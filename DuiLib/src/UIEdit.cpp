@@ -298,7 +298,7 @@ LRESULT CEditWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     // 2018-06-02 修复编辑框获取焦点后不显示Tooltip的问题
     else if (uMsg == WM_MOUSEMOVE)
     {
-        if (!bTrack)
+        if (!bTrack && !(wParam & MK_LBUTTON))
         {
             int iHoverTime = m_pOwner->GetManager()->GetHoverTime();
             TRACKMOUSEEVENT tme = { 0 };
@@ -309,6 +309,7 @@ LRESULT CEditWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             _TrackMouseEvent(&tme);
             bTrack = true;
         }
+        else { bHandled = FALSE; }
     }
     else if (uMsg == WM_MOUSELEAVE)
     {
@@ -972,6 +973,8 @@ void CEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     {
         SetRegExpFilter((_tcscmp(pstrValue, _T("true")) == 0) ? true : false);
     }
+    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
+    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
     else { CLabelUI::SetAttribute(pstrName, pstrValue); }
 }
 

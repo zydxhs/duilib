@@ -125,6 +125,7 @@ void CTileLayoutUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     {
         m_bChildRounded = (_tcscmp(pstrValue, _T("true")) == 0) ? true : false;
     }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else { CContainerUI::SetAttribute(pstrName, pstrValue); }
 }
 

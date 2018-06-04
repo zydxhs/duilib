@@ -2046,6 +2046,10 @@ void CListHeaderItemUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         SetSepColor(clrColor);
     }
     else if (_tcscmp(pstrName, _T("sepimage")) == 0) { SetSepImage(pstrValue); }
+    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
+    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
+    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("不支持属性:dropenable")); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else { CContainerUI::SetAttribute(pstrName, pstrValue); }
 }
 
@@ -2507,6 +2511,10 @@ void CListElementUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         m_dwBackColor = _tcstoul(pstrValue, &pstr, 16);
         m_bCustomBk = true;
     }
+    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
+    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
+    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("不支持属性:dropenable")); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else { CControlUI::SetAttribute(pstrName, pstrValue); }
 }
 
@@ -3649,6 +3657,10 @@ void CListContainerElementUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if (_tcscmp(pstrName, _T("selected")) == 0) { Select(); }
     else if (_tcscmp(pstrName, _T("expandable")) == 0) { SetExpandable(_tcscmp(pstrValue, _T("true")) == 0); }
+    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
+    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
+    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("不支持属性:dropenable")); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else { CContainerUI::SetAttribute(pstrName, pstrValue); }
 }
 

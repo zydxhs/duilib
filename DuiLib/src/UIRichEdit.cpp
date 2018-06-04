@@ -2604,7 +2604,7 @@ void CRichEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
         SetTipColor(clrColor);
     }
-    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { }    // RichEdit 不支持 autowidth 属性
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else { CContainerUI::SetAttribute(pstrName, pstrValue); }
 }
 

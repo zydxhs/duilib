@@ -17,6 +17,7 @@ public:
     CDuiString *GetLinkContent(int iIndex);
 
     void DoEvent(TEventUI &event);
+    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
     void PaintText(HDC hDC);
 

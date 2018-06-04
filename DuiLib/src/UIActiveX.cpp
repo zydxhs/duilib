@@ -1219,6 +1219,7 @@ void CActiveXUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     if (_tcscmp(pstrName, _T("clsid")) == 0) { SetCLSID(pstrValue); }
     else if (_tcscmp(pstrName, _T("modulename")) == 0) { SetModuleName(pstrValue); }
     else if (_tcscmp(pstrName, _T("delaycreate")) == 0) { SetDelayCreate(_tcscmp(pstrValue, _T("true")) == 0); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else { CControlUI::SetAttribute(pstrName, pstrValue); }
 }
 

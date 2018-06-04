@@ -391,4 +391,20 @@ void CDateTimeUI::DoEvent(TEventUI &event)
 
     CLabelUI::DoEvent(event);
 }
+
+SIZE CDateTimeUI::EstimateSize(SIZE szAvailable)
+{
+    CLabelUI::EstimateSize(szAvailable);
+    m_cxyFixedLast.cx += 26;
+    return m_cxyFixedLast;
+}
+
+void CDateTimeUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
+{
+    if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
+    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
+    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("不支持属性:dropenable")); }
+    else { CLabelUI::SetAttribute(pstrName, pstrValue); }
+}
+
 }

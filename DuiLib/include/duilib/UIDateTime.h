@@ -29,6 +29,8 @@ public:
     void Move(SIZE szOffset, bool bNeedInvalidate = true);
 
     void DoEvent(TEventUI &event);
+    SIZE EstimateSize(SIZE szAvailable);
+    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
 protected:
     SYSTEMTIME m_sysTime;

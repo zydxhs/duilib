@@ -1465,6 +1465,7 @@ void CComboUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         SetItemHLineColor(clrColor);
     }
     else if (_tcscmp(pstrName, _T("itemshowhtml")) == 0) { SetItemShowHtml(_tcscmp(pstrValue, _T("true")) == 0); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else { CContainerUI::SetAttribute(pstrName, pstrValue); }
 }
 

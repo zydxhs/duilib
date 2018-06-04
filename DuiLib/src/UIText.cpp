@@ -121,12 +121,6 @@ void CTextUI::DoEvent(TEventUI &event)
                 return;
             }
         }
-
-        if ((event.wParam & MK_LBUTTON) && m_bDragEnable)
-        {
-            OnDoDragDrop(event);
-            return;
-        }
     }
 
     if (event.Type == UIEVENT_MOUSELEAVE)
@@ -153,6 +147,13 @@ void CTextUI::DoEvent(TEventUI &event)
     }
 
     CLabelUI::DoEvent(event);
+}
+
+void CTextUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
+{
+    if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
+    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
+    else { CLabelUI::SetAttribute(pstrName, pstrValue); }
 }
 
 void CTextUI::PaintText(HDC hDC)

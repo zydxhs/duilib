@@ -532,6 +532,10 @@ void CHotKeyUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if (_tcscmp(pstrName, _T("hotimage")) == 0) { SetHotImage(pstrValue); }
     else if (_tcscmp(pstrName, _T("focusedimage")) == 0) { SetFocusedImage(pstrValue); }
     else if (_tcscmp(pstrName, _T("disabledimage")) == 0) { SetDisabledImage(pstrValue); }
+    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
+    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
+    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("不支持属性:dropenable")); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else { CLabelUI::SetAttribute(pstrName, pstrValue); }
 }
 

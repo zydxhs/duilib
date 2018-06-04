@@ -12,7 +12,7 @@ void CChildLayoutUI::Init()
     {
         CDialogBuilder builder;
         CContainerUI *pChildWindow = static_cast<CContainerUI *>(builder.Create(m_pstrXMLFile.GetData(), (UINT)0,
-                                     NULL, m_pManager));
+                                                                 NULL, m_pManager));
 
         if (pChildWindow)
         {
@@ -27,10 +27,9 @@ void CChildLayoutUI::Init()
 
 void CChildLayoutUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("xmlfile")) == 0)
-    { SetChildLayoutXML(pstrValue); }
-    else
-    { CContainerUI::SetAttribute(pstrName, pstrValue); }
+    if (_tcscmp(pstrName, _T("xmlfile")) == 0) { SetChildLayoutXML(pstrValue); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
+    else { CContainerUI::SetAttribute(pstrName, pstrValue); }
 }
 
 void CChildLayoutUI::SetChildLayoutXML(CDuiString pXML)

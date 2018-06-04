@@ -514,6 +514,7 @@ void CTreeNodeUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
         SetSelItemHotTextColor(clrColor);
     }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else { CListContainerElementUI::SetAttribute(pstrName, pstrValue); }
 }
 

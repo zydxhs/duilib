@@ -353,6 +353,7 @@ void CFlashUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if (_tcscmp(pstrName, _T("movie")) == 0) { m_sMovie = pstrValue; }
     else if (_tcscmp(pstrName, _T("base")) == 0)  { m_sBase = pstrValue; }
     else if (_tcscmp(pstrName, _T("scale")) == 0) { m_sScale = pstrValue; }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else { CActiveXUI::SetAttribute(pstrName, pstrValue); }
 }
 
