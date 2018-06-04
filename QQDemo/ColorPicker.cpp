@@ -41,7 +41,7 @@ LPCTSTR CColorPicker::GetWindowClassName() const
 
 void CColorPicker::OnFinalMessage(HWND hWnd)
 {
-	WindowImplBase::OnFinalMessage(hWnd);
+	CWndImplBase::OnFinalMessage(hWnd);
 	delete this;
 }
 
@@ -49,11 +49,11 @@ void CColorPicker::Notify(TNotifyUI& msg)
 {
 	if (_tcsicmp(msg.sType, _T("click")) == 0)
 	{
-		CControlUI* pOne = static_cast<CControlUI*>(m_PaintManager.FindControl(msg.ptMouse));
+        CControlUI* pOne = static_cast<CControlUI*>(m_pm.FindControl(msg.ptMouse));
 		if (_tcsicmp(pOne->GetClass(), DUI_CTR_BUTTON) == 0)
 		{
 			DWORD nColor = pOne->GetBkColor();
-			CVerticalLayoutUI* pColorContiner = static_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("color")));
+            CVerticalLayoutUI* pColorContiner = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(_T("color")));
 			pColorContiner->SetBkColor(nColor);
 			UpdateWindow(m_hWnd);
 			Sleep(500);
@@ -64,7 +64,7 @@ void CColorPicker::Notify(TNotifyUI& msg)
 
 void CColorPicker::InitWindow()
 {
-	CVerticalLayoutUI* pColorContiner = static_cast<CVerticalLayoutUI*>(m_PaintManager.FindControl(_T("color")));
+    CVerticalLayoutUI* pColorContiner = static_cast<CVerticalLayoutUI*>(m_pm.FindControl(_T("color")));
 	for (int i = 0; (i < 5) && (pColorContiner != NULL); i ++)
 	{
 		CHorizontalLayoutUI* pLine = new CHorizontalLayoutUI();
@@ -85,7 +85,7 @@ void CColorPicker::InitWindow()
 		}
 	}
 
-	SIZE size = m_PaintManager.GetInitSize();
+    SIZE size = m_pm.GetInitSize();
 	MoveWindow(GetHWND(), based_point_.x - static_cast<LONG>(size.cx / 2), based_point_.y - size.cy, size.cx, size.cy, FALSE);
 }
 

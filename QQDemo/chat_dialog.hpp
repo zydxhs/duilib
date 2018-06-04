@@ -4,7 +4,7 @@
 #include "skin_change_event.hpp"
 #include "UIFriends.hpp"
 
-class ChatDialog : public WindowImplBase, public SkinChangedReceiver
+class ChatDialog : public CWndImplBase, public SkinChangedReceiver
 {
 public:
 

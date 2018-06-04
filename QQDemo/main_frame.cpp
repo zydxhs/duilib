@@ -11,10 +11,10 @@
 #include "chat_dialog.hpp"
 
 const TCHAR* const kTitleControlName = _T("apptitle");
-const TCHAR* const kCloseButtonControlName = _T("closebtn");
-const TCHAR* const kMinButtonControlName = _T("minbtn");
-const TCHAR* const kMaxButtonControlName = _T("maxbtn");
-const TCHAR* const kRestoreButtonControlName = _T("restorebtn");
+const TCHAR* const kCloseButtonControlName = _T("btnclose");
+const TCHAR* const kMinButtonControlName = _T("btnmin");
+const TCHAR* const kMaxButtonControlName = _T("btnmax");
+const TCHAR* const kRestoreButtonControlName = _T("btnrestore");
 
 const TCHAR* const kTabControlName = _T("tabs");
 
@@ -61,15 +61,15 @@ CControlUI* MainFrame::CreateControl(LPCTSTR pstrClass)
 {
 	if (_tcsicmp(pstrClass, _T("FriendList")) == 0)
 	{
-		return new CFriendsUI(m_PaintManager);
+        return new CFriendsUI(m_pm);
 	}
 	else if (_tcsicmp(pstrClass, _T("GroupList")) == 0)
 	{
-		return new CGroupsUI(m_PaintManager);
+        return new CGroupsUI(m_pm);
 	}
 	else if (_tcsicmp(pstrClass, _T("MicroBlog")) == 0)
 	{
-		return new CMicroBlogUI(m_PaintManager);
+        return new CMicroBlogUI(m_pm);
 	}
 
 	return NULL;
@@ -77,7 +77,7 @@ CControlUI* MainFrame::CreateControl(LPCTSTR pstrClass)
 
 void MainFrame::OnFinalMessage(HWND hWnd)
 {
-	WindowImplBase::OnFinalMessage(hWnd);
+	CWndImplBase::OnFinalMessage(hWnd);
 	delete this;
 }
 
@@ -106,16 +106,16 @@ LRESULT MainFrame::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
 	{
 		if (!bZoomed)
 		{
-			CControlUI* pControl = static_cast<CControlUI*>(m_PaintManager.FindControl(kMaxButtonControlName));
+            CControlUI* pControl = static_cast<CControlUI*>(m_pm.FindControl(kMaxButtonControlName));
 			if( pControl ) pControl->SetVisible(false);
-			pControl = static_cast<CControlUI*>(m_PaintManager.FindControl(kRestoreButtonControlName));
+            pControl = static_cast<CControlUI*>(m_pm.FindControl(kRestoreButtonControlName));
 			if( pControl ) pControl->SetVisible(true);
 		}
-		else 
+		else
 		{
-			CControlUI* pControl = static_cast<CControlUI*>(m_PaintManager.FindControl(kMaxButtonControlName));
+            CControlUI* pControl = static_cast<CControlUI*>(m_pm.FindControl(kMaxButtonControlName));
 			if( pControl ) pControl->SetVisible(true);
-			pControl = static_cast<CControlUI*>(m_PaintManager.FindControl(kRestoreButtonControlName));
+            pControl = static_cast<CControlUI*>(m_pm.FindControl(kRestoreButtonControlName));
 			if( pControl ) pControl->SetVisible(false);
 		}
 	}
@@ -153,7 +153,7 @@ void MainFrame::InitWindow()
 
 DWORD MainFrame::GetBkColor()
 {
-	CControlUI* background = m_PaintManager.FindControl(kBackgroundControlName);
+    CControlUI* background = m_pm.FindControl(kBackgroundControlName);
 	if (background != NULL)
 		return background->GetBkColor();
 
@@ -162,7 +162,7 @@ DWORD MainFrame::GetBkColor()
 
 void MainFrame::SetBkColor(DWORD dwBackColor)
 {
-	CControlUI* background = m_PaintManager.FindControl(kBackgroundControlName);
+    CControlUI* background = m_pm.FindControl(kBackgroundControlName);
 	if (background != NULL)
 	{
 		background->SetBkImage(_T(""));
@@ -178,7 +178,7 @@ void MainFrame::SetBkColor(DWORD dwBackColor)
 
 void MainFrame::UpdateFriendsList()
 {
-	CFriendsUI* pFriendsList = static_cast<CFriendsUI*>(m_PaintManager.FindControl(kFriendsListControlName));
+    CFriendsUI* pFriendsList = static_cast<CFriendsUI*>(m_pm.FindControl(kFriendsListControlName));
 	if (pFriendsList != NULL)
 	{
 		if (!friends_.empty())
@@ -197,7 +197,7 @@ void MainFrame::UpdateFriendsList()
 		friends_.push_back(item);
 
 		item.id = _T("1");
-		item.folder = false;		
+		item.folder = false;
 		item.logo = _T("man.png");
 		item.nick_name = _T("tojen");
 		item.description = _T("tojen.me@gmail.com");
@@ -268,7 +268,7 @@ void MainFrame::UpdateFriendsList()
 
 void MainFrame::UpdateGroupsList()
 {
-	CGroupsUI* pGroupsList = static_cast<CGroupsUI*>(m_PaintManager.FindControl(kGroupsListControlName));
+    CGroupsUI* pGroupsList = static_cast<CGroupsUI*>(m_pm.FindControl(kGroupsListControlName));
 	if (pGroupsList != NULL)
 	{
 		if (pGroupsList->GetCount() > 0)
@@ -298,14 +298,14 @@ void MainFrame::UpdateGroupsList()
 
 void MainFrame::UpdateMicroBlogList()
 {
-	CMicroBlogUI* pMicroBlogList = static_cast<CMicroBlogUI*>(m_PaintManager.FindControl(kMicroBlogListControlName));
+    CMicroBlogUI* pMicroBlogList = static_cast<CMicroBlogUI*>(m_pm.FindControl(kMicroBlogListControlName));
 	if (pMicroBlogList != NULL)
 	{}
 }
 
 void MainFrame::OnPrepare(TNotifyUI& msg)
 {
-	CControlUI* background = m_PaintManager.FindControl(kBackgroundControlName);
+    CControlUI* background = m_pm.FindControl(kBackgroundControlName);
 	if (background != NULL)
 	{
 		TCHAR szBuf[MAX_PATH] = {0};
@@ -335,7 +335,7 @@ void MainFrame::Notify(TNotifyUI& msg)
 		if (_tcsicmp(msg.pSender->GetName(), kSignatureControlName) == 0)
 		{
 			msg.pSender->SetVisible(false);
-			CControlUI* signature_tip = m_PaintManager.FindControl(kSignatureTipsControlName);
+            CControlUI* signature_tip = m_pm.FindControl(kSignatureTipsControlName);
 			if (signature_tip != NULL)
 			{
 				CRichEditUI* signature = static_cast<CRichEditUI*>(msg.pSender);
@@ -347,7 +347,7 @@ void MainFrame::Notify(TNotifyUI& msg)
 		else if (_tcsicmp(msg.pSender->GetName(), kSearchEditControlName) == 0)
 		{
 			msg.pSender->SetVisible(false);
-			CControlUI* search_tip = static_cast<CRichEditUI*>(m_PaintManager.FindControl(kSearchEditTipControlName));
+            CControlUI* search_tip = static_cast<CRichEditUI*>(m_pm.FindControl(kSearchEditTipControlName));
 			if (search_tip != NULL)
 			{
 				CRichEditUI* search_edit = static_cast<CRichEditUI*>(msg.pSender);
@@ -375,9 +375,9 @@ void MainFrame::Notify(TNotifyUI& msg)
 		{
 #if defined(UNDER_CE)
 			::ShowWindow(m_hWnd, SW_MAXIMIZE);
-			CControlUI* pControl = static_cast<CControlUI*>(m_PaintManager.FindControl(kMaxButtonControlName));
+            CControlUI* pControl = static_cast<CControlUI*>(m_pm.FindControl(kMaxButtonControlName));
 			if( pControl ) pControl->SetVisible(false);
-			pControl = static_cast<CControlUI*>(m_PaintManager.FindControl(kRestoreButtonControlName));
+			pControl = static_cast<CControlUI*>(m_pm.FindControl(kRestoreButtonControlName));
 			if( pControl ) pControl->SetVisible(true);
 #else
 			SendMessage(WM_SYSCOMMAND, SC_MAXIMIZE, 0);
@@ -387,9 +387,9 @@ void MainFrame::Notify(TNotifyUI& msg)
 		{
 #if defined(UNDER_CE)
 			::ShowWindow(m_hWnd, SW_RESTORE);
-			CControlUI* pControl = static_cast<CControlUI*>(m_PaintManager.FindControl(kMaxButtonControlName));
+			CControlUI* pControl = static_cast<CControlUI*>(m_pm.FindControl(kMaxButtonControlName));
 			if( pControl ) pControl->SetVisible(true);
-			pControl = static_cast<CControlUI*>(m_PaintManager.FindControl(kRestoreButtonControlName));
+			pControl = static_cast<CControlUI*>(m_pm.FindControl(kRestoreButtonControlName));
 			if( pControl ) pControl->SetVisible(false);
 #else
 			SendMessage(WM_SYSCOMMAND, SC_RESTORE, 0);
@@ -397,9 +397,9 @@ void MainFrame::Notify(TNotifyUI& msg)
 		}
 		else if (_tcsicmp(msg.pSender->GetName(), kHideLeftMainPannelControlName) == 0)
 		{
-			CControlUI* left_main_pannel = m_PaintManager.FindControl(kLeftMainPannelControlName);
-			CControlUI* hide_left_main_pannel = m_PaintManager.FindControl(kHideLeftMainPannelControlName);
-			CControlUI* show_left_main_pannel = m_PaintManager.FindControl(kShowLeftMainPannelControlName);
+			CControlUI* left_main_pannel = m_pm.FindControl(kLeftMainPannelControlName);
+			CControlUI* hide_left_main_pannel = m_pm.FindControl(kHideLeftMainPannelControlName);
+			CControlUI* show_left_main_pannel = m_pm.FindControl(kShowLeftMainPannelControlName);
 			if ((left_main_pannel != NULL) && (show_left_main_pannel != NULL) && (hide_left_main_pannel != NULL))
 			{
 				hide_left_main_pannel->SetVisible(false);
@@ -409,9 +409,9 @@ void MainFrame::Notify(TNotifyUI& msg)
 		}
 		else if (_tcsicmp(msg.pSender->GetName(), kShowLeftMainPannelControlName) == 0)
 		{
-			CControlUI* left_main_pannel = m_PaintManager.FindControl(kLeftMainPannelControlName);
-			CControlUI* hide_left_main_pannel = m_PaintManager.FindControl(kHideLeftMainPannelControlName);
-			CControlUI* show_left_main_pannel = m_PaintManager.FindControl(kShowLeftMainPannelControlName);
+			CControlUI* left_main_pannel = m_pm.FindControl(kLeftMainPannelControlName);
+			CControlUI* hide_left_main_pannel = m_pm.FindControl(kHideLeftMainPannelControlName);
+			CControlUI* show_left_main_pannel = m_pm.FindControl(kShowLeftMainPannelControlName);
 			if ((left_main_pannel != NULL) && (show_left_main_pannel != NULL) && (hide_left_main_pannel != NULL))
 			{
 				hide_left_main_pannel->SetVisible(true);
@@ -422,7 +422,7 @@ void MainFrame::Notify(TNotifyUI& msg)
 		else if (_tcsicmp(msg.pSender->GetName(), kSignatureTipsControlName) == 0)
 		{
 			msg.pSender->SetVisible(false);
-			CRichEditUI* signature = static_cast<CRichEditUI*>(m_PaintManager.FindControl(kSignatureControlName));
+			CRichEditUI* signature = static_cast<CRichEditUI*>(m_pm.FindControl(kSignatureControlName));
 			if (signature != NULL)
 			{
 				signature->SetText(msg.pSender->GetText());
@@ -432,7 +432,7 @@ void MainFrame::Notify(TNotifyUI& msg)
 		else if (_tcsicmp(msg.pSender->GetName(), kSearchEditTipControlName) == 0)
 		{
 			msg.pSender->SetVisible(false);
-			CRichEditUI* search_edit = static_cast<CRichEditUI*>(m_PaintManager.FindControl(kSearchEditControlName));
+			CRichEditUI* search_edit = static_cast<CRichEditUI*>(m_pm.FindControl(kSearchEditControlName));
 			if (search_edit != NULL)
 			{
 				search_edit->SetText(msg.pSender->GetText());
@@ -441,7 +441,7 @@ void MainFrame::Notify(TNotifyUI& msg)
 		}
 		else if (_tcsicmp(msg.pSender->GetName(), kChangeBkSkinControlName) == 0)
 		{
-			CControlUI* background = m_PaintManager.FindControl(kBackgroundControlName);
+			CControlUI* background = m_pm.FindControl(kBackgroundControlName);
 			if (background != NULL)
 			{
 				TCHAR szBuf[MAX_PATH] = {0};
@@ -457,7 +457,7 @@ void MainFrame::Notify(TNotifyUI& msg)
 				background->SetBkImage(szBuf);
 
 				SkinChangedParam param;
-				CControlUI* background = m_PaintManager.FindControl(kBackgroundControlName);
+				CControlUI* background = m_pm.FindControl(kBackgroundControlName);
 				if (background != NULL)
 				{
 					param.bkcolor = background->GetBkColor();
@@ -489,7 +489,7 @@ void MainFrame::Notify(TNotifyUI& msg)
 	}
 	else if (_tcsicmp(msg.sType, _T("selectchanged")) == 0)
 	{
-		CTabLayoutUI* pTabControl = static_cast<CTabLayoutUI*>(m_PaintManager.FindControl(kTabControlName));
+		CTabLayoutUI* pTabControl = static_cast<CTabLayoutUI*>(m_pm.FindControl(kTabControlName));
 		if (_tcsicmp(msg.pSender->GetName(), kFriendButtonControlName) == 0)
 		{
 			if (pTabControl && pTabControl->GetCurSel() != 0)
@@ -517,19 +517,19 @@ void MainFrame::Notify(TNotifyUI& msg)
 	}
 	else if (_tcsicmp(msg.sType, _T("itemactivate")) == 0)
 	{
-		CTabLayoutUI* pTabControl = static_cast<CTabLayoutUI*>(m_PaintManager.FindControl(kTabControlName));
+		CTabLayoutUI* pTabControl = static_cast<CTabLayoutUI*>(m_pm.FindControl(kTabControlName));
 		if (pTabControl != NULL)
 		{
 			if (pTabControl->GetCurSel() == 0)
 			{
-				CFriendsUI* pFriendsList = static_cast<CFriendsUI*>(m_PaintManager.FindControl(kFriendsListControlName));
+				CFriendsUI* pFriendsList = static_cast<CFriendsUI*>(m_pm.FindControl(kFriendsListControlName));
 				if ((pFriendsList != NULL) &&  pFriendsList->GetItemIndex(msg.pSender) != -1)
 				{
 					if (_tcsicmp(msg.pSender->GetClass(), DUI_CTR_LISTCONTAINERELEMENT) == 0)
 					{
 						Node* node = (Node*)msg.pSender->GetTag();
 
-						CControlUI* background = m_PaintManager.FindControl(kBackgroundControlName);
+						CControlUI* background = m_pm.FindControl(kBackgroundControlName);
 						if (!pFriendsList->CanExpand(node) && (background != NULL))
 						{
 							FriendListItemInfo friend_info;
@@ -572,12 +572,12 @@ void MainFrame::Notify(TNotifyUI& msg)
 	}
 	else if (_tcsicmp(msg.sType, _T("itemclick")) == 0)
 	{
-		CTabLayoutUI* pTabControl = static_cast<CTabLayoutUI*>(m_PaintManager.FindControl(kTabControlName));
+		CTabLayoutUI* pTabControl = static_cast<CTabLayoutUI*>(m_pm.FindControl(kTabControlName));
 		if (pTabControl != NULL)
 		{
 			if (pTabControl->GetCurSel() == 0)
 			{
-				CFriendsUI* pFriendsList = static_cast<CFriendsUI*>(m_PaintManager.FindControl(kFriendsListControlName));
+				CFriendsUI* pFriendsList = static_cast<CFriendsUI*>(m_pm.FindControl(kFriendsListControlName));
 				if ((pFriendsList != NULL) &&  pFriendsList->GetItemIndex(msg.pSender) != -1)
 				{
 					if (_tcsicmp(msg.pSender->GetClass(), DUI_CTR_LISTCONTAINERELEMENT) == 0)
@@ -593,7 +593,7 @@ void MainFrame::Notify(TNotifyUI& msg)
 			}
 			else if (pTabControl->GetCurSel() == 1)
 			{
-				CGroupsUI* pGroupsList = static_cast<CGroupsUI*>(m_PaintManager.FindControl(kGroupsListControlName));
+				CGroupsUI* pGroupsList = static_cast<CGroupsUI*>(m_pm.FindControl(kGroupsListControlName));
 				if ((pGroupsList != NULL) &&  pGroupsList->GetItemIndex(msg.pSender) != -1)
 				{
 					if (_tcsicmp(msg.pSender->GetClass(), DUI_CTR_LISTCONTAINERELEMENT) == 0)

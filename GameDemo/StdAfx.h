@@ -4,18 +4,18 @@
 
 #pragma once
 
-#define WIN32_LEAN_AND_MEAN	
+#define WIN32_LEAN_AND_MEAN
 #define _CRT_SECURE_NO_DEPRECATE
 
 // Required for VS 2008 (fails on XP and Win2000 without this fix)
 #ifndef _WIN32_WINNT
-  #define _WIN32_WINNT 0x0500
+    #define _WIN32_WINNT 0x0500
 #endif
 
 #include <windows.h>
 #include <objbase.h>
 
-#include "..\DuiLib\UIlib.h"
+#include "UIlib.h"
 
 using namespace DuiLib;
 

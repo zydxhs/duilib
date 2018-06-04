@@ -4,7 +4,7 @@
 class MainFrame;
 using namespace DuiLib;
 
-class ColorSkinWindow : public WindowImplBase
+class ColorSkinWindow : public CWndImplBase
 {
 public:
 	ColorSkinWindow(MainFrame* main_frame, RECT rcParentWindow);

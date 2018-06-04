@@ -4,7 +4,7 @@
 #include "skin_change_event.hpp"
 #include "UIFriends.hpp"
 
-class MainFrame : public WindowImplBase
+class MainFrame : public CWndImplBase
 {
 public:
 

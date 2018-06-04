@@ -86,10 +86,10 @@ public:
     }
 };
 
-class CMenuWnd : public CWindowWnd, public INotifyUI
+class CMenuWndList : public CWindowWnd, public INotifyUI
 {
 public:
-    CMenuWnd() : m_pOwner(NULL), m_pShadowWnd(NULL) { };
+    CMenuWndList() : m_pOwner(NULL), m_pShadowWnd(NULL) { };
 
     void Init(CControlUI* pOwner, POINT pt) {
         if( pOwner == NULL ) return;

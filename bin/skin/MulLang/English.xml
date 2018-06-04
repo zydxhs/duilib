@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Language lang="English" codepage="1033">
+	<String	id="title"		text="Multi Language Demo" />
+	<String	id="item1"		text="This is title" />
+	<String	id="item2"		text="Good morning" />
+	<String	id="chglang"    text="Change Language" />
+    <String id="weak"       text="Weak" />
+    <String id="middle"     text="Middle" />
+    <String id="strong"     text="Strong" />
+</Language>

@@ -1,0 +1,24 @@
+总结，DuiLib消息响应方式，按优先级排列：
+
+1. 实现 IMessageFilterUI 接口，调用 CPaintManagerUI::AddPreMessageFilter，进行消息发送到窗口过程前的过滤。
+2. 重载 HandleMessage 函数，当消息发送到窗口过程中时，最先进行过滤。
+3. 实现 INotifyUI，调用CPaintManagerUI::AddNotifier，将自身加入Notifier队列。
+4. 添加消息代理（其实就是将成员函数最为回调函数加入），MakeDelegate(this, &CFrameWindowWnd::OnAlphaChanged);，当程序某个地方调用了 CPaintManagerUI::SendNotify，并且Msg.pSender正好是this，我们的类成员回调函数将被调用。
+5. 重载父类：WindowImplBase的虚函数
+6. 重载父类：WindowImplBase::HandleCustomMessage函数
+7. 使用类似MFC的消息映射
+
+-------------------------------------------------
+CNotifyPump 用法（只能使用消息映射）：
+1. 从 CNotifyPump 派生虚拟窗口类CVWnd
+   1.类声明中添加 DUI_DECLARE_MESSAGE_MAP()
+   2.类实现添加：
+    DUI_BEGIN_MESSAGE_MAP(CVWnd, CNotifyPump)
+    这里写消息映射
+    DUI_END_MESSAGE_MAP()
+   3.实现消息映射函数
+2. xml中，需要与 CVWnd 绑定的控件，添加 virtualwnd 属性
+3. 绑定控件与CVWnd
+   控件的父窗口类也需要从 CNotifyPump 继承，
+   1. 给CVWnd设置 CPaintManagerUI 对象指针。可选
+   2. 在控件的父窗口类中调用 AddVirtualWnd()把控件与CVWnd绑定

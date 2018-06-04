@@ -8,23 +8,21 @@
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
-	CPaintManagerUI::SetInstance(hInstance);
-	//CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("\\skin"));
-	//CPaintManagerUI::SetResourceZip(_T("RichListRes.zip"));
+    CPaintManagerUI::SetInstance(hInstance);
+    //CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("\\skin"));
+    //CPaintManagerUI::SetResourceZip(_T("RichListRes.zip"));
 
-	HRESULT Hr = ::CoInitialize(NULL);
-	if( FAILED(Hr) ) return 0;
+    CRichListWnd *pFrame = new CRichListWnd();
 
-	CRichListWnd* pFrame = new CRichListWnd();
-	if( pFrame == NULL ) return 0;
-	pFrame->Create(NULL, _T("DuiLib Demo from mbstudio.cn / meineson"), UI_WNDSTYLE_FRAME, 0L, 0, 0, 500, 400);
-	pFrame->CenterWindow();
-	::ShowWindow(*pFrame, SW_SHOW);
+    if (pFrame == NULL) { return 0; }
 
-	//::MessageBox(NULL, _T("alert!"), _T("Duilib Demo"), MB_OK);
+    pFrame->Create(NULL, _T("DuiLib Demo from mbstudio.cn / meineson"), UI_WNDSTYLE_FRAME, 0L, 0, 0, 500, 400);
+    pFrame->CenterWindow();
+    ::ShowWindow(*pFrame, SW_SHOW);
 
-	CPaintManagerUI::MessageLoop();
+    //::MessageBox(NULL, _T("alert!"), _T("Duilib Demo"), MB_OK);
 
-	::CoUninitialize();
-	return 0;
+    CPaintManagerUI::MessageLoop();
+    CPaintManagerUI::Term();
+    return 0;
 }

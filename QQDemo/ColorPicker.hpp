@@ -1,30 +1,30 @@
 #ifndef COLORPICKER_HPP
 #define COLORPICKER_HPP
-#include "..\DuiLib\Utils\WinImplBase.h"
+#include "../DuiLib/include/uilib.h"
 
 class ChatDialog;
-class CColorPicker : public WindowImplBase
+class CColorPicker : public CWndImplBase
 {
 public:
-	CColorPicker(ChatDialog* chat_dialog, POINT ptMouse);
+    CColorPicker(ChatDialog *chat_dialog, POINT ptMouse);
 
-	LPCTSTR GetWindowClassName() const;
+    LPCTSTR GetWindowClassName() const;
 
-	virtual void OnFinalMessage(HWND hWnd);
+    virtual void OnFinalMessage(HWND hWnd);
 
-	void Notify(TNotifyUI& msg);
+    void Notify(TNotifyUI &msg);
 
-	void InitWindow();
+    void InitWindow();
 
-	virtual CDuiString GetSkinFile();
+    virtual CDuiString GetSkinFile();
 
-	virtual CDuiString GetSkinFolder();
+    virtual CDuiString GetSkinFolder();
 
-	virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+    virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
 
 private:
-	POINT based_point_;
-	ChatDialog* chat_dialog_;
+    POINT based_point_;
+    ChatDialog *chat_dialog_;
 };
 
 #endif // COLORPICKER_HPP

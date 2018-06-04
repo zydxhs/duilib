@@ -12,7 +12,8 @@ typedef struct DWM_BLURBEHIND
     BOOL fTransitionOnMaximized;
 } DWM_BLURBEHIND;
 
-typedef struct tagDWL_MARGINS {
+typedef struct tagDWL_MARGINS
+{
     int cxLeftWidth;
     int cxRightWidth;
     int cyTopHeight;
@@ -69,11 +70,11 @@ enum DWMFLIP3DWINDOWPOLICY
 class CDwm
 {
 public:
-    typedef HRESULT (WINAPI *FNDWMENABLECOMPOSITION)(UINT);
-    typedef HRESULT (WINAPI *FNDWNISCOMPOSITIONENABLED)(LPBOOL);
-    typedef HRESULT (WINAPI *FNENABLEBLURBEHINDWINDOW)(HWND, CONST DWM_BLURBEHIND*);
-    typedef HRESULT (WINAPI *FNDWMEXTENDFRAMEINTOCLIENTAREA)(HWND, CONST DWM_MARGINS*);
-    typedef HRESULT (WINAPI *FNDWMSETWINDOWATTRIBUTE)(HWND, DWORD, LPCVOID pvAttribute, DWORD);
+    typedef HRESULT(WINAPI *FNDWMENABLECOMPOSITION)(UINT);
+    typedef HRESULT(WINAPI *FNDWNISCOMPOSITIONENABLED)(LPBOOL);
+    typedef HRESULT(WINAPI *FNENABLEBLURBEHINDWINDOW)(HWND, CONST DWM_BLURBEHIND *);
+    typedef HRESULT(WINAPI *FNDWMEXTENDFRAMEINTOCLIENTAREA)(HWND, CONST DWM_MARGINS *);
+    typedef HRESULT(WINAPI *FNDWMSETWINDOWATTRIBUTE)(HWND, DWORD, LPCVOID pvAttribute, DWORD);
 
     FNDWMENABLECOMPOSITION fnDwmEnableComposition;
     FNDWNISCOMPOSITIONENABLED fnDwmIsCompositionEnabled;
@@ -84,14 +85,20 @@ public:
     CDwm()
     {
         static HINSTANCE hDwmInstance = ::LoadLibrary(_T("dwmapi.dll"));
-        if( hDwmInstance != NULL ) {
+
+        if (hDwmInstance != NULL)
+        {
             fnDwmEnableComposition = (FNDWMENABLECOMPOSITION) ::GetProcAddress(hDwmInstance, "DwmEnableComposition");
-            fnDwmIsCompositionEnabled = (FNDWNISCOMPOSITIONENABLED) ::GetProcAddress(hDwmInstance, "DwmIsCompositionEnabled");
-            fnDwmEnableBlurBehindWindow = (FNENABLEBLURBEHINDWINDOW) ::GetProcAddress(hDwmInstance, "DwmEnableBlurBehindWindow");
-            fnDwmExtendFrameIntoClientArea = (FNDWMEXTENDFRAMEINTOCLIENTAREA) ::GetProcAddress(hDwmInstance, "DwmExtendFrameIntoClientArea");
+            fnDwmIsCompositionEnabled = (FNDWNISCOMPOSITIONENABLED) ::GetProcAddress(hDwmInstance,
+                                        "DwmIsCompositionEnabled");
+            fnDwmEnableBlurBehindWindow = (FNENABLEBLURBEHINDWINDOW) ::GetProcAddress(hDwmInstance,
+                                          "DwmEnableBlurBehindWindow");
+            fnDwmExtendFrameIntoClientArea = (FNDWMEXTENDFRAMEINTOCLIENTAREA) ::GetProcAddress(hDwmInstance,
+                                             "DwmExtendFrameIntoClientArea");
             fnDwmSetWindowAttribute = (FNDWMSETWINDOWATTRIBUTE) ::GetProcAddress(hDwmInstance, "DwmSetWindowAttribute");
         }
-        else {
+        else
+        {
             fnDwmEnableComposition = NULL;
             fnDwmIsCompositionEnabled = NULL;
             fnDwmEnableBlurBehindWindow = NULL;
@@ -104,66 +111,82 @@ public:
     {
         HRESULT Hr = E_NOTIMPL;
         BOOL bRes = FALSE;
-        if( fnDwmIsCompositionEnabled != NULL ) Hr = fnDwmIsCompositionEnabled(&bRes);
+
+        if (fnDwmIsCompositionEnabled != NULL) { Hr = fnDwmIsCompositionEnabled(&bRes); }
+
         return SUCCEEDED(Hr) && bRes;
     }
 
     BOOL EnableComposition(UINT fEnable)
     {
         BOOL bRes = FALSE;
-        if( fnDwmEnableComposition != NULL ) bRes = SUCCEEDED(fnDwmEnableComposition(fEnable));
+
+        if (fnDwmEnableComposition != NULL) { bRes = SUCCEEDED(fnDwmEnableComposition(fEnable)); }
+
         return bRes;
     }
 
     BOOL EnableBlurBehindWindow(HWND hWnd)
     {
         BOOL bRes = FALSE;
-        if( fnDwmEnableBlurBehindWindow != NULL ) {
+
+        if (fnDwmEnableBlurBehindWindow != NULL)
+        {
             DWM_BLURBEHIND bb = { 0 };
             bb.dwFlags = DWM_BB_ENABLE;
             bb.fEnable = TRUE;
             bRes = SUCCEEDED(fnDwmEnableBlurBehindWindow(hWnd, &bb));
         }
+
         return bRes;
     }
 
-    BOOL EnableBlurBehindWindow(HWND hWnd, CONST DWM_BLURBEHIND& bb)
+    BOOL EnableBlurBehindWindow(HWND hWnd, CONST DWM_BLURBEHIND &bb)
     {
         BOOL bRes = FALSE;
-        if( fnDwmEnableBlurBehindWindow != NULL ) {
+
+        if (fnDwmEnableBlurBehindWindow != NULL)
+        {
             bRes = SUCCEEDED(fnDwmEnableBlurBehindWindow(hWnd, &bb));
         }
+
         return bRes;
     }
 
-    BOOL ExtendFrameIntoClientArea(HWND hWnd, CONST DWM_MARGINS& Margins)
+    BOOL ExtendFrameIntoClientArea(HWND hWnd, CONST DWM_MARGINS &Margins)
     {
         BOOL bRes = FALSE;
-        if( fnDwmEnableComposition != NULL ) bRes = SUCCEEDED(fnDwmExtendFrameIntoClientArea(hWnd, &Margins));
+
+        if (fnDwmEnableComposition != NULL) { bRes = SUCCEEDED(fnDwmExtendFrameIntoClientArea(hWnd, &Margins)); }
+
         return bRes;
     }
 
     BOOL SetWindowAttribute(HWND hwnd, DWORD dwAttribute, LPCVOID pvAttribute, DWORD cbAttribute)
     {
         BOOL bRes = FALSE;
-        if( fnDwmSetWindowAttribute != NULL ) bRes = SUCCEEDED(fnDwmSetWindowAttribute(hwnd, dwAttribute, pvAttribute, cbAttribute));
+
+        if (fnDwmSetWindowAttribute != NULL) { bRes = SUCCEEDED(fnDwmSetWindowAttribute(hwnd, dwAttribute, pvAttribute, cbAttribute)); }
+
         return bRes;
     }
 };
 
 #ifndef WM_DPICHANGED
-#   define WM_DPICHANGED       0x02E0
+    #define WM_DPICHANGED       0x02E0
 #endif
 
 
 #ifndef _SHELLSCALINGAPI_H_
-typedef enum _PROCESS_DPI_AWARENESS { 
+typedef enum _PROCESS_DPI_AWARENESS
+{
     PROCESS_DPI_UNAWARE            = 0,
     PROCESS_SYSTEM_DPI_AWARE       = 1,
     PROCESS_PER_MONITOR_DPI_AWARE  = 2
 } PROCESS_DPI_AWARENESS;
 
-typedef enum _MONITOR_DPI_TYPE { 
+typedef enum _MONITOR_DPI_TYPE
+{
     MDT_EFFECTIVE_DPI  = 0,
     MDT_ANGULAR_DPI    = 1,
     MDT_RAW_DPI        = 2,
@@ -175,37 +198,45 @@ class CDPI
 {
 public:
     typedef BOOL (WINAPI *FNSETPROCESSDPIAWARE)(VOID);
-    typedef HRESULT (WINAPI *FNSETPROCESSDPIAWARENESS)(PROCESS_DPI_AWARENESS);
-    typedef HRESULT (WINAPI *FNGETDPIFORMONITOR)(HMONITOR, Monitor_DPI_Type, UINT*, UINT*);
+    typedef HRESULT(WINAPI *FNSETPROCESSDPIAWARENESS)(PROCESS_DPI_AWARENESS);
+    typedef HRESULT(WINAPI *FNGETDPIFORMONITOR)(HMONITOR, Monitor_DPI_Type, UINT *, UINT *);
 
     FNSETPROCESSDPIAWARE fnSetProcessDPIAware; // vista,win7
     FNSETPROCESSDPIAWARENESS fnSetProcessDpiAwareness; // win8+
     FNGETDPIFORMONITOR fnGetDpiForMonitor; //
 
-    CDPI() {
+    CDPI()
+    {
         m_nScaleFactor = 0;
         m_nScaleFactorSDA = 0;
         m_Awareness = PROCESS_DPI_UNAWARE;
 
         static HINSTANCE hUser32Instance = ::LoadLibrary(_T("User32.dll"));
         static HINSTANCE hShcoreInstance = ::LoadLibrary(_T("Shcore.dll"));
-        if( hUser32Instance != NULL ) {
+
+        if (hUser32Instance != NULL)
+        {
             fnSetProcessDPIAware = (FNSETPROCESSDPIAWARE) ::GetProcAddress(hUser32Instance, "SetProcessDPIAware");
         }
-        else {
+        else
+        {
             fnSetProcessDPIAware = NULL;
         }
 
-        if( hShcoreInstance != NULL ) {
-            fnSetProcessDpiAwareness = (FNSETPROCESSDPIAWARENESS) ::GetProcAddress(hShcoreInstance, "SetProcessDpiAwareness");
+        if (hShcoreInstance != NULL)
+        {
+            fnSetProcessDpiAwareness = (FNSETPROCESSDPIAWARENESS) ::GetProcAddress(hShcoreInstance,
+                                       "SetProcessDpiAwareness");
             fnGetDpiForMonitor = (FNGETDPIFORMONITOR) ::GetProcAddress(hShcoreInstance, "GetDpiForMonitor");
         }
-        else {
+        else
+        {
             fnSetProcessDpiAwareness = NULL;
             fnGetDpiForMonitor = NULL;
         }
 
-        if (fnGetDpiForMonitor != NULL) {
+        if (fnGetDpiForMonitor != NULL)
+        {
             UINT     dpix = 0, dpiy = 0;
             HRESULT  hr = E_FAIL;
             POINT pt = {1, 1};
@@ -213,7 +244,8 @@ public:
             hr = fnGetDpiForMonitor(hMonitor, MDT_EFFECTIVE_DPI, &dpix, &dpiy);
             SetScale(dpix);
         }
-        else {
+        else
+        {
             UINT     dpix = 0;
             HDC hDC = ::GetDC(::GetDesktopWindow());
             dpix = GetDeviceCaps(hDC, LOGPIXELSX);
@@ -231,15 +263,19 @@ public:
 
     int  Scale(int x)
     {
-        if (m_Awareness == PROCESS_DPI_UNAWARE) return x;
-        if (m_Awareness == PROCESS_SYSTEM_DPI_AWARE) return MulDiv(x, m_nScaleFactorSDA, 100);
+        if (m_Awareness == PROCESS_DPI_UNAWARE) { return x; }
+
+        if (m_Awareness == PROCESS_SYSTEM_DPI_AWARE) { return MulDiv(x, m_nScaleFactorSDA, 100); }
+
         return MulDiv(x, m_nScaleFactor, 100); // PROCESS_PER_MONITOR_DPI_AWARE
     }
 
     UINT GetScale()
     {
-        if (m_Awareness == PROCESS_DPI_UNAWARE) return 100;
-        if (m_Awareness == PROCESS_SYSTEM_DPI_AWARE) return m_nScaleFactorSDA;
+        if (m_Awareness == PROCESS_DPI_UNAWARE) { return 100; }
+
+        if (m_Awareness == PROCESS_SYSTEM_DPI_AWARE) { return m_nScaleFactorSDA; }
+
         return m_nScaleFactor;
     }
 
@@ -256,18 +292,18 @@ public:
         pPoint->x = Scale(pPoint->x);
         pPoint->y = Scale(pPoint->y);
     }
-    
-    void OnDPIChanged(HWND hWnd, WPARAM wParam, LPARAM lParam) 
+
+    void OnDPIChanged(HWND hWnd, WPARAM wParam, LPARAM lParam)
     {
         SetScale(LOWORD(wParam));
-        RECT* const prcNewWindow = (RECT*)lParam;
+        RECT *const prcNewWindow = (RECT *)lParam;
         ::SetWindowPos(hWnd,
-            NULL,
-            prcNewWindow ->left,
-            prcNewWindow ->top,
-            prcNewWindow->right - prcNewWindow->left,
-            prcNewWindow->bottom - prcNewWindow->top,
-            SWP_NOZORDER | SWP_NOACTIVATE);
+                       NULL,
+                       prcNewWindow ->left,
+                       prcNewWindow ->top,
+                       prcNewWindow->right - prcNewWindow->left,
+                       prcNewWindow->bottom - prcNewWindow->top,
+                       SWP_NOZORDER | SWP_NOACTIVATE);
     }
 
 private:
@@ -275,33 +311,43 @@ private:
     UINT m_nScaleFactorSDA;
     PROCESS_DPI_AWARENESS m_Awareness;
 
-    BOOL SetAwareness(PROCESS_DPI_AWARENESS value) 
+    BOOL SetAwareness(PROCESS_DPI_AWARENESS value)
     {
-        if( fnSetProcessDpiAwareness != NULL ) {
+        if (fnSetProcessDpiAwareness != NULL)
+        {
             HRESULT Hr = E_NOTIMPL;
             Hr = fnSetProcessDpiAwareness(value);
-            if (Hr == S_OK) {
+
+            if (Hr == S_OK)
+            {
                 m_Awareness = value;
                 return TRUE;
             }
-            else {
+            else
+            {
                 return FALSE;
             }
         }
-        else {
-            if (fnSetProcessDPIAware) {
+        else
+        {
+            if (fnSetProcessDPIAware)
+            {
                 BOOL bRet = fnSetProcessDPIAware();
-                if (bRet) m_Awareness = PROCESS_SYSTEM_DPI_AWARE;
+
+                if (bRet) { m_Awareness = PROCESS_SYSTEM_DPI_AWARE; }
+
                 return bRet;
             }
         }
+
         return FALSE;
     }
 
     void SetScale(__in UINT iDPI)
     {
         m_nScaleFactor = MulDiv(iDPI, 100, 96);
-        if (m_nScaleFactorSDA == 0) m_nScaleFactorSDA = m_nScaleFactor;
+
+        if (m_nScaleFactorSDA == 0) { m_nScaleFactorSDA = m_nScaleFactor; }
     }
 };
 
@@ -309,78 +355,107 @@ private:
 class CFrameWindowWnd : public CWindowWnd, public INotifyUI, public CDwm, public CDPI
 {
 public:
-    CFrameWindowWnd() : m_pWndShadow(NULL) { };
+    CFrameWindowWnd() { };
     LPCTSTR GetWindowClassName() const { return _T("UIMainFrame"); };
     UINT GetClassStyle() const { return UI_CLASSSTYLE_FRAME | CS_DBLCLKS; };
     void OnFinalMessage(HWND /*hWnd*/) { delete this; };
 
     void Init() { }
 
-    bool OnHChanged(void* param) {
-        TNotifyUI* pMsg = (TNotifyUI*)param;
-        if( pMsg->sType == _T("valuechanged") ) {
-            short H, S, L;
-            CPaintManagerUI::GetHSL(&H, &S, &L);
-            CPaintManagerUI::SetHSL(true, (static_cast<CSliderUI*>(pMsg->pSender))->GetValue(), S, L);
-        }
-        return true;
-    }
-
-    bool OnSChanged(void* param) {
-        TNotifyUI* pMsg = (TNotifyUI*)param;
-        if( pMsg->sType == _T("valuechanged") ) {
-            short H, S, L;
-            CPaintManagerUI::GetHSL(&H, &S, &L);
-            CPaintManagerUI::SetHSL(true, H, (static_cast<CSliderUI*>(pMsg->pSender))->GetValue(), L);
-        }
-        return true;
-    }
-
-    bool OnLChanged(void* param) {
-        TNotifyUI* pMsg = (TNotifyUI*)param;
-        if( pMsg->sType == _T("valuechanged") ) {
-            short H, S, L;
-            CPaintManagerUI::GetHSL(&H, &S, &L);
-            CPaintManagerUI::SetHSL(true, H, S, (static_cast<CSliderUI*>(pMsg->pSender))->GetValue());
-        }
-        return true;
-    }
-
-    bool OnAlphaChanged(void* param) {
-        TNotifyUI* pMsg = (TNotifyUI*)param;
-        if( pMsg->sType == _T("valuechanged") ) {
-            m_pm.SetOpacity((static_cast<CSliderUI*>(pMsg->pSender))->GetValue());
-        }
-        return true;
-    }
-
-    void OnPrepare() 
+    bool OnHChanged(void *param)
     {
-        CSliderUI* pSilder = static_cast<CSliderUI*>(m_pm.FindControl(_T("alpha_controlor")));
-        if( pSilder ) pSilder->OnNotify += MakeDelegate(this, &CFrameWindowWnd::OnAlphaChanged);
-        pSilder = static_cast<CSliderUI*>(m_pm.FindControl(_T("h_controlor")));
-        if( pSilder ) pSilder->OnNotify += MakeDelegate(this, &CFrameWindowWnd::OnHChanged);
-        pSilder = static_cast<CSliderUI*>(m_pm.FindControl(_T("s_controlor")));
-        if( pSilder ) pSilder->OnNotify += MakeDelegate(this, &CFrameWindowWnd::OnSChanged);
-        pSilder = static_cast<CSliderUI*>(m_pm.FindControl(_T("l_controlor")));
-        if( pSilder ) pSilder->OnNotify += MakeDelegate(this, &CFrameWindowWnd::OnLChanged);
+        TNotifyUI *pMsg = (TNotifyUI *)param;
+
+        if (pMsg->sType == _T("valuechanged"))
+        {
+            short H, S, L;
+            CPaintManagerUI::GetHSL(&H, &S, &L);
+            CPaintManagerUI::SetHSL(true, (static_cast<CSliderUI *>(pMsg->pSender))->GetValue(), S, L);
+        }
+
+        return true;
     }
 
-    void Notify(TNotifyUI& msg)
+    bool OnSChanged(void *param)
     {
-        if( msg.sType == _T("windowinit") ) OnPrepare();
-        else if( msg.sType == _T("click") ) {
-            if( msg.pSender->GetName() == _T("insertimagebtn") ) {
-                CRichEditUI* pRich = static_cast<CRichEditUI*>(m_pm.FindControl(_T("testrichedit")));
-                if( pRich ) {
+        TNotifyUI *pMsg = (TNotifyUI *)param;
+
+        if (pMsg->sType == _T("valuechanged"))
+        {
+            short H, S, L;
+            CPaintManagerUI::GetHSL(&H, &S, &L);
+            CPaintManagerUI::SetHSL(true, H, (static_cast<CSliderUI *>(pMsg->pSender))->GetValue(), L);
+        }
+
+        return true;
+    }
+
+    bool OnLChanged(void *param)
+    {
+        TNotifyUI *pMsg = (TNotifyUI *)param;
+
+        if (pMsg->sType == _T("valuechanged"))
+        {
+            short H, S, L;
+            CPaintManagerUI::GetHSL(&H, &S, &L);
+            CPaintManagerUI::SetHSL(true, H, S, (static_cast<CSliderUI *>(pMsg->pSender))->GetValue());
+        }
+
+        return true;
+    }
+
+    bool OnAlphaChanged(void *param)
+    {
+        TNotifyUI *pMsg = (TNotifyUI *)param;
+
+        if (pMsg->sType == _T("valuechanged"))
+        {
+            m_pm.SetOpacity((static_cast<CSliderUI *>(pMsg->pSender))->GetValue());
+        }
+
+        return true;
+    }
+
+    void OnPrepare()
+    {
+        CSliderUI *pSilder = static_cast<CSliderUI *>(m_pm.FindControl(_T("alpha_controlor")));
+
+        if (pSilder) { pSilder->OnNotify += MakeDelegate(this, &CFrameWindowWnd::OnAlphaChanged); }
+
+        pSilder = static_cast<CSliderUI *>(m_pm.FindControl(_T("h_controlor")));
+
+        if (pSilder) { pSilder->OnNotify += MakeDelegate(this, &CFrameWindowWnd::OnHChanged); }
+
+        pSilder = static_cast<CSliderUI *>(m_pm.FindControl(_T("s_controlor")));
+
+        if (pSilder) { pSilder->OnNotify += MakeDelegate(this, &CFrameWindowWnd::OnSChanged); }
+
+        pSilder = static_cast<CSliderUI *>(m_pm.FindControl(_T("l_controlor")));
+
+        if (pSilder) { pSilder->OnNotify += MakeDelegate(this, &CFrameWindowWnd::OnLChanged); }
+    }
+
+    void Notify(TNotifyUI &msg)
+    {
+        if (msg.sType == _T("windowinit")) { OnPrepare(); }
+        else if (msg.sType == _T("click"))
+        {
+            if (msg.pSender->GetName() == _T("insertimagebtn"))
+            {
+                CRichEditUI *pRich = static_cast<CRichEditUI *>(m_pm.FindControl(_T("testrichedit")));
+
+                if (pRich)
+                {
                     pRich->RemoveAll();
                 }
             }
-            else if( msg.pSender->GetName() == _T("changeskinbtn") ) {
-                if( CPaintManagerUI::GetResourcePath() == CPaintManagerUI::GetInstancePath() )
-                    CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skin\\FlashRes"));
+            else if (msg.pSender->GetName() == _T("changeskinbtn"))
+            {
+                if (CPaintManagerUI::GetResourcePath() == CPaintManagerUI::GetInstancePath())
+                { CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skin\\FlashRes")); }
                 else
-                    CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath());
+                { CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath()); }
+
                 CPaintManagerUI::ReloadSkin();
             }
         }
@@ -388,19 +463,14 @@ public:
 
     LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
-        if( uMsg == WM_CREATE ) {
+        if (uMsg == WM_CREATE)
+        {
             m_pm.Init(m_hWnd);
             CDialogBuilder builder;
-            CControlUI* pRoot = builder.Create(_T("test1.xml"), (UINT)0, NULL, &m_pm);
+            CControlUI *pRoot = builder.Create(_T("test1.xml"), (UINT)0, NULL, &m_pm);
             ASSERT(pRoot && "Failed to parse XML");
             m_pm.AttachDialog(pRoot);
             m_pm.AddNotifier(this);
-
-            m_pWndShadow = new CWndShadow;
-            m_pWndShadow->Create(m_hWnd);
-            RECT rcCorner = {3,3,4,4};
-            RECT rcHoleOffset = {0,0,0,0};
-            m_pWndShadow->SetImage(_T("LeftWithFill.png"), rcCorner, rcHoleOffset);
 
             DWMNCRENDERINGPOLICY ncrp = DWMNCRP_ENABLED;
             SetWindowAttribute(m_hWnd, DWMWA_TRANSITIONS_FORCEDISABLED, &ncrp, sizeof(ncrp));
@@ -417,20 +487,24 @@ public:
             Init();
             return 0;
         }
-        else if( uMsg == WM_DESTROY ) {
+        else if (uMsg == WM_DESTROY)
+        {
             ::PostQuitMessage(0L);
         }
-        else if( uMsg == WM_NCACTIVATE ) {
-            if( !::IsIconic(*this) ) return (wParam == 0) ? TRUE : FALSE;
+        else if (uMsg == WM_NCACTIVATE)
+        {
+            if (!::IsIconic(*this)) { return (wParam == 0) ? TRUE : FALSE; }
         }
+
         LRESULT lRes = 0;
-        if( m_pm.MessageHandler(uMsg, wParam, lParam, lRes) ) return lRes;
+
+        if (m_pm.MessageHandler(uMsg, wParam, lParam, lRes)) { return lRes; }
+
         return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
     }
 
 public:
     CPaintManagerUI m_pm;
-    CWndShadow* m_pWndShadow;
 };
 
 
@@ -439,18 +513,15 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
     CPaintManagerUI::SetInstance(hInstance);
     CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath());
 
-    HRESULT Hr = ::CoInitialize(NULL);
-    if( FAILED(Hr) ) return 0;
+    CFrameWindowWnd *pFrame = new CFrameWindowWnd();
 
-    CWndShadow::Initialize(hInstance);
+    if (pFrame == NULL) { return 0; }
 
-    CFrameWindowWnd* pFrame = new CFrameWindowWnd();
-    if( pFrame == NULL ) return 0;
-    pFrame->Create(NULL, _T("这是一个最简单的测试用exe，修改test1.xml就可以看到效果"), UI_WNDSTYLE_FRAME|WS_CLIPCHILDREN, WS_EX_WINDOWEDGE);
+    pFrame->Create(NULL, _T("这是一个最简单的测试用exe，修改test1.xml就可以看到效果"),
+                   UI_WNDSTYLE_FRAME | WS_CLIPCHILDREN, WS_EX_WINDOWEDGE);
     pFrame->CenterWindow();
     pFrame->ShowWindow(true);
     CPaintManagerUI::MessageLoop();
-
-    ::CoUninitialize();
+    CPaintManagerUI::Term();
     return 0;
 }

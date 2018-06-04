@@ -1,6 +1,6 @@
 #pragma once
 
-class CAbout : public WindowImplBase,DuiLib::CSkinSetting
+class CAbout : public CWndImplBase,DuiLib::CSkinSetting
 {
 public:
 	bool m_bModal;

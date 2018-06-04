@@ -19,7 +19,7 @@
 #ifndef MAINFRAME_HPP
 #define MAINFRAME_HPP
 
-class MainFrame : public WindowImplBase
+class MainFrame : public CWndImplBase
 {
 public:
 

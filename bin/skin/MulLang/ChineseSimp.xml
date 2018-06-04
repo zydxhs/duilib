@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Language lang="zh_CN" codepage="936">
+	<String	id="title"		text="多语言 Demo" />
+	<String	id="item1"		text="这是标题" />
+	<String	id="item2"		text="早上好" />
+	<String	id="chglang"    text="更换语言" />
+    <String id="weak"       text="弱" />
+    <String id="middle"     text="中" />
+    <String id="strong"     text="强" />
+</Language>
