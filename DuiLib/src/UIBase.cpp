@@ -418,12 +418,20 @@ void CWindowWnd::CenterWindow()
 
 void CWindowWnd::SetIcon(UINT nRes)
 {
+    // 防止某些 DPI 设置下图标模糊
+    // HICON hIcon = (HICON)::LoadImage(CPaintManagerUI::GetInstance(), MAKEINTRESOURCE(nRes), IMAGE_ICON,
+    //                                  ::GetSystemMetrics(SM_CXICON), ::GetSystemMetrics(SM_CYICON), LR_DEFAULTCOLOR);
     HICON hIcon = (HICON)::LoadImage(CPaintManagerUI::GetInstance(), MAKEINTRESOURCE(nRes), IMAGE_ICON,
-                                     ::GetSystemMetrics(SM_CXICON), ::GetSystemMetrics(SM_CYICON), LR_DEFAULTCOLOR);
+                                     (::GetSystemMetrics(SM_CXICON) + 15) & ~15,
+                                     (::GetSystemMetrics(SM_CYICON) + 15) & ~15, LR_DEFAULTCOLOR);
     ASSERT(hIcon);
     ::SendMessage(m_hWnd, WM_SETICON, (WPARAM) TRUE, (LPARAM) hIcon);
+    // 防止某些 DPI 设置下图标模糊
+    // hIcon = (HICON)::LoadImage(CPaintManagerUI::GetInstance(), MAKEINTRESOURCE(nRes), IMAGE_ICON,
+    //                            ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR);
     hIcon = (HICON)::LoadImage(CPaintManagerUI::GetInstance(), MAKEINTRESOURCE(nRes), IMAGE_ICON,
-                               ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR);
+                               (::GetSystemMetrics(SM_CXSMICON) + 15) & ~15,
+                               (::GetSystemMetrics(SM_CYSMICON) + 15) & ~15, LR_DEFAULTCOLOR);
     ASSERT(hIcon);
     ::SendMessage(m_hWnd, WM_SETICON, (WPARAM) FALSE, (LPARAM) hIcon);
 }
@@ -577,8 +585,10 @@ void CWindowWnd::ResizeClient(int cx /*= -1*/, int cy /*= -1*/)
 
     if (cy != -1) { rc.bottom = cy; }
 
-    if (!::AdjustWindowRectEx(&rc, GetWindowStyle(m_hWnd), (!(GetWindowStyle(m_hWnd) & WS_CHILD) &&
-                              (::GetMenu(m_hWnd) != NULL)), GetWindowExStyle(m_hWnd))) { return; }
+    if (!::AdjustWindowRectEx(&rc, GetWindowStyle(m_hWnd),
+                              (!(GetWindowStyle(m_hWnd) & WS_CHILD) && (::GetMenu(m_hWnd) != NULL)),
+                              GetWindowExStyle(m_hWnd)))
+    { return; }
 
     ::SetWindowPos(m_hWnd, NULL, 0, 0, rc.right - rc.left, rc.bottom - rc.top,
                    SWP_NOZORDER | SWP_NOMOVE | SWP_NOACTIVATE);

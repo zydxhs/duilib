@@ -236,6 +236,17 @@ struct DUI_MSGMAP_ENTRY //定义一个结构体，来存放消息信息
 #define DUI_ON_TIMER()                                                    \
     { DUI_MSGTYPE_TIMER, _T(""), DuiSig_vn,(DUI_PMSG)&OnTimer },
 
+// Mark method as deprecated.
+// example: DUI_DEPRECATED void func();
+#if defined(_MSC_VER)
+    #define DUI_DEPRECATED __declspec(deprecated)
+#elif defined(__GNUC__)
+    #define DUI_DEPRECATED __attribute__((deprecated))
+#else
+    #pragma message("WARNING: You need to implement DUI_DEPRECATED for this compiler")
+    #define DUI_DEPRECATED
+#endif
+
 
 ///
 //////////////END消息映射宏定义////////////////////////////////////////////////////
