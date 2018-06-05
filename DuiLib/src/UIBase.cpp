@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 
 #ifdef _DEBUG
     #include <shlwapi.h>
@@ -207,7 +207,7 @@ LDispatch:
 
 void CNotifyPump::NotifyPump(TNotifyUI &msg)
 {
-    ///±éÀúĞéÄâ´°¿Ú
+    ///éå†è™šæ‹Ÿçª—å£
     if (!msg.sVirtualWnd.IsEmpty())
     {
         for (int i = 0; i < m_VirtualWndMap.GetSize(); i++)
@@ -226,7 +226,7 @@ void CNotifyPump::NotifyPump(TNotifyUI &msg)
     }
 
     ///
-    //±éÀúÖ÷´°¿Ú
+    //éå†ä¸»çª—å£
     LoopDispatch(msg);
 }
 
@@ -284,7 +284,7 @@ HWND CWindowWnd::Create(HWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD 
                               CPaintManagerUI::GetInstance(), this);
     ASSERT(m_hWnd != NULL);
 
-    // 2017-02-09 ÍêÉÆ¶àÓïÑÔÇĞ»»
+    // 2017-02-09 å®Œå–„å¤šè¯­è¨€åˆ‡æ¢
     CPaintManagerUI::AddLanguageNotifier(m_hWnd);
 
     return m_hWnd;
@@ -369,7 +369,7 @@ void CWindowWnd::Close(UINT nRet)
 
     PostMessage(WM_CLOSE, (WPARAM)nRet, 0L);
 
-    //2017-02-25 zhuyadong ÍêÉÆ¶àÓïÑÔÇĞ»»
+    //2017-02-25 zhuyadong å®Œå–„å¤šè¯­è¨€åˆ‡æ¢
     CPaintManagerUI::DelLanguageNotifier(m_hWnd);
 }
 
@@ -388,7 +388,7 @@ void CWindowWnd::CenterWindow()
     if (hWndCenter != NULL)
     { hWnd = hWndCenter; }
 
-    // ´¦Àí¶àÏÔÊ¾Æ÷Ä£Ê½ÏÂÆÁÄ»¾ÓÖĞ
+    // å¤„ç†å¤šæ˜¾ç¤ºå™¨æ¨¡å¼ä¸‹å±å¹•å±…ä¸­
     MONITORINFO oMonitor = {};
     oMonitor.cbSize = sizeof(oMonitor);
     ::GetMonitorInfo(::MonitorFromWindow(hWnd, MONITOR_DEFAULTTONEAREST), &oMonitor);
@@ -418,7 +418,7 @@ void CWindowWnd::CenterWindow()
 
 void CWindowWnd::SetIcon(UINT nRes)
 {
-    // ·ÀÖ¹Ä³Ğ© DPI ÉèÖÃÏÂÍ¼±êÄ£ºı
+    // é˜²æ­¢æŸäº› DPI è®¾ç½®ä¸‹å›¾æ ‡æ¨¡ç³Š
     // HICON hIcon = (HICON)::LoadImage(CPaintManagerUI::GetInstance(), MAKEINTRESOURCE(nRes), IMAGE_ICON,
     //                                  ::GetSystemMetrics(SM_CXICON), ::GetSystemMetrics(SM_CYICON), LR_DEFAULTCOLOR);
     HICON hIcon = (HICON)::LoadImage(CPaintManagerUI::GetInstance(), MAKEINTRESOURCE(nRes), IMAGE_ICON,
@@ -426,7 +426,7 @@ void CWindowWnd::SetIcon(UINT nRes)
                                      (::GetSystemMetrics(SM_CYICON) + 15) & ~15, LR_DEFAULTCOLOR);
     ASSERT(hIcon);
     ::SendMessage(m_hWnd, WM_SETICON, (WPARAM) TRUE, (LPARAM) hIcon);
-    // ·ÀÖ¹Ä³Ğ© DPI ÉèÖÃÏÂÍ¼±êÄ£ºı
+    // é˜²æ­¢æŸäº› DPI è®¾ç½®ä¸‹å›¾æ ‡æ¨¡ç³Š
     // hIcon = (HICON)::LoadImage(CPaintManagerUI::GetInstance(), MAKEINTRESOURCE(nRes), IMAGE_ICON,
     //                            ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR);
     hIcon = (HICON)::LoadImage(CPaintManagerUI::GetInstance(), MAKEINTRESOURCE(nRes), IMAGE_ICON,

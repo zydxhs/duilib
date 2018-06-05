@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "Canvas.h"
 
 CCanvasUI::CCanvasUI()
@@ -24,5 +24,5 @@ LPVOID CCanvasUI::GetInterface(LPCTSTR pstrName)
 
 void CCanvasUI::DoEvent(TEventUI& event) 
 {
-	// if m_rcItem.left < 20 ×ó±ß¿ÉÒÔÐÞ¸Ä
+	// if m_rcItem.left < 20 å·¦è¾¹å¯ä»¥ä¿®æ”¹
 }

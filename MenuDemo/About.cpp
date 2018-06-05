@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "SkinSetting.h"
 #include "About.h"
 
@@ -187,7 +187,7 @@ LRESULT CAbout::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 LRESULT CAbout::OnNcActivate(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
 {
 
-	//wParamÎª0Ê±±íÊ¾ÊÇÊ§È¥½¹µã£¬Îª·Ç0Ê±±íÊ¾µÃµ½½¹µã
+	//wParamä¸º0æ—¶è¡¨ç¤ºæ˜¯å¤±å»ç„¦ç‚¹ï¼Œä¸ºé0æ—¶è¡¨ç¤ºå¾—åˆ°ç„¦ç‚¹
 	if (m_bModal)
 	{
 		if (! wParam)

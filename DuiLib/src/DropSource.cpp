@@ -1,6 +1,6 @@
-/// \copyright Copyright(c) 2018, SuZhou Keda Technology Co., All rights reserved.
+ï»¿/// \copyright Copyright(c) 2018, SuZhou Keda Technology Co., All rights reserved.
 /// \file dropsource.cpp
-/// \brief ÍÏ·ÅÔ´
+/// \brief æ‹–æ”¾æº
 ///
 ///
 /// \author zhuyadong
@@ -8,8 +8,8 @@
 /// \date 2018-04-27
 /// \note
 /// -----------------------------------------------------------------------------
-/// ĞŞ¸Ä¼ÇÂ¼£º
-/// ÈÕ  ÆÚ        °æ±¾        ĞŞ¸ÄÈË        ×ß¶ÁÈË    ĞŞ¸ÄÄÚÈİ
+/// ä¿®æ”¹è®°å½•ï¼š
+/// æ—¥  æœŸ        ç‰ˆæœ¬        ä¿®æ”¹äºº        èµ°è¯»äºº    ä¿®æ”¹å†…å®¹
 ///
 #include "stdafx.h"
 #include "DropSource.h"

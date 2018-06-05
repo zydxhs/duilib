@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 
 namespace DuiLib {
 //CDateTimeUI::m_nDTUpdateFlag
@@ -213,7 +213,7 @@ CDateTimeUI::CDateTimeUI()
     m_bReadOnly = false;
     m_pWindow = NULL;
     m_nDTUpdateFlag = DT_UPDATE;
-    UpdateText();       // add by:daviyang35 ³õÊ¼»¯½çÃæÊ±ÏÔÊ¾Ê±¼ä
+    UpdateText();       // add by:daviyang35 åˆå§‹åŒ–ç•Œé¢æ—¶æ˜¾ç¤ºæ—¶é—´
     m_nDTUpdateFlag = DT_NONE;
 }
 
@@ -355,7 +355,7 @@ void CDateTimeUI::DoEvent(TEventUI &event)
     {
         if (IsEnabled())
         {
-            // 2018-05-28 Ô­À´´úÂëÔÚmanagerÖĞ²¶»ñ£¬ÔÚ´ËÊÍ·Å¡£ĞŞ¸ÄCapture»úÖÆºó£¬ÓÉ¿Ø¼ş×Ô¼º¾ö¶¨ÊÇ·ñ²¶»ñ
+            // 2018-05-28 åŸæ¥ä»£ç åœ¨managerä¸­æ•è·ï¼Œåœ¨æ­¤é‡Šæ”¾ã€‚ä¿®æ”¹Captureæœºåˆ¶åï¼Œç”±æ§ä»¶è‡ªå·±å†³å®šæ˜¯å¦æ•è·
             // ReleaseCapture();
 
             if (IsFocused() && m_pWindow == NULL)
@@ -401,9 +401,9 @@ SIZE CDateTimeUI::EstimateSize(SIZE szAvailable)
 
 void CDateTimeUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:dragenable")); }
-    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:drageimage")); }
-    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:dropenable")); }
+    if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:dragenable")); }
+    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:drageimage")); }
+    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:dropenable")); }
     else { CLabelUI::SetAttribute(pstrName, pstrValue); }
 }
 

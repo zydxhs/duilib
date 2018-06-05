@@ -1,4 +1,4 @@
-#ifndef __UIBUTTON_H__
+ï»¿#ifndef __UIBUTTON_H__
 #define __UIBUTTON_H__
 
 #pragma once
@@ -32,7 +32,7 @@ public:
     LPCTSTR GetHotForeImage();
     void SetHotForeImage(LPCTSTR pStrImage);
 
-    // ¶ÔÓ¦°´Å¥µÄ5¸ö×´Ì¬Í¼
+    // å¯¹åº”æŒ‰é’®çš„5ä¸ªçŠ¶æ€å›¾
     void SetFiveStatusImage(LPCTSTR pStrImage);
     void SetFadeAlphaDelta(BYTE uDelta);
     BYTE GetFadeAlphaDelta();
@@ -64,13 +64,13 @@ protected:
 
     UINT m_uButtonState;
 
-    // Control::m_dwBackColor       Õı³£ ±³¾°É«
-    // Label::m_dwTextColor         Õı³£ Ç°¾°É«
-    // Label::m_dwDisabledTextColor ½ûÓÃ Ç°¾°É«
-    DWORD m_dwHotBkColor;           // Êó±êĞü¸¡ ±³¾°É«
-    DWORD m_dwHotTextColor;         // Êó±êĞü¸¡ Ç°¾°É«
-    DWORD m_dwFocusedTextColor;     // ½¹µã×´Ì¬ Ç°¾°É«
-    DWORD m_dwPushedTextColor;      // Êó±ê°´ÏÂ Ç°¾°É«
+    // Control::m_dwBackColor       æ­£å¸¸ èƒŒæ™¯è‰²
+    // Label::m_dwTextColor         æ­£å¸¸ å‰æ™¯è‰²
+    // Label::m_dwDisabledTextColor ç¦ç”¨ å‰æ™¯è‰²
+    DWORD m_dwHotBkColor;           // é¼ æ ‡æ‚¬æµ® èƒŒæ™¯è‰²
+    DWORD m_dwHotTextColor;         // é¼ æ ‡æ‚¬æµ® å‰æ™¯è‰²
+    DWORD m_dwFocusedTextColor;     // ç„¦ç‚¹çŠ¶æ€ å‰æ™¯è‰²
+    DWORD m_dwPushedTextColor;      // é¼ æ ‡æŒ‰ä¸‹ å‰æ™¯è‰²
     BYTE m_uFadeAlpha;
     BYTE m_uFadeAlphaDelta;
 

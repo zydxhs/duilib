@@ -1,4 +1,4 @@
-#ifndef __UILIST_H__
+ï»¿#ifndef __UILIST_H__
 #define __UILIST_H__
 
 #pragma once
@@ -329,7 +329,7 @@ public:
     bool IsExpanded() const;
     bool Expand(bool bExpand = true);
 
-    void Invalidate(); // Ö±½ÓCControl::Invalidate»áµ¼ÖÂ¹ö¶¯ÌõË¢ĞÂ£¬ÖØĞ´¼õÉÙË¢ĞÂÇøÓò
+    void Invalidate(); // ç›´æ¥CControl::Invalidateä¼šå¯¼è‡´æ»šåŠ¨æ¡åˆ·æ–°ï¼Œé‡å†™å‡å°‘åˆ·æ–°åŒºåŸŸ
     bool Activate();
 
     void DoEvent(TEventUI &event);
@@ -337,8 +337,8 @@ public:
 
     void DrawItemBk(HDC hDC, const RECT &rcItem);
 
-    int GetMouseColumn(POINT pt);       // ·µ»ØÊó±êËùÔÚµÄÁĞ
-    RECT GetSubItemPos(int nIndex);     // ·µ»ØÊó±êËùÔÚÁĞµÄ¾ØĞÎ
+    int GetMouseColumn(POINT pt);       // è¿”å›é¼ æ ‡æ‰€åœ¨çš„åˆ—
+    RECT GetSubItemPos(int nIndex);     // è¿”å›é¼ æ ‡æ‰€åœ¨åˆ—çš„çŸ©å½¢
 protected:
     int m_iIndex;
     int m_iDrawIndex;
@@ -449,7 +449,7 @@ public:
     bool IsExpanded() const;
     bool Expand(bool bExpand = true);
 
-    void Invalidate(); // Ö±½ÓCControl::Invalidate»áµ¼ÖÂ¹ö¶¯ÌõË¢ĞÂ£¬ÖØĞ´¼õÉÙË¢ĞÂÇøÓò
+    void Invalidate(); // ç›´æ¥CControl::Invalidateä¼šå¯¼è‡´æ»šåŠ¨æ¡åˆ·æ–°ï¼Œé‡å†™å‡å°‘åˆ·æ–°åŒºåŸŸ
     bool Activate();
 
     void DoEvent(TEventUI &event);

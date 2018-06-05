@@ -1,7 +1,7 @@
-/*
-    ´´½¨ÈÕÆÚ£º 2012/11/05 15:09:48
-    ×÷Õß£º     daviyang35@gmail.com
-    ÃèÊö£º     FlashUI
+ï»¿/*
+    åˆ›å»ºæ—¥æœŸï¼š 2012/11/05 15:09:48
+    ä½œè€…ï¼š     daviyang35@gmail.com
+    æè¿°ï¼š     FlashUI
 */
 #ifndef __UIFLASH_H__
 #define __UIFLASH_H__
@@ -27,7 +27,7 @@ public:
     virtual LPVOID GetInterface(LPCTSTR pstrName);
     virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
-    // ÊôĞÔ
+    // å±æ€§
     CDuiString GetAlign(void);
     void SetAlign(CDuiString sAlign);
     CDuiString GetWMode(void);
@@ -42,35 +42,35 @@ public:
     bool IsPlaying(void);
 
 
-    // ÏûÏ¢Í¨Öª²ÎÊı
-    int GetState(void)    { return m_nState; }          // ·µ»Øµ±Ç°×´Ì¬
-    int GetProgress(void) { return m_nProgress; }       // ·µ»Øµ±Ç°½ø¶È
-    CDuiString GetCommand(void)  { return m_sCmd; }     // ·µ»ØÃüÁî
-    CDuiString GetArgument(void) { return m_sArg; }     // ·µ»Ø²ÎÊı
+    // æ¶ˆæ¯é€šçŸ¥å‚æ•°
+    int GetState(void)    { return m_nState; }          // è¿”å›å½“å‰çŠ¶æ€
+    int GetProgress(void) { return m_nProgress; }       // è¿”å›å½“å‰è¿›åº¦
+    CDuiString GetCommand(void)  { return m_sCmd; }     // è¿”å›å‘½ä»¤
+    CDuiString GetArgument(void) { return m_sArg; }     // è¿”å›å‚æ•°
 
 protected:
     virtual bool DoCreateControl();
 
 private:
-    // Ó°Æ¬×´Ì¬±ä»¯Í¨Öª£¬¿ÉÄÜµÄÖµ£º
-    // 0 ¡ª¡ªÕıÔÚÔØÈë
-    // 1 ¡ª¡ªÎ´³õÊ¼»¯
-    // 2 ¡ª¡ªÒÑÔØÈë
-    // 3 ¡ª¡ªÕıÔÚ½»»¥
-    // 4 ¡ª¡ªÍê³É Àı×Ó
+    // å½±ç‰‡çŠ¶æ€å˜åŒ–é€šçŸ¥ï¼Œå¯èƒ½çš„å€¼ï¼š
+    // 0 â€”â€”æ­£åœ¨è½½å…¥
+    // 1 â€”â€”æœªåˆå§‹åŒ–
+    // 2 â€”â€”å·²è½½å…¥
+    // 3 â€”â€”æ­£åœ¨äº¤äº’
+    // 4 â€”â€”å®Œæˆ ä¾‹å­
     HRESULT OnReadyStateChange(long newState);
-    // ²¥·Å½ø¶È
+    // æ’­æ”¾è¿›åº¦
     HRESULT OnProgress(long percentDone);
-    // fscommand ÃüÁî
-    // È«ÆÁÃüÁî          "fullscreen","true"
-    // ÆÁ±ÎÓÒ¼ü²Ëµ¥       "showmenu","false"
-    // ½ûÖ¹Ó°Æ¬Ëõ·Å       "allowscale","false"
-    // Ê¹¼üÅÌ³öÈëÎŞĞ§     "trapallkeys","true"
-    // µ÷ÓÃ¿ÉÖ´ĞĞÎÄ¼ş     "exec","ĞèÒª´ò¿ªµÄÎÄ¼şÂ·¾¶"
-    // ¹Ø±Õ²¥·ÅÆ÷        "quit"
-    // ±£´æ±äÁ¿µ½ÎÄ±¾ÎÄ¼ş  "save","arg"
+    // fscommand å‘½ä»¤
+    // å…¨å±å‘½ä»¤          "fullscreen","true"
+    // å±è”½å³é”®èœå•       "showmenu","false"
+    // ç¦æ­¢å½±ç‰‡ç¼©æ”¾       "allowscale","false"
+    // ä½¿é”®ç›˜å‡ºå…¥æ— æ•ˆ     "trapallkeys","true"
+    // è°ƒç”¨å¯æ‰§è¡Œæ–‡ä»¶     "exec","éœ€è¦æ‰“å¼€çš„æ–‡ä»¶è·¯å¾„"
+    // å…³é—­æ’­æ”¾å™¨        "quit"
+    // ä¿å­˜å˜é‡åˆ°æ–‡æœ¬æ–‡ä»¶  "save","arg"
     HRESULT FSCommand(CDuiString &command, CDuiString &args);
-    // FSCommand ÊÂ¼ş²î²»¶à£¬Óë FSCommand²»Í¬µÄÊÇ£¬Õâ¸öÊÂ¼ş¿ÉÒÔÓĞ·µ»ØÖµ¡£²ÎÊıÊÇÒ»¸öXML¸ñÊ½µÄ×Ö·û´®£¬¸ñÊ½ÈçÏÂ
+    // FSCommand äº‹ä»¶å·®ä¸å¤šï¼Œä¸ FSCommandä¸åŒçš„æ˜¯ï¼Œè¿™ä¸ªäº‹ä»¶å¯ä»¥æœ‰è¿”å›å€¼ã€‚å‚æ•°æ˜¯ä¸€ä¸ªXMLæ ¼å¼çš„å­—ç¬¦ä¸²ï¼Œæ ¼å¼å¦‚ä¸‹
     // "<invoke name='%s'returntype='xml'><arguments><string>%s</string></arguments></invoke>"
     HRESULT FlashCall(CDuiString &request);
 
@@ -78,7 +78,7 @@ private:
     HRESULT RegisterEventHandler(BOOL inAdvise);
 
     // ITranslateAccelerator
-    // DuilibÏûÏ¢·Ö·¢¸øFlash
+    // Duilibæ¶ˆæ¯åˆ†å‘ç»™Flash
     virtual LRESULT TranslateAccelerator(MSG *pMsg);
 
 private:
@@ -87,12 +87,12 @@ private:
     ShockwaveFlashObjects::IShockwaveFlash *m_pFlash;
     CFlashEvents       *m_pFlashEvents;
 
-    // ÊôĞÔ
-    CDuiString  m_sAlign;       // ¶ÔÆëÊôĞÔ£ºL=Left T=Top R=Right B=Bottom ¸÷×Ö·ûµÄ×éºÏ
-    CDuiString  m_sWMode;       // ¿Ø¼şµÄ´°¿ÚÄ£Ê½
-    CDuiString  m_sMovie;       // Ó°Æ¬Â·¾¶£¨URL / Ïà¶Ô×ÊÔ´Ä¿Â¼µÄÂ·¾¶£©
-    CDuiString  m_sBase;        // Ö¸¶¨ËùÓĞÓ°Æ¬Ïà¶ÔÂ·¾¶µÄ»ùµØÖ·¡£µ±Ó°Æ¬ÓëÆäËüĞèÒªµÄÆäËüÎÄ¼ş²»ÔÚÍ¬Ò»Ä¿Â¼Ê±ÌØ±ğÓĞÓÃ¡£Ä¬ÈÏÎªµ±Ç°Ó°Æ¬ËùÔÚÂ·¾¶¡£
-    CDuiString  m_sScale;       // Ó°Æ¬Ëõ·ÅÄ£Ê½
+    // å±æ€§
+    CDuiString  m_sAlign;       // å¯¹é½å±æ€§ï¼šL=Left T=Top R=Right B=Bottom å„å­—ç¬¦çš„ç»„åˆ
+    CDuiString  m_sWMode;       // æ§ä»¶çš„çª—å£æ¨¡å¼
+    CDuiString  m_sMovie;       // å½±ç‰‡è·¯å¾„ï¼ˆURL / ç›¸å¯¹èµ„æºç›®å½•çš„è·¯å¾„ï¼‰
+    CDuiString  m_sBase;        // æŒ‡å®šæ‰€æœ‰å½±ç‰‡ç›¸å¯¹è·¯å¾„çš„åŸºåœ°å€ã€‚å½“å½±ç‰‡ä¸å…¶å®ƒéœ€è¦çš„å…¶å®ƒæ–‡ä»¶ä¸åœ¨åŒä¸€ç›®å½•æ—¶ç‰¹åˆ«æœ‰ç”¨ã€‚é»˜è®¤ä¸ºå½“å‰å½±ç‰‡æ‰€åœ¨è·¯å¾„ã€‚
+    CDuiString  m_sScale;       // å½±ç‰‡ç¼©æ”¾æ¨¡å¼
 
     int         m_nProgress;
     int         m_nState;

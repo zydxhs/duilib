@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 
 namespace DuiLib {
 
@@ -900,7 +900,7 @@ LPCTSTR CActiveXWnd::GetWindowClassName() const
 void CActiveXWnd::OnFinalMessage(HWND hWnd)
 {
     m_pOwner->m_pOwner->GetManager()->RemoveNativeWindow(hWnd);
-    //delete this; // ÕâÀï²»ĞèÒªÇåÀí£¬CActiveXUI»áÇåÀíµÄ
+    //delete this; // è¿™é‡Œä¸éœ€è¦æ¸…ç†ï¼ŒCActiveXUIä¼šæ¸…ç†çš„
 }
 
 void CActiveXWnd::DoVerb(LONG iVerb)
@@ -1219,7 +1219,7 @@ void CActiveXUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     if (_tcscmp(pstrName, _T("clsid")) == 0) { SetCLSID(pstrValue); }
     else if (_tcscmp(pstrName, _T("modulename")) == 0) { SetModuleName(pstrValue); }
     else if (_tcscmp(pstrName, _T("delaycreate")) == 0) { SetDelayCreate(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:autowidth")); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:autowidth")); }
     else { CControlUI::SetAttribute(pstrName, pstrValue); }
 }
 

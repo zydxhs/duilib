@@ -1,6 +1,6 @@
-/// \copyright Copyright(c) 2018, SuZhou Keda Technology Co., All rights reserved.
+ï»¿/// \copyright Copyright(c) 2018, SuZhou Keda Technology Co., All rights reserved.
 /// \file dataobjecthelper.cpp
-/// \brief OleÊı¾İ¶ÔÏó¸¨ÖúÀà
+/// \brief Oleæ•°æ®å¯¹è±¡è¾…åŠ©ç±»
 ///
 ///
 /// \author zhuyadong
@@ -8,8 +8,8 @@
 /// \date 2018-04-28
 /// \note
 /// -----------------------------------------------------------------------------
-/// ĞŞ¸Ä¼ÇÂ¼£º
-/// ÈÕ  ÆÚ        °æ±¾        ĞŞ¸ÄÈË        ×ß¶ÁÈË    ĞŞ¸ÄÄÚÈİ
+/// ä¿®æ”¹è®°å½•ï¼š
+/// æ—¥  æœŸ        ç‰ˆæœ¬        ä¿®æ”¹äºº        èµ°è¯»äºº    ä¿®æ”¹å†…å®¹
 ///
 #include "objidl.h"
 #include "stdafx.h"
@@ -288,7 +288,7 @@ void *COleDataHelper::GetCustomData(WORD wCF, DWORD &dwLen)
     return pData;
 }
 
-// TODO ÑéÖ¤ÊÇ·ñÕıÈ·
+// TODO éªŒè¯æ˜¯å¦æ­£ç¡®
 HGDIOBJ COleDataHelper::GetCustomGDI(WORD wCF)
 {
     if (wCF < ECF_GDIOBJFIRST || wCF > ECF_GDIOBJLAST) { return NULL; }

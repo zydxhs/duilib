@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include <atlcomcli.h>
 #include "flash11.tlh"
 
@@ -261,7 +261,7 @@ LRESULT CFlashUI::TranslateAccelerator(MSG *pMsg)
 
     if (m_pFlash == NULL) { return E_NOTIMPL; }
 
-    // µ±Ç°Flash´°¿Ú²»ÊÇ½¹µã,²»´¦Àí¼ÓËÙ¼ü
+    // å½“å‰Flashçª—å£ä¸æ˜¯ç„¦ç‚¹,ä¸å¤„ç†åŠ é€Ÿé”®
     BOOL bIsChild = FALSE;
     HWND hTempWnd = NULL;
     HWND hWndFocus = ::GetFocus();
@@ -319,7 +319,7 @@ HRESULT CFlashUI::RegisterEventHandler(BOOL inAdvise)
 
 void CFlashUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    // Flash ¿Ø¼ş²»Ö§³ÖÕâÁ½¸öÊôĞÔ
+    // Flash æ§ä»¶ä¸æ”¯æŒè¿™ä¸¤ä¸ªå±æ€§
     if (_tcscmp(pstrName, _T("homepage")) == 0) { }
     else if (_tcscmp(pstrName, _T("autonavi")) == 0) { }
     else if (_tcscmp(pstrName, _T("align")) == 0)
@@ -353,7 +353,7 @@ void CFlashUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if (_tcscmp(pstrName, _T("movie")) == 0) { m_sMovie = pstrValue; }
     else if (_tcscmp(pstrName, _T("base")) == 0)  { m_sBase = pstrValue; }
     else if (_tcscmp(pstrName, _T("scale")) == 0) { m_sScale = pstrValue; }
-    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:autowidth")); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:autowidth")); }
     else { CActiveXUI::SetAttribute(pstrName, pstrValue); }
 }
 

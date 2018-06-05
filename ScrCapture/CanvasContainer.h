@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 class CCanvasContainerUI: public CContainerUI
 {
@@ -19,6 +19,6 @@ public:
 protected:
 	int m_iCursor;
 	UINT m_uButtonState;
-	POINT m_ptClipBasePoint; // µ÷Õû»ù×¼µã
+	POINT m_ptClipBasePoint; // è°ƒæ•´åŸºå‡†ç‚¹
 	POINT m_ptLastMouse; // 
 };

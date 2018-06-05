@@ -1,4 +1,4 @@
-//2017-02-25 zhuyadong Ìí¼Ó¿ì½İ¼ü¿Ø¼ş
+ï»¿//2017-02-25 zhuyadong æ·»åŠ å¿«æ·é”®æ§ä»¶
 #ifndef __UIHOTKEY_H__
 #define __UIHOTKEY_H__
 #pragma once

@@ -1,6 +1,6 @@
-/// \copyright Copyright(c) 2018, SuZhou Keda Technology Co., All rights reserved.
+ï»¿/// \copyright Copyright(c) 2018, SuZhou Keda Technology Co., All rights reserved.
 /// \file droptarget.h
-/// \brief ÍÏ·ÅÄ¿±ê
+/// \brief æ‹–æ”¾ç›®æ ‡
 ///
 ///
 /// \author zhuyadong
@@ -8,8 +8,8 @@
 /// \date 2018-04-26
 /// \note
 /// -----------------------------------------------------------------------------
-/// ÐÞ¸Ä¼ÇÂ¼£º
-/// ÈÕ  ÆÚ        °æ±¾        ÐÞ¸ÄÈË        ×ß¶ÁÈË    ÐÞ¸ÄÄÚÈÝ
+/// ä¿®æ”¹è®°å½•ï¼š
+/// æ—¥  æœŸ        ç‰ˆæœ¬        ä¿®æ”¹äºº        èµ°è¯»äºº    ä¿®æ”¹å†…å®¹
 ///
 #pragma once
 #include <OleIdl.h>
@@ -27,14 +27,14 @@ public:
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, __RPC__deref_out void **ppvObject);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
-    //½øÈë
+    //è¿›å…¥
     HRESULT STDMETHODCALLTYPE DragEnter(__RPC__in_opt IDataObject *pDataObj, DWORD grfKeyState, POINTL pt,
                                         __RPC__inout DWORD *pdwEffect);
-    //ÒÆ¶¯
+    //ç§»åŠ¨
     HRESULT STDMETHODCALLTYPE DragOver(DWORD grfKeyState, POINTL pt, __RPC__inout DWORD *pdwEffect);
-    //Àë¿ª
+    //ç¦»å¼€
     HRESULT STDMETHODCALLTYPE DragLeave();
-    //ÊÍ·Å
+    //é‡Šæ”¾
     HRESULT STDMETHODCALLTYPE Drop(__RPC__in_opt IDataObject *pDataObj, DWORD grfKeyState, POINTL pt,
                                    __RPC__inout DWORD *pdwEffect);
 

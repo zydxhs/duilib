@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "deelx.h"
 
 namespace DuiLib {
@@ -9,7 +9,7 @@ const TCHAR *const NUMBERS_BIN = _T("01");
 const TCHAR *const NUMBERS_DEC = _T("0123456789");
 const TCHAR *const NUMBERS_HEX = _T("0123456789abcdefABCDEF");
 const TCHAR *const LINUX_NOTSUPPORT =
-    _T("@#$&()*/£¬¡££¡¡­¡­¡ª¡ª£¤£¨£©¡¢£¿:£º£»¡°¡±£¦¡«£¥¡Á£À£££«£­£½£¼£¾£¬£®~¡¤¡¶¡·\\|\"'[]{}<>!?; \t");
+    _T("@#$&()*/ï¼Œã€‚ï¼â€¦â€¦â€”â€”ï¿¥ï¼ˆï¼‰ã€ï¼Ÿ:ï¼šï¼›â€œâ€ï¼†ï½ï¼…Ã—ï¼ ï¼ƒï¼‹ï¼ï¼ï¼œï¼ï¼Œï¼~Â·ã€Šã€‹\\|\"'[]{}<>!?; \t");
 const TCHAR *const SPECIAL_SYMBOL = _T("`~!@#$%^&*()-_=+[]{};:,.<>/?'\"\\|");
 
 
@@ -38,8 +38,8 @@ protected:
     enum
     {
         DEFAULT_TIMERID = 20,
-        // 2017-07-21 zhuyadong Ìí¼Ó minmaxnumber ÊôĞÔ
-        CHECK_TIMERID,          // ÓÃÓÚ¼ì²âÓÃ»§ÊäÈëµÄÖµÊÇ·ñÔ½½ç
+        // 2017-07-21 zhuyadong æ·»åŠ  minmaxnumber å±æ€§
+        CHECK_TIMERID,          // ç”¨äºæ£€æµ‹ç”¨æˆ·è¾“å…¥çš„å€¼æ˜¯å¦è¶Šç•Œ
     };
 
     CEditUI *m_pOwner;
@@ -47,7 +47,7 @@ protected:
     bool m_bInit;
     bool m_bDrawCaret;
 #ifndef UNICODE
-    BYTE m_byDChar; // ·Ç0±íÊ¾µ±Ç°ÊäÈë×Ö·ûÎªË«×Ö½Ú×Ö·û
+    BYTE m_byDChar; // é0è¡¨ç¤ºå½“å‰è¾“å…¥å­—ç¬¦ä¸ºåŒå­—èŠ‚å­—ç¬¦
 #endif // UNICODE
 };
 
@@ -257,7 +257,7 @@ LRESULT CEditWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             lRes = CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 
-            if (m_pOwner->IsEnabled() && m_bDrawCaret)    // todo:ÅĞ¶ÏÊÇ·ñenabled
+            if (m_pOwner->IsEnabled() && m_bDrawCaret)    // todo:åˆ¤æ–­æ˜¯å¦enabled
             {
                 RECT rcClient;
                 ::GetClientRect(m_hWnd, &rcClient);
@@ -295,7 +295,7 @@ LRESULT CEditWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         lRes = CWindowWnd::HandleMessage(uMsg, wParam, lParam);
         OnPaste(uMsg, wParam, lParam, bHandled);
     }
-    // 2018-06-02 ĞŞ¸´±à¼­¿ò»ñÈ¡½¹µãºó²»ÏÔÊ¾TooltipµÄÎÊÌâ
+    // 2018-06-02 ä¿®å¤ç¼–è¾‘æ¡†è·å–ç„¦ç‚¹åä¸æ˜¾ç¤ºTooltipçš„é—®é¢˜
     else if (uMsg == WM_MOUSEMOVE)
     {
         if (!bTrack && !(wParam & MK_LBUTTON))
@@ -326,10 +326,10 @@ LRESULT CEditWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         lRes = CWindowWnd::HandleMessage(uMsg, wParam, lParam);
         // 2018-03-14
-        // 1. ²Ù×÷ÏµÍ³»á°ÑÒ»¸ö WM_IME_CHAR ÏûÏ¢×ª»»ÎªÁ½¸ö WM_CHAR ÏûÏ¢
-        // 2. ±à¼­¿òÖ»ÓĞ´¦ÀíÁËÁ½¸ö WM_CHAR ÏûÏ¢ºó£¬¸Ã×Ö·û²Å»á³öÏÖÔÚ±à¼­¿òÖĞ
-        // 3. ÎªÁËÖ§³ÖÔÚ±à¼­¿òÖĞ²åÈë¡¢Ñ¡Ôñ×Ö·ûºóÌæ»»ÊäÈëµÈ¹¦ÄÜ
-        // ¸ÃÏûÏ¢²»×÷×Ö·û¹ıÂË¡¢ÕıÔòÆ¥Åä¹¤×÷£¬¶øÊÇÉèÖÃ±êÊ¶£¬ÔÚ WM_CHARE ÏûÏ¢ÖĞ´¦Àí
+        // 1. æ“ä½œç³»ç»Ÿä¼šæŠŠä¸€ä¸ª WM_IME_CHAR æ¶ˆæ¯è½¬æ¢ä¸ºä¸¤ä¸ª WM_CHAR æ¶ˆæ¯
+        // 2. ç¼–è¾‘æ¡†åªæœ‰å¤„ç†äº†ä¸¤ä¸ª WM_CHAR æ¶ˆæ¯åï¼Œè¯¥å­—ç¬¦æ‰ä¼šå‡ºç°åœ¨ç¼–è¾‘æ¡†ä¸­
+        // 3. ä¸ºäº†æ”¯æŒåœ¨ç¼–è¾‘æ¡†ä¸­æ’å…¥ã€é€‰æ‹©å­—ç¬¦åæ›¿æ¢è¾“å…¥ç­‰åŠŸèƒ½
+        // è¯¥æ¶ˆæ¯ä¸ä½œå­—ç¬¦è¿‡æ»¤ã€æ­£åˆ™åŒ¹é…å·¥ä½œï¼Œè€Œæ˜¯è®¾ç½®æ ‡è¯†ï¼Œåœ¨ WM_CHARE æ¶ˆæ¯ä¸­å¤„ç†
         m_byDChar = 0 != HIBYTE(wParam) ? 1 : 0;
     }
 
@@ -380,7 +380,7 @@ LRESULT CEditWnd::OnEditChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPara
     return 0;
 }
 
-// bHandled ±ØĞëÎªTRUE
+// bHandled å¿…é¡»ä¸ºTRUE
 LRESULT CEditWnd::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
 #ifndef UNICODE
@@ -402,7 +402,7 @@ LRESULT CEditWnd::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled
         (m_pOwner->IsRegExpFilter() && !m_pOwner->IsRegExpMatch(sTxt.GetData())))
     {
         ::MessageBeep(MB_ICONWARNING);
-        // É¾³ı×Ö·û
+        // åˆ é™¤å­—ç¬¦
         wIdx -= 1;
 #ifndef UNICODE
         LPCTSTR start = (LPCTSTR)sTxt.GetData();
@@ -421,7 +421,7 @@ LRESULT CEditWnd::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled
     return 0;
 }
 
-// bHandled ±ØĞëÎªTRUE
+// bHandled å¿…é¡»ä¸ºTRUE
 LRESULT CEditWnd::OnPaste(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
     if (!m_pOwner->IsCharFilter() && !m_pOwner->IsRegExpFilter()) { return 0L; }
@@ -435,7 +435,7 @@ LRESULT CEditWnd::OnPaste(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandle
 
     if (strValidTxt != buf)
     {
-        // Ôö¼ÓÕ³Ìù
+        // å¢åŠ ç²˜è´´
         SetWindowText(m_hWnd, strValidTxt);
         ::SendMessage(m_hWnd, EM_SETSEL, LOWORD(-2), HIWORD(-1));
     }
@@ -463,7 +463,7 @@ void CEditWnd::GetRegExpMatch(LPCTSTR pstrTxt, CDuiString &strValidTxt)
 
 bool CEditWnd::IsValidNumber(LPTSTR &pstr)
 {
-    // 2018-03-07 zhuyadong É¾³ıÊı×Ö×ó²àµÄ0
+    // 2018-03-07 zhuyadong åˆ é™¤æ•°å­—å·¦ä¾§çš„0
     int nLen = (int)_tcslen(pstr);
     WORD wIdx = LOWORD(::SendMessage(m_hWnd, EM_GETSEL, 0, 0));
 
@@ -599,7 +599,7 @@ void CEditUI::DoEvent(TEventUI &event)
     {
         if (IsEnabled())
         {
-            // 2018-05-28 Ô­À´´úÂëÔÚmanagerÖĞ²¶»ñ£¬ÔÚ´ËÊÍ·Å¡£ĞŞ¸ÄCapture»úÖÆºó£¬ÓÉ¿Ø¼ş×Ô¼º¾ö¶¨ÊÇ·ñ²¶»ñ
+            // 2018-05-28 åŸæ¥ä»£ç åœ¨managerä¸­æ•è·ï¼Œåœ¨æ­¤é‡Šæ”¾ã€‚ä¿®æ”¹Captureæœºåˆ¶åï¼Œç”±æ§ä»¶è‡ªå·±å†³å®šæ˜¯å¦æ•è·
             // ReleaseCapture();
 
             if (IsFocused() && m_pWindow == NULL)
@@ -948,7 +948,7 @@ void CEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
         SetTipColor(clrColor);
     }
-    // 2017-07-21 zhuyadong Ìí¼Ó minmaxnumber ÊôĞÔ
+    // 2017-07-21 zhuyadong æ·»åŠ  minmaxnumber å±æ€§
     else if (_tcscmp(pstrName, _T("minmaxnumber")) == 0)
     {
         TCHAR *pDot = _tcschr((LPTSTR)pstrValue, _T(','));
@@ -973,8 +973,8 @@ void CEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     {
         SetRegExpFilter((_tcscmp(pstrValue, _T("true")) == 0) ? true : false);
     }
-    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:dragenable")); }
-    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:drageimage")); }
+    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:dragenable")); }
+    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:drageimage")); }
     else { CLabelUI::SetAttribute(pstrName, pstrValue); }
 }
 
@@ -1055,7 +1055,7 @@ void CEditUI::PaintText(HDC hDC)
     }
 }
 
-//2017-02-25 zhuyadong Ìí¼ÓÌáÊ¾ÎÄ×Ö¼°ÆäÑÕÉ«
+//2017-02-25 zhuyadong æ·»åŠ æç¤ºæ–‡å­—åŠå…¶é¢œè‰²
 void CEditUI::SetTipText(LPCTSTR pstrTip)
 {
     m_sTipText = pstrTip;
@@ -1085,7 +1085,7 @@ DWORD CEditUI::GetTipColor()
 {
     return m_dwTipColor;
 }
-// 2017-07-21 zhuyadong Ìí¼Ó minmaxnumber ÊôĞÔ
+// 2017-07-21 zhuyadong æ·»åŠ  minmaxnumber å±æ€§
 void CEditUI::SetMinMaxNumber(int nMin, int nMax)
 {
     m_nMinNumber = nMin;

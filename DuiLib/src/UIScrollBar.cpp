@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 
 namespace DuiLib {
 
@@ -1114,10 +1114,10 @@ void CScrollBarUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if (_tcscmp(pstrName, _T("scrollunit")) == 0) { SetScrollUnit(_ttoi(pstrValue)); }
     else if (_tcscmp(pstrName, _T("showbutton1")) == 0) { SetShowButton1(_tcscmp(pstrValue, _T("true")) == 0); }
     else if (_tcscmp(pstrName, _T("showbutton2")) == 0) { SetShowButton2(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:dragenable")); }
-    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:drageimage")); }
-    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:dropenable")); }
-    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:autowidth")); }
+    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:dragenable")); }
+    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:drageimage")); }
+    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:dropenable")); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:autowidth")); }
     else { CControlUI::SetAttribute(pstrName, pstrValue); }
 }
 

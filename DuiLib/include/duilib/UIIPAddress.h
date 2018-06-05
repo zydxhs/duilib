@@ -1,4 +1,4 @@
-#ifndef __UIIPADDRESS_H__
+ï»¿#ifndef __UIIPADDRESS_H__
 #define __UIIPADDRESS_H__
 
 #pragma once
@@ -36,7 +36,7 @@ public:
     bool IsReadOnly() const;
     HWND GetNativeEditHWND() const;
 
-    // Ö÷»úĞò¡£µã·Ö±íÊ¾·¨ÖĞµÚ1¸ö×Ö¶Î£¬ÔÚ×î¸ßÎ»
+    // ä¸»æœºåºã€‚ç‚¹åˆ†è¡¨ç¤ºæ³•ä¸­ç¬¬1ä¸ªå­—æ®µï¼Œåœ¨æœ€é«˜ä½
     void SetIp(DWORD dwIp);
     DWORD GetIp(void);
 

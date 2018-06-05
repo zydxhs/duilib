@@ -1,4 +1,4 @@
-//2017-02-25 zhuyadong Ìí¼Ó¿ì½İ¼ü¿Ø¼ş
+ï»¿//2017-02-25 zhuyadong æ·»åŠ å¿«æ·é”®æ§ä»¶
 #include "stdafx.h"
 
 namespace DuiLib {
@@ -178,7 +178,7 @@ LRESULT CHotKeyWnd::OnEditChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL 
 
     if (m_pOwner->m_wVirtualKeyCode == 0)
     {
-        m_pOwner->m_sText = _T("ÎŞ");
+        m_pOwner->m_sText = _T("æ— ");
         m_pOwner->m_wModifiers = 0;
     }
     else
@@ -361,7 +361,7 @@ void CHotKeyUI::DoEvent(TEventUI &event)
     {
         if (IsEnabled())
         {
-            // 2018-05-28 Ô­À´´úÂëÔÚmanagerÖĞ²¶»ñ£¬ÔÚ´ËÊÍ·Å¡£ĞŞ¸ÄCapture»úÖÆºó£¬ÓÉ¿Ø¼ş×Ô¼º¾ö¶¨ÊÇ·ñ²¶»ñ
+            // 2018-05-28 åŸæ¥ä»£ç åœ¨managerä¸­æ•è·ï¼Œåœ¨æ­¤é‡Šæ”¾ã€‚ä¿®æ”¹Captureæœºåˆ¶åï¼Œç”±æ§ä»¶è‡ªå·±å†³å®šæ˜¯å¦æ•è·
             // ReleaseCapture();
 
             if (IsFocused() && m_pWindow == NULL)
@@ -532,10 +532,10 @@ void CHotKeyUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if (_tcscmp(pstrName, _T("hotimage")) == 0) { SetHotImage(pstrValue); }
     else if (_tcscmp(pstrName, _T("focusedimage")) == 0) { SetFocusedImage(pstrValue); }
     else if (_tcscmp(pstrName, _T("disabledimage")) == 0) { SetDisabledImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:dragenable")); }
-    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:drageimage")); }
-    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:dropenable")); }
-    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:autowidth")); }
+    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:dragenable")); }
+    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:drageimage")); }
+    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:dropenable")); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:autowidth")); }
     else { CLabelUI::SetAttribute(pstrName, pstrValue); }
 }
 

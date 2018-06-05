@@ -1,4 +1,4 @@
-#ifndef __UIWEBBROWSER_H__
+ï»¿#ifndef __UIWEBBROWSER_H__
 #define __UIWEBBROWSER_H__
 
 #pragma once
@@ -16,7 +16,7 @@ class DUILIB_API CWebBrowserUI
     , public ITranslateAccelerator
 {
 public:
-    /// ¹¹Ôìº¯Êı
+    /// æ„é€ å‡½æ•°
     CWebBrowserUI();
     virtual ~CWebBrowserUI();
 
@@ -43,16 +43,16 @@ public:
     static HRESULT SetProperty(IDispatch *pObj, LPOLESTR pName, VARIANT *pValue);
 
 protected:
-    IWebBrowser2           *m_pWebBrowser2; //ä¯ÀÀÆ÷Ö¸Õë
+    IWebBrowser2           *m_pWebBrowser2; //æµè§ˆå™¨æŒ‡é’ˆ
     IHTMLWindow2       *_pHtmlWnd2;
     LONG m_dwRef;
     DWORD m_dwCookie;
     virtual void ReleaseControl();
     HRESULT RegisterEventHandler(BOOL inAdvise);
     virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-    CDuiString m_sHomePage; // Ä¬ÈÏÒ³Ãæ
-    bool m_bAutoNavi;   // ÊÇ·ñÆô¶¯Ê±´ò¿ªÄ¬ÈÏÒ³Ãæ
-    CWebBrowserEventHandler *m_pWebBrowserEventHandler; //ä¯ÀÀÆ÷ÊÂ¼ş´¦Àí
+    CDuiString m_sHomePage; // é»˜è®¤é¡µé¢
+    bool m_bAutoNavi;   // æ˜¯å¦å¯åŠ¨æ—¶æ‰“å¼€é»˜è®¤é¡µé¢
+    CWebBrowserEventHandler *m_pWebBrowserEventHandler; //æµè§ˆå™¨äº‹ä»¶å¤„ç†
 
     // DWebBrowserEvents2
     void BeforeNavigate2(IDispatch *pDisp, VARIANT *&url, VARIANT *&Flags, VARIANT *&TargetFrameName,
@@ -97,7 +97,7 @@ public:
     STDMETHOD(OnFrameWindowActivate)(BOOL fActivate);
     STDMETHOD(ResizeBorder)(LPCRECT prcBorder, IOleInPlaceUIWindow *pUIWindow, BOOL fFrameWindow);
     STDMETHOD(TranslateAccelerator)(LPMSG lpMsg, const GUID *pguidCmdGroup,
-                                    DWORD nCmdID);  //ä¯ÀÀÆ÷ÏûÏ¢¹ıÂË
+                                    DWORD nCmdID);  //æµè§ˆå™¨æ¶ˆæ¯è¿‡æ»¤
     STDMETHOD(GetOptionKeyPath)(LPOLESTR *pchKey, DWORD dwReserved);
     STDMETHOD(GetDropTarget)(IDropTarget *pDropTarget, IDropTarget **ppDropTarget);
     STDMETHOD(GetExternal)(IDispatch **ppDispatch);
@@ -125,7 +125,7 @@ public:
         /* [in] */ UINT uiCP);
 
     // ITranslateAccelerator
-    // DuilibÏûÏ¢·Ö·¢¸øWebBrowser
+    // Duilibæ¶ˆæ¯åˆ†å‘ç»™WebBrowser
     virtual LRESULT TranslateAccelerator(MSG *pMsg);
 };
 } // namespace DuiLib

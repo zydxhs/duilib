@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include <exdisp.h>
 #include <comdef.h>
 #include "ControlEx.h"
@@ -199,7 +199,7 @@ public:
 
     LRESULT OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
     {
-        // ÓÐÊ±»áÔÚÊÕµ½WM_NCDESTROYºóÊÕµ½wParamÎªSC_CLOSEµÄWM_SYSCOMMAND
+        // æœ‰æ—¶ä¼šåœ¨æ”¶åˆ°WM_NCDESTROYåŽæ”¶åˆ°wParamä¸ºSC_CLOSEçš„WM_SYSCOMMAND
         if (wParam == SC_CLOSE)
         {
             ::PostQuitMessage(0L);
@@ -297,7 +297,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 
     if (pFrame == NULL) { return 0; }
 
-    pFrame->Create(NULL, _T("360°²È«ÎÀÊ¿"), UI_WNDSTYLE_FRAME, 0L, 0, 0, 800, 572);
+    pFrame->Create(NULL, _T("360å®‰å…¨å«å£«"), UI_WNDSTYLE_FRAME, 0L, 0, 0, 800, 572);
     pFrame->CenterWindow();
     ::ShowWindow(*pFrame, SW_SHOW);
 

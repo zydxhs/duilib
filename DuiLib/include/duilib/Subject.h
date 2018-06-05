@@ -1,27 +1,27 @@
-#ifndef __OBSERVER_PATTERN_H__
+ï»¿#ifndef __OBSERVER_PATTERN_H__
 #define __OBSERVER_PATTERN_H__
 #pragma once
 
 namespace DuiLib {
 
-//¹Û²ìÕß
+//è§‚å¯Ÿè€…
 class CSubjectBase;
 class DUILIB_API IObserver
 {
 public:
     /** \brief
      *
-     * \param p1 WPARAM                     ²ÎÊı1
-     * \param NULL WPARAM p2=               ²ÎÊı2
-     * \param NULL LPARAM p3=               ²ÎÊı3
-     * \param NULL CSubjectBase *pSub=      Ö÷Ìâ¶ÔÏóÖ¸Õë
+     * \param p1 WPARAM                     å‚æ•°1
+     * \param NULL WPARAM p2=               å‚æ•°2
+     * \param NULL LPARAM p3=               å‚æ•°3
+     * \param NULL CSubjectBase *pSub=      ä¸»é¢˜å¯¹è±¡æŒ‡é’ˆ
      * \return virtual void
      *
      */
     virtual void OnSubjectUpdate(WPARAM p1, WPARAM p2 = NULL, LPARAM p3 = NULL, CSubjectBase *pSub = NULL) = 0;
 };
 
-//Ö÷Ìâ
+//ä¸»é¢˜
 namespace sub {
 class CSubjectImpl;
 }
@@ -33,14 +33,14 @@ public:
     virtual ~CSubjectBase(void);
     void AddObserver(IObserver *o);
     void RemoveObserver(IObserver *o);
-    // ²ÎÊıËµÃ÷£º
-    // p1/p2/p3  Í¨ÖªÄÚÈİ¡£Ê¹ÓÃÖ¸Õë£¬¿ÉÒÔ´«µİ32/64Î»ÕûÊı£¬»ò½á¹¹Ìå/Àà¶ÔÏóÖ¸Õë£¬32/64Î»ÏµÍ³Í¨ÓÃ
-    // o         ¹Û²ìÕßÖ¸Õë£¬ÓÃÓÚ¶¨ÏòÍ¨Öª
+    // å‚æ•°è¯´æ˜ï¼š
+    // p1/p2/p3  é€šçŸ¥å†…å®¹ã€‚ä½¿ç”¨æŒ‡é’ˆï¼Œå¯ä»¥ä¼ é€’32/64ä½æ•´æ•°ï¼Œæˆ–ç»“æ„ä½“/ç±»å¯¹è±¡æŒ‡é’ˆï¼Œ32/64ä½ç³»ç»Ÿé€šç”¨
+    // o         è§‚å¯Ÿè€…æŒ‡é’ˆï¼Œç”¨äºå®šå‘é€šçŸ¥
     void NotifyObserver(WPARAM p1, WPARAM p2 = NULL, LPARAM p3 = NULL, IObserver *o = NULL);
 
-    // Í¨Öª·¢ËÍ·½Ïò£ºÕıÏò/ÄæÏò ±éÀú¹Û²ìÕß
+    // é€šçŸ¥å‘é€æ–¹å‘ï¼šæ­£å‘/é€†å‘ éå†è§‚å¯Ÿè€…
     void SetNotifyDirection(bool bForward = true);
-    // ±éÀú¹Û²ìÕß
+    // éå†è§‚å¯Ÿè€…
     IObserver *GetFirst(void);
     IObserver *GetNext(void);
 

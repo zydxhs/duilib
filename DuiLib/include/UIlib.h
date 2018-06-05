@@ -1,4 +1,4 @@
-// Copyright (c) 2010-2011, duilib develop team(www.duilib.com).
+ï»¿// Copyright (c) 2010-2011, duilib develop team(www.duilib.com).
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or
@@ -47,7 +47,7 @@
     #endif
 #endif
 
-//µ¼Èë¿â
+//å¯¼å…¥åº“
 #if defined(_MSC_VER) && !defined(UILIB_STATIC)
     #ifndef UILIB_EXPORTS
         #ifdef _DEBUG

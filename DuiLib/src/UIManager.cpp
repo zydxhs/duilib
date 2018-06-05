@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include <zmouse.h>
 #include <stdlib.h>
 #include "UIShadow.h"
@@ -429,7 +429,7 @@ INLINE void CPaintManagerUI::SetInstance(HINSTANCE hInst)
     m_hInstance = hInst;
 #ifdef USE_GDIPLUS
     m_pGdiplusStartupInput = new Gdiplus::GdiplusStartupInput;
-    Gdiplus::GdiplusStartup(&m_gdiplusToken, m_pGdiplusStartupInput, NULL); // ¼ÓÔØGDI+½Ó¿Ú
+    Gdiplus::GdiplusStartup(&m_gdiplusToken, m_pGdiplusStartupInput, NULL); // åŠ è½½GDI+æ¥å£
 #endif // USE_GDIPLUS
     CShadowUI::Initialize(hInst);
 }
@@ -1528,7 +1528,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
             m_bMouseTracking = false;
             POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
 
-            // 2018-06-02 ĞŞ¸´±à¼­¿ò»ñÈ¡½¹µãºó²»ÏÔÊ¾TooltipµÄÎÊÌâ
+            // 2018-06-02 ä¿®å¤ç¼–è¾‘æ¡†è·å–ç„¦ç‚¹åä¸æ˜¾ç¤ºTooltipçš„é—®é¢˜
             if (m_pEventHover == NULL) { break; }
 
             // Generate mouse hover event
@@ -1572,7 +1572,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 
             }
 
-            // by jiangdong 2016-8-6 ĞŞ¸Ätooltip ĞüÍ£Ê±ºò ÉÁË¸bug
+            // by jiangdong 2016-8-6 ä¿®æ”¹tooltip æ‚¬åœæ—¶å€™ é—ªçƒbug
             if (m_pLastToolTip == NULL)
             {
                 m_pLastToolTip = m_pEventHover;
@@ -1599,7 +1599,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
                 }
             }
 
-            //ĞŞ¸ÄÔÚCListElementUI ÓĞÌáÊ¾ ×ÓÏîÎŞÌáÊ¾ÏÂÎŞ·¨¸úËæÒÆ¶¯£¡£¨°´ÀíËµ²»Ó¦¸ÃÒÆ¶¯µÄ£©
+            //ä¿®æ”¹åœ¨CListElementUI æœ‰æç¤º å­é¡¹æ— æç¤ºä¸‹æ— æ³•è·Ÿéšç§»åŠ¨ï¼ï¼ˆæŒ‰ç†è¯´ä¸åº”è¯¥ç§»åŠ¨çš„ï¼‰
             ::SendMessage(m_hwndTooltip, TTM_TRACKPOSITION, 0, (LPARAM)(DWORD)MAKELONG(pt.x, pt.y));
         }
 
@@ -1609,7 +1609,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
         {
             if (m_pRoot == NULL) { break; }
 
-            // 2018-06-02 ĞŞ¸´±à¼­¿ò»ñÈ¡½¹µãºó²»ÏÔÊ¾TooltipµÄÎÊÌâ
+            // 2018-06-02 ä¿®å¤ç¼–è¾‘æ¡†è·å–ç„¦ç‚¹åä¸æ˜¾ç¤ºTooltipçš„é—®é¢˜
             if (m_hwndTooltip != NULL && !::PtInRect(&m_pEventHover->GetPos(), m_ptLastMousePos))
             {
                 ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, FALSE, (LPARAM)&m_ToolTip);
@@ -1788,12 +1788,12 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
             event.wKeyState = (WORD)wParam;
             event.dwTimestamp = ::GetTickCount();
             // By daviyang35 at 2015-6-5 16:10:13
-            // ÔÚClickÊÂ¼şÖĞµ¯³öÁËÄ£Ì¬¶Ô»°¿ò£¬ÍË³ö½×¶Î´°¿ÚÊµÀı¿ÉÄÜÒÑ¾­É¾³ı
-            // this³ÉÔ±ÊôĞÔ¸³Öµ½«»áµ¼ÖÂheap´íÎó
-            // this³ÉÔ±º¯Êıµ÷ÓÃ½«»áµ¼ÖÂÒ°Ö¸ÕëÒì³£
-            // Ê¹ÓÃÕ»ÉÏµÄ³ÉÔ±À´µ÷ÓÃÏìÓ¦£¬ÌáÇ°Çå¿Õ³ÉÔ±
-            // µ±×èÈûµÄÄ£Ì¬´°¿Ú·µ»ØÊ±£¬»ØÕ»½×¶Î²»·ÃÎÊÈÎºÎÀàÊµÀı·½·¨»òÊôĞÔ
-            // ½«²»»á´¥·¢Òì³£
+            // åœ¨Clickäº‹ä»¶ä¸­å¼¹å‡ºäº†æ¨¡æ€å¯¹è¯æ¡†ï¼Œé€€å‡ºé˜¶æ®µçª—å£å®ä¾‹å¯èƒ½å·²ç»åˆ é™¤
+            // thisæˆå‘˜å±æ€§èµ‹å€¼å°†ä¼šå¯¼è‡´heapé”™è¯¯
+            // thisæˆå‘˜å‡½æ•°è°ƒç”¨å°†ä¼šå¯¼è‡´é‡æŒ‡é’ˆå¼‚å¸¸
+            // ä½¿ç”¨æ ˆä¸Šçš„æˆå‘˜æ¥è°ƒç”¨å“åº”ï¼Œæå‰æ¸…ç©ºæˆå‘˜
+            // å½“é˜»å¡çš„æ¨¡æ€çª—å£è¿”å›æ—¶ï¼Œå›æ ˆé˜¶æ®µä¸è®¿é—®ä»»ä½•ç±»å®ä¾‹æ–¹æ³•æˆ–å±æ€§
+            // å°†ä¸ä¼šè§¦å‘å¼‚å¸¸
             pControl->Event(event);
         }
         break;
@@ -1823,7 +1823,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
         }
         break;
 
-    case WM_RBUTTONUP:                 //ÓÒ¼üµ¯Æğ
+    case WM_RBUTTONUP:                 //å³é”®å¼¹èµ·
         {
             POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
             m_ptLastMousePos = pt;
@@ -2064,7 +2064,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
         }
         break;
 
-    case WM_IME_STARTCOMPOSITION:      //ÊäÈë·¨
+    case WM_IME_STARTCOMPOSITION:      //è¾“å…¥æ³•
         {
             if (m_pFocus == NULL) { break; }
 
@@ -2325,7 +2325,7 @@ int CPaintManagerUI::MessageLoop()
 void CPaintManagerUI::Term()
 {
 #ifdef USE_GDIPLUS
-    Gdiplus::GdiplusShutdown(m_gdiplusToken);   //  Ğ¶ÔØGDI+½Ó¿Ú
+    Gdiplus::GdiplusShutdown(m_gdiplusToken);   //  å¸è½½GDI+æ¥å£
     delete m_pGdiplusStartupInput;
 #endif // USE_GDIPLUS
 
@@ -3522,7 +3522,7 @@ const TImageInfo *CPaintManagerUI::AddImage(LPCTSTR bitmap, LPCTSTR type, DWORD 
 const TImageInfo *CPaintManagerUI::AddImage(LPCTSTR bitmap, HBITMAP hBitmap, int iWidth, int iHeight,
                                             bool bAlpha, bool bShared)
 {
-    // ÒòÎŞ·¨È·¶¨Íâ²¿HBITMAP¸ñÊ½£¬²»ÄÜÊ¹ÓÃhslµ÷Õû
+    // å› æ— æ³•ç¡®å®šå¤–éƒ¨HBITMAPæ ¼å¼ï¼Œä¸èƒ½ä½¿ç”¨hslè°ƒæ•´
     if (bitmap == NULL || bitmap[0] == _T('\0')) { return NULL; }
 
     if (hBitmap == NULL || iWidth <= 0 || iHeight <= 0) { return NULL; }
@@ -4479,7 +4479,7 @@ bool CPaintManagerUI::TranslateMessage(const LPMSG pMsg)
     {
         HWND hWndParent = ::GetParent(pMsg->hwnd);
 
-        //code by redrain 2014.12.3,½â¾öeditºÍwebbrowser°´tabÎŞ·¨ÇĞ»»½¹µãµÄbug
+        //code by redrain 2014.12.3,è§£å†³editå’ŒwebbrowseræŒ‰tabæ— æ³•åˆ‡æ¢ç„¦ç‚¹çš„bug
         //      for( int i = 0; i < m_aPreMessages.GetSize(); i++ )
         for (int i = m_aPreMessages.GetSize() - 1; i >= 0 ; --i)
         {
@@ -4551,13 +4551,13 @@ CShadowUI *CPaintManagerUI::GetShadow()
     return m_pWndShadow;
 }
 
-//2017-02-25 zhuyadong ÍêÉÆ¶àÓïÑÔÇĞ»»
+//2017-02-25 zhuyadong å®Œå–„å¤šè¯­è¨€åˆ‡æ¢
 bool CPaintManagerUI::LoadLanguage(int nLangType, const STRINGorID &xml, LPCTSTR szResType)
 {
     CMarkup xmlLoader;
 
-    //×ÊÔ´IDÎª×Ö·û´®£¬¸ñÊ½£º%{id}
-    //×Ö·û´®ÒÔ<¿ªÍ·ÈÏÎªÊÇXML×Ö·û´®£¬·ñÔòÈÏÎªÊÇXMLÎÄ¼ş
+    //èµ„æºIDä¸ºå­—ç¬¦ä¸²ï¼Œæ ¼å¼ï¼š%{id}
+    //å­—ç¬¦ä¸²ä»¥<å¼€å¤´è®¤ä¸ºæ˜¯XMLå­—ç¬¦ä¸²ï¼Œå¦åˆ™è®¤ä¸ºæ˜¯XMLæ–‡ä»¶
     if (HIWORD(xml.m_lpstr) != NULL)
     {
         if (*(xml.m_lpstr) == _T('<'))  { if (!xmlLoader.Load(xml.m_lpstr))        { return false; } }
@@ -4598,7 +4598,7 @@ bool CPaintManagerUI::LoadLanguage(int nLangType, const STRINGorID &xml, LPCTSTR
     LPCTSTR pstrName = NULL;
     LPCTSTR pstrValue = NULL;
     LPTSTR pstr = NULL;
-    ASSERT(2 == nAttributes);   // ÓïÑÔ°üÎÄ¼ş Language ½Úµã±ØĞë°üº¬´úÂëÒ³ÓëÃèÊö
+    ASSERT(2 == nAttributes);   // è¯­è¨€åŒ…æ–‡ä»¶ Language èŠ‚ç‚¹å¿…é¡»åŒ…å«ä»£ç é¡µä¸æè¿°
 
     for (int i = 0; i < root.GetAttributeCount(); ++i)
     {

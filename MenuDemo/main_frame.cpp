@@ -1,4 +1,4 @@
-//
+ï»¿//
 // main_frame.cpp
 // ~~~~~~~~~~~~~~
 //
@@ -206,25 +206,25 @@ void MainFrame::Notify(TNotifyUI &msg)
             {
                 CMenuUI *pRootMenu = pMenu->GetMenuUI();
 
-                // Ìí¼ÓÒ»¼¶²Ëµ¥Ïî
+                // æ·»åŠ ä¸€çº§èœå•é¡¹
                 CMenuElementUI *pNew = pRootMenu->NewMenuItem();
                 pNew->SetName(_T("Menu_Dynamic_1"));
-                pNew->SetText(_T("¶¯Ì¬Ò»¼¶²Ëµ¥"));
+                pNew->SetText(_T("åŠ¨æ€ä¸€çº§èœå•"));
                 pRootMenu->Add(pNew);
 
-                // Ìí¼Ó¶ş¼¶²Ëµ¥Ïî
+                // æ·»åŠ äºŒçº§èœå•é¡¹
                 CMenuElementUI *pItem1 = pRootMenu->FindMenuItem(_T("menu1"));
                 pNew = pItem1->NewMenuItem();
                 pNew->SetName(_T("Menu_Dynamic_2"));
-                pNew->SetText(_T("¶¯Ì¬¶ş¼¶²Ëµ¥_1"));
+                pNew->SetText(_T("åŠ¨æ€äºŒçº§èœå•_1"));
                 pItem1->Add(pNew);
 
-                // Ìí¼Ó¶ş¼¶²Ëµ¥Ïî£ºÔ­¸¸²Ëµ¥ÏîÃ»ÓĞ×Ó²Ëµ¥
+                // æ·»åŠ äºŒçº§èœå•é¡¹ï¼šåŸçˆ¶èœå•é¡¹æ²¡æœ‰å­èœå•
                 CMenuElementUI *pItem4 = pRootMenu->FindMenuItem(_T("menu4"));
-                pItem4->SetExpandable(true);    // Ìí¼Ó¿ÉÕ¹¿ªÊôĞÔ
+                pItem4->SetExpandable(true);    // æ·»åŠ å¯å±•å¼€å±æ€§
                 pNew = pItem4->NewMenuItem();
                 pNew->SetName(_T("Menu_Dynamic_3"));
-                pNew->SetText(_T("¶¯Ì¬¶ş¼¶²Ëµ¥_3"));
+                pNew->SetText(_T("åŠ¨æ€äºŒçº§èœå•_3"));
                 pItem4->Add(pNew);
 
             }
@@ -239,8 +239,8 @@ void MainFrame::Notify(TNotifyUI &msg)
     else if (msg.sType == DUI_MSGTYPE_MENUITEM_CLICK)
     {
         CDuiString strTxt;
-        strTxt.Format(_T("Äãµ¥»÷ÁË²Ëµ¥Ïî£º%s"), CMenuWnd::s_strName.GetData());
-        MessageBox(GetHWND(), strTxt, _T("ÌáÊ¾"), MB_OK);
+        strTxt.Format(_T("ä½ å•å‡»äº†èœå•é¡¹ï¼š%s"), CMenuWnd::s_strName.GetData());
+        MessageBox(GetHWND(), strTxt, _T("æç¤º"), MB_OK);
     }
 }
 

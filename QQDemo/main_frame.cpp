@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include <windows.h>
 #if !defined(UNDER_CE)
 #include <shellapi.h>
@@ -191,7 +191,7 @@ void MainFrame::UpdateFriendsList()
 		item.id = _T("0");
 		item.folder = true;
 		item.empty = false;
-		item.nick_name = _T("ÎÒµÄºÃÓÑ");
+		item.nick_name = _T("æˆ‘çš„å¥½å‹");
 
 		Node* root_parent = pFriendsList->AddNode(item, NULL);
 		friends_.push_back(item);
@@ -237,14 +237,14 @@ void MainFrame::UpdateFriendsList()
 		item.id = _T("3");
 		item.folder = true;
 		item.empty = false;
-		item.nick_name = _T("ÆóÒµºÃÓÑ");
+		item.nick_name = _T("ä¼ä¸šå¥½å‹");
 		Node* root_parent2 = pFriendsList->AddNode(item, NULL);
 		friends_.push_back(item);
 
 		item.id = _T("4");
 		item.folder = false;
 		item.logo = _T("icon_home.png");
-		item.nick_name = _T("ÌÚÑ¶ÆóÒµQQµÄ¹Ù·½Õ¹Ê¾ºÅ");
+		item.nick_name = _T("è…¾è®¯ä¼ä¸šQQçš„å®˜æ–¹å±•ç¤ºå·");
 		item.description = _T("");
 		pFriendsList->AddNode(item, root_parent2);
 		friends_.push_back(item);
@@ -252,7 +252,7 @@ void MainFrame::UpdateFriendsList()
 		item.id = _T("5");
 		item.folder = true;
 		item.empty = false;
-		item.nick_name = _T("Ä°ÉúÈË");
+		item.nick_name = _T("é™Œç”Ÿäºº");
 		Node* root_parent3 = pFriendsList->AddNode(item, NULL);
 		friends_.push_back(item);
 
@@ -260,7 +260,7 @@ void MainFrame::UpdateFriendsList()
 		item.id = _T("6");
 		item.folder = true;
 		item.empty = false;
-		item.nick_name = _T("ºÚÃûµ¥");
+		item.nick_name = _T("é»‘åå•");
 		Node* root_parent4 = pFriendsList->AddNode(item, NULL);
 		friends_.push_back(item);
 	}
@@ -278,19 +278,19 @@ void MainFrame::UpdateGroupsList()
 
 		item.folder = true;
 		item.empty = false;
-		item.nick_name = _T("ÎÒµÄQQÈº");
+		item.nick_name = _T("æˆ‘çš„QQç¾¤");
 
 		Node* root_parent = pGroupsList->AddNode(item, NULL);
 
 		item.folder = false;
 		item.logo = _T("duilib.png");
-		item.nick_name = _T("Duilib¹Ù·½½»Á÷Èº");
+		item.nick_name = _T("Duilibå®˜æ–¹äº¤æµç¾¤");
 		item.description = _T("153787916");
 		pGroupsList->AddNode(item, root_parent);
 
 		item.folder = false;
 		item.logo = _T("groups.png");
-		item.nick_name = _T("Duilib¹Ù·½½»Á÷Èº2");
+		item.nick_name = _T("Duilibå®˜æ–¹äº¤æµç¾¤2");
 		item.description = _T("79145400");
 		pGroupsList->AddNode(item, root_parent);
 	}

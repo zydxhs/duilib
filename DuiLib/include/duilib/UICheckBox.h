@@ -1,11 +1,11 @@
-#ifndef __UICHECKBOX_H__
+ï»¿#ifndef __UICHECKBOX_H__
 #define __UICHECKBOX_H__
 
 #pragma once
 
 namespace DuiLib {
-/// ×îÆÕÍ¨µÄ¸´Ñ¡°´Å¥¿Ø¼þ£¬Ö»ÓÐÊÇ¡¢·ñÁ½ÖÖ½á¹û£¬¿ÉÒÔÓÃ COptionUI ´úÌæ£¬²»Ìí¼Ó group ÊôÐÔ
-/// ÅÉÉúÓÚCOptionUI£¬Ö»ÊÇÃ¿×éÖ»ÓÐÒ»¸ö°´Å¥¶øÒÑ£¬×éÃûÎª¿Õ£¬ÅäÖÃÎÄ¼þÄ¬ÈÏÊôÐÔ¾ÙÀý£º
+/// æœ€æ™®é€šçš„å¤é€‰æŒ‰é’®æŽ§ä»¶ï¼Œåªæœ‰æ˜¯ã€å¦ä¸¤ç§ç»“æžœï¼Œå¯ä»¥ç”¨ COptionUI ä»£æ›¿ï¼Œä¸æ·»åŠ  group å±žæ€§
+/// æ´¾ç”ŸäºŽCOptionUIï¼Œåªæ˜¯æ¯ç»„åªæœ‰ä¸€ä¸ªæŒ‰é’®è€Œå·²ï¼Œç»„åä¸ºç©ºï¼Œé…ç½®æ–‡ä»¶é»˜è®¤å±žæ€§ä¸¾ä¾‹ï¼š
 /// <CheckBox name="chbTest" value="height='20' align='left' textpadding='24,0,0,0'
 ///  selnormalimg="file='chb_sel_nor.png' dest='0,4,16,20'" selhotimg="file='chb_sel_hover.png' dest='0,4,16,20'"
 ///  selfocusedimg="file='chb_sel_hover.png' dest='0,4,16,20'" selpushedimg="file='chb_sel_down.png' dest='0,4,16,20'"

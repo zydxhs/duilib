@@ -1,4 +1,4 @@
-#ifndef __UITILELAYOUT_H__
+ï»¿#ifndef __UITILELAYOUT_H__
 #define __UITILELAYOUT_H__
 
 #pragma once
@@ -30,16 +30,16 @@ public:
     void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
 private:
-    void ResetInternVisible(void);  // ÖØÖÃ×Ó¿Ø¼şÄÚ²¿ÏÔÊ¾ÊôĞÔ
+    void ResetInternVisible(void);  // é‡ç½®å­æ§ä»¶å†…éƒ¨æ˜¾ç¤ºå±æ€§
 protected:
-    SIZE m_szItem;                  // ÊôĞÔ|µ±Ç°£º×Ó¿Ø¼ş´óĞ¡£¬Ä¬ÈÏ80
-    int m_nColumns;                 // µ±Ç°×Ó¿Ø¼şÁĞÊı
-    int m_nRows;                    // µ±Ç°×Ó¿Ø¼şĞĞÊı
+    SIZE m_szItem;                  // å±æ€§|å½“å‰ï¼šå­æ§ä»¶å¤§å°ï¼Œé»˜è®¤80
+    int m_nColumns;                 // å½“å‰å­æ§ä»¶åˆ—æ•°
+    int m_nRows;                    // å½“å‰å­æ§ä»¶è¡Œæ•°
 
-    int m_nColumnsFixed;            // ÊôĞÔ£º×Ó¿Ø¼şÁĞÊı
-    int m_nRowsFixed;               // ÊôĞÔ£º×Ó¿Ø¼şĞĞÊı
-    int m_iChildVPadding;           // ÊôĞÔ£º×Ó¿Ø¼ş´¹Ö±·½Ïò¼ä¾à
-    bool m_bChildRounded;           // ÊôĞÔ£º×Ó¿Ø¼şË®Æ½¡¢´¹Ö±ÆÌÂú£¬ºöÂÔ×Ó¿Ø¼ş´óĞ¡
+    int m_nColumnsFixed;            // å±æ€§ï¼šå­æ§ä»¶åˆ—æ•°
+    int m_nRowsFixed;               // å±æ€§ï¼šå­æ§ä»¶è¡Œæ•°
+    int m_iChildVPadding;           // å±æ€§ï¼šå­æ§ä»¶å‚ç›´æ–¹å‘é—´è·
+    bool m_bChildRounded;           // å±æ€§ï¼šå­æ§ä»¶æ°´å¹³ã€å‚ç›´é“ºæ»¡ï¼Œå¿½ç•¥å­æ§ä»¶å¤§å°
 };
 }
 #endif // __UITILELAYOUT_H__

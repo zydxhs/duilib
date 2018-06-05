@@ -1,10 +1,10 @@
-#ifndef __UICHILDLAYOUT_H__
+ï»¿#ifndef __UICHILDLAYOUT_H__
 #define __UICHILDLAYOUT_H__
 
 #pragma once
 
 namespace DuiLib {
-// ²»ÍÆ¼öÊ¹ÓÃ¡£¿ÉÒÔÓÃ Include ±êÇ©´úÌæ
+// ä¸æ¨èä½¿ç”¨ã€‚å¯ä»¥ç”¨ Include æ ‡ç­¾ä»£æ›¿
 class DUILIB_API CChildLayoutUI : public CContainerUI
 {
 public:

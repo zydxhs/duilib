@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include <windows.h>
 #include <shellapi.h>
 
@@ -47,7 +47,7 @@ ChatDialog::ChatDialog(const CDuiString& bgimage, DWORD bkcolor, const FriendLis
 , italic_(false)
 , underline_(false)
 , font_size_(12)
-, font_face_name_(_T("Î¢ÈíÑÅºÚ"))
+, font_face_name_(_T("å¾®è½¯é›…é»‘"))
 {}
 
 ChatDialog::~ChatDialog()
@@ -224,9 +224,9 @@ CDuiString GetCurrentTimeString()
 	TCHAR szTime[MAX_PATH] = {0};
 	::GetLocalTime( &time );
 #if defined(UNDER_CE)
-	_stprintf( szTime, _T("%04dÄê%02dÔÂ%02dÈÕ %02d:%02d:%02d"), time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
+	_stprintf( szTime, _T("%04då¹´%02dæœˆ%02dæ—¥ %02d:%02d:%02d"), time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
 #else
-	_stprintf_s( szTime, MAX_PATH, _T("%04dÄê%02dÔÂ%02dÈÕ %02d:%02d:%02d"), time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
+	_stprintf_s( szTime, MAX_PATH, _T("%04då¹´%02dæœˆ%02dæ—¥ %02d:%02d:%02d"), time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond);
 #endif
 
 	return szTime;
@@ -255,7 +255,7 @@ void ChatDialog::SendMsg()
 
     lSelEnd = lSelBegin = pRichEdit->GetTextLength();
     pRichEdit->SetSel(lSelEnd, lSelEnd);
-    pRichEdit->ReplaceSel(_T("Ä³ÈË"), false);
+    pRichEdit->ReplaceSel(_T("æŸäºº"), false);
 
     lSelEnd = pRichEdit->GetTextLength();
     pRichEdit->SetSel(lSelBegin, lSelEnd);
@@ -263,7 +263,7 @@ void ChatDialog::SendMsg()
 
     lSelEnd = lSelBegin = pRichEdit->GetTextLength();
     pRichEdit->SetSel(lSelEnd, lSelEnd);
-    pRichEdit->ReplaceSel(_T("Ëµ:\t2011-07-30 08:30:12\n"), false);
+    pRichEdit->ReplaceSel(_T("è¯´:\t2011-07-30 08:30:12\n"), false);
     cf.dwMask = CFM_COLOR;
     cf.crTextColor = RGB(0, 0, 0);
     cf.dwEffects = 0;

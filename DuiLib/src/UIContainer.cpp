@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 
 namespace DuiLib {
 
@@ -270,8 +270,8 @@ void CContainerUI::SetVisible(bool bVisible)
     }
 }
 
-// Âß¼­ÉÏ£¬¶ÔÓÚContainer¿Ø¼ş²»¹«¿ª´Ë·½·¨
-// µ÷ÓÃ´Ë·½·¨µÄ½á¹ûÊÇ£¬ÄÚ²¿×Ó¿Ø¼şÒş²Ø£¬¿Ø¼ş±¾ÉíÒÀÈ»ÏÔÊ¾£¬±³¾°µÈĞ§¹û´æÔÚ
+// é€»è¾‘ä¸Šï¼Œå¯¹äºContaineræ§ä»¶ä¸å…¬å¼€æ­¤æ–¹æ³•
+// è°ƒç”¨æ­¤æ–¹æ³•çš„ç»“æœæ˜¯ï¼Œå†…éƒ¨å­æ§ä»¶éšè—ï¼Œæ§ä»¶æœ¬èº«ä¾ç„¶æ˜¾ç¤ºï¼ŒèƒŒæ™¯ç­‰æ•ˆæœå­˜åœ¨
 void CContainerUI::SetInternVisible(bool bVisible)
 {
     CControlUI::SetInternVisible(bVisible);
@@ -280,8 +280,8 @@ void CContainerUI::SetInternVisible(bool bVisible)
 
     for (int it = 0; it < m_items.GetSize(); it++)
     {
-        // ¿ØÖÆ×Ó¿Ø¼şÏÔÊ¾×´Ì¬
-        // InternVisible×´Ì¬Ó¦ÓÉ×Ó¿Ø¼ş×Ô¼º¿ØÖÆ
+        // æ§åˆ¶å­æ§ä»¶æ˜¾ç¤ºçŠ¶æ€
+        // InternVisibleçŠ¶æ€åº”ç”±å­æ§ä»¶è‡ªå·±æ§åˆ¶
         static_cast<CControlUI *>(m_items[it])->SetInternVisible(IsVisible());
     }
 }
@@ -858,9 +858,9 @@ void CContainerUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         else if (_tcscmp(pstrValue, _T("bottom")) == 0) { m_iChildVAlign = DT_BOTTOM; }
     }
     else if (_tcscmp(pstrName, _T("autowidth")) == 0) { SetAutoWidth(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:dragenable")); }
-    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:drageimage")); }
-    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:dropenable")); }
+    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:dragenable")); }
+    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:drageimage")); }
+    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:dropenable")); }
     else { CControlUI::SetAttribute(pstrName, pstrValue); }
 }
 
@@ -1094,7 +1094,7 @@ SIZE CContainerUI::EstimateSize(SIZE szAvailable)
 
 void CContainerUI::SetFloatPos(int iIndex)
 {
-    // ÒòÎªCControlUI::SetPos¶ÔfloatµÄ²Ù×÷Ó°Ïì£¬ÕâÀï²»ÄÜ¶Ôfloat×é¼şÌí¼Ó¹ö¶¯ÌõµÄÓ°Ïì
+    // å› ä¸ºCControlUI::SetPoså¯¹floatçš„æ“ä½œå½±å“ï¼Œè¿™é‡Œä¸èƒ½å¯¹floatç»„ä»¶æ·»åŠ æ»šåŠ¨æ¡çš„å½±å“
     if (iIndex < 0 || iIndex >= m_items.GetSize()) { return; }
 
     CControlUI *pControl = static_cast<CControlUI *>(m_items[iIndex]);

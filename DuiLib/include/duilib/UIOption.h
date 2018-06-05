@@ -1,4 +1,4 @@
-#ifndef __UIOPTION_H__
+ï»¿#ifndef __UIOPTION_H__
 #define __UIOPTION_H__
 
 #pragma once
@@ -27,7 +27,7 @@ public:
     void SetSelHotBkColor(DWORD dwHotBkColor);
     DWORD GetSelHotBkColor();
 
-    // Ñ¡ÖĞ
+    // é€‰ä¸­
     LPCTSTR GetSelNormalImg();
     void SetSelNormalImg(LPCTSTR pStrImage);
     LPCTSTR GetSelHotImg();
@@ -38,7 +38,7 @@ public:
     void SetSelPushedImg(LPCTSTR pStrImage);
     LPCTSTR GetSelDisabledImg();
     void SetSelDisabledImg(LPCTSTR pStrImage);
-    // Î´Ñ¡ÖĞ
+    // æœªé€‰ä¸­
     LPCTSTR GetUnselNormalImg();
     void SetUnselNormalImg(LPCTSTR pStrImage);
     LPCTSTR GetUnselHotImg();
@@ -71,21 +71,21 @@ protected:
     bool            m_bSelected;
     CDuiString      m_sGroupName;
 
-    // 5Ì¬ÑÕÉ« Ñ¡ÖĞÊ±½öÕı³£¡¢Ğü¸¡±³¾°É«ÓĞĞ§
-    // Button::m_dwPushedTextColor      °´ÏÂ/Ñ¡ÖĞ Ç°¾°É« ÆäËüÑÕÉ«¼ûButtton
-    DWORD           m_dwSelBkColor;     // °´ÏÂ/Ñ¡ÖĞ ±³¾°É«
-    DWORD           m_dwSelHotBkColor;  // Ğü¸¡/Ñ¡ÖĞ ±³¾°É«
+    // 5æ€é¢œè‰² é€‰ä¸­æ—¶ä»…æ­£å¸¸ã€æ‚¬æµ®èƒŒæ™¯è‰²æœ‰æ•ˆ
+    // Button::m_dwPushedTextColor      æŒ‰ä¸‹/é€‰ä¸­ å‰æ™¯è‰² å…¶å®ƒé¢œè‰²è§Buttton
+    DWORD           m_dwSelBkColor;     // æŒ‰ä¸‹/é€‰ä¸­ èƒŒæ™¯è‰²
+    DWORD           m_dwSelHotBkColor;  // æ‚¬æµ®/é€‰ä¸­ èƒŒæ™¯è‰²
 
-    TDrawInfo       m_diSelNormal;      // Ñ¡ÖĞ×´Ì¬ Õı³£
-    TDrawInfo       m_diSelHot;         // Ñ¡ÖĞ×´Ì¬ Êó±êĞü¸¡
-    TDrawInfo       m_diSelFocused;     // Ñ¡ÖĞ×´Ì¬ ½¹µã×´Ì¬
-    TDrawInfo       m_diSelPushed;      // Ñ¡ÖĞ×´Ì¬ °´ÏÂ
-    TDrawInfo       m_diSelDisabled;    // Ñ¡ÖĞ×´Ì¬ ½ûÓÃ
+    TDrawInfo       m_diSelNormal;      // é€‰ä¸­çŠ¶æ€ æ­£å¸¸
+    TDrawInfo       m_diSelHot;         // é€‰ä¸­çŠ¶æ€ é¼ æ ‡æ‚¬æµ®
+    TDrawInfo       m_diSelFocused;     // é€‰ä¸­çŠ¶æ€ ç„¦ç‚¹çŠ¶æ€
+    TDrawInfo       m_diSelPushed;      // é€‰ä¸­çŠ¶æ€ æŒ‰ä¸‹
+    TDrawInfo       m_diSelDisabled;    // é€‰ä¸­çŠ¶æ€ ç¦ç”¨
 
     TDrawInfo       m_diFore;
 
-    int             m_nBindTabIndex;    // µ¥»÷ºó´¥·¢µÄ TabLayout Ò³ÃæË÷ÒıºÅ
-    CDuiString      m_sBindTabLayout;   // °ó¶¨µÄ TabLayout ¿Ø¼şÃû
+    int             m_nBindTabIndex;    // å•å‡»åè§¦å‘çš„ TabLayout é¡µé¢ç´¢å¼•å·
+    CDuiString      m_sBindTabLayout;   // ç»‘å®šçš„ TabLayout æ§ä»¶å
 };
 
 class CButtonGroupImpl;

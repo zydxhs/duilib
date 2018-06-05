@@ -1,4 +1,4 @@
-#ifndef __UIHWEIGHTLAYOUT_H__
+ï»¿#ifndef __UIHWEIGHTLAYOUT_H__
 #define __UIHWEIGHTLAYOUT_H__
 
 #pragma once
@@ -16,8 +16,8 @@ public:
     void SetPos(RECT rc, bool bNeedInvalidate = true);
 
 protected:
-    void ResetWeightCtrlState(void);    // ´øÈ¨ÖØÇÒ±»Òş²ØµÄ¿Ø¼ş£¬ÖØÖÃÆä InternVisible ÊôĞÔ
-    bool HideMinHeightCtrl(int nIndex); // Òş²ØÖ¸¶¨Ë÷ÒıÎ»ÖÃµÄ¿Ø¼ş
+    void ResetWeightCtrlState(void);    // å¸¦æƒé‡ä¸”è¢«éšè—çš„æ§ä»¶ï¼Œé‡ç½®å…¶ InternVisible å±æ€§
+    bool HideMinHeightCtrl(int nIndex); // éšè—æŒ‡å®šç´¢å¼•ä½ç½®çš„æ§ä»¶
 
 };
 }

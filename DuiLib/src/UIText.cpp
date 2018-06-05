@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 
 namespace DuiLib {
 CTextUI::CTextUI() : m_nLinks(0), m_nHoverLink(-1)
@@ -92,7 +92,7 @@ void CTextUI::DoEvent(TEventUI &event)
     {
         ReleaseCapture();
 
-        //2017-02-25 zhuyadong ÏûÏ¢´«µİ¸ø¸¸¿Ø¼ş£¬ÓÃÓÚ¸´ÔÓ×éºÏ¿Ø¼şµÄÉÏÏÂÎÄ²Ëµ¥ÏìÓ¦¡£
+        //2017-02-25 zhuyadong æ¶ˆæ¯ä¼ é€’ç»™çˆ¶æ§ä»¶ï¼Œç”¨äºå¤æ‚ç»„åˆæ§ä»¶çš„ä¸Šä¸‹æ–‡èœå•å“åº”ã€‚
         if (m_pParent != NULL) { m_pParent->DoEvent(event); }
 
         return;
@@ -151,8 +151,8 @@ void CTextUI::DoEvent(TEventUI &event)
 
 void CTextUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:dragenable")); }
-    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:drageimage")); }
+    if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:dragenable")); }
+    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:drageimage")); }
     else { CLabelUI::SetAttribute(pstrName, pstrValue); }
 }
 

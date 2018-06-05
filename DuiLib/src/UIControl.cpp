@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include <ShlGuid.h>
 #include <ShObjIdl.h>
 #include "DropSource.h"
@@ -936,7 +936,7 @@ void CControlUI::NeedParentUpdate()
 
 DWORD CControlUI::GetAdjustColor(DWORD dwColor)
 {
-    // 2018-03-29 zyd ÑÕÉ«Í¸Ã÷ÏÔÊ¾¡£±£Áô alpha Í¨µÀÖµ£¬»æÖÆÑÕÉ«Ê±Ê¹ÓÃ
+    // 2018-03-29 zyd é¢œè‰²é€æ˜Žæ˜¾ç¤ºã€‚ä¿ç•™ alpha é€šé“å€¼ï¼Œç»˜åˆ¶é¢œè‰²æ—¶ä½¿ç”¨
     if (!m_bColorHSL) { return dwColor; }
 
     short H, S, L;
@@ -1000,14 +1000,14 @@ void CControlUI::DoEvent(TEventUI &event)
         }
     }
 
-    // 2017-02-25 zhuyadong Ìí¼ÓË«»÷ÊÂ¼þ
+    // 2017-02-25 zhuyadong æ·»åŠ åŒå‡»äº‹ä»¶
     if (event.Type == UIEVENT_DBLCLICK)
     {
         m_pManager->SendNotify(this, DUI_MSGTYPE_DBLCLICK);
         return;
     }
 
-    // ÍÏ×§
+    // æ‹–æ‹½
     if (event.Type == UIEVENT_MOUSEMOVE && (event.wParam & MK_LBUTTON) && m_bDragEnable)
     {
         OnDoDragDrop(event);
@@ -1140,7 +1140,7 @@ void CControlUI::ReleaseCapture(void)
 void CControlUI::OnDoDragDrop(TEventUI &evt)
 {
     SetCapture();
-    // µ÷ÓÃ½Ó¿Ú£¬ÓÉÓÃ»§Ìî³äÊý¾Ý
+    // è°ƒç”¨æŽ¥å£ï¼Œç”±ç”¨æˆ·å¡«å……æ•°æ®
     COleDataHelper cDataObjHelper;
     IDataObject *pDataObject = cDataObjHelper.CreateDataObject();
     TNotifyUI msg;
@@ -1199,7 +1199,7 @@ void CControlUI::OnDoDragDrop(TEventUI &evt)
         // if (S_OK != hr) { DeleteObject(hBMP); }
     }
 
-    // ÔÝÊ±Ö»Ö§³Ö¸´ÖÆ
+    // æš‚æ—¶åªæ”¯æŒå¤åˆ¶
     DWORD dwEffects = DROPEFFECT_COPY | DROPEFFECT_MOVE | DROPEFFECT_LINK | DROPEFFECT_SCROLL;
     dwResult = DoDragDrop(pDataObject, pDropSource, dwEffects, &dwEffect);
 
@@ -1455,7 +1455,7 @@ bool CControlUI::Paint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl)
 
 bool CControlUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl)
 {
-    // »æÖÆÑ­Ðò£º±³¾°ÑÕÉ«->±³¾°Í¼->×´Ì¬Í¼->ÎÄ±¾->±ß¿ò
+    // ç»˜åˆ¶å¾ªåºï¼šèƒŒæ™¯é¢œè‰²->èƒŒæ™¯å›¾->çŠ¶æ€å›¾->æ–‡æœ¬->è¾¹æ¡†
     if (m_cxyBorderRound.cx > 0 || m_cxyBorderRound.cy > 0)
     {
         CRenderClip roundClip;
@@ -1521,7 +1521,7 @@ void CControlUI::PaintBorder(HDC hDC)
 {
     if (m_rcBorderSize.left > 0 && (m_dwBorderColor != 0 || m_dwFocusBorderColor != 0))
     {
-        if (m_cxyBorderRound.cx > 0 || m_cxyBorderRound.cy > 0) //»­Ô²½Ç±ß¿ò
+        if (m_cxyBorderRound.cx > 0 || m_cxyBorderRound.cy > 0) //ç”»åœ†è§’è¾¹æ¡†
         {
             if (IsFocused() && m_dwFocusBorderColor != 0)
             { CRenderEngine::DrawRoundRect(hDC, m_rcItem, m_rcBorderSize.left, m_cxyBorderRound.cx, m_cxyBorderRound.cy, GetAdjustColor(m_dwFocusBorderColor), m_nBorderStyle); }

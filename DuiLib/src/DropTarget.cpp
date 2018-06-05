@@ -1,6 +1,6 @@
-/// \copyright Copyright(c) 2018, SuZhou Keda Technology Co., All rights reserved.
+ï»¿/// \copyright Copyright(c) 2018, SuZhou Keda Technology Co., All rights reserved.
 /// \file droptarget.cpp
-/// \brief ÍÏ·ÅÄ¿±ê
+/// \brief æ‹–æ”¾ç›®æ ‡
 ///
 ///
 /// \author zhuyadong
@@ -8,8 +8,8 @@
 /// \date 2018-04-26
 /// \note
 /// -----------------------------------------------------------------------------
-/// ÐÞ¸Ä¼ÇÂ¼£º
-/// ÈÕ  ÆÚ        °æ±¾        ÐÞ¸ÄÈË        ×ß¶ÁÈË    ÐÞ¸ÄÄÚÈÝ
+/// ä¿®æ”¹è®°å½•ï¼š
+/// æ—¥  æœŸ        ç‰ˆæœ¬        ä¿®æ”¹äºº        èµ°è¯»äºº    ä¿®æ”¹å†…å®¹
 ///
 #include "stdafx.h"
 #include <ShlGuid.h>
@@ -91,7 +91,7 @@ ULONG STDMETHODCALLTYPE CDropTarget::Release()
     return m_lRefCount;
 }
 
-//½øÈë
+//è¿›å…¥
 HRESULT STDMETHODCALLTYPE CDropTarget::DragEnter(__RPC__in_opt IDataObject *pDataObj, DWORD grfKeyState,
         POINTL pt, __RPC__inout DWORD *pdwEffect)
 {
@@ -100,7 +100,7 @@ HRESULT STDMETHODCALLTYPE CDropTarget::DragEnter(__RPC__in_opt IDataObject *pDat
     return m_pDuiDropTarget->OnDragEnter(pDataObj, grfKeyState, pt, pdwEffect);
 }
 
-//ÒÆ¶¯
+//ç§»åŠ¨
 HRESULT STDMETHODCALLTYPE CDropTarget::DragOver(DWORD grfKeyState, POINTL pt, __RPC__inout DWORD *pdwEffect)
 {
     if (m_bUseDnDHelper) { m_piDropHelper->DragOver((LPPOINT)&pt, *pdwEffect); }
@@ -108,7 +108,7 @@ HRESULT STDMETHODCALLTYPE CDropTarget::DragOver(DWORD grfKeyState, POINTL pt, __
     return m_pDuiDropTarget->OnDragOver(grfKeyState, pt, pdwEffect);
 }
 
-//Àë¿ª
+//ç¦»å¼€
 HRESULT STDMETHODCALLTYPE CDropTarget::DragLeave()
 {
     if (m_bUseDnDHelper) { m_piDropHelper->DragLeave(); }
@@ -116,7 +116,7 @@ HRESULT STDMETHODCALLTYPE CDropTarget::DragLeave()
     return m_pDuiDropTarget->OnDragLeave();
 }
 
-//ÊÍ·Å
+//é‡Šæ”¾
 HRESULT STDMETHODCALLTYPE CDropTarget::Drop(__RPC__in_opt IDataObject *pDataObj, DWORD grfKeyState,
         POINTL pt, __RPC__inout DWORD *pdwEffect)
 {

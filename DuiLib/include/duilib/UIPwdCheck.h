@@ -1,4 +1,4 @@
-#ifndef __UIPWDCHECK_H__
+ï»¿#ifndef __UIPWDCHECK_H__
 #define __UIPWDCHECK_H__
 
 #pragma once
@@ -36,12 +36,12 @@ private:
 private:
     enum {EPS_WEAK = 1, EPS_MIDDLE, EPS_STRONG };
 
-    BYTE        m_byPwdStrongth;    // ÃÜÂëÇ¿¶È
-    bool        m_bShowTxt;         // ÊÇ·ñÏÔÊ¾ÎÄ±¾
+    BYTE        m_byPwdStrongth;    // å¯†ç å¼ºåº¦
+    bool        m_bShowTxt;         // æ˜¯å¦æ˜¾ç¤ºæ–‡æœ¬
 
-    DWORD       m_dwClrWeak;        // ÈõÃÜÂë
+    DWORD       m_dwClrWeak;        // å¼±å¯†ç 
     DWORD       m_dwClrMiddle;      //
-    DWORD       m_dwClrStrong;      // Ç¿ÃÜÂë
+    DWORD       m_dwClrStrong;      // å¼ºå¯†ç 
 
     CDuiString  m_sTxtWeak;
     CDuiString  m_sTxtMiddle;

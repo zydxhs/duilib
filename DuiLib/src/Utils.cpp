@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 
 namespace DuiLib {
 /////////////////////////////////////////////////////////////////////////////////////
@@ -1031,7 +1031,7 @@ LPVOID CDuiStringPtrMap::Find(LPCTSTR key, bool optimize) const
                 pItem->pPrev = NULL;
                 pItem->pNext = m_aT[slot];
                 pItem->pNext->pPrev = pItem;
-                //½«itemÒÆ¶¯ÖÁÁ´ÌõÍ·²¿
+                //å°†itemç§»åŠ¨è‡³é“¾æ¡å¤´éƒ¨
                 m_aT[slot] = pItem;
             }
 

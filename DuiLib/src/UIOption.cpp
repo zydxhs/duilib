@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include <map>
 
 namespace DuiLib {
@@ -399,10 +399,10 @@ void COptionUI::PaintStatusImage(HDC hDC)
     if (!IsEnabled()) { m_uButtonState |= UISTATE_DISABLED; }
     else { m_uButtonState &= ~UISTATE_DISABLED; }
 
-    // ����˳��5̬ ����ͼ->ǰ��ͼ
+    // 绘制顺序：5态 背景图->前景图
     if (m_uButtonState & UISTATE_SELECTED)
     {
-        // ѡ��״̬
+        // 选中状态
         if ((m_uButtonState & UISTATE_DISABLED) != 0)
         {
             if (!DrawImage(hDC, m_diSelDisabled)) { DrawNormalBkImg(hDC, m_diSelNormal); }
@@ -435,7 +435,7 @@ void COptionUI::PaintStatusImage(HDC hDC)
     }
     else
     {
-        // δѡ��״̬
+        // 未选中状态
         CButtonUI::PaintStatusImage(hDC);
     }
 

@@ -1,4 +1,4 @@
-#include "UIlib.h"
+ï»¿#include "UIlib.h"
 #include <ShlObj.h>
 #include <string>
 #include "resource.h"
@@ -16,17 +16,17 @@ using std::wstring;
 
 enum EMDLGTYPE
 {
-    EDLG_GET_PATH,  // Ä¿Â¼Ñ¡Ôñ¶Ô»°¿ò
-    EDLG_GET_FILE,  // ÎÄ¼şÑ¡Ôñ¶Ô»°¿ò
+    EDLG_GET_PATH,  // ç›®å½•é€‰æ‹©å¯¹è¯æ¡†
+    EDLG_GET_FILE,  // æ–‡ä»¶é€‰æ‹©å¯¹è¯æ¡†
 };
 
 tstring GetPathFile(HWND hWnd, int nFlag, tstring strDefFileName = tstring())
 {
     BOOL bRet = FALSE;
-    // Ä¬ÈÏÎÄ¼şÃû
+    // é»˜è®¤æ–‡ä»¶å
     TCHAR szFile[MAX_PATH] = { 0 };
     _tcscpy(szFile, strDefFileName.c_str());
-    // µ±Ç°¹¤×÷Ä¿Â¼¡£·ÀÖ¹µ±Ç°¹¤×÷Ä¿Â¼±»¸Ä±ä
+    // å½“å‰å·¥ä½œç›®å½•ã€‚é˜²æ­¢å½“å‰å·¥ä½œç›®å½•è¢«æ”¹å˜
     TCHAR szCurPath[MAX_PATH] = { 0 };
     GetCurrentDirectory(MAX_PATH, szCurPath);
     //
@@ -41,20 +41,20 @@ tstring GetPathFile(HWND hWnd, int nFlag, tstring strDefFileName = tstring())
 
     if (EDLG_GET_FILE == nFlag)
     {
-        // µ¼ÈëÅäÖÃ
+        // å¯¼å…¥é…ç½®
         ofn.Flags |= OFN_FILEMUSTEXIST;
-        ofn.lpstrFilter = _T("Zip ×ÊÔ´ÎÄ¼ş(*.zip)\0*.zip\0\0");
-        ofn.lpstrTitle = _T("ÇëÑ¡Ôñ DuiLib Æ¤·ôÎÄ¼ş(Zip)");
+        ofn.lpstrFilter = _T("Zip èµ„æºæ–‡ä»¶(*.zip)\0*.zip\0\0");
+        ofn.lpstrTitle = _T("è¯·é€‰æ‹© DuiLib çš®è‚¤æ–‡ä»¶(Zip)");
         bRet = GetOpenFileName(&ofn);
     }
 
     if (EDLG_GET_PATH == nFlag)
     {
-        // µ¼³öĞ£ÕıÏµÊı
+        // å¯¼å‡ºæ ¡æ­£ç³»æ•°
         BROWSEINFO bi = { 0 };
-        bi.hwndOwner = hWnd;        //ÓµÓĞÕß´°¿Ú¾ä±ú,ÎªNULL±íÊ¾¶Ô»°¿òÊÇ·ÇÄ£Ì¬µÄ,Êµ¼ÊÓ¦ÓÃÖĞÒ»°ã¶¼ÒªÓĞÕâ¸ö¾ä±ú
-        bi.pszDisplayName = szFile; //½ÓÊÕÎÄ¼ş¼ĞµÄ»º³åÇø
-        bi.lpszTitle = _T("ÇëÑ¡Ôñ DuiLib Æ¤·ôÄ¿Â¼");
+        bi.hwndOwner = hWnd;        //æ‹¥æœ‰è€…çª—å£å¥æŸ„,ä¸ºNULLè¡¨ç¤ºå¯¹è¯æ¡†æ˜¯éæ¨¡æ€çš„,å®é™…åº”ç”¨ä¸­ä¸€èˆ¬éƒ½è¦æœ‰è¿™ä¸ªå¥æŸ„
+        bi.pszDisplayName = szFile; //æ¥æ”¶æ–‡ä»¶å¤¹çš„ç¼“å†²åŒº
+        bi.lpszTitle = _T("è¯·é€‰æ‹© DuiLib çš®è‚¤ç›®å½•");
         bi.ulFlags = BIF_NEWDIALOGSTYLE;
         LPITEMIDLIST idl = SHBrowseForFolder(&bi);
         bRet = SHGetPathFromIDList(idl, szFile);
@@ -117,15 +117,15 @@ protected:
     void SwitchPage(int nType);
 
 private:
-    CButtonUI      *m_pBtnBrowse1;  // ÎÄ¼şÆ¤·ôä¯ÀÀ
-    CButtonUI      *m_pBtnBrowse2;  // ZipÆ¤·ôä¯ÀÀ
-    CButtonUI      *m_pBtnView;     // Ô¤ÀÀ
-    CEditUI        *m_pEdtPath;     // ÎÄ¼şÆ¤·ô Â·¾¶
-    CEditUI        *m_pEdtFile;     // ÎÄ¼şÆ¤·ô xmlÎÄ¼şÃû
-    CEditUI        *m_pEdtZip;      // Zip Æ¤·ô ÎÄ¼şÃû
-    CComboUI       *m_pCmbXmlFile;  // Zip Æ¤·ô xmlÎÄ¼şÃûÁĞ±í
+    CButtonUI      *m_pBtnBrowse1;  // æ–‡ä»¶çš®è‚¤æµè§ˆ
+    CButtonUI      *m_pBtnBrowse2;  // Zipçš®è‚¤æµè§ˆ
+    CButtonUI      *m_pBtnView;     // é¢„è§ˆ
+    CEditUI        *m_pEdtPath;     // æ–‡ä»¶çš®è‚¤ è·¯å¾„
+    CEditUI        *m_pEdtFile;     // æ–‡ä»¶çš®è‚¤ xmlæ–‡ä»¶å
+    CEditUI        *m_pEdtZip;      // Zip çš®è‚¤ æ–‡ä»¶å
+    CComboUI       *m_pCmbXmlFile;  // Zip çš®è‚¤ xmlæ–‡ä»¶ååˆ—è¡¨
 
-    int             m_nType;        // Æ¤·ôÀàĞÍ
+    int             m_nType;        // çš®è‚¤ç±»å‹
 };
 
 
@@ -177,7 +177,7 @@ void CFrameWnd::Notify(TNotifyUI &msg)
 
         if (ptrArray.IsEmpty()) { return; }
 
-        // ´¦ÀíÎÄ¼şÃû£¬Ö»½ÓÊÜµÚÒ»¸öÎÄ¼ş
+        // å¤„ç†æ–‡ä»¶åï¼Œåªæ¥å—ç¬¬ä¸€ä¸ªæ–‡ä»¶
         CDuiString sDropFile((LPCTSTR)ptrArray.GetAt(0));
 
         for (int i = 0; i < ptrArray.GetSize(); ++i)
@@ -236,7 +236,7 @@ void CFrameWnd::OnPreview(void)
     {
         if (m_pEdtPath->GetText().IsEmpty() || m_pEdtFile->GetText().IsEmpty())
         {
-            MessageBox(GetHWND(), _T("Æ¤·ôÂ·¾¶/ÎÄ¼şÃû²»ÕıÈ·£¡"), _T("ÌáÊ¾"), MB_OK);
+            MessageBox(GetHWND(), _T("çš®è‚¤è·¯å¾„/æ–‡ä»¶åä¸æ­£ç¡®ï¼"), _T("æç¤º"), MB_OK);
             return;
         }
 
@@ -251,7 +251,7 @@ void CFrameWnd::OnPreview(void)
     {
         if (m_pEdtZip->GetText().IsEmpty() || m_pCmbXmlFile->GetCurSel() < 0)
         {
-            MessageBox(GetHWND(), _T("Æ¤·ôÑ¹Ëõ°ü/ÎÄ¼şÃû²»ÕıÈ·£¡"), _T("ÌáÊ¾"), MB_OK);
+            MessageBox(GetHWND(), _T("çš®è‚¤å‹ç¼©åŒ…/æ–‡ä»¶åä¸æ­£ç¡®ï¼"), _T("æç¤º"), MB_OK);
             return;
         }
 
@@ -330,7 +330,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 
     if (pFrame == NULL) { return 0; }
 
-    pFrame->Create(NULL, _T("DuiLib Æ¤·ôÔ¤ÀÀ"), UI_WNDSTYLE_FRAME | WS_CLIPCHILDREN, WS_EX_WINDOWEDGE);
+    pFrame->Create(NULL, _T("DuiLib çš®è‚¤é¢„è§ˆ"), UI_WNDSTYLE_FRAME | WS_CLIPCHILDREN, WS_EX_WINDOWEDGE);
     pFrame->SetIcon(IDI_LOGO);
     pFrame->CenterWindow();
     CPaintManagerUI::MessageLoop();

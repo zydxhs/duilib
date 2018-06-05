@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 
 namespace DuiLib {
 LPCTSTR CCheckBoxUI::GetClass() const
@@ -25,8 +25,8 @@ bool  CCheckBoxUI::GetCheck() const
 
 void CCheckBoxUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    // ¸´Ñ¡¿ò£¬groupÊôĞÔÎŞĞ§
-    if (_tcscmp(pstrName, _T("group")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:group")); }
+    // å¤é€‰æ¡†ï¼Œgroupå±æ€§æ— æ•ˆ
+    if (_tcscmp(pstrName, _T("group")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:group")); }
     else { COptionUI::SetAttribute(pstrName, pstrValue); }
 }
 

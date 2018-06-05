@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "gifinfo.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -311,7 +311,7 @@ Gdiplus::Image *CGifAnimUI::LoadGifFromFile(LPCTSTR pstrGifPath)
 
     while (!pData)
     {
-        //¶Á²»µ½Í¼Æ¬, ÔòÖ±½ÓÈ¥¶ÁÈ¡bitmap.m_lpstrÖ¸ÏòµÄÂ·¾¶
+        //è¯»ä¸åˆ°å›¾ç‰‡, åˆ™ç›´æ¥å»è¯»å–bitmap.m_lpstræŒ‡å‘çš„è·¯å¾„
         HANDLE hFile = ::CreateFile(pstrGifPath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, \
                                     FILE_ATTRIBUTE_NORMAL, NULL);
 
@@ -428,7 +428,7 @@ void CGifAnimUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     {
         SetAutoSize(_tcscmp(pstrValue, _T("true")) == 0);
     }
-    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:autowidth")); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:autowidth")); }
     else { CControlUI::SetAttribute(pstrName, pstrValue); }
 }
 

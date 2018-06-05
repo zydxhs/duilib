@@ -1,4 +1,4 @@
-// App.cpp : Defines the entry point for the application.
+ï»¿// App.cpp : Defines the entry point for the application.
 //
 
 #include "stdafx.h"
@@ -700,7 +700,7 @@ private:
                 free((void *)szFile);
             }
 
-            // ÎÄ±¾
+            // æ–‡æœ¬
             if (pHelper->HasText())
             {
                 CDuiString sText = pHelper->GetText();
@@ -708,7 +708,7 @@ private:
                 if (!sText.IsEmpty()) { msg.pSender->SetText(sText); }
             }
 
-            // Î»Í¼
+            // ä½å›¾
             if (pHelper->HasBitmap())
             {
                 HBITMAP hBMP = pHelper->GetBitmap();
@@ -722,7 +722,7 @@ private:
                 }
             }
 
-            // ×Ô¶¨ÒåÊý¾Ý
+            // è‡ªå®šä¹‰æ•°æ®
             if (pHelper->HasCustomData())
             {
                 LPCTSTR pBuf = (LPCTSTR)pHelper->GetCustomData(ECF_STRUCTDATA, dwLen);

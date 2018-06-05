@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "RichListWnd.h"
 
 
@@ -32,9 +32,9 @@ void CPage1::OnClick(TNotifyUI &msg)
         if (find_ctrl)
         {
             MessageBox(NULL,
-                       find_ctrl->GetText() + _T(" ÑİÊ¾Î´Ñ¡ÖĞĞĞÖĞµÄ°´Å¥´¥·¢¶¯×÷£¬ÒÀ¸Ã°´Å¥¸¸½áµãµÄÕÒµ½ËùÊôĞĞlistcontainer.."),
+                       find_ctrl->GetText() + _T(" æ¼”ç¤ºæœªé€‰ä¸­è¡Œä¸­çš„æŒ‰é’®è§¦å‘åŠ¨ä½œï¼Œä¾è¯¥æŒ‰é’®çˆ¶ç»“ç‚¹çš„æ‰¾åˆ°æ‰€å±è¡Œlistcontainer.."),
                        _T("DUILIB DEMO"), MB_OK);
-            ((CLabelUI *)find_ctrl)->SetText(_T("ÓÉ³ÌĞò¶¯Ì¬ÉèÖÃºóµÄÃû³Æ..."));
+            ((CLabelUI *)find_ctrl)->SetText(_T("ç”±ç¨‹åºåŠ¨æ€è®¾ç½®åçš„åç§°..."));
         }
     }
     else if (msg.pSender->GetName() == _T("down_del"))
@@ -216,7 +216,7 @@ void CRichListWnd::OnClick(TNotifyUI &msg)
 {
     if (msg.pSender == m_pCloseBtn)
     {
-        PostQuitMessage(0); // ÒòÎªactivexµÄÔ­Òò£¬Ê¹ÓÃclose¿ÉÄÜ»á³öÏÖ´íÎó
+        PostQuitMessage(0); // å› ä¸ºactivexçš„åŸå› ï¼Œä½¿ç”¨closeå¯èƒ½ä¼šå‡ºç°é”™è¯¯
         return;
     }
     else if (msg.pSender == m_pMinBtn)
@@ -236,7 +236,7 @@ void CRichListWnd::OnClick(TNotifyUI &msg)
     }
     else if (msg.pSender->GetName() == _T("btnclose"))
     {
-        PostQuitMessage(0); // ÒòÎªactivexµÄÔ­Òò£¬Ê¹ÓÃclose¿ÉÄÜ»á³öÏÖ´íÎó
+        PostQuitMessage(0); // å› ä¸ºactivexçš„åŸå› ï¼Œä½¿ç”¨closeå¯èƒ½ä¼šå‡ºç°é”™è¯¯
     }
 }
 
@@ -256,7 +256,7 @@ void CRichListWnd::OnItemClick(TNotifyUI &msg)
 {
     TCHAR alert_msg[64] = {0};
     int index = ((CListContainerElementUI *)msg.pSender)->GetIndex();
-    wsprintf(alert_msg, _T("Ñ¡ÖĞÁËĞĞ%d, ²éÕÒ±¾ĞĞÄÚµÄÏÂÔØÏîÄ¿Ãû..."), index);
+    wsprintf(alert_msg, _T("é€‰ä¸­äº†è¡Œ%d, æŸ¥æ‰¾æœ¬è¡Œå†…çš„ä¸‹è½½é¡¹ç›®å..."), index);
     MessageBox(NULL, alert_msg, _T("DUILIB DEMO"), MB_OK);
 
     CControlUI *find_ctrl = m_pm.FindSubControlByName(msg.pSender, _T("down_name"));
@@ -264,13 +264,13 @@ void CRichListWnd::OnItemClick(TNotifyUI &msg)
     if (find_ctrl)
     {
         MessageBox(NULL,
-                   find_ctrl->GetText() + _T(" Ñ¡ÖĞĞĞµÄÏÂÔØÏîÄ¿Ãû³Æ.."),
+                   find_ctrl->GetText() + _T(" é€‰ä¸­è¡Œçš„ä¸‹è½½é¡¹ç›®åç§°.."),
                    _T("DUILIB DEMO"), MB_OK);
-        ((CLabelUI *)find_ctrl)->SetText(_T("ÓÉ³ÌĞò¶¯Ì¬ÉèÖÃºóµÄÃû³Æ..."));
+        ((CLabelUI *)find_ctrl)->SetText(_T("ç”±ç¨‹åºåŠ¨æ€è®¾ç½®åçš„åç§°..."));
     }
     else
     {
-        MessageBox(NULL, _T("±¾²âÊÔĞĞÎ´Îª¿Ø¼şÉèÖÃname£¬¹ÊÕÒ²»µ½Òª²Ù×÷µÄ¿Ø¼ş"),
+        MessageBox(NULL, _T("æœ¬æµ‹è¯•è¡Œæœªä¸ºæ§ä»¶è®¾ç½®nameï¼Œæ•…æ‰¾ä¸åˆ°è¦æ“ä½œçš„æ§ä»¶"),
                    _T("DUILIB DEMO"), MB_OK);
     }
 
@@ -279,11 +279,11 @@ void CRichListWnd::OnItemClick(TNotifyUI &msg)
     if (find_ctrl)
     {
         TCHAR alert_msg[256] = {0};
-        wsprintf(alert_msg, _T("½ø¶ÈÌõÖµ:%d"), ((CProgressUI *)find_ctrl)->GetValue());
+        wsprintf(alert_msg, _T("è¿›åº¦æ¡å€¼:%d"), ((CProgressUI *)find_ctrl)->GetValue());
         MessageBox(NULL, alert_msg, _T("DUILIB DEMO"), MB_OK);
 
         ((CProgressUI *)find_ctrl)->SetValue(30);
-        MessageBox(NULL, _T("ĞŞ¸ÄÁË½ø¶ÈÌõÖµ"), _T("DUILIB DEMO"), MB_OK);
+        MessageBox(NULL, _T("ä¿®æ”¹äº†è¿›åº¦æ¡å€¼"), _T("DUILIB DEMO"), MB_OK);
     }
 }
 
@@ -294,7 +294,7 @@ void CRichListWnd::Notify(TNotifyUI &msg)
 
 LRESULT CRichListWnd::OnMouseWheel(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
-    // ½â¾öie¿Ø¼şÊÕ²»µ½¹ö¶¯ÏûÏ¢µÄÎÊÌâ
+    // è§£å†³ieæ§ä»¶æ”¶ä¸åˆ°æ»šåŠ¨æ¶ˆæ¯çš„é—®é¢˜
     POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
     ::ScreenToClient(m_pm.GetPaintWindow(), &pt);
     CControlUI *pControl = static_cast<CControlUI *>(m_pm.FindControl(_T("ie")));
@@ -315,7 +315,7 @@ LRESULT CRichListWnd::OnMouseWheel(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 
 LRESULT CRichListWnd::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
-    // ÓĞÊ±»áÔÚÊÕµ½WM_NCDESTROYºóÊÕµ½wParamÎªSC_CLOSEµÄWM_SYSCOMMAND
+    // æœ‰æ—¶ä¼šåœ¨æ”¶åˆ°WM_NCDESTROYåæ”¶åˆ°wParamä¸ºSC_CLOSEçš„WM_SYSCOMMAND
     if (wParam == SC_CLOSE)
     {
         ::PostQuitMessage(0L);
@@ -368,10 +368,10 @@ LRESULT CRichListWnd::OnMouseHover(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 
     if (pHover == NULL) { return 0; }
 
-    /*ÑİÊ¾ĞüÍ£ÔÚÏÂÔØÁĞ±íµÄÍ¼±êÉÏÊ±£¬¶¯Ì¬±ä»»ÏÂÔØÍ¼±ê×´Ì¬ÏÔÊ¾*/
+    /*æ¼”ç¤ºæ‚¬åœåœ¨ä¸‹è½½åˆ—è¡¨çš„å›¾æ ‡ä¸Šæ—¶ï¼ŒåŠ¨æ€å˜æ¢ä¸‹è½½å›¾æ ‡çŠ¶æ€æ˜¾ç¤º*/
     if (pHover->GetName() == _T("down_ico"))
     {
-        MessageBox(NULL, _T("Êó±êÔÚÄ³¿Ø¼şÀıÈç°´Å¥ÉÏĞüÍ£ºó£¬¶ÔÄ¿±ê¿Ø¼ş²Ù×÷£¬ÕâÀï¸Ä±äÁË×´Ì¬Í¼±ê´óĞ¡"),
+        MessageBox(NULL, _T("é¼ æ ‡åœ¨æŸæ§ä»¶ä¾‹å¦‚æŒ‰é’®ä¸Šæ‚¬åœåï¼Œå¯¹ç›®æ ‡æ§ä»¶æ“ä½œï¼Œè¿™é‡Œæ”¹å˜äº†çŠ¶æ€å›¾æ ‡å¤§å°"),
                    _T("DUILIB DEMO"), MB_OK);
         ((CButtonUI *)pHover)->SetAttributeList(
             _T("normalimage=\"file='downlist_pause.png' dest='15,9,32,26'\""));
@@ -382,12 +382,12 @@ LRESULT CRichListWnd::OnMouseHover(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 
 LRESULT CRichListWnd::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
-    /*ÑİÊ¾¼üÅÌÏûÏ¢µÄ´¦Àí*/
+    /*æ¼”ç¤ºé”®ç›˜æ¶ˆæ¯çš„å¤„ç†*/
     TCHAR press_char = (TCHAR)wParam;
 
     if (press_char == VK_BACK)
     {
-        MessageBox(NULL, _T("°´ÏÂÁË»ØÍË¼ü"), _T("DUILIB DEMO"), MB_OK);
+        MessageBox(NULL, _T("æŒ‰ä¸‹äº†å›é€€é”®"), _T("DUILIB DEMO"), MB_OK);
     }
     else
     {

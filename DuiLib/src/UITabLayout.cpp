@@ -1,4 +1,4 @@
-#include "stdafx.h"
+Ôªø#include "stdafx.h"
 
 namespace DuiLib {
 CTabLayoutUI::CTabLayoutUI() : m_iCurSel(-1)
@@ -142,7 +142,7 @@ bool CTabLayoutUI::SelectItem(CControlUI *pControl, bool bTriggerEvent)
 void CTabLayoutUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if (_tcscmp(pstrName, _T("selectedid")) == 0) { SelectItem(_ttoi(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("≤ª÷ß≥÷ Ù–‘:autowidth")); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("‰∏çÊîØÊåÅÂ±ûÊÄß:autowidth")); }
     else { CContainerUI::SetAttribute(pstrName, pstrValue); }
 }
 

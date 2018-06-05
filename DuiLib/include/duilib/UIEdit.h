@@ -1,4 +1,4 @@
-#ifndef __UIEDIT_H__
+ï»¿#ifndef __UIEDIT_H__
 #define __UIEDIT_H__
 
 #pragma once
@@ -8,14 +8,14 @@ template <class CHART> class CRegexpT;
 namespace DuiLib {
 enum EMFilterType
 {
-    EFILTER_CHAR_UPPER      = 0x01,     // ´óĞ´Ó¢ÎÄ×Ö·û
-    EFILTER_CHAR_LOWER      = 0x02,     // Ğ¡Ğ´Ó¢ÎÄ×Ö·û
-    EFILTER_CHAR_BLANK      = 0x04,     // Ó¢ÎÄ¿Õ¸ñ
-    EFILTER_SPECIAL_SYMBOL  = 0x08,     // ÌØÊâ×Ö·û
-    EFILTER_CHAR_LINUX      = 0x10,     // LinuxÎÄ¼ş²Ù×÷¹ıÂË×Ö·û ºÚÃûµ¥Ä£Ê½
-    EFILTER_NUMBER_BIN      = 0x20,     // ¶ş½øÖÆÊı×Ö
-    EFILTER_NUMBER_DEC      = 0x40,     // Ê®½øÖÆÊı×Ö
-    EFILTER_NUMBER_HEX      = 0x80,     // Ê®Áù½øÖÆÊı×Ö
+    EFILTER_CHAR_UPPER      = 0x01,     // å¤§å†™è‹±æ–‡å­—ç¬¦
+    EFILTER_CHAR_LOWER      = 0x02,     // å°å†™è‹±æ–‡å­—ç¬¦
+    EFILTER_CHAR_BLANK      = 0x04,     // è‹±æ–‡ç©ºæ ¼
+    EFILTER_SPECIAL_SYMBOL  = 0x08,     // ç‰¹æ®Šå­—ç¬¦
+    EFILTER_CHAR_LINUX      = 0x10,     // Linuxæ–‡ä»¶æ“ä½œè¿‡æ»¤å­—ç¬¦ é»‘åå•æ¨¡å¼
+    EFILTER_NUMBER_BIN      = 0x20,     // äºŒè¿›åˆ¶æ•°å­—
+    EFILTER_NUMBER_DEC      = 0x40,     // åè¿›åˆ¶æ•°å­—
+    EFILTER_NUMBER_HEX      = 0x80,     // åå…­è¿›åˆ¶æ•°å­—
 };
 
 
@@ -74,18 +74,18 @@ public:
     void PaintStatusImage(HDC hDC);
     void PaintText(HDC hDC);
 
-    //2017-02-25 zhuyadong Ìí¼ÓÌáÊ¾ÎÄ×Ö¼°ÆäÑÕÉ«
+    //2017-02-25 zhuyadong æ·»åŠ æç¤ºæ–‡å­—åŠå…¶é¢œè‰²
     void SetTipText(LPCTSTR pstrTip);
     LPCTSTR GetTipText();
     virtual void ReloadText(void);
     void SetTipColor(DWORD dwColor);
     DWORD GetTipColor();
-    // 2017-07-21 zhuyadong Ìí¼Ó minmaxnumber ÊôĞÔ
+    // 2017-07-21 zhuyadong æ·»åŠ  minmaxnumber å±æ€§
     void SetMinMaxNumber(int nMin, int nMax);
     int GetMinNumber();
     int GetMaxNumber();
 
-    // 2018-01-28 zhuyadong Ìí¼Ó×Ö·û¹ıÂË¹¦ÄÜ
+    // 2018-01-28 zhuyadong æ·»åŠ å­—ç¬¦è¿‡æ»¤åŠŸèƒ½
     void SetCharFilter(bool bFilter);
     bool IsCharFilter(void);
     void SetFilterMode(bool bWiteList);
@@ -95,7 +95,7 @@ public:
     void SetFilterCharSet(int nFilterType);
     void AppendFilterCharSet(CDuiString sCharSet);
 
-    // ÕıÔò¹ıÂË
+    // æ­£åˆ™è¿‡æ»¤
     void SetRegExpFilter(bool bRegExp);
     bool IsRegExpFilter(void);
     void SetRegExpPattern(CDuiString sRegExp);
@@ -125,22 +125,22 @@ protected:
     TDrawInfo m_diFocused;
     TDrawInfo m_diDisabled;
 
-    //2017-02-25 zhuyadong Ìí¼ÓÌáÊ¾ÎÄ×Ö¼°ÆäÑÕÉ«
+    //2017-02-25 zhuyadong æ·»åŠ æç¤ºæ–‡å­—åŠå…¶é¢œè‰²
     CDuiString m_sTipText;
     CDuiString m_sTipTextOrig;
     DWORD m_dwTipColor;
-    // 2017-07-21 zhuyadong Ìí¼Ó minmaxnumber ÊôĞÔ
+    // 2017-07-21 zhuyadong æ·»åŠ  minmaxnumber å±æ€§
     int   m_nMinNumber;
     int   m_nMaxNumber;
-    // 2018-01-28 zhuyadong Ìí¼Ó×Ö·û¹ıÂË¹¦ÄÜ
-    // ·ÖºÚ°×Ãûµ¥Ä£Ê½£¬°×Ãûµ¥ÉèÖÃÔÊĞíµÄ×Ö·û¼¯£»ºÚÃûµ¥Éè±¸½ûÖ¹µÄ×Ö·û¼¯
-    // ÕıÔò±í´ïÊ½Æ¥ÅäÓë×Ö·û¹ıÂË£¬Ö»ÄÜÓĞÒ»¸öÆôÓÃ¡£
-    bool  m_bCharFilter;            // ÆôÓÃ×Ö·û¹ıÂË
-    bool  m_bWiteList;              // true ±íÊ¾°×Ãûµ¥£¬false ±íÊ¾ºÚÃûµ¥¡£
-    bool  m_bRegExp;                // true ±íÊ¾ÆôÓÃÕıÔò±í´ïÊ½Æ¥Åä
-    CDuiString  m_sFilterCharSet;   // ×Ö·û¹ıÂË¼¯
-    CDuiString  m_sRegExp;          // ÕıÔò±í´ïÊ½
-    CRegexpT<TCHAR>    *m_pRegExp;  // ÕıÔò±í´ïÊ½¶ÔÏó
+    // 2018-01-28 zhuyadong æ·»åŠ å­—ç¬¦è¿‡æ»¤åŠŸèƒ½
+    // åˆ†é»‘ç™½åå•æ¨¡å¼ï¼Œç™½åå•è®¾ç½®å…è®¸çš„å­—ç¬¦é›†ï¼›é»‘åå•è®¾å¤‡ç¦æ­¢çš„å­—ç¬¦é›†
+    // æ­£åˆ™è¡¨è¾¾å¼åŒ¹é…ä¸å­—ç¬¦è¿‡æ»¤ï¼Œåªèƒ½æœ‰ä¸€ä¸ªå¯ç”¨ã€‚
+    bool  m_bCharFilter;            // å¯ç”¨å­—ç¬¦è¿‡æ»¤
+    bool  m_bWiteList;              // true è¡¨ç¤ºç™½åå•ï¼Œfalse è¡¨ç¤ºé»‘åå•ã€‚
+    bool  m_bRegExp;                // true è¡¨ç¤ºå¯ç”¨æ­£åˆ™è¡¨è¾¾å¼åŒ¹é…
+    CDuiString  m_sFilterCharSet;   // å­—ç¬¦è¿‡æ»¤é›†
+    CDuiString  m_sRegExp;          // æ­£åˆ™è¡¨è¾¾å¼
+    CRegexpT<TCHAR>    *m_pRegExp;  // æ­£åˆ™è¡¨è¾¾å¼å¯¹è±¡
 };
 
 }

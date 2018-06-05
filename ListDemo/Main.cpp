@@ -1,6 +1,6 @@
-/*
+﻿/*
 * Code By Tojen (qq:342269237)
-* �������ͼƬ��Դ80%ԭ����������ȫԭ��,ѧϰ��Ʒ����������ש
+* 界面设计图片资源80%原创，布局完全原创,学习作品，不好请拍砖
 */
 #include <objbase.h>
 #include <zmouse.h>
@@ -15,15 +15,15 @@ using namespace DuiLib;
 
 #define WM_ADDLISTITEM WM_USER + 50
 /*
-* ��ŵڶ�������
+* 存放第二列数据
 */
 std::vector<std::string> domain;
 /*
-* ��ŵ���������
+* 存放第三列数据
 */
 std::vector<std::string> desc;
 /*
-*  �̺߳����д���Ľṹ�������ʹ���߳�Ϊ��ʹ�����߳��������أ���ֹ��ס�����Ƕ��á�
+*  线程函数中传入的结构体变量，使用线程为了使界面线程立即返回，防止卡住，你们懂得。
 */
 struct Prama
 {
@@ -81,7 +81,7 @@ public:
 
             //-------------------------------------
             /*
-            * ��������ѭ��
+            * 添加数据循环
             */
             for (int i = 0; i < 100; i++)
             {
@@ -100,7 +100,7 @@ public:
                 }
 
                 /*
-                *   Sleep Ϊ��չʾ���ӵĶ�̬Ч�����ʷ����������ٶȣ�ͬʱ���Կ������ӹ����н�����Ȼ������Ӧ
+                *   Sleep 为了展示添加的动态效果，故放慢了添加速度，同时可以看到添加过程中界面仍然可以响应
                 */
                 ::Sleep(100);
             }
@@ -141,7 +141,7 @@ public:
         HANDLE hThread = CreateThread(NULL, 0, &ListMainForm::Search, (LPVOID)prama,  0, &dwThreadID);
     }
     /*
-    * �ؼ��Ļص�������IListCallbackUI �е�һ���麯������Ⱦʱ������,��[1]�������˻ص�����
+    * 关键的回调函数，IListCallbackUI 中的一个虚函数，渲染时候会调用,在[1]中设置了回调对象
     */
     LPCTSTR GetItemText(CControlUI *pControl, int iIndex, int iSubItem)
     {
@@ -238,7 +238,7 @@ public:
             sMessage += domain[iIndex].c_str();
 
 #endif
-            ::MessageBox(NULL, sMessage.GetData(), _T("��ʾ(by tojen)"), MB_OK);
+            ::MessageBox(NULL, sMessage.GetData(), _T("提示(by tojen)"), MB_OK);
         }
         else if (msg.sType == _T("menu"))
         {
@@ -415,7 +415,7 @@ public:
 
     LRESULT OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
     {
-        // ��ʱ�����յ�WM_NCDESTROY���յ�wParamΪSC_CLOSE��WM_SYSCOMMAND
+        // 有时会在收到WM_NCDESTROY后收到wParam为SC_CLOSE的WM_SYSCOMMAND
         if (wParam == SC_CLOSE)
         {
             ::PostQuitMessage(0L);

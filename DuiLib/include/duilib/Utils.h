@@ -1,4 +1,4 @@
-#ifndef __UTILS_H__
+ï»¿#ifndef __UTILS_H__
 #define __UTILS_H__
 
 #pragma once
@@ -84,7 +84,7 @@ public:
     ~CDuiString();
     CDuiString ToString();
 
-    void Reserve(int nLen);     // ¸Ä±ä×Ö·û´®×î´ó´æ´¢¿Õ¼ä
+    void Reserve(int nLen);     // æ”¹å˜å­—ç¬¦ä¸²æœ€å¤§å­˜å‚¨ç©ºé—´
     void Empty();
     int GetLength() const;
     bool IsEmpty() const;

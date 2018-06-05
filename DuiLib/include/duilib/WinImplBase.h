@@ -1,14 +1,14 @@
-#ifndef WIN_IMPL_BASE_HPP
+ï»¿#ifndef WIN_IMPL_BASE_HPP
 #define WIN_IMPL_BASE_HPP
 
 namespace DuiLib {
 
 enum UILIB_RESOURCETYPE
 {
-    UILIB_FILE = 1,     // À´×Ô´ÅÅÌÎÄ¼ş
-    UILIB_ZIP,          // À´×Ô´ÅÅÌzipÑ¹Ëõ°ü
-    UILIB_RESOURCE,     // À´×Ô×ÊÔ´
-    UILIB_ZIPRESOURCE,  // À´×Ô×ÊÔ´µÄzipÑ¹Ëõ°ü
+    UILIB_FILE = 1,     // æ¥è‡ªç£ç›˜æ–‡ä»¶
+    UILIB_ZIP,          // æ¥è‡ªç£ç›˜zipå‹ç¼©åŒ…
+    UILIB_RESOURCE,     // æ¥è‡ªèµ„æº
+    UILIB_ZIPRESOURCE,  // æ¥è‡ªèµ„æºçš„zipå‹ç¼©åŒ…
 };
 
 class DUILIB_API CWndImplBase
@@ -22,10 +22,10 @@ public:
     CWndImplBase();
     virtual ~CWndImplBase() {};
 
-    // IMessageFilterUI ½Ó¿Ú£¬½øĞĞÏûÏ¢·¢ËÍµ½´°¿Ú¹ı³ÌÇ°µÄ¹ıÂË´¦Àí
+    // IMessageFilterUI æ¥å£ï¼Œè¿›è¡Œæ¶ˆæ¯å‘é€åˆ°çª—å£è¿‡ç¨‹å‰çš„è¿‡æ»¤å¤„ç†
     virtual LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool &bHandled);
 
-    // INotifyUI ½Ó¿Ú£¬duilib ¿Ø¼şÍ¨ÖªÏûÏ¢
+    // INotifyUI æ¥å£ï¼Œduilib æ§ä»¶é€šçŸ¥æ¶ˆæ¯
     virtual void Notify(TNotifyUI &msg);
 
     void ShowWindow(bool bShow = true, bool bTakeFocus = true);
@@ -35,39 +35,39 @@ protected:
     virtual void OnClick(TNotifyUI &msg);
 
 protected:
-    // ´°¿ÚÀàÏà¹Ø½Ó¿Ú
+    // çª—å£ç±»ç›¸å…³æ¥å£
     virtual LPCTSTR GetWindowClassName(void) const = 0;
     // virtual LPCTSTR GetSuperClassName() const;
     virtual UINT GetClassStyle() const { return CS_DBLCLKS; }
 
-    // ´°¿Ú×ÊÔ´Ïà¹Ø½Ó¿Ú
+    // çª—å£èµ„æºç›¸å…³æ¥å£
     virtual CDuiString GetSkinFolder() = 0;
     virtual CDuiString GetSkinFile() = 0;
     virtual UILIB_RESOURCETYPE GetResourceType() const { return UILIB_FILE; }
     virtual CDuiString GetZIPFileName() const { return _T(""); }
     virtual LPCTSTR GetResourceID() const { return _T(""); }
 
-    // IDialogBuilderCallback ½Ó¿Ú£¬´´½¨×Ô¶¨Òå¿Ø¼ş
+    // IDialogBuilderCallback æ¥å£ï¼Œåˆ›å»ºè‡ªå®šä¹‰æ§ä»¶
     virtual CControlUI *CreateControl(LPCTSTR pstrClass) { return NULL; }
 
-    // ´°ÌåÉúÃüÖÜÆÚÖĞ£¬µÚÒ»´ÎºÍ×îºóÒ»´Î±»µ÷ÓÃµÄ½Ó¿Ú£¬ÇÒ½ö±»µ÷ÓÃÒ»´Î¡£
-    // .´°Ìå´´½¨ºó£¬°ó¶¨Êı¾İ¡£±ÈÈç¿Ø¼şÓë±äÁ¿µÄ°ó¶¨¡¢¿Ø¼şÊôĞÔÉèÖÃµÈÖ»ĞèÒªÉèÖÃÒ»´ÎµÄ²Ù×÷¡£
+    // çª—ä½“ç”Ÿå‘½å‘¨æœŸä¸­ï¼Œç¬¬ä¸€æ¬¡å’Œæœ€åä¸€æ¬¡è¢«è°ƒç”¨çš„æ¥å£ï¼Œä¸”ä»…è¢«è°ƒç”¨ä¸€æ¬¡ã€‚
+    // .çª—ä½“åˆ›å»ºåï¼Œç»‘å®šæ•°æ®ã€‚æ¯”å¦‚æ§ä»¶ä¸å˜é‡çš„ç»‘å®šã€æ§ä»¶å±æ€§è®¾ç½®ç­‰åªéœ€è¦è®¾ç½®ä¸€æ¬¡çš„æ“ä½œã€‚
     virtual void OnInitWindow(void) { }
-    // .´°ÌåÏú»Ùºó£¬Àà¶ÔÏóÏú»ÙÇ°£¬×îºó±»µ÷ÓÃµÄ½Ó¿Ú¡£new µÄ´°Ìå£¬ÔÚ¸Ã½Ó¿ÚÖĞµ÷ÓÃ delete Ïú»Ù¶ÔÏó¡£
+    // .çª—ä½“é”€æ¯åï¼Œç±»å¯¹è±¡é”€æ¯å‰ï¼Œæœ€åè¢«è°ƒç”¨çš„æ¥å£ã€‚new çš„çª—ä½“ï¼Œåœ¨è¯¥æ¥å£ä¸­è°ƒç”¨ delete é”€æ¯å¯¹è±¡ã€‚
     virtual void OnFinalMessage(HWND hWnd);
-    // ´°ÌåÊı¾İÏÔÊ¾Êı¾İµÄ³õÊ¼»¯¡¢±£´æ
-    // .´°Ìå ´´½¨|ÏÔÊ¾ Ö®Ç° ³õÊ¼»¯ Êı¾İ¡£ÔÚ OnInitWindow ºÍ OnFinalMesssage Ö®¼äµ÷ÓÃ
+    // çª—ä½“æ•°æ®æ˜¾ç¤ºæ•°æ®çš„åˆå§‹åŒ–ã€ä¿å­˜
+    // .çª—ä½“ åˆ›å»º|æ˜¾ç¤º ä¹‹å‰ åˆå§‹åŒ– æ•°æ®ã€‚åœ¨ OnInitWindow å’Œ OnFinalMesssage ä¹‹é—´è°ƒç”¨
     virtual void OnDataInit(void) { }
-    // .´°Ìå Ïú»Ù|Òş²Ø Ö®Ç°  ±£´æ  Êı¾İ¡£ÔÚ OnInitWindow ºÍ OnFinalMesssage Ö®¼äµ÷ÓÃ
+    // .çª—ä½“ é”€æ¯|éšè— ä¹‹å‰  ä¿å­˜  æ•°æ®ã€‚åœ¨ OnInitWindow å’Œ OnFinalMesssage ä¹‹é—´è°ƒç”¨
     virtual void OnDataSave(void) { }
-    // ´°Ìå²¼¾ÖµÚÒ»´ÎÕıÈ·³õÊ¼»¯ºóµ÷ÓÃµÄ½Ó¿Ú£¬´ËÊ±´°¿Ú½«Ìá½»Ë¢ĞÂ/¶¯»­¡£ÔÚ´°¿ÚÏÔÊ¾Ç°µ÷ÓÃ
+    // çª—ä½“å¸ƒå±€ç¬¬ä¸€æ¬¡æ­£ç¡®åˆå§‹åŒ–åè°ƒç”¨çš„æ¥å£ï¼Œæ­¤æ—¶çª—å£å°†æäº¤åˆ·æ–°/åŠ¨ç”»ã€‚åœ¨çª—å£æ˜¾ç¤ºå‰è°ƒç”¨
     virtual void OnPrepare(void) { }
 
     virtual LRESULT ResponseDefaultKeyEvent(WPARAM wParam);
-    //2017-02-25 zhuyadong ÍêÉÆ¶àÓïÑÔÇĞ»»
+    //2017-02-25 zhuyadong å®Œå–„å¤šè¯­è¨€åˆ‡æ¢
     virtual LRESULT OnLanguageUpdate(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // ×Ô¶¨ÒåÏûÏ¢´¦Àí¡£·¢ËÍµ½´°¿ÚµÄÏûÏ¢£¬ÔÚ½»¸ø CPaintManagerUI ´¦ÀíÖ®Ç°½Ø»ñ
+    // è‡ªå®šä¹‰æ¶ˆæ¯å¤„ç†ã€‚å‘é€åˆ°çª—å£çš„æ¶ˆæ¯ï¼Œåœ¨äº¤ç»™ CPaintManagerUI å¤„ç†ä¹‹å‰æˆªè·
     virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
 
     virtual LRESULT OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
@@ -94,7 +94,7 @@ protected:
     virtual LRESULT OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
     virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
 
-    // ´°¿Ú´¦Àí¹ı³Ì£¬Í¨³£²»ĞèÒªÖØÔØ¡£ËùÓĞ·¢ËÍµ½´°¿ÚµÄÏûÏ¢£¬¶¼¿ÉÒÔÔÚ´Ë½Ø»ñ
+    // çª—å£å¤„ç†è¿‡ç¨‹ï¼Œé€šå¸¸ä¸éœ€è¦é‡è½½ã€‚æ‰€æœ‰å‘é€åˆ°çª—å£çš„æ¶ˆæ¯ï¼Œéƒ½å¯ä»¥åœ¨æ­¤æˆªè·
     virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
@@ -105,7 +105,7 @@ protected:
     static LPBYTE m_lpResourceZIPBuffer;
 
 private:
-    int     m_nWndState;            // ÓÃÓÚÅĞ¶ÏÊÇ·ñ·¢ËÍ´°ÌåÊı¾İ³õÊ¼»¯/±£´æÏûÏ¢
+    int     m_nWndState;            // ç”¨äºåˆ¤æ–­æ˜¯å¦å‘é€çª—ä½“æ•°æ®åˆå§‹åŒ–/ä¿å­˜æ¶ˆæ¯
 };
 
 }

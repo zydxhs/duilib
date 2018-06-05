@@ -1,4 +1,4 @@
-#include "stdafx.h"
+Ôªø#include "stdafx.h"
 
 namespace DuiLib {
 CVerticalLayoutUI::CVerticalLayoutUI() : m_iSepHeight(0), m_uButtonState(0), m_bImmMode(false)
@@ -292,7 +292,7 @@ void CVerticalLayoutUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if (_tcscmp(pstrName, _T("sepheight")) == 0) { SetSepHeight(_ttoi(pstrValue)); }
     else if (_tcscmp(pstrName, _T("sepimm")) == 0) { SetSepImmMode(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("≤ª÷ß≥÷ Ù–‘:autowidth")); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("‰∏çÊîØÊåÅÂ±ûÊÄß:autowidth")); }
     else { CContainerUI::SetAttribute(pstrName, pstrValue); }
 }
 

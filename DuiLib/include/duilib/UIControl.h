@@ -1,4 +1,4 @@
-#ifndef __UICONTROL_H__
+ï»¿#ifndef __UICONTROL_H__
 #define __UICONTROL_H__
 
 #pragma once
@@ -35,12 +35,12 @@ public:
     virtual CControlUI *GetCover() const;
     virtual void SetCover(CControlUI *pControl);
 
-    // ÎÄ±¾Ïà¹Ø
+    // æ–‡æœ¬ç›¸å…³
     virtual CDuiString GetText() const;
     virtual void SetText(LPCTSTR pstrText);
     virtual void ReloadText(void);
 
-    // Í¼ĞÎÏà¹Ø
+    // å›¾å½¢ç›¸å…³
     DWORD GetBkColor() const;
     void SetBkColor(DWORD dwBackColor);
     DWORD GetBkColor2() const;
@@ -57,7 +57,7 @@ public:
     void SetBorderRound(SIZE cxyRound);
     bool DrawImage(HDC hDC, TDrawInfo &drawInfo);
 
-    //±ß¿òÏà¹Ø
+    //è¾¹æ¡†ç›¸å…³
     DWORD GetBorderColor() const;
     void SetBorderColor(DWORD dwBorderColor);
     RECT GetBorderSize() const;
@@ -66,11 +66,11 @@ public:
     int GetBorderStyle() const;
     void SetBorderStyle(int nStyle);
 
-    // Î»ÖÃÏà¹Ø
+    // ä½ç½®ç›¸å…³
     virtual const RECT &GetPos() const;
-    virtual RECT GetRelativePos() const; // Ïà¶Ô(¸¸¿Ø¼ş)Î»ÖÃ
-    virtual RECT GetClientPos() const; // ¿Í»§ÇøÓò£¨³ıÈ¥scrollbarºÍinset£©
-    // Ö»ÓĞ¿Ø¼şÎªfloatµÄÊ±ºò£¬Íâ²¿µ÷ÓÃSetPosºÍMove²ÅÊÇÓĞĞ§µÄ£¬Î»ÖÃ²ÎÊıÊÇÏà¶Ô¸¸¿Ø¼şµÄÎ»ÖÃ
+    virtual RECT GetRelativePos() const; // ç›¸å¯¹(çˆ¶æ§ä»¶)ä½ç½®
+    virtual RECT GetClientPos() const; // å®¢æˆ·åŒºåŸŸï¼ˆé™¤å»scrollbarå’Œinsetï¼‰
+    // åªæœ‰æ§ä»¶ä¸ºfloatçš„æ—¶å€™ï¼Œå¤–éƒ¨è°ƒç”¨SetPoså’ŒMoveæ‰æ˜¯æœ‰æ•ˆçš„ï¼Œä½ç½®å‚æ•°æ˜¯ç›¸å¯¹çˆ¶æ§ä»¶çš„ä½ç½®
     virtual void SetPos(RECT rc, bool bNeedInvalidate = true);
     virtual void Move(SIZE szOffset, bool bNeedInvalidate = true);
     virtual int GetWidth() const;
@@ -78,15 +78,15 @@ public:
     virtual int GetX() const;
     virtual int GetY() const;
     virtual RECT GetPadding() const;
-    virtual void SetPadding(RECT rcPadding);    // ÉèÖÃÍâ±ß¾à£¬ÓÉÉÏ²ã´°¿Ú»æÖÆ
-    virtual SIZE GetFixedXY() const;            // Êµ¼Ê´óĞ¡Î»ÖÃÊ¹ÓÃGetPos»ñÈ¡£¬ÕâÀïµÃµ½µÄÊÇÔ¤ÉèµÄ²Î¿¼Öµ
-    virtual void SetFixedXY(SIZE szXY);         // ½öfloatÎªtrueÊ±ÓĞĞ§
+    virtual void SetPadding(RECT rcPadding);    // è®¾ç½®å¤–è¾¹è·ï¼Œç”±ä¸Šå±‚çª—å£ç»˜åˆ¶
+    virtual SIZE GetFixedXY() const;            // å®é™…å¤§å°ä½ç½®ä½¿ç”¨GetPosè·å–ï¼Œè¿™é‡Œå¾—åˆ°çš„æ˜¯é¢„è®¾çš„å‚è€ƒå€¼
+    virtual void SetFixedXY(SIZE szXY);         // ä»…floatä¸ºtrueæ—¶æœ‰æ•ˆ
     virtual TPercentInfo GetFloatPercent() const;
     virtual void SetFloatPercent(TPercentInfo piFloatPercent);
-    virtual int GetFixedWidth() const;          // Êµ¼Ê´óĞ¡Î»ÖÃÊ¹ÓÃGetPos»ñÈ¡£¬ÕâÀïµÃµ½µÄÊÇÔ¤ÉèµÄ²Î¿¼Öµ
-    virtual void SetFixedWidth(int cx);         // Ô¤ÉèµÄ²Î¿¼Öµ
-    virtual int GetFixedHeight() const;         // Êµ¼Ê´óĞ¡Î»ÖÃÊ¹ÓÃGetPos»ñÈ¡£¬ÕâÀïµÃµ½µÄÊÇÔ¤ÉèµÄ²Î¿¼Öµ
-    virtual void SetFixedHeight(int cy);        // Ô¤ÉèµÄ²Î¿¼Öµ
+    virtual int GetFixedWidth() const;          // å®é™…å¤§å°ä½ç½®ä½¿ç”¨GetPosè·å–ï¼Œè¿™é‡Œå¾—åˆ°çš„æ˜¯é¢„è®¾çš„å‚è€ƒå€¼
+    virtual void SetFixedWidth(int cx);         // é¢„è®¾çš„å‚è€ƒå€¼
+    virtual int GetFixedHeight() const;         // å®é™…å¤§å°ä½ç½®ä½¿ç”¨GetPosè·å–ï¼Œè¿™é‡Œå¾—åˆ°çš„æ˜¯é¢„è®¾çš„å‚è€ƒå€¼
+    virtual void SetFixedHeight(int cy);        // é¢„è®¾çš„å‚è€ƒå€¼
     virtual int GetMinWidth() const;
     virtual void SetMinWidth(int cx);
     virtual int GetMaxWidth() const;
@@ -96,31 +96,31 @@ public:
     virtual int GetMaxHeight() const;
     virtual void SetMaxHeight(int cy);
 
-    // Êó±êÌáÊ¾
+    // é¼ æ ‡æç¤º
     virtual CDuiString GetToolTip() const;
     virtual void SetToolTip(LPCTSTR pstrText);
     virtual void ReloadToolTip(void);
     virtual void SetToolTipWidth(int nWidth);
-    virtual int   GetToolTipWidth(void);    // ¶àĞĞToolTipµ¥ĞĞ×î³¤¿í¶È
+    virtual int   GetToolTipWidth(void);    // å¤šè¡ŒToolTipå•è¡Œæœ€é•¿å®½åº¦
 
-    // ¿ì½İ¼ü
+    // å¿«æ·é”®
     virtual TCHAR GetShortcut() const;
     virtual void SetShortcut(TCHAR ch);
 
-    // ²Ëµ¥
+    // èœå•
     virtual bool IsContextMenuUsed() const;
     virtual void SetContextMenuUsed(bool bMenuUsed);
 
-    // ÓÃ»§ÊôĞÔ
-    virtual const CDuiString &GetUserData(); // ¸¨Öúº¯Êı£¬¹©ÓÃ»§Ê¹ÓÃ
-    virtual void SetUserData(LPCTSTR pstrText); // ¸¨Öúº¯Êı£¬¹©ÓÃ»§Ê¹ÓÃ
-    virtual UINT_PTR GetTag() const; // ¸¨Öúº¯Êı£¬¹©ÓÃ»§Ê¹ÓÃ
-    virtual void SetTag(UINT_PTR pTag); // ¸¨Öúº¯Êı£¬¹©ÓÃ»§Ê¹ÓÃ
+    // ç”¨æˆ·å±æ€§
+    virtual const CDuiString &GetUserData(); // è¾…åŠ©å‡½æ•°ï¼Œä¾›ç”¨æˆ·ä½¿ç”¨
+    virtual void SetUserData(LPCTSTR pstrText); // è¾…åŠ©å‡½æ•°ï¼Œä¾›ç”¨æˆ·ä½¿ç”¨
+    virtual UINT_PTR GetTag() const; // è¾…åŠ©å‡½æ•°ï¼Œä¾›ç”¨æˆ·ä½¿ç”¨
+    virtual void SetTag(UINT_PTR pTag); // è¾…åŠ©å‡½æ•°ï¼Œä¾›ç”¨æˆ·ä½¿ç”¨
 
-    // Ò»Ğ©ÖØÒªµÄÊôĞÔ
+    // ä¸€äº›é‡è¦çš„å±æ€§
     virtual bool IsVisible() const;
     virtual void SetVisible(bool bVisible = true);
-    // .½ö¹©ÄÚ²¿µ÷ÓÃ£¬ÓĞĞ©UIÓµÓĞ´°¿Ú¾ä±ú£¬ĞèÒªÖØĞ´´Ëº¯Êı
+    // .ä»…ä¾›å†…éƒ¨è°ƒç”¨ï¼Œæœ‰äº›UIæ‹¥æœ‰çª—å£å¥æŸ„ï¼Œéœ€è¦é‡å†™æ­¤å‡½æ•°
     virtual void SetInternVisible(bool bVisible = true);
     virtual bool IsEnabled() const;
     virtual void SetEnabled(bool bEnable = true);
@@ -133,11 +133,11 @@ public:
     virtual bool IsFloat() const;
     virtual void SetFloat(bool bFloat = true);
 
-    // È¨ÖØÊôĞÔ
+    // æƒé‡å±æ€§
     void SetWeight(int nWeight);
     int GetWeight(void);
 
-    // ×Ô¶¨Òå(Î´´¦ÀíµÄ)ÊôĞÔ
+    // è‡ªå®šä¹‰(æœªå¤„ç†çš„)å±æ€§
     void AddCustomAttribute(LPCTSTR pstrName, LPCTSTR pstrAttr);
     LPCTSTR GetCustomAttribute(LPCTSTR pstrName) const;
     bool RemoveCustomAttribute(LPCTSTR pstrName);
@@ -164,7 +164,7 @@ public:
 
     virtual SIZE EstimateSize(SIZE szAvailable);
 
-    // ·µ»ØÒª²»Òª¼ÌĞø»æÖÆ
+    // è¿”å›è¦ä¸è¦ç»§ç»­ç»˜åˆ¶
     virtual bool Paint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl = NULL);
     virtual bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl);
     virtual void PaintBkColor(HDC hDC);
@@ -175,11 +175,11 @@ public:
 
     virtual void DoPostPaint(HDC hDC, const RECT &rcPaint);
 
-    //ĞéÄâ´°¿Ú²ÎÊı
+    //è™šæ‹Ÿçª—å£å‚æ•°
     void SetVirtualWnd(LPCTSTR pstrValue);
     CDuiString GetVirtualWnd() const;
 
-    // ÍÏ×§Ïà¹Ø
+    // æ‹–æ‹½ç›¸å…³
     void SetDropEnable(bool bDropEnable);
     bool GetDropEnable(void);
     void SetDragEnable(bool bDragEnable);
@@ -226,12 +226,12 @@ protected:
     bool m_bFocused;
     bool m_bFloat;
     TPercentInfo m_piFloatPercent;
-    bool m_bSetPos; // ·ÀÖ¹SetPosÑ­»·µ÷ÓÃ
+    bool m_bSetPos; // é˜²æ­¢SetPoså¾ªç¯è°ƒç”¨
 
     CDuiString m_sText;
-    CDuiString m_sTextOrig;     // ·­ÒëÇ°µÄÎÄ±¾
+    CDuiString m_sTextOrig;     // ç¿»è¯‘å‰çš„æ–‡æœ¬
     CDuiString m_sToolTip;
-    CDuiString m_sToolTipOrig;  // ·­ÒëÇ°µÄÎÄ±¾
+    CDuiString m_sToolTipOrig;  // ç¿»è¯‘å‰çš„æ–‡æœ¬
     TCHAR m_chShortcut;
     CDuiString m_sUserData;
     UINT_PTR m_pTag;
@@ -250,11 +250,11 @@ protected:
     RECT m_rcPaint;
     RECT m_rcBorderSize;
     CDuiStringPtrMap m_mCustomAttrHash;
-    int m_nWeight;                      // È¨ÖØ£¬Ä¬ÈÏ100¡£ÖµÔ½Ğ¡£¬È¨ÖØÔ½Ğ¡£¬¿Õ¼ä²»×ãÊ±ÓÅÏÈ²Ã¼õÆä´óĞ¡Ö±µ½Òş²Ø
-    bool m_bDropEnable;                 // ÊÇ·ñ½ÓÊÜÍÏ·Å(ÍÏ·ÅÄ¿±ê£©
-    bool m_bDragEnable;                 // ÊÇ·ñÔÊĞíÍÏ¶¯£¨ÍÏ·ÅÔ´£©
-    TDrawInfo m_diDrag;                 // ÍÏ×§Ê±ÏÔÊ¾µÄÍ¼Æ¬
-    bool m_bCapture;                    // true ±íÊ¾²¶»ñÊó±ê
+    int m_nWeight;                      // æƒé‡ï¼Œé»˜è®¤100ã€‚å€¼è¶Šå°ï¼Œæƒé‡è¶Šå°ï¼Œç©ºé—´ä¸è¶³æ—¶ä¼˜å…ˆè£å‡å…¶å¤§å°ç›´åˆ°éšè—
+    bool m_bDropEnable;                 // æ˜¯å¦æ¥å—æ‹–æ”¾(æ‹–æ”¾ç›®æ ‡ï¼‰
+    bool m_bDragEnable;                 // æ˜¯å¦å…è®¸æ‹–åŠ¨ï¼ˆæ‹–æ”¾æºï¼‰
+    TDrawInfo m_diDrag;                 // æ‹–æ‹½æ—¶æ˜¾ç¤ºçš„å›¾ç‰‡
+    bool m_bCapture;                    // true è¡¨ç¤ºæ•è·é¼ æ ‡
 };
 
 } // namespace DuiLib

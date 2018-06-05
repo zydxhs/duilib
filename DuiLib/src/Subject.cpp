@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include <vector>
 
 namespace DuiLib {
@@ -85,12 +85,12 @@ public:
         }
     }
 
-    // Í¨Öª·¢ËÍ·½Ê½£ºÕıÏò/ÄæÏò ±éÀú¹Û²ìÕß
+    // é€šçŸ¥å‘é€æ–¹å¼ï¼šæ­£å‘/é€†å‘ éå†è§‚å¯Ÿè€…
     void SetNotifyDirection(bool bForward)
     {
         m_bForward = bForward;
     }
-    // ±éÀú¹Û²ìÕß
+    // éå†è§‚å¯Ÿè€…
     IObserver *GetFirst(void)
     {
         if (m_bForward)
@@ -123,7 +123,7 @@ private:
     CVecObserver                    m_vecObs;
     CVecObserver::iterator          m_itCur;
     CVecObserver::reverse_iterator  m_ritCur;
-    bool                            m_bForward; // Í¨Öª·¢ËÍ·½Ïò£ºtrue ´ÓÍ·µ½Î²£»false Ïà·´
+    bool                            m_bForward; // é€šçŸ¥å‘é€æ–¹å‘ï¼štrue ä»å¤´åˆ°å°¾ï¼›false ç›¸å
 };
 
 }

@@ -1,4 +1,4 @@
-#ifndef __UIBASE_H__
+ï»¿#ifndef __UIBASE_H__
 #define __UIBASE_H__
 
 
@@ -76,7 +76,7 @@ public:
     void ShowWindow(bool bShow = true, bool bTakeFocus = true);
     UINT ShowModal();
     void Close(UINT nRet = IDOK);
-    void CenterWindow();    // ¾ÓÖĞ£¬Ö§³ÖÀ©Õ¹ÆÁÄ»
+    void CenterWindow();    // å±…ä¸­ï¼Œæ”¯æŒæ‰©å±•å±å¹•
     void SetIcon(UINT nRes);
 
     LRESULT SendMessage(UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0L);
@@ -103,8 +103,8 @@ protected:
     HWND m_hWnd;
     WNDPROC m_OldWndProc;
     bool m_bSubclassed;
-    CDuiString  m_sTitle;       // ´°¿Ú±êÌâ
-    CDuiString  m_sTitleOrig;   // ´°¿Ú±êÌâ£¨·­ÒëÇ°£©
+    CDuiString  m_sTitle;       // çª—å£æ ‡é¢˜
+    CDuiString  m_sTitleOrig;   // çª—å£æ ‡é¢˜ï¼ˆç¿»è¯‘å‰ï¼‰
 };
 
 } // namespace DuiLib

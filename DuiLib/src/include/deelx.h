@@ -1,4 +1,4 @@
-// deelx.h
+ï»¿// deelx.h
 //
 // DEELX Regular Expression Engine (v1.2)
 //
@@ -7,7 +7,7 @@
 //
 // http://www.regexlab.com/deelx/
 //
-// Author: Ê·ÊÙÎ° (sswater shi)
+// Author: å²å¯¿ä¼Ÿ (sswater shi)
 // sswater@gmail.com
 //
 // $Revision: 749 $
@@ -723,7 +723,7 @@ template <class CHART> int CBackrefElxT <CHART> :: Match(CContext *pContext) con
 
     if (m_brightleft)
     {
-        // 2018-02-03 zhuydong ½öÓÃÓÚ±à¼­¿òÕıÔò¹ıÂË¡£
+        // 2018-02-03 zhuydong ä»…ç”¨äºç¼–è¾‘æ¡†æ­£åˆ™è¿‡æ»¤ã€‚
         if (m_bignorecase) { bsucc = !refstr.nCompareNoCase(pcsz + (npos - slen), tlen); }
         else { bsucc = !refstr.nCompare(pcsz + (npos - slen), tlen); }
 
@@ -744,7 +744,7 @@ template <class CHART> int CBackrefElxT <CHART> :: Match(CContext *pContext) con
     }
     else
     {
-        // 2018-02-03 zhuydong ½öÓÃÓÚ±à¼­¿òÕıÔò¹ıÂË¡£
+        // 2018-02-03 zhuydong ä»…ç”¨äºç¼–è¾‘æ¡†æ­£åˆ™è¿‡æ»¤ã€‚
         if (m_bignorecase) { bsucc = !refstr.nCompareNoCase(pcsz + npos, tlen); }
         else { bsucc = !refstr.nCompare(pcsz + npos, tlen); }
 
@@ -1444,7 +1444,7 @@ template <class CHART> int CStringElxT <CHART> :: Match(CContext *pContext) cons
 
     if (m_brightleft)
     {
-        // 2018-02-03 zhuyadong ½öÓÃÓÚ±à¼­¿òÕıÔò¹ıÂË¡£²éÕÒÊäÈë×Ö·ûÊÇ·ñ´æÔÚÓÚPatternÖĞ
+        // 2018-02-03 zhuyadong ä»…ç”¨äºç¼–è¾‘æ¡†æ­£åˆ™è¿‡æ»¤ã€‚æŸ¥æ‰¾è¾“å…¥å­—ç¬¦æ˜¯å¦å­˜åœ¨äºPatternä¸­
         if (m_bignorecase) { bsucc = !m_szPattern.nCompareNoCase(pcsz + (npos - slen), tlen); }
         else { bsucc = !m_szPattern.nCompare(pcsz + (npos - slen), tlen); }
 
@@ -1460,7 +1460,7 @@ template <class CHART> int CStringElxT <CHART> :: Match(CContext *pContext) cons
     }
     else
     {
-        // 2018-02-03 zhuyadong ½öÓÃÓÚ±à¼­¿òÕıÔò¹ıÂË¡£²éÕÒÊäÈë×Ö·ûÊÇ·ñ´æÔÚÓÚPatternÖĞ
+        // 2018-02-03 zhuyadong ä»…ç”¨äºç¼–è¾‘æ¡†æ­£åˆ™è¿‡æ»¤ã€‚æŸ¥æ‰¾è¾“å…¥å­—ç¬¦æ˜¯å¦å­˜åœ¨äºPatternä¸­
         if (m_bignorecase) { bsucc = !m_szPattern.nCompareNoCase(pcsz + npos, tlen); }
         else { bsucc = !m_szPattern.nCompare(pcsz + npos, tlen); }
 
@@ -3483,7 +3483,7 @@ template <class CHART> MatchResult CRegexpT <CHART> :: MatchExact(const CHART *t
     pContext->m_capturestack.Push(-1);
 
     // match
-    // 2018-02-03 zhuyadong ½öÓÃÓÚ±à¼­¿òÕıÔò¹ıÂË¡£
+    // 2018-02-03 zhuyadong ä»…ç”¨äºç¼–è¾‘æ¡†æ­£åˆ™è¿‡æ»¤ã€‚
     // if (! m_builder.m_pTopElx->Match(pContext)) { return 0; }
     // else
     // {
@@ -4248,7 +4248,7 @@ template <int x> int CListElxT <x> :: Match(CContext *pContext) const
         if (m_elxlist[n]->Match(pContext)) { n += stp; }
         else
         {
-            // 2018-02-03 zhuydong ½öÓÃÓÚ±à¼­¿òÕıÔò¹ıÂË¡£Æ¥ÅäÊ§°ÜÊ±Ö±½Ó·µ»Ø¡£
+            // 2018-02-03 zhuydong ä»…ç”¨äºç¼–è¾‘æ¡†æ­£åˆ™è¿‡æ»¤ã€‚åŒ¹é…å¤±è´¥æ—¶ç›´æ¥è¿”å›ã€‚
             return 1;
             //n -= stp;
             //while (n != bol && ! m_elxlist[n]->MatchNext(pContext)) { n -= stp; }

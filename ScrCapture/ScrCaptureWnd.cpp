@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "ScrCaptureWnd.h"
 #include "Canvas.h"
 #include "CanvasContainer.h"
@@ -54,19 +54,19 @@ void CScrCaptureWnd::OnFinalMessage(HWND /*hWnd*/)
 void CScrCaptureWnd::Init() 
 {
 	m_hEditMenu = ::CreatePopupMenu();
-	::AppendMenu(m_hEditMenu, MF_STRING, MENUCMD_ADDRECTANGE, _T("Ìí¼Ó¾ØĞÎ"));
-	::AppendMenu(m_hEditMenu, MF_STRING, MENUCMD_ADDELLIPSE, _T("Ìí¼ÓÍÖÔ²"));
-	::AppendMenu(m_hEditMenu, MF_STRING, MENUCMD_ADDARROW, _T("Ìí¼Ó¼ıÍ·"));
-	::AppendMenu(m_hEditMenu, MF_STRING, MENUCMD_ADDBRUSH, _T("Ìí¼Ó»­Ë¢¹¤¾ß"));
-	::AppendMenu(m_hEditMenu, MF_STRING, MENUCMD_ADDTEXT, _T("Ìí¼ÓÎÄ×Ö"));
-	::AppendMenu(m_hEditMenu, MF_STRING, MENUCMD_UNDO, _T("³·Ïú±à¼­"));
+	::AppendMenu(m_hEditMenu, MF_STRING, MENUCMD_ADDRECTANGE, _T("æ·»åŠ çŸ©å½¢"));
+	::AppendMenu(m_hEditMenu, MF_STRING, MENUCMD_ADDELLIPSE, _T("æ·»åŠ æ¤­åœ†"));
+	::AppendMenu(m_hEditMenu, MF_STRING, MENUCMD_ADDARROW, _T("æ·»åŠ ç®­å¤´"));
+	::AppendMenu(m_hEditMenu, MF_STRING, MENUCMD_ADDBRUSH, _T("æ·»åŠ ç”»åˆ·å·¥å…·"));
+	::AppendMenu(m_hEditMenu, MF_STRING, MENUCMD_ADDTEXT, _T("æ·»åŠ æ–‡å­—"));
+	::AppendMenu(m_hEditMenu, MF_STRING, MENUCMD_UNDO, _T("æ’¤é”€ç¼–è¾‘"));
 	::AppendMenu(m_hEditMenu, MF_SEPARATOR, 0, NULL);
-	::AppendMenu(m_hEditMenu, MF_STRING, MENUCMD_RECHOICE, _T("ÖØĞÂÑ¡Ôñ½ØÍ¼ÇøÓò"));
-	::AppendMenu(m_hEditMenu, MF_STRING, MENUCMD_SAVEANDQUIT, _T("¸´ÖÆ²¢ÍË³ö½ØÍ¼"));
-	::AppendMenu(m_hEditMenu, MF_STRING, MENUCMD_SAVE, _T("±£´æ"));
+	::AppendMenu(m_hEditMenu, MF_STRING, MENUCMD_RECHOICE, _T("é‡æ–°é€‰æ‹©æˆªå›¾åŒºåŸŸ"));
+	::AppendMenu(m_hEditMenu, MF_STRING, MENUCMD_SAVEANDQUIT, _T("å¤åˆ¶å¹¶é€€å‡ºæˆªå›¾"));
+	::AppendMenu(m_hEditMenu, MF_STRING, MENUCMD_SAVE, _T("ä¿å­˜"));
 	::AppendMenu(m_hEditMenu, MF_SEPARATOR, 0, NULL);
-	::AppendMenu(m_hEditMenu, MF_STRING, MENUCMD_HIDETOOLBAR, _T("Òş²Ø±à¼­¹¤¾ßÀ¸"));
-	::AppendMenu(m_hEditMenu, MF_STRING, MENUCMD_QUIT, _T("ÍË³ö½ØÆÁ"));
+	::AppendMenu(m_hEditMenu, MF_STRING, MENUCMD_HIDETOOLBAR, _T("éšè—ç¼–è¾‘å·¥å…·æ "));
+	::AppendMenu(m_hEditMenu, MF_STRING, MENUCMD_QUIT, _T("é€€å‡ºæˆªå±"));
 
 	m_pDesktopImage = m_pm.FindControl(_T("desktopimage"));
 	m_pDesktopMask = m_pm.FindControl(_T("desktopmask"));
@@ -191,7 +191,7 @@ LRESULT CScrCaptureWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		}
 	}
 	else if(uMsg == WM_LBUTTONDBLCLK) {
-		// todo:Íê³É½ØÍ¼£¬±£´æµ½¼ôÌù°å
+		// todo:å®Œæˆæˆªå›¾ï¼Œä¿å­˜åˆ°å‰ªè´´æ¿
 		m_bClipChoiced = true;
 		::PostQuitMessage(0L);
 		return 0;
@@ -212,14 +212,14 @@ LRESULT CScrCaptureWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 			}
 		}
 		else {
-			// ÍË³ö½ØÍ¼
+			// é€€å‡ºæˆªå›¾
 			::PostQuitMessage(0L);
 		}
 		return 0;
 	}
 	else if(uMsg == WM_MOUSEMOVE) {
 		if (!m_bClipChoiced) {
-			if( ::GetKeyState(VK_LBUTTON) < 0 ) { // ×ó¼ü°´ÏÂ×´Ì¬
+			if( ::GetKeyState(VK_LBUTTON) < 0 ) { // å·¦é”®æŒ‰ä¸‹çŠ¶æ€
 				if (m_ptClipBasePoint.x != GET_X_LPARAM(lParam) || m_ptClipBasePoint.y != GET_Y_LPARAM(lParam)) {
 					m_rcClipPadding.left = min(GET_X_LPARAM(lParam), m_ptClipBasePoint.x)-m_rcWindow.left; if (m_rcClipPadding.left < 0) m_rcClipPadding.left = 0;
 					m_rcClipPadding.top = min(GET_Y_LPARAM(lParam), m_ptClipBasePoint.y)-m_rcWindow.top; if (m_rcClipPadding.top < 0) m_rcClipPadding.top = 0;
@@ -284,7 +284,7 @@ LRESULT CScrCaptureWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 			return 0;
 		case MENUCMD_SAVE:
 			{
-				// todo:µ¯³ö±£´æ¶Ô»°¿ò
+				// todo:å¼¹å‡ºä¿å­˜å¯¹è¯æ¡†
 			}
 			return 0;
 		case MENUCMD_HIDETOOLBAR:
