@@ -410,8 +410,8 @@
             <Attribute name="selected" default="false" type="BOOL" comment="是否选中,如(true)"/>
             <Attribute name="expandable" default="false" type="BOOL" comment="是否可以展开,如(true)"/>
         </ListContainerElement>
-        <CListHBoxElementUI parent="ListContainerElement" notifies="setfocus killfocus timer itemactivate itemclick itemexpanded itemcollapsed windowinit(root)">
-        </CListHBoxElementUI>
+        <ListHBoxElementUI parent="ListContainerElement" notifies="setfocus killfocus timer itemactivate itemclick itemexpanded itemcollapsed windowinit(root)">
+        </ListHBoxElementUI>
         <RichEdit parent="Container" notifies="setfocus killfocus timer menu return windowinit(root)">
             <!-- 不支持 autowidth 属性 -->
             <Attribute name="vscrollbar" default="false" type="BOOL" comment="是否使用竖向滚动条,如(true)"/>

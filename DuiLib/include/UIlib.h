@@ -47,24 +47,6 @@
     #endif
 #endif
 
-//导入库
-#if defined(_MSC_VER) && !defined(UILIB_STATIC)
-    #ifndef UILIB_EXPORTS
-        #ifdef _DEBUG
-            #ifdef _UNICODE
-                #pragma comment(lib, "duilib_ud.lib")
-            #else
-                #pragma comment(lib, "duilib_d.lib")
-            #endif
-        #else
-            #ifdef _UNICODE
-                #pragma comment(lib, "duilib_u.lib")
-            #else
-                #pragma comment(lib, "duilib.lib")
-            #endif
-        #endif
-    #endif
-#endif //_MSC_VER
 
 #ifdef UILIB_STATIC
     #define INLINE
