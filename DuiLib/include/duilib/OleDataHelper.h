@@ -1,24 +1,24 @@
-/// \copyright Copyright(c) 2018, SuZhou Keda Technology Co., All rights reserved.
+ï»¿/// \copyright Copyright(c) 2018, SuZhou Keda Technology Co., All rights reserved.
 /// \file dataobjecthelper.h
-/// \brief OleÊı¾İ¶ÔÏó¸¨ÖúÀà
+/// \brief Oleæ•°æ®å¯¹è±¡è¾…åŠ©ç±»
 ///
-/// RegisterClipboardFormat ¿ÉÒÔ×¢²á×Ô¼ºµÄÊı¾İ¸ñÊ½
+/// RegisterClipboardFormat å¯ä»¥æ³¨å†Œè‡ªå·±çš„æ•°æ®æ ¼å¼
 /// \author zhuyadong
 /// Contact: zhuyadong@kedacom.com
 /// \date 2018-04-28
 /// \note
 /// -----------------------------------------------------------------------------
-/// ĞŞ¸Ä¼ÇÂ¼£º
-/// ÈÕ  ÆÚ        °æ±¾        ĞŞ¸ÄÈË        ×ß¶ÁÈË    ĞŞ¸ÄÄÚÈİ
+/// ä¿®æ”¹è®°å½•ï¼š
+/// æ—¥  æœŸ        ç‰ˆæœ¬        ä¿®æ”¹äºº        èµ°è¯»äºº    ä¿®æ”¹å†…å®¹
 ///
 #pragma once
 
 namespace DuiLib {
 
-// Ö§³ÖµÄÊı¾İÀàĞÍ
-// 1. ±ê×¼¼ôÌù°åÊı¾İÀàĞÍ
-#define ECF_TEXT             1          // ANSI ÎÄ±¾
-#define ECF_BITMAP           2          // Î»Í¼
+// æ”¯æŒçš„æ•°æ®ç±»å‹
+// 1. æ ‡å‡†å‰ªè´´æ¿æ•°æ®ç±»å‹
+#define ECF_TEXT             1          // ANSI æ–‡æœ¬
+#define ECF_BITMAP           2          // ä½å›¾
 #define ECF_METAFILEPICT     3
 #define ECF_SYLK             4
 #define ECF_DIF              5
@@ -29,11 +29,11 @@ namespace DuiLib {
 #define ECF_PENDATA          10
 #define ECF_RIFF             11
 #define ECF_WAVE             12
-#define ECF_UNICODETEXT      13         // UNICODE ÎÄ±¾
+#define ECF_UNICODETEXT      13         // UNICODE æ–‡æœ¬
 #define ECF_ENHMETAFILE      14
 
 #if(WINVER >= 0x0400)
-    #define ECF_HDROP            15     // ×ÊÔ´¹ÜÀíÆ÷ÎÄ¼şÍÏ×§£¨Í¨¹ı¼ôÌù°å£©
+    #define ECF_HDROP            15     // èµ„æºç®¡ç†å™¨æ–‡ä»¶æ‹–æ‹½ï¼ˆé€šè¿‡å‰ªè´´æ¿ï¼‰
     #define ECF_LOCALE           16
 #endif /* WINVER >= 0x0400 */
 #if(WINVER >= 0x0500)
@@ -72,7 +72,7 @@ enum TDVASPECT
 };
 
 
-// ´æ´¢Ã½ÌåÀàĞÍ£¬Óë TYMED µÄ¶¨ÒåÒ»ÖÂ
+// å­˜å‚¨åª’ä½“ç±»å‹ï¼Œä¸ TYMED çš„å®šä¹‰ä¸€è‡´
 enum EMTypeMedium
 {
     ETYMED_NULL = 0,
@@ -87,13 +87,13 @@ enum EMTypeMedium
 
 struct DUILIB_API TDragData
 {
-    WORD    m_wClipFormat;  // Ö§³ÖµÄÊı¾İÀàĞÍ
-    WORD    m_wAspect;      // Ïê¼û TDVASPECT(DVASPECT)
-    int     m_eTypeMedium;  // ´æ´¢Ã½ÌåÀàĞÍ£¬Ïê¼û EMTypeMedium(TYMED)
+    WORD    m_wClipFormat;  // æ”¯æŒçš„æ•°æ®ç±»å‹
+    WORD    m_wAspect;      // è¯¦è§ TDVASPECT(DVASPECT)
+    int     m_eTypeMedium;  // å­˜å‚¨åª’ä½“ç±»å‹ï¼Œè¯¦è§ EMTypeMedium(TYMED)
     void   *m_pData;        //
 };
 
-// ×Ö·û´®´æ´¢µ½ HGLOBAL
+// å­—ç¬¦ä¸²å­˜å‚¨åˆ° HGLOBAL
 HGLOBAL DUILIB_API StringToHandle(LPCWSTR lpcstrText, int nTextLen = -1);
 HBITMAP DUILIB_API CopyHBitmap(HDC hDC, HBITMAP hBmpSrc);
 
@@ -103,37 +103,37 @@ public:
     COleDataHelper(void);
     ~COleDataHelper(void);
 
-    // Ìí¼ÓÊı¾İ¡£
-    bool SetText(CDuiString sText);                         // ÉèÖÃ ÎÄ±¾
-    bool SetBitmap(HBITMAP hBmp);                           // ÉèÖÃ HBITMAP Î»Í¼
-    bool SetCustomData(void *pData, DWORD dwLen, WORD wCF); // ÉèÖÃ ×Ô¶¨ÒåÊı¾İ
-    bool SetCustomGDI(HGDIOBJ hGDI, WORD wCF);              // ÉèÖÃ HBITMAP ÒÔÍâµÄ GDI ¶ÔÏó
+    // æ·»åŠ æ•°æ®ã€‚
+    bool SetText(CDuiString sText);                         // è®¾ç½® æ–‡æœ¬
+    bool SetBitmap(HBITMAP hBmp);                           // è®¾ç½® HBITMAP ä½å›¾
+    bool SetCustomData(void *pData, DWORD dwLen, WORD wCF); // è®¾ç½® è‡ªå®šä¹‰æ•°æ®
+    bool SetCustomGDI(HGDIOBJ hGDI, WORD wCF);              // è®¾ç½® HBITMAP ä»¥å¤–çš„ GDI å¯¹è±¡
 
-    // ¶ÁÈ¡Êı¾İ
-    CDuiString GetText(void);                       // ·µ»Ø ÎÄ±¾
-    HBITMAP GetBitmap(void);                        // ·µ»Ø HBITMAP Î»Í¼
-    CDuiPtrArray GetFileList(void);                 // ·µ»Ø ÎÄ¼şÁĞ±í(TCHAR*)£¬ĞèÒª free ÊÍ·ÅÄÚ´æ¡£½ÓÊÕ×ÊÔ´¹ÜÀíÆ÷ÍÏ×§µÄÎÄ¼şÁĞ±í
-    void *GetCustomData(WORD wCF, DWORD &dwLen);    // ·µ»Ø ×Ô¶¨ÒåÊı¾İ¡£ĞèÒª free ÊÍ·ÅÄÚ´æ
-    HGDIOBJ GetCustomGDI(WORD wCF);                 // ·µ»Ø HBITMAP ÒÔÍâµÄ GDI ¶ÔÏó
+    // è¯»å–æ•°æ®
+    CDuiString GetText(void);                       // è¿”å› æ–‡æœ¬
+    HBITMAP GetBitmap(void);                        // è¿”å› HBITMAP ä½å›¾
+    CDuiPtrArray GetFileList(void);                 // è¿”å› æ–‡ä»¶åˆ—è¡¨(TCHAR*)ï¼Œéœ€è¦ free é‡Šæ”¾å†…å­˜ã€‚æ¥æ”¶èµ„æºç®¡ç†å™¨æ‹–æ‹½çš„æ–‡ä»¶åˆ—è¡¨
+    void *GetCustomData(WORD wCF, DWORD &dwLen);    // è¿”å› è‡ªå®šä¹‰æ•°æ®ã€‚éœ€è¦ free é‡Šæ”¾å†…å­˜
+    HGDIOBJ GetCustomGDI(WORD wCF);                 // è¿”å› HBITMAP ä»¥å¤–çš„ GDI å¯¹è±¡
 
-    // bRelease : TRUE µ÷ÓÃÍê³Éºó£¬ÓÃ»§²»ÄÜÊÍ·Å×ÊÔ´£»FALSE ±íÊ¾º¯ÊıÄÚ²¿»á¸´ÖÆÒ»·İ×ÊÔ´£¬pDataÓÉÓÃ»§ÊÍ·Å
+    // bRelease : TRUE è°ƒç”¨å®Œæˆåï¼Œç”¨æˆ·ä¸èƒ½é‡Šæ”¾èµ„æºï¼›FALSE è¡¨ç¤ºå‡½æ•°å†…éƒ¨ä¼šå¤åˆ¶ä¸€ä»½èµ„æºï¼ŒpDataç”±ç”¨æˆ·é‡Šæ”¾
     bool SetData(void *pData, int nTM, WORD wCF, WORD wAspect = EDVASPECT_CONTENT, BOOL bRelease = TRUE);
     void *GetData(WORD wCF, int nTM, WORD wAspect = EDVASPECT_CONTENT);
 
-    // IDataObject Êı¾İÃ¶¾Ù
-    bool GetNext(WORD &wCF, WORD &wAspect, int &nTM);   // ´Ó0¿ªÊ¼Ã¶¾ÙÊı¾İÀàĞÍ
-    bool Reset(void);                                   // ÖØÖÃË÷ÒıÎª0£¬ÖØĞÂ¿ªÊ¼Ã¶¾Ù
+    // IDataObject æ•°æ®æšä¸¾
+    bool GetNext(WORD &wCF, WORD &wAspect, int &nTM);   // ä»0å¼€å§‹æšä¸¾æ•°æ®ç±»å‹
+    bool Reset(void);                                   // é‡ç½®ç´¢å¼•ä¸º0ï¼Œé‡æ–°å¼€å§‹æšä¸¾
 
-    bool HasText(void);                                 // ·µ»Ø ÎÄ±¾ÊÇ·ñ¿ÉÓÃ
-    bool HasBitmap(void);                               // ·µ»Ø Î»Í¼ÊÇ·ñ¿ÉÓÃ
-    bool HasFileList(void);                             // ·µ»Ø ÎÄ¼şÁĞ±íÊÇ·ñ¿ÉÓÃ
-    bool HasCustomData(void);                           // ·µ»Ø ×Ô¶¨ÒåÊı¾İÊÇ·ñ¿ÉÓÃ
-    bool HasCustomGDI(void);                            // ·µ»Ø HBITMAP ÒÔÍâµÄ GDI ¶ÔÏóÊÇ·ñ¿ÉÓÃ
+    bool HasText(void);                                 // è¿”å› æ–‡æœ¬æ˜¯å¦å¯ç”¨
+    bool HasBitmap(void);                               // è¿”å› ä½å›¾æ˜¯å¦å¯ç”¨
+    bool HasFileList(void);                             // è¿”å› æ–‡ä»¶åˆ—è¡¨æ˜¯å¦å¯ç”¨
+    bool HasCustomData(void);                           // è¿”å› è‡ªå®šä¹‰æ•°æ®æ˜¯å¦å¯ç”¨
+    bool HasCustomGDI(void);                            // è¿”å› HBITMAP ä»¥å¤–çš„ GDI å¯¹è±¡æ˜¯å¦å¯ç”¨
 
-    // ÍÏ×§Ê±·µ»Øµ±Ç°µÄ×´Ì¬£ºDROPEFFECT_NONE | DROPEFFECT_COPY | DROPEFFECT_MOVE | DROPEFFECT_LINK | DROPEFFECT_SCROLL
+    // æ‹–æ‹½æ—¶è¿”å›å½“å‰çš„çŠ¶æ€ï¼šDROPEFFECT_NONE | DROPEFFECT_COPY | DROPEFFECT_MOVE | DROPEFFECT_LINK | DROPEFFECT_SCROLL
     DWORD GetEffect(void) { return m_dwEffect; }
     void SetEffect(DWORD dwEffect) { m_dwEffect = dwEffect; }
-    // ÍÏ×§Ê±°´¼ü×´Ì¬£ºMK_CONTROL µÈ
+    // æ‹–æ‹½æ—¶æŒ‰é”®çŠ¶æ€ï¼šMK_CONTROL ç­‰
     DWORD GetKeyState(void) { return m_dwKeyState; }
 
 protected:
@@ -141,7 +141,7 @@ protected:
     friend class CControlUI;
 
     IDataObject *CreateDataObject(void);
-    bool CreateEnumFormatEtc(void);                     // ´´½¨Êı¾İÀàĞÍÃ¶¾Ù½Ó¿Ú
+    bool CreateEnumFormatEtc(void);                     // åˆ›å»ºæ•°æ®ç±»å‹æšä¸¾æ¥å£
 private:
     IDataObject    *m_pDataObj;
     bool            m_bAutoRelease;

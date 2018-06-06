@@ -1,4 +1,4 @@
-#ifndef __UIMANAGER_H__
+ï»¿#ifndef __UIMANAGER_H__
 #define __UIMANAGER_H__
 
 #pragma once
@@ -43,7 +43,7 @@ typedef enum EVENTTYPE_UI
     UIEVENT_TIMER,
     UIEVENT_NOTIFY,
     UIEVENT_COMMAND,
-    UIEVENT_IME_STARTCOMPOSITION,   // ÊäÈë·¨ÊÂ¼ş
+    UIEVENT_IME_STARTCOMPOSITION,   // è¾“å…¥æ³•äº‹ä»¶
     UIEVENT__LAST,
 };
 
@@ -143,15 +143,15 @@ typedef struct DUILIB_API tagTResInfo
     DWORD m_dwDefaultLinkFontColor;
     DWORD m_dwDefaultLinkHoverFontColor;
     DWORD m_dwDefaultSelectedBkColor;
-    int              m_nCurLangType;        // µ±Ç°ÓïÑÔÀàĞÍ
-    int              m_nCurCodePage;        // µ±Ç°ÓïÑÔ´úÂëÒ³
-    CDuiString       m_sCurLangDesc;        // µ±Ç°ÓïÑÔÃèÊö
+    int              m_nCurLangType;        // å½“å‰è¯­è¨€ç±»å‹
+    int              m_nCurCodePage;        // å½“å‰è¯­è¨€ä»£ç é¡µ
+    CDuiString       m_sCurLangDesc;        // å½“å‰è¯­è¨€æè¿°
     TFontInfo        m_DefaultFontInfo;
     CDuiStringPtrMap m_CustomFonts;
     CDuiStringPtrMap m_ImageHash;
     CDuiStringPtrMap m_AttrHash;
     CDuiStringPtrMap m_MultiLanguageHash;
-    CDuiPtrArray     m_LanguageNotifyers;   //2017-02-25 zhuyadong ÍêÉÆ¶àÓïÑÔÇĞ»»¡£
+    CDuiPtrArray     m_LanguageNotifyers;   //2017-02-25 zhuyadong å®Œå–„å¤šè¯­è¨€åˆ‡æ¢ã€‚
 } TResInfo;
 
 // Structure for notifications from the system
@@ -343,30 +343,30 @@ public:
 
     CDuiString GetWindowXML();
 
-    // 2018-01-25 zhuyadong ¶àÓïÑÔÊ¹ÓÃ²½Öè
-    // 1. Ğ´UIÃèÊöÎÄ¼şxml¡£ĞèÒª·­ÒëµÄ×Ö·û´®Ê¹ÓÃÈçÏÂ¸ñÊ½£º%{str}
-    // 2. Ğ´ÓïÑÔ°ü¡£root½ÚµãÎªLanguage£¬µÈ·­Òë×Ö·û´®Ğ´ÔÚString½ÚµãÖĞ
-    //    <Language> <String id="%{title}" text="ÕâÊÇ±êÌâ" /> </Language>
-    // 3. ¼ÓÔØĞèÒªµÄÓïÑÔ°ü
+    // 2018-01-25 zhuyadong å¤šè¯­è¨€ä½¿ç”¨æ­¥éª¤
+    // 1. å†™UIæè¿°æ–‡ä»¶xmlã€‚éœ€è¦ç¿»è¯‘çš„å­—ç¬¦ä¸²ä½¿ç”¨å¦‚ä¸‹æ ¼å¼ï¼š%[str]
+    // 2. å†™è¯­è¨€åŒ…ã€‚rootèŠ‚ç‚¹ä¸ºLanguageï¼Œç­‰ç¿»è¯‘å­—ç¬¦ä¸²å†™åœ¨StringèŠ‚ç‚¹ä¸­
+    //    <Language> <String id="%[title]" text="è¿™æ˜¯æ ‡é¢˜" /> </Language>
+    // 3. åŠ è½½éœ€è¦çš„è¯­è¨€åŒ…
     //    CPaintManagerUI::LoadLanguage(_T("English.xml"), _T("xml"));
     //    CPaintManagerUI::ChangeLanguage();
-    // 4. Èç¹û´°ÌåÊÇ´Ó CWindowWnd ¼Ì³ĞµÄ£¬ÔòĞèÒª´¦ÀíÏûÏ¢ WM_LANGUAGE_UPDATE
-    //    ÔÚÏûÏ¢´¦Àíº¯ÊıÖĞ·Ö±ğµ÷ÓÃ£ºReloadTitle(); m_pm.UpdateLanguage();
-    // 5. ³ÌĞòÖĞµÄÆäËüĞèÒª·­ÒëµÄ×Ö·û´®£¬ĞèÒª´¦ÀíÏûÏ¢ WM_LANGUAGE_UPDATE
-    //    ÔÚÏûÏ¢´¦Àíº¯ÊıÖĞ£¬µ÷ÓÃ CPaintManagerUI::ProcessMultiLanguageTokens(.)
-    static void AddMultiLanguageString(LPCTSTR id, LPCTSTR pStrMultiLanguage);  // Ìí¼Ó×Ö·û´®Ó³Éä
-    static LPCTSTR GetMultiLanguageString(LPCTSTR id);      // ²éÑ¯·­ÒëºóµÄ×Ö·û´®
-    static bool RemoveMultiLanguageString(LPCTSTR id);      // É¾³ıÖ¸¶¨idµÄ×Ö·û´®Ó³Éä
-    static void RemoveAllMultiLanguageString();             // Çå¿Õ×Ö·û´®Ó³Éä±í
-    static void ProcessMultiLanguageTokens(CDuiString &pStrMultiLanguage);  // ·­Òë×Ö·û´®
-    //2017-02-09 zhuyadong ÍêÉÆ¶àÓïÑÔÇĞ»»¡£nLangType ÓïÑÔÀàĞÍÓÉÓÃ»§¶¨Òå
+    // 4. å¦‚æœçª—ä½“æ˜¯ä» CWindowWnd ç»§æ‰¿çš„ï¼Œåˆ™éœ€è¦å¤„ç†æ¶ˆæ¯ WM_LANGUAGE_UPDATE
+    //    åœ¨æ¶ˆæ¯å¤„ç†å‡½æ•°ä¸­åˆ†åˆ«è°ƒç”¨ï¼šReloadTitle(); m_pm.UpdateLanguage();
+    // 5. ç¨‹åºä¸­çš„å…¶å®ƒéœ€è¦ç¿»è¯‘çš„å­—ç¬¦ä¸²ï¼Œéœ€è¦å¤„ç†æ¶ˆæ¯ WM_LANGUAGE_UPDATE
+    //    åœ¨æ¶ˆæ¯å¤„ç†å‡½æ•°ä¸­ï¼Œè°ƒç”¨ CPaintManagerUI::ProcessMultiLanguageTokens(.)
+    static void AddMultiLanguageString(LPCTSTR id, LPCTSTR pStrMultiLanguage);  // æ·»åŠ å­—ç¬¦ä¸²æ˜ å°„
+    static LPCTSTR GetMultiLanguageString(LPCTSTR id);      // æŸ¥è¯¢ç¿»è¯‘åçš„å­—ç¬¦ä¸²
+    static bool RemoveMultiLanguageString(LPCTSTR id);      // åˆ é™¤æŒ‡å®šidçš„å­—ç¬¦ä¸²æ˜ å°„
+    static void RemoveAllMultiLanguageString();             // æ¸…ç©ºå­—ç¬¦ä¸²æ˜ å°„è¡¨
+    static void ProcessMultiLanguageTokens(CDuiString &pStrMultiLanguage);  // ç¿»è¯‘å­—ç¬¦ä¸²
+    //2017-02-09 zhuyadong å®Œå–„å¤šè¯­è¨€åˆ‡æ¢ã€‚nLangType è¯­è¨€ç±»å‹ç”±ç”¨æˆ·å®šä¹‰
     static bool LoadLanguage(int nLangType, const STRINGorID &xml, LPCTSTR szResType = NULL);
-    static void ChangeLanguage(void);               // Í¨ÖªËùÓĞ´°Ìå¸üĞÂ½çÃæÓïÑÔ
-    static int GetCurLanguage(void);                // »ñÈ¡µ±Ç°ÓïÑÔÀàĞÍ
-    static int GetCurCodePage(void);                // »ñÈ¡µ±Ç°ÓïÑÔ´úÂëÒ³
-    static void AddLanguageNotifier(HWND hWnd);     // Ìí¼ÓĞèÒªÍ¨ÖªµÄ´°Ìå
-    static void DelLanguageNotifier(HWND hWnd);     // É¾³ıĞèÒªÍ¨ÖªµÄ´°Ìå
-    void UpdateLanguage();                          // ¸üĞÂ½çÃæÓïÑÔ£¬ĞèÒªË¢ĞÂËùÓĞÏÔÊ¾½çÃæ
+    static void ChangeLanguage(void);               // é€šçŸ¥æ‰€æœ‰çª—ä½“æ›´æ–°ç•Œé¢è¯­è¨€
+    static int GetCurLanguage(void);                // è·å–å½“å‰è¯­è¨€ç±»å‹
+    static int GetCurCodePage(void);                // è·å–å½“å‰è¯­è¨€ä»£ç é¡µ
+    static void AddLanguageNotifier(HWND hWnd);     // æ·»åŠ éœ€è¦é€šçŸ¥çš„çª—ä½“
+    static void DelLanguageNotifier(HWND hWnd);     // åˆ é™¤éœ€è¦é€šçŸ¥çš„çª—ä½“
+    void UpdateLanguage();                          // æ›´æ–°ç•Œé¢è¯­è¨€ï¼Œéœ€è¦åˆ·æ–°æ‰€æœ‰æ˜¾ç¤ºç•Œé¢
 
     bool AttachDialog(CControlUI *pControl);
     bool InitControls(CControlUI *pControl, CControlUI *pParent = NULL);
@@ -529,12 +529,12 @@ private:
     bool m_bForceUseSharedRes;
     TResInfo m_ResInfo;
 
-    CShadowUI       *m_pWndShadow;      // ´°ÌåÒõÓ°
-    // ÍÏ·ÅÏà¹Ø
-    bool            m_bDropEnable;      // ´°ÌåÊÇ·ñÖ§³ÖÍÏ·Å
+    CShadowUI       *m_pWndShadow;      // çª—ä½“é˜´å½±
+    // æ‹–æ”¾ç›¸å…³
+    bool            m_bDropEnable;      // çª—ä½“æ˜¯å¦æ”¯æŒæ‹–æ”¾
     CDropTarget    *m_pDropTarget;      //
-    CControlUI     *m_pEventDrop;       // µ±Ç°½ÓÊÕÍÏ·ÅµÄ¿Ø¼ş
-    IDataObject    *m_pDataObject;      // ÍÏ·ÅĞ¯´øµÄÊı¾İ¶ÔÏó
+    CControlUI     *m_pEventDrop;       // å½“å‰æ¥æ”¶æ‹–æ”¾çš„æ§ä»¶
+    IDataObject    *m_pDataObject;      // æ‹–æ”¾æºå¸¦çš„æ•°æ®å¯¹è±¡
 
     //
     static HINSTANCE m_hResourceInstance;

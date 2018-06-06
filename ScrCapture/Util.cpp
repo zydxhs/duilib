@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "Util.h"
 
 HBITMAP CreateDesktopBitmap(HWND hWnd)

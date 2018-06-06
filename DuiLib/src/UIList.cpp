@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 
 namespace DuiLib {
 
@@ -329,8 +329,7 @@ void CListUI::RemoveAll()
 
 void CListUI::SetPos(RECT rc, bool bNeedInvalidate)
 {
-    if (m_pHeader !=
-        NULL)    // ÉèÖÃheader¸÷×ÓÔªËØx×ø±ê,ÒòÎªÓĞĞ©listitemµÄsetposĞèÒªÓÃµ½(ÁÙÊ±ĞŞ¸´)
+    if (m_pHeader != NULL)    // è®¾ç½®headerå„å­å…ƒç´ xåæ ‡,å› ä¸ºæœ‰äº›listitemçš„setposéœ€è¦ç”¨åˆ°(ä¸´æ—¶ä¿®å¤)
     {
         int iLeft = rc.left + m_rcInset.left;
         int iRight = rc.right - m_rcInset.right;
@@ -485,7 +484,7 @@ void CListUI::DoEvent(TEventUI &event)
         {
             switch (event.chKey)
             {
-            //2017-02-25 zhuyadong ĞŞ¸´ case Óï¾äÃ»ÓĞ break µÄ bug
+            //2017-02-25 zhuyadong ä¿®å¤ case è¯­å¥æ²¡æœ‰ break çš„ bug
             case VK_UP:     SelectItem(FindSelectable(m_iCurSel - 1, false), true); break;
 
             case VK_DOWN:   SelectItem(FindSelectable(m_iCurSel + 1, true), true);  break;
@@ -1655,7 +1654,7 @@ bool CListBodyUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl
 
                     if (pListInfo && pListInfo->iHLineSize > 0)
                     {
-                        // ÒòÎªÃ»ÓĞÎª×îºóÒ»¸öÔ¤Áô·Ö¸îÌõ³¤¶È£¬Èç¹ûlistÆÌÂú£¬×îºóÒ»Ìõ²»»áÏÔÊ¾
+                        // å› ä¸ºæ²¡æœ‰ä¸ºæœ€åä¸€ä¸ªé¢„ç•™åˆ†å‰²æ¡é•¿åº¦ï¼Œå¦‚æœlisté“ºæ»¡ï¼Œæœ€åä¸€æ¡ä¸ä¼šæ˜¾ç¤º
                         RECT rcPadding = pControl->GetPadding();
                         const RECT &rcPos = pControl->GetPos();
                         RECT rcBottomLine = { rcPos.left, rcPos.bottom + rcPadding.bottom, rcPos.right, rcPos.bottom + rcPadding.bottom + pListInfo->iHLineSize };
@@ -1771,6 +1770,9 @@ CListHeaderItemUI::CListHeaderItemUI() : m_bDragable(true), m_uButtonState(0), m
     m_uTextStyle(DT_CENTER | DT_VCENTER | DT_SINGLELINE), m_dwTextColor(0), m_dwSepColor(0),
     m_iFont(-1), m_bShowHtml(false)
 {
+    //è®¾ç½®å†…è¾¹è·ï¼Œé˜²æ­¢é®æŒ¡æ‹–æ”¾çš„é—´éš”æ¡
+    if (0 == m_rcInset.left || 0 == m_rcInset.right) { m_rcInset.left = m_rcInset.right = 4; }
+
     SetTextPadding(CDuiRect(2, 0, 2, 0));
     ptLastMouse.x = ptLastMouse.y = 0;
     SetMinWidth(16);
@@ -1796,7 +1798,7 @@ UINT CListHeaderItemUI::GetControlFlags() const
 
 void CListHeaderItemUI::SetEnabled(bool bEnable)
 {
-    CControlUI::SetEnabled(bEnable);
+    CContainerUI::SetEnabled(bEnable);
 
     if (!IsEnabled()) { m_uButtonState = 0; }
 }
@@ -2046,10 +2048,10 @@ void CListHeaderItemUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         SetSepColor(clrColor);
     }
     else if (_tcscmp(pstrName, _T("sepimage")) == 0) { SetSepImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:dragenable")); }
-    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:drageimage")); }
-    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:dropenable")); }
-    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:autowidth")); }
+    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:dragenable")); }
+    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:drageimage")); }
+    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:dropenable")); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:autowidth")); }
     else { CContainerUI::SetAttribute(pstrName, pstrValue); }
 }
 
@@ -2058,7 +2060,7 @@ void CListHeaderItemUI::DoEvent(TEventUI &event)
     if (!IsMouseEnabled() && event.Type > UIEVENT__MOUSEBEGIN && event.Type < UIEVENT__MOUSEEND)
     {
         if (m_pParent != NULL) { m_pParent->DoEvent(event); }
-        else { CControlUI::DoEvent(event); }
+        else { CContainerUI::DoEvent(event); }
 
         return;
     }
@@ -2091,7 +2093,7 @@ void CListHeaderItemUI::DoEvent(TEventUI &event)
         else
         {
             m_uButtonState |= UISTATE_PUSHED;
-            // 2018-05-23 µ¥»÷ÊÂ¼ş·ÅÔÚÊó±êµ¯ÆğÊ±·¢ËÍ
+            // 2018-05-23 å•å‡»äº‹ä»¶æ”¾åœ¨é¼ æ ‡å¼¹èµ·æ—¶å‘é€
             //m_pManager->SendNotify(this, DUI_MSGTYPE_HEADERCLICK);
             Invalidate();
         }
@@ -2113,7 +2115,7 @@ void CListHeaderItemUI::DoEvent(TEventUI &event)
         {
             m_uButtonState &= ~UISTATE_PUSHED;
             Invalidate();
-            // 2018-05-23 µ¥»÷ÊÂ¼ş·ÅÔÚÊó±êµ¯ÆğÊ±·¢ËÍ
+            // 2018-05-23 å•å‡»äº‹ä»¶æ”¾åœ¨é¼ æ ‡å¼¹èµ·æ—¶å‘é€
             m_pManager->SendNotify(this, DUI_MSGTYPE_HEADERCLICK);
         }
 
@@ -2196,14 +2198,14 @@ void CListHeaderItemUI::DoEvent(TEventUI &event)
         }
     }
 
-    CControlUI::DoEvent(event);
+    CContainerUI::DoEvent(event);
 }
 
 SIZE CListHeaderItemUI::EstimateSize(SIZE szAvailable)
 {
     if (m_cxyFixed.cy == 0) { return CDuiSize(m_cxyFixed.cx, m_pManager->GetDefaultFontInfo()->tm.tmHeight + 8); }
 
-    return CControlUI::EstimateSize(szAvailable);
+    return CContainerUI::EstimateSize(szAvailable);
 }
 
 RECT CListHeaderItemUI::GetThumbRect() const
@@ -2511,10 +2513,10 @@ void CListElementUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         m_dwBackColor = _tcstoul(pstrValue, &pstr, 16);
         m_bCustomBk = true;
     }
-    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:dragenable")); }
-    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:drageimage")); }
-    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:dropenable")); }
-    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:autowidth")); }
+    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:dragenable")); }
+    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:drageimage")); }
+    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:dropenable")); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:autowidth")); }
     else { CControlUI::SetAttribute(pstrName, pstrValue); }
 }
 
@@ -2625,7 +2627,7 @@ RECT CListElementUI::GetSubItemPos(int nIndex)
     RECT rtTmp = pHeader->GetItemAt(nIndex)->GetPos();
     rtColumn.left = rtTmp.left;
     rtColumn.right = rtTmp.right;
-    // ±ÜÃâÕÚ×¡¹ö¶¯Ìõ
+    // é¿å…é®ä½æ»šåŠ¨æ¡
     CScrollBarUI *pSB = pList->GetVerticalScrollBar();
 
     if (NULL != pSB)
@@ -2702,7 +2704,7 @@ void CListLabelElementUI::DoEvent(TEventUI &event)
         if (IsEnabled())
         {
             SetCapture();
-            // 2018-05-23 µ¥»÷ÊÂ¼ş·ÅÔÚÊó±êµ¯ÆğÊ±·¢ËÍ
+            // 2018-05-23 å•å‡»äº‹ä»¶æ”¾åœ¨é¼ æ ‡å¼¹èµ·æ—¶å‘é€
             //m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMCLICK);
             Select();
             Invalidate();
@@ -2711,7 +2713,7 @@ void CListLabelElementUI::DoEvent(TEventUI &event)
         return;
     }
 
-    // 2018-05-23 µ¥»÷ÊÂ¼ş·ÅÔÚÊó±êµ¯ÆğÊ±·¢ËÍ
+    // 2018-05-23 å•å‡»äº‹ä»¶æ”¾åœ¨é¼ æ ‡å¼¹èµ·æ—¶å‘é€
     if (event.Type == UIEVENT_BUTTONUP || event.Type == UIEVENT_RBUTTONUP)
     {
         if (IsEnabled())
@@ -2915,10 +2917,10 @@ void CListLabelElementUI::DrawItemText(HDC hDC, const RECT &rcItem)
     rcText.bottom -= pInfo->rcTextPadding.bottom;
 
     if (pInfo->bShowHtml)
-        CRenderEngine::DrawHtmlText(hDC, m_pManager, rcText, m_sText, iTextColor, \
+        CRenderEngine::DrawHtmlText(hDC, m_pManager, rcText, m_sText, iTextColor,
                                     NULL, NULL, nLinks, pInfo->nFont, pInfo->uTextStyle);
     else
-        CRenderEngine::DrawText(hDC, m_pManager, rcText, m_sText, iTextColor, \
+        CRenderEngine::DrawText(hDC, m_pManager, rcText, m_sText, iTextColor,
                                 pInfo->nFont, pInfo->uTextStyle);
 }
 
@@ -3281,7 +3283,7 @@ void CListTextElementUI::DrawItemText(HDC hDC, const RECT &rcItem)
             rcItem.top += pInfo->rcTextPadding.top;
             rcItem.bottom -= pInfo->rcTextPadding.bottom;
 
-            CDuiString strText;//²»Ê¹ÓÃLPCTSTR£¬·ñÔòÏŞÖÆÌ«¶à by cddjr 2011/10/20
+            CDuiString strText;//ä¸ä½¿ç”¨LPCTSTRï¼Œå¦åˆ™é™åˆ¶å¤ªå¤š by cddjr 2011/10/20
 
             if (pCallback) { strText = pCallback->GetItemText(this, m_iIndex, i); }
             else { strText.Assign(GetText(i)); }
@@ -3581,7 +3583,7 @@ void CListContainerElementUI::DoEvent(TEventUI &event)
         if (IsEnabled())
         {
             SetCapture();
-            // 2018-05-23 µ¥»÷ÊÂ¼ş·ÅÔÚÊó±êµ¯ÆğÊ±·¢ËÍ
+            // 2018-05-23 å•å‡»äº‹ä»¶æ”¾åœ¨é¼ æ ‡å¼¹èµ·æ—¶å‘é€
             //m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMCLICK);
             Select();
             Invalidate();
@@ -3590,7 +3592,7 @@ void CListContainerElementUI::DoEvent(TEventUI &event)
         return;
     }
 
-    // 2018-05-23 µ¥»÷ÊÂ¼ş·ÅÔÚÊó±êµ¯ÆğÊ±·¢ËÍ
+    // 2018-05-23 å•å‡»äº‹ä»¶æ”¾åœ¨é¼ æ ‡å¼¹èµ·æ—¶å‘é€
     if (event.Type == UIEVENT_BUTTONUP || event.Type == UIEVENT_RBUTTONUP)
     {
         if (IsEnabled())
@@ -3657,10 +3659,10 @@ void CListContainerElementUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if (_tcscmp(pstrName, _T("selected")) == 0) { Select(); }
     else if (_tcscmp(pstrName, _T("expandable")) == 0) { SetExpandable(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:dragenable")); }
-    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:drageimage")); }
-    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:dropenable")); }
-    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:autowidth")); }
+    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:dragenable")); }
+    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:drageimage")); }
+    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:dropenable")); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:autowidth")); }
     else { CContainerUI::SetAttribute(pstrName, pstrValue); }
 }
 

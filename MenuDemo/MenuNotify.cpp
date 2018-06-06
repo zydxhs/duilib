@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "MenuNotify.h"
 #include "UIMenu.h"
 #include "main_frame.hpp"

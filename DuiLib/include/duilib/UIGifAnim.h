@@ -1,4 +1,4 @@
-#ifndef GifAnimUI_h__
+ï»¿#ifndef GifAnimUI_h__
 #define GifAnimUI_h__
 
 #pragma once
@@ -35,18 +35,18 @@ private:
     void    InitGifImage();
     void    DeleteGif();
     void    OnTimer(UINT_PTR idEvent);
-    void    DrawFrame(HDC hDC);          // »æÖÆGIFÃ¿Ö¡
+    void    DrawFrame(HDC hDC);          // ç»˜åˆ¶GIFæ¯å¸§
     Gdiplus::Image *LoadGifFromFile(LPCTSTR pstrGifPath);
     Gdiplus::Image *LoadGifFromMemory(LPVOID pBuf, size_t dwSize);
 private:
     Gdiplus::Image  *m_pGifImage;
-    UINT            m_nFrameCount;              // gifÍ¼Æ¬×ÜÖ¡Êı
-    UINT            m_nFramePosition;           // µ±Ç°·Åµ½µÚ¼¸Ö¡
-    Gdiplus::PropertyItem  *m_pPropertyItem;    // Ö¡ÓëÖ¡Ö®¼ä¼ä¸ôÊ±¼ä
+    UINT            m_nFrameCount;              // gifå›¾ç‰‡æ€»å¸§æ•°
+    UINT            m_nFramePosition;           // å½“å‰æ”¾åˆ°ç¬¬å‡ å¸§
+    Gdiplus::PropertyItem  *m_pPropertyItem;    // å¸§ä¸å¸§ä¹‹é—´é—´éš”æ—¶é—´
 
     CDuiString      m_sBkImage;
-    bool            m_bIsAutoPlay;              // ÊÇ·ñ×Ô¶¯²¥·Ågif
-    bool            m_bIsAutoSize;              // ÊÇ·ñ×Ô¶¯¸ù¾İÍ¼Æ¬ÉèÖÃ´óĞ¡
+    bool            m_bIsAutoPlay;              // æ˜¯å¦è‡ªåŠ¨æ’­æ”¾gif
+    bool            m_bIsAutoSize;              // æ˜¯å¦è‡ªåŠ¨æ ¹æ®å›¾ç‰‡è®¾ç½®å¤§å°
     bool            m_bIsPlaying;
 
 };
@@ -79,13 +79,13 @@ private:
     void    InitGifImage();
     void    DeleteGif();
     void    OnTimer(UINT_PTR idEvent);
-    void    DrawFrame(HDC hDC);                 // »æÖÆGIFµ±Ç°Ö¡
+    void    DrawFrame(HDC hDC);                 // ç»˜åˆ¶GIFå½“å‰å¸§
 private:
-    CGifInfo       *m_pcGifInfo;                // gif Í¼Æ¬ĞÅÏ¢
+    CGifInfo       *m_pcGifInfo;                // gif å›¾ç‰‡ä¿¡æ¯
 
     CDuiString      m_sBkImage;
-    bool            m_bIsAutoPlay;              // ÊÇ·ñ×Ô¶¯²¥·Ågif
-    bool            m_bIsAutoSize;              // ÊÇ·ñ×Ô¶¯¸ù¾İÍ¼Æ¬ÉèÖÃ´óĞ¡
+    bool            m_bIsAutoPlay;              // æ˜¯å¦è‡ªåŠ¨æ’­æ”¾gif
+    bool            m_bIsAutoSize;              // æ˜¯å¦è‡ªåŠ¨æ ¹æ®å›¾ç‰‡è®¾ç½®å¤§å°
     bool            m_bIsPlaying;
 };
 

@@ -1,4 +1,4 @@
-#ifndef COLORPICKER_HPP
+﻿#ifndef COLORPICKER_HPP
 #define COLORPICKER_HPP
 #include "../DuiLib/include/uilib.h"
 

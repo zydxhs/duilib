@@ -1,14 +1,14 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include <vector>
 
 namespace DuiLib {
 
 typedef struct tagCtrlInfo
 {
-    int         nIndex;     // Ë÷Òı
-    int         nWeight;    // È¨ÖØ
-    int         nSpace;     // ¿Ø¼şÕ¼ÓÃµÄ¿í
-    CControlUI *pCtrl;      // ¿Ø¼şÖ¸Õë
+    int         nIndex;     // ç´¢å¼•
+    int         nWeight;    // æƒé‡
+    int         nSpace;     // æ§ä»¶å ç”¨çš„å®½
+    CControlUI *pCtrl;      // æ§ä»¶æŒ‡é’ˆ
 
     tagCtrlInfo(int nI, int nW, int nS, CControlUI *pC) : nIndex(nI), nWeight(nW), pCtrl(pC), nSpace(nS) { }
     tagCtrlInfo(CControlUI *pC) : nIndex(0), nWeight(0), nSpace(0), pCtrl(pC) { }
@@ -62,7 +62,7 @@ void CHWeightLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
         return;
     }
 
-    // Determine the minimum size ¼ÆËãËùÏà¶Ô²¼¾Ö²¢ÇÒ¿É¼ûµÄ¿Ø¼şµÄ×îĞ¡¿Õ¼ä
+    // Determine the minimum size è®¡ç®—æ‰€ç›¸å¯¹å¸ƒå±€å¹¶ä¸”å¯è§çš„æ§ä»¶çš„æœ€å°ç©ºé—´
     SIZE szAvailable = { rc.right - rc.left, rc.bottom - rc.top };
 
     if (m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible())
@@ -71,20 +71,20 @@ void CHWeightLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
     if (m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible())
     { szAvailable.cy += m_pVerticalScrollBar->GetScrollRange(); }
 
-    int cyNeeded = 0;               // ËùÓĞ×Ó¿Ø¼şÖĞ£¬¸ß¶ÈµÄ×î´óÖµ
-    int nAdjustables = 0;           // ¿Éµ÷Õû´óĞ¡µÄ¿Ø¼şµÄ¸öÊı
-    int cxFixed = 0;                // ¿Ø¼şÕ¼ÓÃµÄ¿í¶È
-    int nEstimateNum = 0;           // ĞèÒª¼ÆËã´óĞ¡µÄ¿Ø¼şÊı
-    SIZE szControlAvailable;        // ¿Ø¼ş×î´ó¿ÉÓÃ¿Õ¼ä
-    int iControlMaxWidth = 0;       // ×î´ó¿Ø¼şµÄ¿í
+    int cyNeeded = 0;               // æ‰€æœ‰å­æ§ä»¶ä¸­ï¼Œé«˜åº¦çš„æœ€å¤§å€¼
+    int nAdjustables = 0;           // å¯è°ƒæ•´å¤§å°çš„æ§ä»¶çš„ä¸ªæ•°
+    int cxFixed = 0;                // æ§ä»¶å ç”¨çš„å®½åº¦
+    int nEstimateNum = 0;           // éœ€è¦è®¡ç®—å¤§å°çš„æ§ä»¶æ•°
+    SIZE szControlAvailable;        // æ§ä»¶æœ€å¤§å¯ç”¨ç©ºé—´
+    int iControlMaxWidth = 0;       // æœ€å¤§æ§ä»¶çš„å®½
     int iControlMaxHeight = 0;
     int cxExpand = 0;
-    CVecCtrlInfo vecCtrls;          // ¶ÁÈ¡×Ó¿Ø¼şÈ¨ÖØ
+    CVecCtrlInfo vecCtrls;          // è¯»å–å­æ§ä»¶æƒé‡
     CControlUI *pCtrl = NULL;
 
-    ResetWeightCtrlState();         // ÖØÖÃ×Ó¿Ø¼şÄÚ²¿ÏÔÊ¾ÊôĞÔ
+    ResetWeightCtrlState();         // é‡ç½®å­æ§ä»¶å†…éƒ¨æ˜¾ç¤ºå±æ€§
 
-    // Ô­´úÂë£¬¼ÆËã¿Õ¼ä
+    // åŸä»£ç ï¼Œè®¡ç®—ç©ºé—´
     for (int i = 0; i < m_items.GetSize(); i++)
     {
         pCtrl = static_cast<CControlUI *>(m_items[i]);
@@ -145,7 +145,7 @@ void CHWeightLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
         vecCtrls.push_back(TCtrlInfo(i, pCtrl->GetWeight(), sz.cx, pCtrl));
     }
 
-    // °´È¨ÖØ´ÓĞ¡µ½´óÅÅĞò
+    // æŒ‰æƒé‡ä»å°åˆ°å¤§æ’åº
     std::sort(vecCtrls.begin(), vecCtrls.end(), [ ](TCtrlInfo lhs, TCtrlInfo rhs) -> bool
     {
         return lhs.nWeight < rhs.nWeight;
@@ -153,7 +153,7 @@ void CHWeightLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
 
     cxFixed += (nEstimateNum - 1) * m_iChildPadding;
 
-    // Èç¹û¿Õ¼ä²»×ã£¬³¢ÊÔÈ¨ÖØ´ÓµÍµ½¸ßËõ¼õ¿Ø¼ş´óĞ¡
+    // å¦‚æœç©ºé—´ä¸è¶³ï¼Œå°è¯•æƒé‡ä»ä½åˆ°é«˜ç¼©å‡æ§ä»¶å¤§å°
     if (szAvailable.cx < cxFixed)
     {
         for (CVecCtrlInfo::iterator it(vecCtrls.begin()); it != vecCtrls.end(); ++it)

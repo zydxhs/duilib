@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "gifinfo.h"
 #include "XUnzip.h"
 
@@ -236,7 +236,7 @@ typedef BOOL(WINAPI *LPALPHABLEND)(HDC, int, int, int, int, HDC, int, int, int, 
 static LPALPHABLEND GetAlphaBlend(void)
 {
     LPALPHABLEND lpAlphaBlend = (LPALPHABLEND)::GetProcAddress(::GetModuleHandle(_T("msimg32.dll")),
-                                "AlphaBlend");
+                                                               "AlphaBlend");
 
     if (NULL == lpAlphaBlend) { lpAlphaBlend = AlphaBitBlt; }
 
@@ -245,8 +245,8 @@ static LPALPHABLEND GetAlphaBlend(void)
 
 void CRenderEngine::ParseDrawInfo(TDrawInfo &drawInfo, CDuiString &sResType, DWORD &dwMask, bool &bHSL)
 {
-    // 1¡¢aaa.jpg
-    // 2¡¢file='aaa.jpg' res='' restype='0' dest='0,0,0,0' source='0,0,0,0' scale9='0,0,0,0'
+    // 1ã€aaa.jpg
+    // 2ã€file='aaa.jpg' res='' restype='0' dest='0,0,0,0' source='0,0,0,0' scale9='0,0,0,0'
     // mask='#FF0000' fade='255' hole='false' xtiled='false' ytiled='false' hsl='false'
     if (drawInfo.sDrawString.IsEmpty()) { return; }
 
@@ -456,7 +456,7 @@ TImageInfo *CRenderEngine::LoadImage(STRINGorID bitmap, LPCTSTR type, DWORD mask
     {
         if (type == NULL || 0 == type[0])
         {
-            // ´ÓÎÄ¼ş¼ÓÔØ
+            // ä»æ–‡ä»¶åŠ è½½
             CDuiString sFile = CPaintManagerUI::GetResourcePath();
 
             if (CPaintManagerUI::GetResourceZip().IsEmpty())
@@ -524,7 +524,7 @@ TImageInfo *CRenderEngine::LoadImage(STRINGorID bitmap, LPCTSTR type, DWORD mask
         }
         else
         {
-            // ´Ó×ÊÔ´ÖĞ¼ÓÔØ
+            // ä»èµ„æºä¸­åŠ è½½
             HRSRC hResource = ::FindResource(CPaintManagerUI::GetResourceDll(), bitmap.m_lpstr, type);
 
             if (hResource == NULL) { break; }
@@ -549,7 +549,7 @@ TImageInfo *CRenderEngine::LoadImage(STRINGorID bitmap, LPCTSTR type, DWORD mask
 
     while (!pData)
     {
-        //¶Á²»µ½Í¼Æ¬, ÔòÖ±½ÓÈ¥¶ÁÈ¡bitmap.m_lpstrÖ¸ÏòµÄÂ·¾¶
+        //è¯»ä¸åˆ°å›¾ç‰‡, åˆ™ç›´æ¥å»è¯»å–bitmap.m_lpstræŒ‡å‘çš„è·¯å¾„
         HANDLE hFile = ::CreateFile(bitmap.m_lpstr, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
                                     FILE_ATTRIBUTE_NORMAL, NULL);
 
@@ -575,7 +575,7 @@ TImageInfo *CRenderEngine::LoadImage(STRINGorID bitmap, LPCTSTR type, DWORD mask
 
     if (!pData)
     {
-        //::MessageBox(0, _T("¶ÁÈ¡Í¼Æ¬Êı¾İÊ§°Ü£¡"), _T("×¥BUG"), MB_OK);
+        //::MessageBox(0, _T("è¯»å–å›¾ç‰‡æ•°æ®å¤±è´¥ï¼"), _T("æŠ“BUG"), MB_OK);
         return NULL;
     }
 
@@ -589,7 +589,7 @@ TImageInfo *CRenderEngine::LoadImage(STRINGorID bitmap, LPCTSTR type, DWORD mask
 
         if (!pImage)
         {
-            //::MessageBox(0, _T("½âÎöÍ¼Æ¬Ê§°Ü"), _T("×¥BUG"), MB_OK);
+            //::MessageBox(0, _T("è§£æå›¾ç‰‡å¤±è´¥"), _T("æŠ“BUG"), MB_OK);
             return NULL;
         }
     }
@@ -610,7 +610,7 @@ TImageInfo *CRenderEngine::LoadImage(STRINGorID bitmap, LPCTSTR type, DWORD mask
 
     if (!hBitmap)
     {
-        //::MessageBox(0, _T("CreateDIBSectionÊ§°Ü"), _T("×¥BUG"), MB_OK);
+        //::MessageBox(0, _T("CreateDIBSectionå¤±è´¥"), _T("æŠ“BUG"), MB_OK);
         return NULL;
     }
 
@@ -680,13 +680,13 @@ TImageInfo *CRenderEngine::LoadImage(STRINGorID bitmap, LPCTSTR type, DWORD mask
 
 DuiLib::CGifInfo *CRenderEngine::LoadGif(CDuiString &sDrawString)
 {
-    // Ö§³Ö file res restype mask
+    // æ”¯æŒ file res restype mask
     TDrawInfo drawInfo(sDrawString);
     CDuiString sResType;
     DWORD dwMask = 0;
     bool bUseHSL = false;
     ParseDrawInfo(drawInfo, sResType, dwMask, bUseHSL);
-    // Èç¹ûÓÃ»§Ê¹ÓÃµÄÊÇ·Ç gif Í¼Æ¬£¬Ôò±¨´í£»Ê¹ÓÃ×ÊÔ´Í¼Æ¬Ê±£¬²»×öÅĞ¶Ï
+    // å¦‚æœç”¨æˆ·ä½¿ç”¨çš„æ˜¯é gif å›¾ç‰‡ï¼Œåˆ™æŠ¥é”™ï¼›ä½¿ç”¨èµ„æºå›¾ç‰‡æ—¶ï¼Œä¸åšåˆ¤æ–­
     ASSERT(sResType.IsEmpty() && -1 != drawInfo.sImageName.Find(_T(".gif")) && _T("Must be GIF picture."));
 
     if (sResType.IsEmpty() && -1 == drawInfo.sImageName.Find(_T(".gif"))) { return NULL; }
@@ -792,7 +792,7 @@ CGifInfo *CRenderEngine::LoadGif(STRINGorID bitmap, LPCTSTR type, DWORD mask)
 
     while (!pData)
     {
-        //¶Á²»µ½Í¼Æ¬, ÔòÖ±½ÓÈ¥¶ÁÈ¡bitmap.m_lpstrÖ¸ÏòµÄÂ·¾¶
+        //è¯»ä¸åˆ°å›¾ç‰‡, åˆ™ç›´æ¥å»è¯»å–bitmap.m_lpstræŒ‡å‘çš„è·¯å¾„
         HANDLE hFile = ::CreateFile(bitmap.m_lpstr, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
                                     FILE_ATTRIBUTE_NORMAL, NULL);
 
@@ -818,7 +818,7 @@ CGifInfo *CRenderEngine::LoadGif(STRINGorID bitmap, LPCTSTR type, DWORD mask)
 
     if (!pData)
     {
-        //::MessageBox(0, _T("¶ÁÈ¡Í¼Æ¬Êı¾İÊ§°Ü£¡"), _T("×¥BUG"), MB_OK);
+        //::MessageBox(0, _T("è¯»å–å›¾ç‰‡æ•°æ®å¤±è´¥ï¼"), _T("æŠ“BUG"), MB_OK);
         return NULL;
     }
 
@@ -833,7 +833,7 @@ CGifInfo *CRenderEngine::LoadGif(STRINGorID bitmap, LPCTSTR type, DWORD mask)
 
     if (NULL == pImage || n <= 0 || w <= 0 || h <= 0) { return NULL; }
 
-    // ´¦ÀíÃ¿Ò»Ö¡Í¼Ïñ
+    // å¤„ç†æ¯ä¸€å¸§å›¾åƒ
     CGifInfo *pcGifInfo = new CGifInfo(n);
 
     pData = pImage;
@@ -844,9 +844,9 @@ CGifInfo *CRenderEngine::LoadGif(STRINGorID bitmap, LPCTSTR type, DWORD mask)
         TImageInfo *ptImg = new TImageInfo;
         ptImg->bUseHSL = false;
         ptImg->pSrcBits = NULL;
-        ptImg->nX = w;                  // ¿í
-        ptImg->nY = h;                  // ¸ß
-        ptImg->dwMask = *(pDelay + i);  // ¸ÃÖ¡ÏÔÊ¾Ê±¼ä
+        ptImg->nX = w;                  // å®½
+        ptImg->nY = h;                  // é«˜
+        ptImg->dwMask = *(pDelay + i);  // è¯¥å¸§æ˜¾ç¤ºæ—¶é—´
         pData = pImage + i * nStride;
 
         BITMAPINFO bmi;
@@ -1575,7 +1575,7 @@ void CRenderEngine::DrawColor(HDC hDC, const RECT &rc, DWORD color)
 
         if (!hBitmap) { return; }
 
-        // 2018-03-29 zyd ÑÕÉ«Í¸Ã÷ÏÔÊ¾
+        // 2018-03-29 zyd é¢œè‰²é€æ˜æ˜¾ç¤º
         *pDest = color | 0xff000000;
 
         static LPALPHABLEND lpAlphaBlend = GetAlphaBlend();
@@ -1747,8 +1747,8 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
                                  DWORD dwTextColor, RECT *prcLinks, CDuiString *sLinks, int &nLinkRects,
                                  int iDefaultFont, UINT uStyle)
 {
-    // ¿¼ÂÇµ½ÔÚxml±à¼­Æ÷ÖĞÊ¹ÓÃ<>·ûºÅ²»·½±ã£¬¿ÉÒÔÊ¹ÓÃ{}·ûºÅ´úÌæ
-    // Ö§³Ö±êÇ©Ç¶Ì×£¨Èç<l><b>text</b></l>£©£¬µ«ÊÇ½»²æÇ¶Ì×ÊÇÓ¦¸Ã±ÜÃâµÄ£¨Èç<l><b>text</l></b>£©
+    // è€ƒè™‘åˆ°åœ¨xmlç¼–è¾‘å™¨ä¸­ä½¿ç”¨<>ç¬¦å·ä¸æ–¹ä¾¿ï¼Œå¯ä»¥ä½¿ç”¨{}ç¬¦å·ä»£æ›¿
+    // æ”¯æŒæ ‡ç­¾åµŒå¥—ï¼ˆå¦‚<l><b>text</b></l>ï¼‰ï¼Œä½†æ˜¯äº¤å‰åµŒå¥—æ˜¯åº”è¯¥é¿å…çš„ï¼ˆå¦‚<l><b>text</l></b>ï¼‰
     // The string formatter supports a kind of "mini-html" that consists of various short tags:
     //
     //   Bold:             <b>text</b>
@@ -1862,7 +1862,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
     bool bInSelected = false;
     int iLineLinkIndex = 0;
 
-    // ÅÅ°æÏ°¹ßÊÇÍ¼ÎÄµ×²¿¶ÔÆë£¬ËùÒÔÃ¿ĞĞ»æÖÆ¶¼Òª·ÖÁ½²½£¬ÏÈ¼ÆËã¸ß¶È£¬ÔÙ»æÖÆ
+    // æ’ç‰ˆä¹ æƒ¯æ˜¯å›¾æ–‡åº•éƒ¨å¯¹é½ï¼Œæ‰€ä»¥æ¯è¡Œç»˜åˆ¶éƒ½è¦åˆ†ä¸¤æ­¥ï¼Œå…ˆè®¡ç®—é«˜åº¦ï¼Œå†ç»˜åˆ¶
     CDuiPtrArray aLineFontArray;
     CDuiPtrArray aLineColorArray;
     CDuiPtrArray aLinePIndentArray;
@@ -1875,7 +1875,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
     int cxLineWidth = 0;
     int cyLineHeight = 0;
     int cxOffset = 0;
-    bool bLineDraw = false; // ĞĞµÄµÚ¶ş½×¶Î£º»æÖÆ
+    bool bLineDraw = false; // è¡Œçš„ç¬¬äºŒé˜¶æ®µï¼šç»˜åˆ¶
 
     while (*pstrText != _T('\0'))
     {
@@ -2075,7 +2075,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
                     LPCTSTR pstrTemp = pstrText;
                     int iFont = (int) _tcstol(pstrText, const_cast<LPTSTR *>(&pstrText), 10);
 
-                    //if( isdigit(*pstrText) ) { // debug°æ±¾»áÒıÆğÒì³£
+                    //if( isdigit(*pstrText) ) { // debugç‰ˆæœ¬ä¼šå¼•èµ·å¼‚å¸¸
                     if (pstrTemp != pstrText)
                     {
                         TFontInfo *pFontInfo = pManager->GetFontInfo(iFont);
@@ -2558,7 +2558,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
                         ABC abc;
                         ::GetCharABCWidths(hDC, _T(' '), _T(' '), &abc);
                         pt.x += abc.abcC /
-                                2; // ¼òµ¥ĞŞÕıÒ»ÏÂĞ±Ìå»ìÅÅµÄÎÊÌâ, ÕıÈ·×ö·¨Ó¦¸ÃÊÇhttp://support.microsoft.com/kb/244798/en-us
+                                2; // ç®€å•ä¿®æ­£ä¸€ä¸‹æ–œä½“æ··æ’çš„é—®é¢˜, æ­£ç¡®åšæ³•åº”è¯¥æ˜¯http://support.microsoft.com/kb/244798/en-us
                     }
 
                     pTm = &pFontInfo->tm;

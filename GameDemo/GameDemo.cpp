@@ -1,4 +1,4 @@
-// App.cpp : Defines the entry point for the application.
+ï»¿// App.cpp : Defines the entry point for the application.
 //
 
 #include "stdafx.h"
@@ -230,42 +230,42 @@ public:
         GameListUI::Node *pGameNode = NULL;
         GameListUI::Node *pServerNode = NULL;
         GameListUI::Node *pRoomNode = NULL;
-        pCategoryNode = pGameList->AddNode(_T("{x 4}{i gameicons.png 18 3}{x 4}ÍÆ¼öÓÎÏ·"));
+        pCategoryNode = pGameList->AddNode(_T("{x 4}{i gameicons.png 18 3}{x 4}æ¨èæ¸¸æˆ"));
 
         for (int i = 0; i < 4; ++i)
         {
-            pGameNode = pGameList->AddNode(_T("{x 4}{i gameicons.png 18 10}{x 4}ËÄÈË¶·µØÖ÷"), pCategoryNode);
+            pGameNode = pGameList->AddNode(_T("{x 4}{i gameicons.png 18 10}{x 4}å››äººæ–—åœ°ä¸»"), pCategoryNode);
 
             for (int i = 0; i < 3; ++i)
             {
-                pServerNode = pGameList->AddNode(_T("{x 4}{i gameicons.png 18 10}{x 4}²âÊÔ·şÎñÆ÷"), pGameNode);
+                pServerNode = pGameList->AddNode(_T("{x 4}{i gameicons.png 18 10}{x 4}æµ‹è¯•æœåŠ¡å™¨"), pGameNode);
 
                 for (int i = 0; i < 3; ++i)
                 {
-                    pRoomNode = pGameList->AddNode(_T("{x 4}{i gameicons.png 18 10}{x 4}²âÊÔ·¿¼ä"), pServerNode);
+                    pRoomNode = pGameList->AddNode(_T("{x 4}{i gameicons.png 18 10}{x 4}æµ‹è¯•æˆ¿é—´"), pServerNode);
                 }
             }
         }
 
-        pCategoryNode = pGameList->AddNode(_T("{x 4}{i gameicons.png 18 3}{x 4}×î½üÍæ¹ıµÄÓÎÏ·"));
+        pCategoryNode = pGameList->AddNode(_T("{x 4}{i gameicons.png 18 3}{x 4}æœ€è¿‘ç©è¿‡çš„æ¸¸æˆ"));
 
         for (int i = 0; i < 2; ++i)
         {
-            pGameList->AddNode(_T("ÈıÈ±Ò»"), pCategoryNode);
+            pGameList->AddNode(_T("ä¸‰ç¼ºä¸€"), pCategoryNode);
         }
 
-        pCategoryNode = pGameList->AddNode(_T("{x 4}{i gameicons.png 18 3}{x 4}ÆåÅÆÓÎÏ·"));
+        pCategoryNode = pGameList->AddNode(_T("{x 4}{i gameicons.png 18 3}{x 4}æ£‹ç‰Œæ¸¸æˆ"));
 
         for (int i = 0; i < 8; ++i)
         {
-            pGameList->AddNode(_T("Ë«¿Û"), pCategoryNode);
+            pGameList->AddNode(_T("åŒæ‰£"), pCategoryNode);
         }
 
-        pCategoryNode = pGameList->AddNode(_T("{x 4}{i gameicons.png 18 3}{x 4}ĞİÏĞÓÎÏ·"));
+        pCategoryNode = pGameList->AddNode(_T("{x 4}{i gameicons.png 18 3}{x 4}ä¼‘é—²æ¸¸æˆ"));
 
         for (int i = 0; i < 8; ++i)
         {
-            pGameList->AddNode(_T("·ÉĞĞÆå"), pCategoryNode);
+            pGameList->AddNode(_T("é£è¡Œæ£‹"), pCategoryNode);
         }
 
         CListUI *pUserList = static_cast<CListUI *>(m_pm.FindControl(_T("userlist")));
@@ -311,14 +311,14 @@ public:
 
         lSelEnd = lSelBegin = pRichEdit->GetTextLength();
         pRichEdit->SetSel(lSelEnd, lSelEnd);
-        pRichEdit->ReplaceSel(_T("Ä³ÈË"), false);
+        pRichEdit->ReplaceSel(_T("æŸäºº"), false);
         lSelEnd = pRichEdit->GetTextLength();
         pRichEdit->SetSel(lSelBegin, lSelEnd);
         pRichEdit->SetSelectionCharFormat(cf);
 
         lSelBegin = lSelEnd;
         pRichEdit->SetSel(-1, -1);
-        pRichEdit->ReplaceSel(_T("Ëµ:"), false);
+        pRichEdit->ReplaceSel(_T("è¯´:"), false);
 
         pRichEdit->SetSel(-1, -1);
         pRichEdit->ReplaceSel(pChatEdit->GetText(), false);
@@ -352,7 +352,7 @@ public:
                 }
                 else
                 {
-                    /*Close()*/PostQuitMessage(0); // ÒòÎªactivexµÄÔ­Òò£¬Ê¹ÓÃclose¿ÉÄÜ»á³öÏÖ´íÎó
+                    /*Close()*/PostQuitMessage(0); // å› ä¸ºactivexçš„åŸå› ï¼Œä½¿ç”¨closeå¯èƒ½ä¼šå‡ºç°é”™è¯¯
                 }
 
                 return;
@@ -365,7 +365,7 @@ public:
 
             if (name == _T("quitbtn"))
             {
-                /*Close()*/PostQuitMessage(0); // ÒòÎªactivexµÄÔ­Òò£¬Ê¹ÓÃclose¿ÉÄÜ»á³öÏÖ´íÎó
+                /*Close()*/PostQuitMessage(0); // å› ä¸ºactivexçš„åŸå› ï¼Œä½¿ç”¨closeå¯èƒ½ä¼šå‡ºç°é”™è¯¯
             }
             else if (name == _T("returnhallbtn"))
             {
@@ -440,7 +440,7 @@ public:
 
                     if (pRichEdit)
                     {
-                        pRichEdit->SetText(_T("»¶Ó­½øÈëXXXÓÎÏ·£¬×£ÓÎÏ·Óä¿ì£¡\n\n"));
+                        pRichEdit->SetText(_T("æ¬¢è¿è¿›å…¥XXXæ¸¸æˆï¼Œç¥æ¸¸æˆæ„‰å¿«ï¼\n\n"));
                         long lSelBegin = 0, lSelEnd = 0;
                         CHARFORMAT2 cf;
                         ZeroMemory(&cf, sizeof(CHARFORMAT2));
@@ -530,7 +530,7 @@ public:
 
             if (iSubItem == 1) { return _T("<i vip.png>"); }
 
-            if (iSubItem == 2) { return _T("´ËÈËêÇ³Æ"); }
+            if (iSubItem == 2) { return _T("æ­¤äººæ˜µç§°"); }
 
             if (iSubItem == 3) { return _T("5"); }
 
@@ -688,7 +688,7 @@ public:
 
     LRESULT OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
     {
-        // ÓĞÊ±»áÔÚÊÕµ½WM_NCDESTROYºóÊÕµ½wParamÎªSC_CLOSEµÄWM_SYSCOMMAND
+        // æœ‰æ—¶ä¼šåœ¨æ”¶åˆ°WM_NCDESTROYåæ”¶åˆ°wParamä¸ºSC_CLOSEçš„WM_SYSCOMMAND
         if (wParam == SC_CLOSE)
         {
             ::PostQuitMessage(0L);
@@ -792,7 +792,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
     if (pFrame == NULL) { return 0; }
 
     pFrame->SetIcon(IDI_ICON_DUILIB);
-    pFrame->Create(NULL, _T("ÓÎÏ·ÖĞĞÄ"), UI_WNDSTYLE_FRAME, 0L, 0, 0, 1024, 738);
+    pFrame->Create(NULL, _T("æ¸¸æˆä¸­å¿ƒ"), UI_WNDSTYLE_FRAME, 0L, 0, 0, 1024, 738);
     pFrame->CenterWindow();
     ::ShowWindow(*pFrame, SW_SHOWMAXIMIZED);
 

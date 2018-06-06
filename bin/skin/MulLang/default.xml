@@ -1,4 +1,4 @@
-<root>
+﻿<root>
     <Font shared="true" id="0" name="幼圆" size="12" default="true" />
 	<Font shared="true" id="1" name="微软雅黑" size="18" />
     <Image shared="true" file="chb_sel_nor.png" />

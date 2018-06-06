@@ -1,4 +1,4 @@
-#include "stdafx.h"
+Ôªø#include "stdafx.h"
 
 namespace DuiLib {
 
@@ -6,10 +6,10 @@ namespace DuiLib {
 enum EMWndState
 {
     ESTATE_UNKNOW,      //
-    ESTATE_CREATE,      // ¥¥Ω®¥∞ÃÂ
-    ESTATE_SHOW,        // œ‘ æ¥∞ÃÂ
-    ESTATE_HIDE,        // “˛≤ÿ¥∞ÃÂ
-    ESTATE_CLOSE,       // œ˙ªŸ¥∞ÃÂ
+    ESTATE_CREATE,      // ÂàõÂª∫Á™ó‰Ωì
+    ESTATE_SHOW,        // ÊòæÁ§∫Á™ó‰Ωì
+    ESTATE_HIDE,        // ÈöêËóèÁ™ó‰Ωì
+    ESTATE_CLOSE,       // ÈîÄÊØÅÁ™ó‰Ωì
 };
 
 LPBYTE CWndImplBase::m_lpResourceZIPBuffer = NULL;
@@ -106,7 +106,7 @@ LRESULT CWndImplBase::OnNcCalcSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 
     if (::IsZoomed(m_hWnd))
     {
-        // ◊Ó¥ÛªØ ±£¨º∆À„µ±«∞œ‘ æ∆˜◊Ó  ∫œøÌ∏ﬂ∂»
+        // ÊúÄÂ§ßÂåñÊó∂ÔºåËÆ°ÁÆóÂΩìÂâçÊòæÁ§∫Âô®ÊúÄÈÄÇÂêàÂÆΩÈ´òÂ∫¶
         MONITORINFO oMonitor = {};
         oMonitor.cbSize = sizeof(oMonitor);
         ::GetMonitorInfo(::MonitorFromWindow(*this, MONITOR_DEFAULTTONEAREST), &oMonitor);
@@ -191,7 +191,7 @@ LRESULT CWndImplBase::OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam, B
     CDuiRect rcMonitor = oMonitor.rcMonitor;
     rcWork.Offset(-oMonitor.rcMonitor.left, -oMonitor.rcMonitor.top);
 
-    // º∆À„◊Ó¥ÛªØ ±£¨’˝»∑µƒ‘≠µ„◊¯±Í
+    // ËÆ°ÁÆóÊúÄÂ§ßÂåñÊó∂ÔºåÊ≠£Á°ÆÁöÑÂéüÁÇπÂùêÊ†á
     lpMMI->ptMaxPosition.x  = rcWork.left;
     lpMMI->ptMaxPosition.y  = rcWork.top;
 
@@ -358,14 +358,14 @@ LRESULT CWndImplBase::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bH
 
     if (pRoot == NULL)
     {
-        MessageBox(NULL, _T("º”‘ÿ◊ ‘¥Œƒº˛ ß∞‹"), _T("Duilib"), MB_OK | MB_ICONERROR);
+        MessageBox(NULL, _T("Âä†ËΩΩËµÑÊ∫êÊñá‰ª∂Â§±Ë¥•"), _T("Duilib"), MB_OK | MB_ICONERROR);
         ExitProcess(1);
         return 0;
     }
 
     if (::GetWindowLong(*this, GWL_STYLE) & WS_CAPTION)
     {
-        // ”–±ÍÃ‚¿∏
+        // ÊúâÊ†áÈ¢òÊ†è
         RECT rt = { 0 };
         m_pm.SetSizeBox(rt);
         m_pm.SetCaptionRect(rt);
@@ -508,7 +508,7 @@ INLINE LRESULT CWndImplBase::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARA
 
     switch (uMsg)
     {
-    //2017-02-25 zhuyadong ÕÍ…∆∂‡”Ô—‘«–ªª
+    //2017-02-25 zhuyadong ÂÆåÂñÑÂ§öËØ≠Ë®ÄÂàáÊç¢
     case WM_LANGUAGE_UPDATE:    lRes = OnLanguageUpdate(uMsg, wParam, lParam);  break;
 
     case WM_WNDDATA_UPDATE:     lRes = OnWndDataUpdate(uMsg, wParam, lParam);   break;

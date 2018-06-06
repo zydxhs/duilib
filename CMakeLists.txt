@@ -1,4 +1,4 @@
-# CMake root file for duilib related apps
+﻿# CMake root file for duilib related apps
 #Date 2012-09-16
 #Author: Qi Gao(monkgau@gmail.com)
 #

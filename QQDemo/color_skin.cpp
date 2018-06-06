@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include <windows.h>
 #if !defined(UNDER_CE)
 #include <shellapi.h>

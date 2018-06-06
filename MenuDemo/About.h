@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 class CAbout : public CWndImplBase,DuiLib::CSkinSetting
 {

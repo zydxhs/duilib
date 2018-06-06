@@ -1,4 +1,4 @@
-#ifndef UILISTCOMMONDEFINE_HPP
+﻿#ifndef UILISTCOMMONDEFINE_HPP
 #define UILISTCOMMONDEFINE_HPP
 
 #include <math.h>

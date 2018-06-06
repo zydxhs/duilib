@@ -1,4 +1,4 @@
-// XUnzip.h  Version 1.3.1
+﻿// XUnzip.h  Version 1.3.1
 //
 // Authors:      Mark Adler et al. (see below)
 //

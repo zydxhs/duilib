@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Window caption="0,0,0,30" roundcorner="5,5,5,5" sizebox="4,4,4,4" mininfo="600,320" showdirty="true">
  <Font id="0" name="宋体" size="13" bold="false"/>
  <Font id="1" name="宋体" size="12"/>
@@ -9,8 +9,8 @@
 			<Text text="ListDemo(tojen)" textcolor="#FFFFFFFF" font="1" float="true" pos="27,10,170,30"></Text>
 		</VerticalLayout>
 		<VerticalLayout width="70">
-			<Button float="true" pos="0,0,28,17" name="minbtn" maxwidth="28" maxheight="17" normalimage="file='max_min.png' source='0,0,28,17'" hotimage="file='max_min_h.png' source='0,0,28,17'" pushedimage="file='max_min_h.png' source='0,0,28,17'"/>
-			<Button float="true" pos="28,0,56,17" name="closebtn" maxwidth="28" maxheight="17" normalimage="file='max_min.png' source='28,0,56,17'" hotimage="file='max_min_h.png' source='28,0,56,17'" pushedimage="file='max_min_h.png' source='28,0,56,17'"/>
+			<Button float="true" pos="0,0,28,17" name="btnmin" maxwidth="28" maxheight="17" normalimage="file='max_min.png' source='0,0,28,17'" hotimage="file='max_min_h.png' source='0,0,28,17'" pushedimage="file='max_min_h.png' source='0,0,28,17'"/>
+			<Button float="true" pos="28,0,56,17" name="btnclose" maxwidth="28" maxheight="17" normalimage="file='max_min.png' source='28,0,56,17'" hotimage="file='max_min_h.png' source='28,0,56,17'" pushedimage="file='max_min_h.png' source='28,0,56,17'"/>
 		</VerticalLayout>
 	</HorizontalLayout>
 	<HorizontalLayout height="35" inset="0,4,0,8">

@@ -1,12 +1,12 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 
 #pragma warning( disable: 4251 )
 namespace DuiLib {
 //************************************
-// º¯ÊıÃû³Æ: CTreeNodeUI
-// ·µ»ØÀàĞÍ:
-// ²ÎÊıĞÅÏ¢: CTreeNodeUI * _ParentNode
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: CTreeNodeUI
+// è¿”å›ç±»å‹:
+// å‚æ•°ä¿¡æ¯: CTreeNodeUI * _ParentNode
+// å‡½æ•°è¯´æ˜:
 //************************************
 CTreeNodeUI::CTreeNodeUI(CTreeNodeUI *_ParentNode /*= NULL*/)
 {
@@ -55,10 +55,10 @@ CTreeNodeUI::CTreeNodeUI(CTreeNodeUI *_ParentNode /*= NULL*/)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: ~CTreeNodeUI
-// ·µ»ØÀàĞÍ:
-// ²ÎÊıĞÅÏ¢: void
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: ~CTreeNodeUI
+// è¿”å›ç±»å‹:
+// å‚æ•°ä¿¡æ¯: void
+// å‡½æ•°è¯´æ˜:
 //************************************
 CTreeNodeUI::~CTreeNodeUI(void)
 {
@@ -66,9 +66,9 @@ CTreeNodeUI::~CTreeNodeUI(void)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: GetClass
-// ·µ»ØÀàĞÍ: LPCTSTR
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: GetClass
+// è¿”å›ç±»å‹: LPCTSTR
+// å‡½æ•°è¯´æ˜:
 //************************************
 LPCTSTR CTreeNodeUI::GetClass() const
 {
@@ -76,10 +76,10 @@ LPCTSTR CTreeNodeUI::GetClass() const
 }
 
 //************************************
-// º¯ÊıÃû³Æ: GetInterface
-// ·µ»ØÀàĞÍ: LPVOID
-// ²ÎÊıĞÅÏ¢: LPCTSTR pstrName
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: GetInterface
+// è¿”å›ç±»å‹: LPVOID
+// å‚æ•°ä¿¡æ¯: LPCTSTR pstrName
+// å‡½æ•°è¯´æ˜:
 //************************************
 LPVOID CTreeNodeUI::GetInterface(LPCTSTR pstrName)
 {
@@ -89,10 +89,10 @@ LPVOID CTreeNodeUI::GetInterface(LPCTSTR pstrName)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: DoEvent
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: TEventUI & event
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: DoEvent
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: TEventUI & event
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeNodeUI::DoEvent(TEventUI &event)
 {
@@ -149,9 +149,9 @@ void CTreeNodeUI::DoEvent(TEventUI &event)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: Invalidate
-// ·µ»ØÀàĞÍ: void
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: Invalidate
+// è¿”å›ç±»å‹: void
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeNodeUI::Invalidate()
 {
@@ -210,10 +210,10 @@ void CTreeNodeUI::Invalidate()
 }
 
 //************************************
-// º¯ÊıÃû³Æ: Select
-// ·µ»ØÀàĞÍ: bool
-// ²ÎÊıĞÅÏ¢: bool bSelect
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: Select
+// è¿”å›ç±»å‹: bool
+// å‚æ•°ä¿¡æ¯: bool bSelect
+// å‡½æ•°è¯´æ˜:
 //************************************
 bool CTreeNodeUI::Select(bool bSelect /*= true*/,  bool bTriggerEvent)
 {
@@ -228,10 +228,10 @@ bool CTreeNodeUI::Select(bool bSelect /*= true*/,  bool bTriggerEvent)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: Add
-// ·µ»ØÀàĞÍ: bool
-// ²ÎÊıĞÅÏ¢: CControlUI * _pTreeNodeUI
-// º¯ÊıËµÃ÷: Í¨¹ı½Úµã¶ÔÏóÌí¼Ó½Úµã
+// å‡½æ•°åç§°: Add
+// è¿”å›ç±»å‹: bool
+// å‚æ•°ä¿¡æ¯: CControlUI * _pTreeNodeUI
+// å‡½æ•°è¯´æ˜: é€šè¿‡èŠ‚ç‚¹å¯¹è±¡æ·»åŠ èŠ‚ç‚¹
 //************************************
 bool CTreeNodeUI::Add(CControlUI *_pTreeNodeUI)
 {
@@ -242,11 +242,11 @@ bool CTreeNodeUI::Add(CControlUI *_pTreeNodeUI)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: AddAt
-// ·µ»ØÀàĞÍ: bool
-// ²ÎÊıĞÅÏ¢: CControlUI * pControl
-// ²ÎÊıĞÅÏ¢: int iIndex             ¸Ã²ÎÊı½öÕë¶Ôµ±Ç°½ÚµãÏÂµÄĞÖµÜË÷Òı£¬²¢·ÇÁĞ±íÊÓÍ¼Ë÷Òı
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: AddAt
+// è¿”å›ç±»å‹: bool
+// å‚æ•°ä¿¡æ¯: CControlUI * pControl
+// å‚æ•°ä¿¡æ¯: int iIndex             è¯¥å‚æ•°ä»…é’ˆå¯¹å½“å‰èŠ‚ç‚¹ä¸‹çš„å…„å¼Ÿç´¢å¼•ï¼Œå¹¶éåˆ—è¡¨è§†å›¾ç´¢å¼•
+// å‡½æ•°è¯´æ˜:
 //************************************
 bool CTreeNodeUI::AddAt(CControlUI *pControl, int iIndex)
 {
@@ -277,10 +277,10 @@ bool CTreeNodeUI::AddAt(CControlUI *pControl, int iIndex)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: SetVisibleTag
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: bool _IsVisible
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: SetVisibleTag
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: bool _IsVisible
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeNodeUI::SetVisibleTag(bool _IsVisible)
 {
@@ -288,9 +288,9 @@ void CTreeNodeUI::SetVisibleTag(bool _IsVisible)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: GetVisibleTag
-// ·µ»ØÀàĞÍ: bool
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: GetVisibleTag
+// è¿”å›ç±»å‹: bool
+// å‡½æ•°è¯´æ˜:
 //************************************
 bool CTreeNodeUI::GetVisibleTag()
 {
@@ -298,10 +298,10 @@ bool CTreeNodeUI::GetVisibleTag()
 }
 
 //************************************
-// º¯ÊıÃû³Æ: SetItemText
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: LPCTSTR pstrValue
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: SetItemText
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: LPCTSTR pstrValue
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeNodeUI::SetItemText(LPCTSTR pstrValue)
 {
@@ -309,9 +309,9 @@ void CTreeNodeUI::SetItemText(LPCTSTR pstrValue)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: GetItemText
-// ·µ»ØÀàĞÍ: UiLib::CDuiString
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: GetItemText
+// è¿”å›ç±»å‹: UiLib::CDuiString
+// å‡½æ•°è¯´æ˜:
 //************************************
 CDuiString CTreeNodeUI::GetItemText()
 {
@@ -319,10 +319,10 @@ CDuiString CTreeNodeUI::GetItemText()
 }
 
 //************************************
-// º¯ÊıÃû³Æ: CheckBoxSelected
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: bool _Selected
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: CheckBoxSelected
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: bool _Selected
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeNodeUI::CheckBoxSelected(bool _Selected)
 {
@@ -330,9 +330,9 @@ void CTreeNodeUI::CheckBoxSelected(bool _Selected)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: IsCheckBoxSelected
-// ·µ»ØÀàĞÍ: bool
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: IsCheckBoxSelected
+// è¿”å›ç±»å‹: bool
+// å‡½æ•°è¯´æ˜:
 //************************************
 bool CTreeNodeUI::IsCheckBoxSelected() const
 {
@@ -340,9 +340,9 @@ bool CTreeNodeUI::IsCheckBoxSelected() const
 }
 
 //************************************
-// º¯ÊıÃû³Æ: IsHasChild
-// ·µ»ØÀàĞÍ: bool
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: IsHasChild
+// è¿”å›ç±»å‹: bool
+// å‡½æ•°è¯´æ˜:
 //************************************
 bool CTreeNodeUI::IsHasChild() const
 {
@@ -350,10 +350,10 @@ bool CTreeNodeUI::IsHasChild() const
 }
 
 //************************************
-// º¯ÊıÃû³Æ: AddChildNode
-// ·µ»ØÀàĞÍ: bool
-// ²ÎÊıĞÅÏ¢: CTreeNodeUI * _pTreeNodeUI
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: AddChildNode
+// è¿”å›ç±»å‹: bool
+// å‚æ•°ä¿¡æ¯: CTreeNodeUI * _pTreeNodeUI
+// å‡½æ•°è¯´æ˜:
 //************************************
 bool CTreeNodeUI::AddChildNode(CTreeNodeUI *_pTreeNodeUI)
 {
@@ -383,10 +383,10 @@ bool CTreeNodeUI::AddChildNode(CTreeNodeUI *_pTreeNodeUI)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: RemoveAt
-// ·µ»ØÀàĞÍ: bool
-// ²ÎÊıĞÅÏ¢: CTreeNodeUI * _pTreeNodeUI
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: RemoveAt
+// è¿”å›ç±»å‹: bool
+// å‚æ•°ä¿¡æ¯: CTreeNodeUI * _pTreeNodeUI
+// å‡½æ•°è¯´æ˜:
 //************************************
 bool CTreeNodeUI::RemoveAt(CTreeNodeUI *_pTreeNodeUI)
 {
@@ -410,10 +410,10 @@ bool CTreeNodeUI::RemoveAt(CTreeNodeUI *_pTreeNodeUI)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: SetParentNode
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: CTreeNodeUI * _pParentTreeNode
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: SetParentNode
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: CTreeNodeUI * _pParentTreeNode
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeNodeUI::SetParentNode(CTreeNodeUI *_pParentTreeNode)
 {
@@ -421,9 +421,9 @@ void CTreeNodeUI::SetParentNode(CTreeNodeUI *_pParentTreeNode)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: GetParentNode
-// ·µ»ØÀàĞÍ: CTreeNodeUI*
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: GetParentNode
+// è¿”å›ç±»å‹: CTreeNodeUI*
+// å‡½æ•°è¯´æ˜:
 //************************************
 CTreeNodeUI *CTreeNodeUI::GetParentNode()
 {
@@ -431,9 +431,9 @@ CTreeNodeUI *CTreeNodeUI::GetParentNode()
 }
 
 //************************************
-// º¯ÊıÃû³Æ: GetCountChild
-// ·µ»ØÀàĞÍ: long
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: GetCountChild
+// è¿”å›ç±»å‹: long
+// å‡½æ•°è¯´æ˜:
 //************************************
 long CTreeNodeUI::GetCountChild()
 {
@@ -441,10 +441,10 @@ long CTreeNodeUI::GetCountChild()
 }
 
 //************************************
-// º¯ÊıÃû³Æ: SetTreeView
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: CTreeViewUI * _CTreeViewUI
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: SetTreeView
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: CTreeViewUI * _CTreeViewUI
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeNodeUI::SetTreeView(CTreeViewUI *_CTreeViewUI)
 {
@@ -452,9 +452,9 @@ void CTreeNodeUI::SetTreeView(CTreeViewUI *_CTreeViewUI)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: GetTreeView
-// ·µ»ØÀàĞÍ: CTreeViewUI*
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: GetTreeView
+// è¿”å›ç±»å‹: CTreeViewUI*
+// å‡½æ•°è¯´æ˜:
 //************************************
 CTreeViewUI *CTreeNodeUI::GetTreeView()
 {
@@ -462,11 +462,11 @@ CTreeViewUI *CTreeNodeUI::GetTreeView()
 }
 
 //************************************
-// º¯ÊıÃû³Æ: SetAttribute
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: LPCTSTR pstrName
-// ²ÎÊıĞÅÏ¢: LPCTSTR pstrValue
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: SetAttribute
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: LPCTSTR pstrName
+// å‚æ•°ä¿¡æ¯: LPCTSTR pstrValue
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeNodeUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
@@ -514,14 +514,14 @@ void CTreeNodeUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
         SetSelItemHotTextColor(clrColor);
     }
-    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:autowidth")); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:autowidth")); }
     else { CListContainerElementUI::SetAttribute(pstrName, pstrValue); }
 }
 
 //************************************
-// º¯ÊıÃû³Æ: GetTreeNodes
-// ·µ»ØÀàĞÍ: UiLib::CDuiPtrArray
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: GetTreeNodes
+// è¿”å›ç±»å‹: UiLib::CDuiPtrArray
+// å‡½æ•°è¯´æ˜:
 //************************************
 CDuiPtrArray CTreeNodeUI::GetTreeNodes()
 {
@@ -529,10 +529,10 @@ CDuiPtrArray CTreeNodeUI::GetTreeNodes()
 }
 
 //************************************
-// º¯ÊıÃû³Æ: GetChildNode
-// ·µ»ØÀàĞÍ: CTreeNodeUI*
-// ²ÎÊıĞÅÏ¢: int _nIndex
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: GetChildNode
+// è¿”å›ç±»å‹: CTreeNodeUI*
+// å‚æ•°ä¿¡æ¯: int _nIndex
+// å‡½æ•°è¯´æ˜:
 //************************************
 CTreeNodeUI *CTreeNodeUI::GetChildNode(int _nIndex)
 {
@@ -540,10 +540,10 @@ CTreeNodeUI *CTreeNodeUI::GetChildNode(int _nIndex)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: SetVisibleFolderBtn
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: bool _IsVisibled
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: SetVisibleFolderBtn
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: bool _IsVisibled
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeNodeUI::SetVisibleFolderBtn(bool _IsVisibled)
 {
@@ -551,9 +551,9 @@ void CTreeNodeUI::SetVisibleFolderBtn(bool _IsVisibled)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: GetVisibleFolderBtn
-// ·µ»ØÀàĞÍ: bool
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: GetVisibleFolderBtn
+// è¿”å›ç±»å‹: bool
+// å‡½æ•°è¯´æ˜:
 //************************************
 bool CTreeNodeUI::GetVisibleFolderBtn()
 {
@@ -561,10 +561,10 @@ bool CTreeNodeUI::GetVisibleFolderBtn()
 }
 
 //************************************
-// º¯ÊıÃû³Æ: SetVisibleCheckBtn
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: bool _IsVisibled
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: SetVisibleCheckBtn
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: bool _IsVisibled
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeNodeUI::SetVisibleCheckBtn(bool _IsVisibled)
 {
@@ -572,9 +572,9 @@ void CTreeNodeUI::SetVisibleCheckBtn(bool _IsVisibled)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: GetVisibleCheckBtn
-// ·µ»ØÀàĞÍ: bool
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: GetVisibleCheckBtn
+// è¿”å›ç±»å‹: bool
+// å‡½æ•°è¯´æ˜:
 //************************************
 bool CTreeNodeUI::GetVisibleCheckBtn()
 {
@@ -582,9 +582,9 @@ bool CTreeNodeUI::GetVisibleCheckBtn()
 }
 
 //************************************
-// º¯ÊıÃû³Æ: GetNodeIndex
-// ·µ»ØÀàĞÍ: int
-// º¯ÊıËµÃ÷: È¡µÃÈ«¾ÖÊ÷ÊÓÍ¼µÄË÷Òı
+// å‡½æ•°åç§°: GetNodeIndex
+// è¿”å›ç±»å‹: int
+// å‡½æ•°è¯´æ˜: å–å¾—å…¨å±€æ ‘è§†å›¾çš„ç´¢å¼•
 //************************************
 int CTreeNodeUI::GetTreeIndex()
 {
@@ -601,9 +601,9 @@ int CTreeNodeUI::GetTreeIndex()
 }
 
 //************************************
-// º¯ÊıÃû³Æ: GetNodeIndex
-// ·µ»ØÀàĞÍ: int
-// º¯ÊıËµÃ÷: È¡µÃÏà¶ÔÓÚĞÖµÜ½ÚµãµÄµ±Ç°Ë÷Òı
+// å‡½æ•°åç§°: GetNodeIndex
+// è¿”å›ç±»å‹: int
+// å‡½æ•°è¯´æ˜: å–å¾—ç›¸å¯¹äºå…„å¼ŸèŠ‚ç‚¹çš„å½“å‰ç´¢å¼•
 //************************************
 int CTreeNodeUI::GetNodeIndex()
 {
@@ -617,9 +617,9 @@ int CTreeNodeUI::GetNodeIndex()
 }
 
 //************************************
-// º¯ÊıÃû³Æ: GetLastNode
-// ·µ»ØÀàĞÍ: CTreeNodeUI*
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: GetLastNode
+// è¿”å›ç±»å‹: CTreeNodeUI*
+// å‡½æ•°è¯´æ˜:
 //************************************
 CTreeNodeUI *CTreeNodeUI::GetLastNode()
 {
@@ -647,10 +647,10 @@ CTreeNodeUI *CTreeNodeUI::GetLastNode()
 }
 
 //************************************
-// º¯ÊıÃû³Æ: CalLocation
-// ·µ»ØÀàĞÍ: CTreeNodeUI*
-// ²ÎÊıĞÅÏ¢: CTreeNodeUI * _pTreeNodeUI
-// º¯ÊıËµÃ÷: Ëõ½ø¼ÆËã
+// å‡½æ•°åç§°: CalLocation
+// è¿”å›ç±»å‹: CTreeNodeUI*
+// å‚æ•°ä¿¡æ¯: CTreeNodeUI * _pTreeNodeUI
+// å‡½æ•°è¯´æ˜: ç¼©è¿›è®¡ç®—
 //************************************
 CTreeNodeUI *CTreeNodeUI::CalLocation(CTreeNodeUI *_pTreeNodeUI)
 {
@@ -664,10 +664,10 @@ CTreeNodeUI *CTreeNodeUI::CalLocation(CTreeNodeUI *_pTreeNodeUI)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: SetTextColor
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: DWORD _dwTextColor
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: SetTextColor
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: DWORD _dwTextColor
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeNodeUI::SetItemTextColor(DWORD _dwItemTextColor)
 {
@@ -676,9 +676,9 @@ void CTreeNodeUI::SetItemTextColor(DWORD _dwItemTextColor)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: GetTextColor
-// ·µ»ØÀàĞÍ: DWORD
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: GetTextColor
+// è¿”å›ç±»å‹: DWORD
+// å‡½æ•°è¯´æ˜:
 //************************************
 DWORD CTreeNodeUI::GetItemTextColor() const
 {
@@ -686,10 +686,10 @@ DWORD CTreeNodeUI::GetItemTextColor() const
 }
 
 //************************************
-// º¯ÊıÃû³Æ: SetTextHotColor
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: DWORD _dwTextHotColor
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: SetTextHotColor
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: DWORD _dwTextHotColor
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeNodeUI::SetItemHotTextColor(DWORD _dwItemHotTextColor)
 {
@@ -698,9 +698,9 @@ void CTreeNodeUI::SetItemHotTextColor(DWORD _dwItemHotTextColor)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: GetTextHotColor
-// ·µ»ØÀàĞÍ: DWORD
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: GetTextHotColor
+// è¿”å›ç±»å‹: DWORD
+// å‡½æ•°è¯´æ˜:
 //************************************
 DWORD CTreeNodeUI::GetItemHotTextColor() const
 {
@@ -708,10 +708,10 @@ DWORD CTreeNodeUI::GetItemHotTextColor() const
 }
 
 //************************************
-// º¯ÊıÃû³Æ: SetSelItemTextColor
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: DWORD _dwSelItemTextColor
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: SetSelItemTextColor
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: DWORD _dwSelItemTextColor
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeNodeUI::SetSelItemTextColor(DWORD _dwSelItemTextColor)
 {
@@ -720,9 +720,9 @@ void CTreeNodeUI::SetSelItemTextColor(DWORD _dwSelItemTextColor)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: GetSelItemTextColor
-// ·µ»ØÀàĞÍ: DWORD
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: GetSelItemTextColor
+// è¿”å›ç±»å‹: DWORD
+// å‡½æ•°è¯´æ˜:
 //************************************
 DWORD CTreeNodeUI::GetSelItemTextColor() const
 {
@@ -730,10 +730,10 @@ DWORD CTreeNodeUI::GetSelItemTextColor() const
 }
 
 //************************************
-// º¯ÊıÃû³Æ: SetSelHotItemTextColor
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: DWORD _dwSelHotItemTextColor
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: SetSelHotItemTextColor
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: DWORD _dwSelHotItemTextColor
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeNodeUI::SetSelItemHotTextColor(DWORD _dwSelHotItemTextColor)
 {
@@ -742,9 +742,9 @@ void CTreeNodeUI::SetSelItemHotTextColor(DWORD _dwSelHotItemTextColor)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: GetSelHotItemTextColor
-// ·µ»ØÀàĞÍ: DWORD
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: GetSelHotItemTextColor
+// è¿”å›ç±»å‹: DWORD
+// å‡½æ•°è¯´æ˜:
 //************************************
 DWORD CTreeNodeUI::GetSelItemHotTextColor() const
 {
@@ -756,10 +756,10 @@ DWORD CTreeNodeUI::GetSelItemHotTextColor() const
 /*****************************************************************************/
 
 //************************************
-// º¯ÊıÃû³Æ: CTreeViewUI
-// ·µ»ØÀàĞÍ:
-// ²ÎÊıĞÅÏ¢: void
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: CTreeViewUI
+// è¿”å›ç±»å‹:
+// å‚æ•°ä¿¡æ¯: void
+// å‡½æ•°è¯´æ˜:
 //************************************
 CTreeViewUI::CTreeViewUI(void) : m_bVisibleFolderBtn(true), m_bVisibleCheckBtn(false), m_uItemMinWidth(0)
 {
@@ -767,10 +767,10 @@ CTreeViewUI::CTreeViewUI(void) : m_bVisibleFolderBtn(true), m_bVisibleCheckBtn(f
 }
 
 //************************************
-// º¯ÊıÃû³Æ: ~CTreeViewUI
-// ·µ»ØÀàĞÍ:
-// ²ÎÊıĞÅÏ¢: void
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: ~CTreeViewUI
+// è¿”å›ç±»å‹:
+// å‚æ•°ä¿¡æ¯: void
+// å‡½æ•°è¯´æ˜:
 //************************************
 CTreeViewUI::~CTreeViewUI(void)
 {
@@ -778,9 +778,9 @@ CTreeViewUI::~CTreeViewUI(void)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: GetClass
-// ·µ»ØÀàĞÍ: LPCTSTR
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: GetClass
+// è¿”å›ç±»å‹: LPCTSTR
+// å‡½æ•°è¯´æ˜:
 //************************************
 LPCTSTR CTreeViewUI::GetClass() const
 {
@@ -948,10 +948,10 @@ bool CTreeViewUI::AddAt(CTreeNodeUI *pControl, CTreeNodeUI *_IndexNode)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: Notify
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: TNotifyUI & msg
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: Notify
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: TNotifyUI & msg
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeViewUI::Notify(TNotifyUI &msg)
 {
@@ -959,10 +959,10 @@ void CTreeViewUI::Notify(TNotifyUI &msg)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: OnCheckBoxChanged
-// ·µ»ØÀàĞÍ: bool
-// ²ÎÊıĞÅÏ¢: void * param
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: OnCheckBoxChanged
+// è¿”å›ç±»å‹: bool
+// å‚æ•°ä¿¡æ¯: void * param
+// å‡½æ•°è¯´æ˜:
 //************************************
 bool CTreeViewUI::OnCheckBoxChanged(void *param)
 {
@@ -980,10 +980,10 @@ bool CTreeViewUI::OnCheckBoxChanged(void *param)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: OnFolderChanged
-// ·µ»ØÀàĞÍ: bool
-// ²ÎÊıĞÅÏ¢: void * param
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: OnFolderChanged
+// è¿”å›ç±»å‹: bool
+// å‚æ•°ä¿¡æ¯: void * param
+// å‡½æ•°è¯´æ˜:
 //************************************
 bool CTreeViewUI::OnFolderChanged(void *param)
 {
@@ -1002,10 +1002,10 @@ bool CTreeViewUI::OnFolderChanged(void *param)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: OnDBClickItem
-// ·µ»ØÀàĞÍ: bool
-// ²ÎÊıĞÅÏ¢: void * param
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: OnDBClickItem
+// è¿”å›ç±»å‹: bool
+// å‚æ•°ä¿¡æ¯: void * param
+// å‡½æ•°è¯´æ˜:
 //************************************
 bool CTreeViewUI::OnDBClickItem(void *param)
 {
@@ -1025,11 +1025,11 @@ bool CTreeViewUI::OnDBClickItem(void *param)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: SetItemCheckBox
-// ·µ»ØÀàĞÍ: bool
-// ²ÎÊıĞÅÏ¢: bool _Selected
-// ²ÎÊıĞÅÏ¢: CTreeNodeUI * _TreeNode
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: SetItemCheckBox
+// è¿”å›ç±»å‹: bool
+// å‚æ•°ä¿¡æ¯: bool _Selected
+// å‚æ•°ä¿¡æ¯: CTreeNodeUI * _TreeNode
+// å‡½æ•°è¯´æ˜:
 //************************************
 bool CTreeViewUI::SetItemCheckBox(bool _Selected, CTreeNodeUI *_TreeNode /*= NULL*/)
 {
@@ -1074,11 +1074,11 @@ bool CTreeViewUI::SetItemCheckBox(bool _Selected, CTreeNodeUI *_TreeNode /*= NUL
 }
 
 //************************************
-// º¯ÊıÃû³Æ: SetItemExpand
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: bool _Expanded
-// ²ÎÊıĞÅÏ¢: CTreeNodeUI * _TreeNode
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: SetItemExpand
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: bool _Expanded
+// å‚æ•°ä¿¡æ¯: CTreeNodeUI * _TreeNode
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeViewUI::SetItemExpand(bool _Expanded, CTreeNodeUI *_TreeNode /*= NULL*/)
 {
@@ -1118,10 +1118,10 @@ void CTreeViewUI::SetItemExpand(bool _Expanded, CTreeNodeUI *_TreeNode /*= NULL*
 }
 
 //************************************
-// º¯ÊıÃû³Æ: SetVisibleFolderBtn
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: bool _IsVisibled
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: SetVisibleFolderBtn
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: bool _IsVisibled
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeViewUI::SetVisibleFolderBtn(bool _IsVisibled)
 {
@@ -1136,9 +1136,9 @@ void CTreeViewUI::SetVisibleFolderBtn(bool _IsVisibled)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: GetVisibleFolderBtn
-// ·µ»ØÀàĞÍ: bool
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: GetVisibleFolderBtn
+// è¿”å›ç±»å‹: bool
+// å‡½æ•°è¯´æ˜:
 //************************************
 bool CTreeViewUI::GetVisibleFolderBtn()
 {
@@ -1146,10 +1146,10 @@ bool CTreeViewUI::GetVisibleFolderBtn()
 }
 
 //************************************
-// º¯ÊıÃû³Æ: SetVisibleCheckBtn
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: bool _IsVisibled
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: SetVisibleCheckBtn
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: bool _IsVisibled
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeViewUI::SetVisibleCheckBtn(bool _IsVisibled)
 {
@@ -1164,9 +1164,9 @@ void CTreeViewUI::SetVisibleCheckBtn(bool _IsVisibled)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: GetVisibleCheckBtn
-// ·µ»ØÀàĞÍ: bool
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: GetVisibleCheckBtn
+// è¿”å›ç±»å‹: bool
+// å‡½æ•°è¯´æ˜:
 //************************************
 bool CTreeViewUI::GetVisibleCheckBtn()
 {
@@ -1174,10 +1174,10 @@ bool CTreeViewUI::GetVisibleCheckBtn()
 }
 
 //************************************
-// º¯ÊıÃû³Æ: SetItemMinWidth
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: UINT _ItemMinWidth
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: SetItemMinWidth
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: UINT _ItemMinWidth
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeViewUI::SetItemMinWidth(UINT _ItemMinWidth)
 {
@@ -1195,9 +1195,9 @@ void CTreeViewUI::SetItemMinWidth(UINT _ItemMinWidth)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: GetItemMinWidth
-// ·µ»ØÀàĞÍ: UINT
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: GetItemMinWidth
+// è¿”å›ç±»å‹: UINT
+// å‡½æ•°è¯´æ˜:
 //************************************
 UINT CTreeViewUI::GetItemMinWidth()
 {
@@ -1205,10 +1205,10 @@ UINT CTreeViewUI::GetItemMinWidth()
 }
 
 //************************************
-// º¯ÊıÃû³Æ: SetItemTextColor
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: DWORD _dwItemTextColor
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: SetItemTextColor
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: DWORD _dwItemTextColor
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeViewUI::SetItemTextColor(DWORD _dwItemTextColor)
 {
@@ -1222,10 +1222,10 @@ void CTreeViewUI::SetItemTextColor(DWORD _dwItemTextColor)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: SetItemHotTextColor
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: DWORD _dwItemHotTextColor
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: SetItemHotTextColor
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: DWORD _dwItemHotTextColor
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeViewUI::SetItemHotTextColor(DWORD _dwItemHotTextColor)
 {
@@ -1239,10 +1239,10 @@ void CTreeViewUI::SetItemHotTextColor(DWORD _dwItemHotTextColor)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: SetSelItemTextColor
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: DWORD _dwSelItemTextColor
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: SetSelItemTextColor
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: DWORD _dwSelItemTextColor
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeViewUI::SetSelItemTextColor(DWORD _dwSelItemTextColor)
 {
@@ -1256,10 +1256,10 @@ void CTreeViewUI::SetSelItemTextColor(DWORD _dwSelItemTextColor)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: SetSelItemHotTextColor
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: DWORD _dwSelHotItemTextColor
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: SetSelItemHotTextColor
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: DWORD _dwSelHotItemTextColor
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeViewUI::SetSelItemHotTextColor(DWORD _dwSelHotItemTextColor)
 {
@@ -1273,11 +1273,11 @@ void CTreeViewUI::SetSelItemHotTextColor(DWORD _dwSelHotItemTextColor)
 }
 
 //************************************
-// º¯ÊıÃû³Æ: SetAttribute
-// ·µ»ØÀàĞÍ: void
-// ²ÎÊıĞÅÏ¢: LPCTSTR pstrName
-// ²ÎÊıĞÅÏ¢: LPCTSTR pstrValue
-// º¯ÊıËµÃ÷:
+// å‡½æ•°åç§°: SetAttribute
+// è¿”å›ç±»å‹: void
+// å‚æ•°ä¿¡æ¯: LPCTSTR pstrName
+// å‚æ•°ä¿¡æ¯: LPCTSTR pstrValue
+// å‡½æ•°è¯´æ˜:
 //************************************
 void CTreeViewUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {

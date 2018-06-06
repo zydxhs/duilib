@@ -1,4 +1,4 @@
-#ifndef UIGROUPS_HPP
+﻿#ifndef UIGROUPS_HPP
 #define UIGROUPS_HPP
 
 #include "UIListCommonDefine.hpp"

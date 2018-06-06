@@ -1,4 +1,4 @@
-#ifndef CHATDIALOG_HPP
+﻿#ifndef CHATDIALOG_HPP
 #define CHATDIALOG_HPP
 
 #include "skin_change_event.hpp"

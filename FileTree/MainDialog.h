@@ -1,4 +1,4 @@
-#ifndef _MainDialog_H_
+﻿#ifndef _MainDialog_H_
 #define _MainDialog_H_
 
 

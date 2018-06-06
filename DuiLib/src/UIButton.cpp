@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 
 namespace DuiLib {
 CButtonUI::CButtonUI()
@@ -118,7 +118,7 @@ void CButtonUI::DoEvent(TEventUI &event)
             ReleaseCapture();
             m_pManager->SendNotify(this, DUI_MSGTYPE_MENU, event.wParam, event.lParam);
         }
-        // 2017-02-25 zhuyadong ��Ϣ���ݸ����ؼ������ڸ�����Ͽؼ��������Ĳ˵���Ӧ��
+        // 2017-02-25 zhuyadong 消息传递给父控件，用于复杂组合控件的上下文菜单响应。
         else if (m_pParent != NULL) { m_pParent->DoEvent(event); }
 
         return;
@@ -489,10 +489,10 @@ void CButtonUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
         SetFocusedTextColor(clrColor);
     }
-    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("��֧������:dragenable")); }
-    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("��֧������:drageimage")); }
-    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("��֧������:dropenable")); }
-    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("��֧������:autowidth")); }
+    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
+    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
+    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("不支持属性:dropenable")); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else { CLabelUI::SetAttribute(pstrName, pstrValue); }
 }
 
@@ -551,7 +551,7 @@ void CButtonUI::PaintStatusImage(HDC hDC)
     if (!IsEnabled()) { m_uButtonState |= UISTATE_DISABLED; }
     else { m_uButtonState &= ~ UISTATE_DISABLED; }
 
-    // ����˳��5̬ ����ͼ->ǰ��ͼ
+    // 绘制顺序：5态 背景图->前景图
     if ((m_uButtonState & UISTATE_DISABLED) != 0)
     {
         if (!DrawImage(hDC, m_diDisabled)) { DrawNormalBkImg(hDC, m_diNormal); }
@@ -655,9 +655,9 @@ void CButtonUI::PaintStatusImage(HDC hDC)
 
 void CButtonUI::DrawNormalBkImg(HDC hDC, TDrawInfo &diNormal, TDrawInfo *pdiHot, bool bHot)
 {
-    // bHot Ϊ false ʱ��pdiHot ����ΪNULL
-    // bHot Ϊ true  ʱ��pdiHot ����ΪNULL
-    // ��� diNormal/pdiNormal ����ΪNULL��pdiHot ����ΪNULL
+    // bHot 为 false 时，pdiHot 可以为NULL
+    // bHot 为 true  时，pdiHot 不能为NULL
+    // 因此 diNormal/pdiNormal 不会为NULL，pdiHot 可能为NULL
     if (bHot && NULL == pdiHot) { return; }
 
     TDrawInfo *pdiNormal = &diNormal;

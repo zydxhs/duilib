@@ -1,17 +1,17 @@
-//2017-02-23 zhuyadong Ìí¼Ó²Ëµ¥¿Ø¼ş
+ï»¿//2017-02-23 zhuyadong æ·»åŠ èœå•æ§ä»¶
 #include "stdafx.h"
 
 namespace DuiLib {
 
 enum
 {
-    EMENU_CLOSE_ALL         = 1,    //¹Ø±ÕËùÓĞ²Ëµ¥
-    EMENU_CLOSE_SUB         = 2,    //¹Ø±Õ×Ó²Ëµ¥
+    EMENU_CLOSE_ALL         = 1,    //å…³é—­æ‰€æœ‰èœå•
+    EMENU_CLOSE_SUB         = 2,    //å…³é—­å­èœå•
     //------------------------------------
-    EMENU_ICON_WIDTH        = 26,   //²Ëµ¥Í¼±êÕ¼ÓÃµÄ×î´ó¿í¶È
-    EMENU_EXPAND_WIDTH      = 20,   //ÏÂ¼¶À©Õ¹²Ëµ¥Í¼±êÕ¼ÓÃµÄ×î´ó¿í¶È
-    EMENU_LINE_HEIGHT       = 6,    //²Ëµ¥·Ö¸îÏßÄ¬ÈÏ¸ß¶È
-    EMENU_ITEM_MINHEIGHT    = 22,   // ²Ëµ¥Ïî×îĞ¡¸ß¶È
+    EMENU_ICON_WIDTH        = 26,   //èœå•å›¾æ ‡å ç”¨çš„æœ€å¤§å®½åº¦
+    EMENU_EXPAND_WIDTH      = 20,   //ä¸‹çº§æ‰©å±•èœå•å›¾æ ‡å ç”¨çš„æœ€å¤§å®½åº¦
+    EMENU_LINE_HEIGHT       = 6,    //èœå•åˆ†å‰²çº¿é»˜è®¤é«˜åº¦
+    EMENU_ITEM_MINHEIGHT    = 22,   // èœå•é¡¹æœ€å°é«˜åº¦
 };
 
 class CSubjectMenu : public CSubjectBase
@@ -316,7 +316,7 @@ void CMenuWnd::Init(CMenuElementUI *pOwner, STRINGorID xml, LPCTSTR pSkinType, P
 
     if (pSkinType != NULL) { m_sSkinType = pSkinType; }
 
-    // Èç¹ûÊÇÒ»¼¶²Ëµ¥µÄ´´½¨
+    // å¦‚æœæ˜¯ä¸€çº§èœå•çš„åˆ›å»º
     if (pOwner == NULL)
     {
         ASSERT(pParent != NULL);
@@ -624,7 +624,7 @@ void CMenuUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
-static CMenuElementUI *s_pHotItem = NULL;   // µ±Ç°Êó±êËùÔÚµÄ²Ëµ¥ÏîµÄÖ¸Õë
+static CMenuElementUI *s_pHotItem = NULL;   // å½“å‰é¼ æ ‡æ‰€åœ¨çš„èœå•é¡¹çš„æŒ‡é’ˆ
 
 CMenuElementUI::CMenuElementUI(void) : m_pSubMenuWnd(NULL), m_bCheckItem(false), m_bChecked(false),
     m_wIconWidth(EMENU_ICON_WIDTH), m_wExpandWidth(EMENU_EXPAND_WIDTH), m_bLine(false), m_dwLineColor(0XFFBCBFC4)
@@ -1157,12 +1157,12 @@ void CMenuElementUI::OnTimer(TEventUI &event)
 
         if (m_pSubMenuWnd || s_pHotItem != this) { return; }
 
-        // ÅĞ¶ÏÊÇ·ñÓĞ×Ó²Ëµ¥
+        // åˆ¤æ–­æ˜¯å¦æœ‰å­èœå•
         bool bHasSubMenu = false;
 
         for (int nIdx = 0; nIdx < GetCount(); ++nIdx)
         {
-            // ²éÕÒÊÇ·ñ£ºÓĞ×Ó²Ëµ¥£¬²¢ÇÒÃ»ÓĞÕ¹¿ª
+            // æŸ¥æ‰¾æ˜¯å¦ï¼šæœ‰å­èœå•ï¼Œå¹¶ä¸”æ²¡æœ‰å±•å¼€
             CMenuElementUI *pItem = static_cast<CMenuElementUI *>(GetItemAt(nIdx)->GetInterface(DUI_CTR_MENUELEMENT));
 
             if (NULL != pItem)
@@ -1173,10 +1173,10 @@ void CMenuElementUI::OnTimer(TEventUI &event)
             }
         }
 
-        // ¹Ø±Õµ±Ç°²Ëµ¥´°¿ÚµÄ×Ó²Ëµ¥
+        // å…³é—­å½“å‰èœå•çª—å£çš„å­èœå•
         GetGlobalMenuSubject().NotifyObserver(EMENU_CLOSE_SUB, (WPARAM)GetManager()->GetPaintWindow());
 
-        // Âú×ãÕâÁ½¸öÌõ¼şÊ±´´½¨×Ó²Ëµ¥´°¿Ú£º1.Êó±êÔÚµ±Ç°²Ëµ¥ÏîÉÏ 2.µ±Ç°²Ëµ¥ÏîÓĞ×Ó´°¿Ú
+        // æ»¡è¶³è¿™ä¸¤ä¸ªæ¡ä»¶æ—¶åˆ›å»ºå­èœå•çª—å£ï¼š1.é¼ æ ‡åœ¨å½“å‰èœå•é¡¹ä¸Š 2.å½“å‰èœå•é¡¹æœ‰å­çª—å£
         if (bHasSubMenu && ::PtInRect(&m_rcItem, GetManager()->GetMousePos()))
         {
             m_pSubMenuWnd = CMenuWnd::CreateMenu(this, _T(""), NULL, CDuiPoint(), NULL);
@@ -1185,7 +1185,7 @@ void CMenuElementUI::OnTimer(TEventUI &event)
     }
     else if (TIMERID_MOUSELEAVE == event.wParam)
     {
-        // Êó±ê²»ÔÚ×Ó²Ëµ¥´°¿ÚÄÚÊ±£¬¹Ø±Õ×Ó²Ëµ¥´°¿Ú
+        // é¼ æ ‡ä¸åœ¨å­èœå•çª—å£å†…æ—¶ï¼Œå…³é—­å­èœå•çª—å£
         GetManager()->KillTimer(this, TIMERID_MOUSELEAVE);
 
         POINT ptMouse = GetManager()->GetMousePos();
@@ -1194,14 +1194,14 @@ void CMenuElementUI::OnTimer(TEventUI &event)
 
         if (::PtInRect(&rtSubMenuWnd, ptMouse))
         {
-            // Êó±êÔÚµ±Ç°²Ëµ¥´°¿Ú£¬¹Ø±Õµ±Ç°²Ëµ¥¿ÉÄÜ´æÔÚµÄ×Ó²Ëµ¥´°¿Ú
+            // é¼ æ ‡åœ¨å½“å‰èœå•çª—å£ï¼Œå…³é—­å½“å‰èœå•å¯èƒ½å­˜åœ¨çš„å­èœå•çª—å£
             GetGlobalMenuSubject().NotifyObserver(EMENU_CLOSE_SUB, (WPARAM)GetManager()->GetPaintWindow());
             return;
         }
 
         if (NULL == m_pSubMenuWnd)
         {
-            // Êó±ê²»ÔÚµ±Ç°²Ëµ¥´°¿Ú£¬²¢ÇÒÃ»ÓĞ×Ó²Ëµ¥´°¿Ú£¬¹Ø±Õµ±Ç°²Ëµ¥¿ÉÄÜ´æÔÚµÄ×Ó²Ëµ¥´°¿Ú£¬È¡ÏûÑ¡Ôñ²Ëµ¥Ïî
+            // é¼ æ ‡ä¸åœ¨å½“å‰èœå•çª—å£ï¼Œå¹¶ä¸”æ²¡æœ‰å­èœå•çª—å£ï¼Œå…³é—­å½“å‰èœå•å¯èƒ½å­˜åœ¨çš„å­èœå•çª—å£ï¼Œå–æ¶ˆé€‰æ‹©èœå•é¡¹
             if (GetOwner()) { GetOwner()->SelectItem(-1, false); }
 
             GetGlobalMenuSubject().NotifyObserver(EMENU_CLOSE_SUB, (WPARAM)GetManager()->GetPaintWindow());
@@ -1213,12 +1213,12 @@ void CMenuElementUI::OnTimer(TEventUI &event)
 
         if (::PtInRect(&rtSubMenuWnd, ptMouse))
         {
-            // Êó±ê´¦ÓÚ×Ó²Ëµ¥´°¿Ú£¬ÉèÖÃµ±Ç°²Ëµ¥ÏîÎªÑ¡Ôñ×´Ì¬£¬²»¹Ø±Õ×Ó²Ëµ¥´°¿Ú
+            // é¼ æ ‡å¤„äºå­èœå•çª—å£ï¼Œè®¾ç½®å½“å‰èœå•é¡¹ä¸ºé€‰æ‹©çŠ¶æ€ï¼Œä¸å…³é—­å­èœå•çª—å£
             if (GetOwner()) { GetOwner()->SelectItem(GetIndex(), false); }
         }
         else
         {
-            // Êó±ê²»ÔÚÈÎºÎ²Ëµ¥´°¿ÚÉÏ
+            // é¼ æ ‡ä¸åœ¨ä»»ä½•èœå•çª—å£ä¸Š
             GetGlobalMenuSubject().NotifyObserver(EMENU_CLOSE_SUB, (WPARAM)GetManager()->GetPaintWindow());
 
             if (GetOwner()) { GetOwner()->SelectItem(-1, false); }
@@ -1243,7 +1243,7 @@ void CMenuElementUI::OnMouseLeave(TEventUI &event)
         s_pHotItem = NULL;
     }
 
-    // ×Ó²Ëµ¥´°¿Ú±£³ÖÌõ¼ş£ºÊó±êÒÆ¶¯µ½×Ó²Ëµ¥´°¿Ú
+    // å­èœå•çª—å£ä¿æŒæ¡ä»¶ï¼šé¼ æ ‡ç§»åŠ¨åˆ°å­èœå•çª—å£
     GetManager()->SetTimer(this, TIMERID_MOUSELEAVE, 100);
     CListContainerElementUI::DoEvent(event);
 }
@@ -1300,8 +1300,8 @@ void CMenuElementUI::OnLButtonUp(TEventUI &event)
     }
 }
 
-//Ö§  ³Ö£º×ó¼ıÍ·ÊÕÆğ×Ó²Ëµ¥£¬ÓÒ¼ıÍ·Õ¹¿ª×Ó²Ëµ¥
-//²»Ö§³Ö£ºÉÏ/ÏÂ¼ıÍ·ÇĞ»»²Ëµ¥Ïî½¹µã
+//æ”¯  æŒï¼šå·¦ç®­å¤´æ”¶èµ·å­èœå•ï¼Œå³ç®­å¤´å±•å¼€å­èœå•
+//ä¸æ”¯æŒï¼šä¸Š/ä¸‹ç®­å¤´åˆ‡æ¢èœå•é¡¹ç„¦ç‚¹
 void CMenuElementUI::OnKeyDown(TEventUI &event)
 {
     CListContainerElementUI::DoEvent(event);

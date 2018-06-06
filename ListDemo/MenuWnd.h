@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 inline HBITMAP CreateMyBitmap(HDC hDC, int cx, int cy, COLORREF** pBits)
 {

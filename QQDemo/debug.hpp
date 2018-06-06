@@ -1,4 +1,4 @@
-#ifndef _DEBUG_HPP
+﻿#ifndef _DEBUG_HPP
 #define _DEBUG_HPP
 
 #include <stdio.h>

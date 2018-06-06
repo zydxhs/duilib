@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 HBITMAP CreateDesktopBitmap(HWND hWnd);
 HBITMAP CreateDesktopMaskBitmap(HWND hWnd);

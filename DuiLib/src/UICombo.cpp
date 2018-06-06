@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 
 namespace DuiLib {
 
@@ -93,7 +93,7 @@ bool CComboBodyUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopContro
 
                     if (pListInfo && pListInfo->iHLineSize > 0)
                     {
-                        // ÒòÎªÃ»ÓĞÎª×îºóÒ»¸öÔ¤Áô·Ö¸îÌõ³¤¶È£¬Èç¹ûlistÆÌÂú£¬×îºóÒ»Ìõ²»»áÏÔÊ¾
+                        // å› ä¸ºæ²¡æœ‰ä¸ºæœ€åä¸€ä¸ªé¢„ç•™åˆ†å‰²æ¡é•¿åº¦ï¼Œå¦‚æœlisté“ºæ»¡ï¼Œæœ€åä¸€æ¡ä¸ä¼šæ˜¾ç¤º
                         RECT rcPadding = pControl->GetPadding();
                         const RECT &rcPos = pControl->GetPos();
                         RECT rcBottomLine = { rcPos.left, rcPos.bottom + rcPadding.bottom, rcPos.right, rcPos.bottom + rcPadding.bottom + pListInfo->iHLineSize };
@@ -198,10 +198,10 @@ void CComboWnd::Init(CComboUI *pOwner)
     SIZE szDrop = m_pOwner->GetDropBoxSize();
     RECT rcOwner = pOwner->GetPos();
     RECT rc = rcOwner;
-    rc.top = rc.bottom;     // ¸¸´°¿Úleft¡¢bottomÎ»ÖÃ×÷Îªµ¯³ö´°¿ÚÆğµã
-    rc.bottom = rc.top + szDrop.cy; // ¼ÆËãµ¯³ö´°¿Ú¸ß¶È
+    rc.top = rc.bottom;     // çˆ¶çª—å£leftã€bottomä½ç½®ä½œä¸ºå¼¹å‡ºçª—å£èµ·ç‚¹
+    rc.bottom = rc.top + szDrop.cy; // è®¡ç®—å¼¹å‡ºçª—å£é«˜åº¦
 
-    if (szDrop.cx > 0) { rc.right = rc.left + szDrop.cx; }   // ¼ÆËãµ¯³ö´°¿Ú¿í¶È
+    if (szDrop.cx > 0) { rc.right = rc.left + szDrop.cx; }   // è®¡ç®—å¼¹å‡ºçª—å£å®½åº¦
 
     SIZE szAvailable = { rc.right - rc.left, rc.bottom - rc.top };
     int cyFixed = 0;
@@ -216,7 +216,7 @@ void CComboWnd::Init(CComboUI *pOwner)
         cyFixed += sz.cy;
     }
 
-    cyFixed += 4; // CVerticalLayoutUI Ä¬ÈÏµÄInset µ÷Õû
+    cyFixed += 4; // CVerticalLayoutUI é»˜è®¤çš„Inset è°ƒæ•´
     rc.bottom = rc.top + std::min<int>(cyFixed, szDrop.cy);
 
     ::MapWindowRect(pOwner->GetManager()->GetPaintWindow(), HWND_DESKTOP, &rc);
@@ -1465,7 +1465,7 @@ void CComboUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         SetItemHLineColor(clrColor);
     }
     else if (_tcscmp(pstrName, _T("itemshowhtml")) == 0) { SetItemShowHtml(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:autowidth")); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:autowidth")); }
     else { CContainerUI::SetAttribute(pstrName, pstrValue); }
 }
 

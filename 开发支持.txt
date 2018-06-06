@@ -1,8 +1,8 @@
-ÎÒÃÇÍ¨¹ıÒÔÏÂ·½Ê½Ìá¹©·¢²¼ĞÅÏ¢¼°Ìá¹©Ö§³Ö:
-¹ÙÍø:							www.duilib.com£¨ÔİÍ£Ê¹ÓÃ£©
-ÂÛÌ³:							bbs.duilib.com£¨ÔİÍ£Ê¹ÓÃ£©
-¹Ù·½QQÈº:							153787916(1Èº),79145400(2Èº)£¬1507570(3Èº) 
-google codeÏîÄ¿ÍĞ¹ÜµØÖ·:		http://code.google.com/p/duilib/
-svn:							https://github.com/duilib/duilib   ×îĞÂ°æ´úÂëÓÉ´ËÇ©³ö
-ĞÂÀËÎ¢²©:						http://weibo.com/duilib
-ÌÚÑ¶Î¢²©:						http://t.qq.com/duilib
+ï»¿æˆ‘ä»¬é€šè¿‡ä»¥ä¸‹æ–¹å¼æä¾›å‘å¸ƒä¿¡æ¯åŠæä¾›æ”¯æŒ:
+å®˜ç½‘:							www.duilib.comï¼ˆæš‚åœä½¿ç”¨ï¼‰
+è®ºå›:							bbs.duilib.comï¼ˆæš‚åœä½¿ç”¨ï¼‰
+å®˜æ–¹QQç¾¤:							153787916(1ç¾¤),79145400(2ç¾¤)ï¼Œ1507570(3ç¾¤) 
+google codeé¡¹ç›®æ‰˜ç®¡åœ°å€:		http://code.google.com/p/duilib/
+svn:							https://github.com/duilib/duilib   æœ€æ–°ç‰ˆä»£ç ç”±æ­¤ç­¾å‡º
+æ–°æµªå¾®åš:						http://weibo.com/duilib
+è…¾è®¯å¾®åš:						http://t.qq.com/duilib

@@ -508,8 +508,12 @@ private:
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
     CPaintManagerUI::SetInstance(hInstance);
+#ifdef _DEBUG
+    CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skin\\ListRes"));
+#else
     CPaintManagerUI::SetResourcePath(CPaintManagerUI::GetInstancePath() + _T("skin"));
     CPaintManagerUI::SetResourceZip(_T("ListRes.zip"));
+#endif // _DEBUG
 
     ListMainForm *pFrame = new ListMainForm();
 

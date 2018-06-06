@@ -1,4 +1,4 @@
-#ifndef COLORSKIN_HPP
+﻿#ifndef COLORSKIN_HPP
 #define COLORSKIN_HPP
 
 class MainFrame;

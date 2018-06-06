@@ -1,4 +1,4 @@
-#ifndef UIMICROBLOG_HPP
+﻿#ifndef UIMICROBLOG_HPP
 #define UIMICROBLOG_HPP
 
 namespace DuiLib

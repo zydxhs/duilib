@@ -1,4 +1,4 @@
-#ifndef MAINFRAME_HPP
+﻿#ifndef MAINFRAME_HPP
 #define MAINFRAME_HPP
 
 #include "skin_change_event.hpp"

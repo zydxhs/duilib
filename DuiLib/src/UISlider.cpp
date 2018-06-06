@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 
 namespace DuiLib {
 CSliderUI::CSliderUI() : m_uButtonState(0), m_nStep(1), m_bImmMode(false)

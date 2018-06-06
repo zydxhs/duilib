@@ -1,7 +1,7 @@
-//2017-02-25 zhuyadong Ìí¼Ó²Ëµ¥¿Ø¼ş
-// ²Ëµ¥ÏîÑ¡ÔñÏûÏ¢£º
-// 1. ¿ÉÒÔÏìÓ¦×Ô¶¨Òå´°¿ÚÏûÏ¢£ºWM_MENUITEM_CLICK
-// 2. ¿ÉÒÔÏìÓ¦ Notify Í¨ÖªÏûÏ¢£ºDUI_MSGTYPE_MENUITEM_CLICK
+ï»¿//2017-02-25 zhuyadong æ·»åŠ èœå•æ§ä»¶
+// èœå•é¡¹é€‰æ‹©æ¶ˆæ¯ï¼š
+// 1. å¯ä»¥å“åº”è‡ªå®šä¹‰çª—å£æ¶ˆæ¯ï¼šWM_MENUITEM_CLICK
+// 2. å¯ä»¥å“åº” Notify é€šçŸ¥æ¶ˆæ¯ï¼šDUI_MSGTYPE_MENUITEM_CLICK
 #ifndef __UIMENU_H__
 #define __UIMENU_H__
 
@@ -27,32 +27,32 @@ class DUILIB_API CMenuWnd : public CWindowWnd, public INotifyUI, public IDialogB
     friend class CMenuElementUI;
 public:
     /*
-    *   @pOwner     Ò»¼¶²Ëµ¥²»ÒªÖ¸¶¨Õâ¸ö²ÎÊı£¬ÕâÊÇ²Ëµ¥ÄÚ²¿Ê¹ÓÃµÄ
-    *   @xml        ²Ëµ¥µÄ²¼¾ÖÎÄ¼ş
-    *   @pSkinType  ²Ëµ¥×ÊÔ´ÀàĞÍ£¬µ±´Ó×ÊÔ´¼ÓÔØ²Ëµ¥Ê±ÓĞĞ§
-    *   @point      ²Ëµ¥µÄ×óÉÏ½Ç×ø±ê
-    *   @pParent    ²Ëµ¥µÄ¸¸´°Ìå¹ÜÀíÆ÷Ö¸Õë
-    *   @dwAlign    ²Ëµ¥µÄ³öÏÖÎ»ÖÃ£¬Ä¬ÈÏ³öÏÖÔÚÊó±êµÄÓÒÏÂ²à¡£
+    *   @pOwner     ä¸€çº§èœå•ä¸è¦æŒ‡å®šè¿™ä¸ªå‚æ•°ï¼Œè¿™æ˜¯èœå•å†…éƒ¨ä½¿ç”¨çš„
+    *   @xml        èœå•çš„å¸ƒå±€æ–‡ä»¶
+    *   @pSkinType  èœå•èµ„æºç±»å‹ï¼Œå½“ä»èµ„æºåŠ è½½èœå•æ—¶æœ‰æ•ˆ
+    *   @point      èœå•çš„å·¦ä¸Šè§’åæ ‡
+    *   @pParent    èœå•çš„çˆ¶çª—ä½“ç®¡ç†å™¨æŒ‡é’ˆ
+    *   @dwAlign    èœå•çš„å‡ºç°ä½ç½®ï¼Œé»˜è®¤å‡ºç°åœ¨é¼ æ ‡çš„å³ä¸‹ä¾§ã€‚
     */
     static CMenuWnd *CreateMenu(CMenuElementUI *pOwner, STRINGorID xml, LPCTSTR pSkinType, POINT pt,
                                 CPaintManagerUI *pParent, DWORD dwAlign = EMENU_ALIGN_LEFT | EMENU_ALIGN_TOP);
 
-    static CDuiString       s_strName;      // ±»µ¥»÷²Ëµ¥ÏîµÄµÄ Ãû×Ö
-    static CDuiString       s_strUserData;  // ±»µ¥»÷²Ëµ¥ÏîµÄµÄ ÓÃ»§Êı¾İ
-    static UINT_PTR         s_ptrTag;       // ±»µ¥»÷²Ëµ¥ÏîµÄµÄ Tag
+    static CDuiString       s_strName;      // è¢«å•å‡»èœå•é¡¹çš„çš„ åå­—
+    static CDuiString       s_strUserData;  // è¢«å•å‡»èœå•é¡¹çš„çš„ ç”¨æˆ·æ•°æ®
+    static UINT_PTR         s_ptrTag;       // è¢«å•å‡»èœå•é¡¹çš„çš„ Tag
 public:
     CMenuWnd(void);
 
-    //¼Ì³ĞÀ´µÄ½Ó¿Ú
+    //ç»§æ‰¿æ¥çš„æ¥å£
     virtual void Notify(TNotifyUI &msg) { }
     virtual CControlUI *CreateControl(LPCTSTR pstrClassName);
     virtual void OnSubjectUpdate(WPARAM p1, WPARAM p2 = NULL, LPARAM p3 = NULL, CSubjectBase *pSub = NULL);
 
-    // »ñÈ¡¸ù²Ëµ¥¿Ø¼ş£¬ÓÃÓÚ¶¯Ì¬Ìí¼Ó×Ó²Ëµ¥
+    // è·å–æ ¹èœå•æ§ä»¶ï¼Œç”¨äºåŠ¨æ€æ·»åŠ å­èœå•
     CMenuUI *GetMenuUI(void);
-    // ÖØĞÂµ÷Õû²Ëµ¥µÄ´óĞ¡
+    // é‡æ–°è°ƒæ•´èœå•çš„å¤§å°
     void ResizeMenu(void);
-    // ÖØĞÂµ÷Õû×Ó²Ëµ¥µÄ´óĞ¡
+    // é‡æ–°è°ƒæ•´å­èœå•çš„å¤§å°
     void ResizeSubMenu(void);
 
 protected:
@@ -76,7 +76,7 @@ public:
     CDuiString          m_sSkinType;
     CPaintManagerUI     m_pm;
     CMenuElementUI     *m_pOwner;
-    DWORD               m_dwAlign;          // ²Ëµ¥¶ÔÆë·½Ê½
+    DWORD               m_dwAlign;          // èœå•å¯¹é½æ–¹å¼
 };
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -87,21 +87,21 @@ public:
     CMenuUI(void);
     virtual ~CMenuUI(void);
 
-    // ·µ»ØÒ»¸öĞÂµÄ²Ëµ¥Ïî¶ÔÏó£¬×Ô¶¯Ìí¼ÓÄ¬ÈÏÊôĞÔ¡£
-    // ÓÃÓÚ½â¾ö DuiLib Ê¹ÓÃ /MT ±àÒëÑ¡ÏîÊ±µÄ¶ÏÑÔ´íÎó£º_pFirstBlock == pHead
+    // è¿”å›ä¸€ä¸ªæ–°çš„èœå•é¡¹å¯¹è±¡ï¼Œè‡ªåŠ¨æ·»åŠ é»˜è®¤å±æ€§ã€‚
+    // ç”¨äºè§£å†³ DuiLib ä½¿ç”¨ /MT ç¼–è¯‘é€‰é¡¹æ—¶çš„æ–­è¨€é”™è¯¯ï¼š_pFirstBlock == pHead
     CMenuElementUI *NewMenuItem(void);
-    // Ìí¼Ó/É¾³ı ²Ëµ¥Ïî
+    // æ·»åŠ /åˆ é™¤ èœå•é¡¹
     virtual bool Add(CControlUI *pControl);
     virtual bool AddAt(CControlUI *pControl, int iIndex);
     virtual bool Remove(CControlUI *pControl, bool bDoNotDestroy = false);
 
-    // »ñÈ¡/ÉèÖÃ ²Ëµ¥ÏîÎ»ÖÃË÷Òı
+    // è·å–/è®¾ç½® èœå•é¡¹ä½ç½®ç´¢å¼•
     virtual int GetItemIndex(CControlUI *pControl) const;
     virtual bool SetItemIndex(CControlUI *pControl, int iIndex);
 
-    // ²éÕÒ²Ëµ¥Ïî¡£
-    // Èç¹û·µ»ØµÄ²Ëµ¥Ïî°üº¬×Ó²Ëµ¥£¬¿ÉÒÔÖ±½ÓÌí¼Ó×Ó²Ëµ¥Ïî
-    // ·ñÔò£¬ĞèÒªÌí¼Ó¿ÉÕ¹¿ªÊôĞÔ
+    // æŸ¥æ‰¾èœå•é¡¹ã€‚
+    // å¦‚æœè¿”å›çš„èœå•é¡¹åŒ…å«å­èœå•ï¼Œå¯ä»¥ç›´æ¥æ·»åŠ å­èœå•é¡¹
+    // å¦åˆ™ï¼Œéœ€è¦æ·»åŠ å¯å±•å¼€å±æ€§
     CMenuElementUI *FindMenuItem(LPCTSTR pstrName);
 
     //////////////////////////////////////////////////////////////////////////
@@ -121,12 +121,12 @@ public:
     CMenuElementUI(void);
     ~CMenuElementUI(void);
 
-    // ·µ»ØÒ»¸öĞÂµÄ²Ëµ¥Ïî¶ÔÏó£¬×Ô¶¯Ìí¼ÓÄ¬ÈÏÊôĞÔ¡£
-    // ÓÃÓÚ½â¾ö DuiLib Ê¹ÓÃ /MT ±àÒëÑ¡ÏîÊ±µÄ¶ÏÑÔ´íÎó£º_pFirstBlock == pHead
+    // è¿”å›ä¸€ä¸ªæ–°çš„èœå•é¡¹å¯¹è±¡ï¼Œè‡ªåŠ¨æ·»åŠ é»˜è®¤å±æ€§ã€‚
+    // ç”¨äºè§£å†³ DuiLib ä½¿ç”¨ /MT ç¼–è¯‘é€‰é¡¹æ—¶çš„æ–­è¨€é”™è¯¯ï¼š_pFirstBlock == pHead
     CMenuElementUI *NewMenuItem(void);
-    // Ìí¼Ó/É¾³ı ²Ëµ¥Ïî£ºÖ±½Óµ÷ÓÃ Addd/AddAt/Remove
+    // æ·»åŠ /åˆ é™¤ èœå•é¡¹ï¼šç›´æ¥è°ƒç”¨ Addd/AddAt/Remove
 
-    //ÊôĞÔ
+    //å±æ€§
     void SetIconWidth(WORD wWidth);
     WORD GetIconWidth(void) const;
     void SetIconNormal(LPCTSTR pstrIcon);
@@ -170,21 +170,21 @@ private:
 
     CMenuWnd   *m_pSubMenuWnd;
 
-    //²Ëµ¥ÏîÍ¼±ê
-    TDrawInfo   m_diIconNormal;     //Õı³£×´Ì¬Í¼±ê
-    TDrawInfo   m_diIconChecked;    //Ñ¡ÖĞ×´Ì¬Í¼±ê£¬½öµ±Ö§³Ö¸´Ñ¡Ê±ÓĞĞ§
-    bool        m_bCheckItem;       //ÊÇ·ñÖ§³Ö¸´Ñ¡
-    bool        m_bChecked;         //µ±Ç°ÊÇ·ñÑ¡ÖĞ
-    WORD        m_wIconWidth;       //Õ¼ÓÃ¿í¶È
+    //èœå•é¡¹å›¾æ ‡
+    TDrawInfo   m_diIconNormal;     //æ­£å¸¸çŠ¶æ€å›¾æ ‡
+    TDrawInfo   m_diIconChecked;    //é€‰ä¸­çŠ¶æ€å›¾æ ‡ï¼Œä»…å½“æ”¯æŒå¤é€‰æ—¶æœ‰æ•ˆ
+    bool        m_bCheckItem;       //æ˜¯å¦æ”¯æŒå¤é€‰
+    bool        m_bChecked;         //å½“å‰æ˜¯å¦é€‰ä¸­
+    WORD        m_wIconWidth;       //å ç”¨å®½åº¦
 
-    //±êÊ¶´æÔÚÏÂ¼¶²Ëµ¥µÄÍ¼±ê
+    //æ ‡è¯†å­˜åœ¨ä¸‹çº§èœå•çš„å›¾æ ‡
     //IsExpandable()
     TDrawInfo   m_diExpandIcon;     //
-    WORD        m_wExpandWidth;     //Õ¼ÓÃ¿í¶È
+    WORD        m_wExpandWidth;     //å ç”¨å®½åº¦
 
-    //·Ö¸îÏß
-    bool        m_bLine;            //»­·Ö¸ôÏß
-    DWORD       m_dwLineColor;      //·Ö¸ôÏßÑÕÉ«
+    //åˆ†å‰²çº¿
+    bool        m_bLine;            //ç”»åˆ†éš”çº¿
+    DWORD       m_dwLineColor;      //åˆ†éš”çº¿é¢œè‰²
 };
 
 } // namespace DuiLib

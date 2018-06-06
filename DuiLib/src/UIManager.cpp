@@ -4257,19 +4257,19 @@ void CPaintManagerUI::RemoveAllMultiLanguageString()
 
 void CPaintManagerUI::ProcessMultiLanguageTokens(CDuiString &pStrMultiLanguage)
 {
-    // Replace string-tokens: %{str}
+    // Replace string-tokens: %[str]
     int iPos = pStrMultiLanguage.Find(_T('%'));
 
     while (iPos >= 0)
     {
-        if (pStrMultiLanguage.GetAt(iPos + 1) == _T('{'))
+        if (pStrMultiLanguage.GetAt(iPos + 1) == _T('['))
         {
             int iEndPos = iPos + 2;
 
             //while (isdigit(pStrMultiLanguage.GetAt(iEndPos))) { iEndPos++; }
-            while (pStrMultiLanguage.GetAt(iEndPos) != _T('}')) { ++iEndPos; }
+            while (pStrMultiLanguage.GetAt(iEndPos) != _T(']')) { ++iEndPos; }
 
-            if (pStrMultiLanguage.GetAt(iEndPos) == '}')
+            if (pStrMultiLanguage.GetAt(iEndPos) == ']')
             {
                 CDuiString sID(pStrMultiLanguage.Mid(iPos + 2, iEndPos - iPos - 2));
                 LPCTSTR pStrTemp = CPaintManagerUI::GetMultiLanguageString(sID);
@@ -4556,7 +4556,7 @@ bool CPaintManagerUI::LoadLanguage(int nLangType, const STRINGorID &xml, LPCTSTR
 {
     CMarkup xmlLoader;
 
-    //资源ID为字符串，格式：%{id}
+    //资源ID为字符串，格式：%[id]
     //字符串以<开头认为是XML字符串，否则认为是XML文件
     if (HIWORD(xml.m_lpstr) != NULL)
     {

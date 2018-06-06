@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 
 namespace DuiLib {
 CTileLayoutUI::CTileLayoutUI() : m_nColumns(1), m_nRows(0)
@@ -125,7 +125,7 @@ void CTileLayoutUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     {
         m_bChildRounded = (_tcscmp(pstrValue, _T("true")) == 0) ? true : false;
     }
-    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:autowidth")); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:autowidth")); }
     else { CContainerUI::SetAttribute(pstrName, pstrValue); }
 }
 
@@ -172,8 +172,8 @@ void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
     { szAvailable.cy += m_pVerticalScrollBar->GetScrollRange(); }
 
     int nEstimateNum = 0;
-    int nMaxVisibleCtrl = m_nRowsFixed * m_nColumnsFixed;   // ×Ó¿Ø¼şÆÌÂúÊ±£¬×î´ó¿ÉÏÔÊ¾¿Ø¼şÊı
-    ResetInternVisible();                                   // ÖØÖÃ×Ó¿Ø¼şÄÚ²¿ÏÔÊ¾ÊôĞÔ
+    int nMaxVisibleCtrl = m_nRowsFixed * m_nColumnsFixed;   // å­æ§ä»¶é“ºæ»¡æ—¶ï¼Œæœ€å¤§å¯æ˜¾ç¤ºæ§ä»¶æ•°
+    ResetInternVisible();                                   // é‡ç½®å­æ§ä»¶å†…éƒ¨æ˜¾ç¤ºå±æ€§
 
     for (int it = 0; it < m_items.GetSize(); it++)
     {
@@ -184,7 +184,7 @@ void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
         if (pControl->IsFloat()) { continue; }
 
         //nEstimateNum++;
-        // Òş²Ø¶àÓàµÄ×Ó¿Ø¼ş
+        // éšè—å¤šä½™çš„å­æ§ä»¶
         if (!m_bChildRounded)                                        { ++nEstimateNum; }
         else if (m_bChildRounded && nMaxVisibleCtrl <= nEstimateNum) { pControl->SetInternVisible(false); }
     }
@@ -192,9 +192,9 @@ void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
     int cxNeeded = 0;
     int cyNeeded = 0;
     int iChildPadding = m_iChildPadding;
-    int nXRemainder = 0; // Ë®Æ½·½Ïò µÈ·ÖºóÊ£ÓàÏñËØÊı
-    int nYRemainder = 0; // Ë®Æ½·½Ïò µÈ·ÖºóÊ£ÓàÏñËØÊı
-    int nCoord = 0;      // ×Ó¿Ø¼şµÄË÷ÒıÎ»ÖÃ£¨´Ó×óµ½ÓÒ£¬´ÓÉÏµ½ÏÂ£¬´Ó0¿ª¼´µİÔö£©£¬ÓÃÓÚ¼ÆËã×Ó¿Ø¼şµÄĞĞÁĞºÅ
+    int nXRemainder = 0; // æ°´å¹³æ–¹å‘ ç­‰åˆ†åå‰©ä½™åƒç´ æ•°
+    int nYRemainder = 0; // æ°´å¹³æ–¹å‘ ç­‰åˆ†åå‰©ä½™åƒç´ æ•°
+    int nCoord = 0;      // å­æ§ä»¶çš„ç´¢å¼•ä½ç½®ï¼ˆä»å·¦åˆ°å³ï¼Œä»ä¸Šåˆ°ä¸‹ï¼Œä»0å¼€å³é€’å¢ï¼‰ï¼Œç”¨äºè®¡ç®—å­æ§ä»¶çš„è¡Œåˆ—å·
 
     if (m_nColumnsFixed == 0)
     {
@@ -259,7 +259,7 @@ void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
         }
         else
         {
-            // ×Ó¿Ø¼şÆÌÂú
+            // å­æ§ä»¶é“ºæ»¡
             m_nColumns = m_nColumnsFixed;
             m_szItem.cx = (rc.right - rc.left - iChildPadding * (m_nColumnsFixed - 1)) / m_nColumnsFixed;
             nXRemainder = (rc.right - rc.left - iChildPadding * (m_nColumnsFixed - 1)) % m_nColumnsFixed;
@@ -316,7 +316,7 @@ void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
 
         if (m_bChildRounded)
         {
-            // ĞŞÕı×Ó¿Ø¼şµÄ´óĞ¡¡¢Î»ÖÃ
+            // ä¿®æ­£å­æ§ä»¶çš„å¤§å°ã€ä½ç½®
             szTmp.cx = (iColumnIndex < nXRemainder) ? (szTmp.cx + 1) : szTmp.cx;
             szTmp.cy = (iRowIndex < nYRemainder) ? (szTmp.cy + 1) : szTmp.cy;
             iPosX += (iColumnIndex < nXRemainder) ? iColumnIndex : nXRemainder;

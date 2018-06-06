@@ -1,4 +1,4 @@
-#ifndef __GIFINFO_H__
+ï»¿#ifndef __GIFINFO_H__
 #define __GIFINFO_H__
 
 #pragma once
@@ -11,16 +11,16 @@ public:
     explicit CGifInfo(int nFrameCnt);
     ~CGifInfo(void);
 
-    int GetFrameCount(void);                // ·µ»Ø×ÜÖ¡Êı
-    void AddFrame(TImageInfo *ptFrame);     // Ìí¼ÓÒ»Ö¡Í¼Ïñ
-    void SetCurFrame(int nCurFrame);        // ÉèÖÃµ±Ç°Ö¡
-    TImageInfo *GetCurFrame(void);          // ·µ»Øµ±Ç°Ö¡
-    TImageInfo *GetNextFrame(void);         // ·µ»ØÏÂÒ»Ö¡
-    TImageInfo *GetFrame(int nIdx);         // ·µ»ØÖ¸¶¨Ö¡
+    int GetFrameCount(void);                // è¿”å›æ€»å¸§æ•°
+    void AddFrame(TImageInfo *ptFrame);     // æ·»åŠ ä¸€å¸§å›¾åƒ
+    void SetCurFrame(int nCurFrame);        // è®¾ç½®å½“å‰å¸§
+    TImageInfo *GetCurFrame(void);          // è¿”å›å½“å‰å¸§
+    TImageInfo *GetNextFrame(void);         // è¿”å›ä¸‹ä¸€å¸§
+    TImageInfo *GetFrame(int nIdx);         // è¿”å›æŒ‡å®šå¸§
 
 private:
-    CDuiPtrArray    vGifFrame;              // ´æ´¢ GIF ËùÓĞÖ¡ĞÅÏ¢µÄÖ¸Õë
-    int             nCurFrame;              // µ±Ç°²¥·Åµ½µÚ¼¸Ö¡
+    CDuiPtrArray    vGifFrame;              // å­˜å‚¨ GIF æ‰€æœ‰å¸§ä¿¡æ¯çš„æŒ‡é’ˆ
+    int             nCurFrame;              // å½“å‰æ’­æ”¾åˆ°ç¬¬å‡ å¸§
     bool            bIsDeleting;
 };
 }

@@ -1,4 +1,4 @@
-#ifndef UIFRIENDS_HPP
+﻿#ifndef UIFRIENDS_HPP
 #define UIFRIENDS_HPP
 
 #include "UIListCommonDefine.hpp"

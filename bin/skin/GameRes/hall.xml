@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Window size="800,600" sizebox="4,4,6,6" caption="0,0,0,90" mininfo="800,570" roundcorner="5,5" showdirty="false" >
 	<Font shared="true" id="0" name="微软雅黑" size="18" bold="false" />
 	<Font shared="true" id="1" name="幼圆" size="14" default="true" />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Window sizebox="4,4,6,6" caption="0,0,0,30" mininfo="450,300" roundcorner="3,3,3,3">
     <Font id="0" name="Arial" size="12" bold="false" default="true" />
     <Font id="1" name="Arial" size="12" bold="true" underline="true" defaultbold="true" />

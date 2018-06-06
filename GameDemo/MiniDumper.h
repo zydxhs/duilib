@@ -1,4 +1,4 @@
-#ifndef MINIDUMPER_H
+﻿#ifndef MINIDUMPER_H
 #define MINIDUMPER_H
 
 #include <windows.h>

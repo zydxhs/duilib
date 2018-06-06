@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "deelx.h"
 
 namespace DuiLib {
@@ -39,8 +39,8 @@ protected:
     enum
     {
         DEFAULT_TIMERID = 20,
-        // 2017-07-21 zhuyadong Ìí¼Ó minmaxnumber ÊôĞÔ
-        CHECK_TIMERID,          // ÓÃÓÚ¼ì²âÓÃ»§ÊäÈëµÄÖµÊÇ·ñÔ½½ç
+        // 2017-07-21 zhuyadong æ·»åŠ  minmaxnumber å±æ€§
+        CHECK_TIMERID,          // ç”¨äºæ£€æµ‹ç”¨æˆ·è¾“å…¥çš„å€¼æ˜¯å¦è¶Šç•Œ
     };
 
     CIPAddressUI   *m_pOwner;
@@ -49,7 +49,7 @@ protected:
     bool m_bInit;
     bool m_bDrawCaret;
 #ifndef UNICODE
-    BYTE m_byDChar; // ·Ç0±íÊ¾µ±Ç°ÊäÈë×Ö·ûÎªË«×Ö½Ú×Ö·û
+    BYTE m_byDChar; // é0è¡¨ç¤ºå½“å‰è¾“å…¥å­—ç¬¦ä¸ºåŒå­—èŠ‚å­—ç¬¦
 #endif // UNICODE
 };
 
@@ -178,7 +178,7 @@ LRESULT CIPAddressWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             DWORD dwRet = ::SendMessage(m_hWnd, EM_GETSEL, 0, 0);
             lRes = CWindowWnd::HandleMessage(uMsg, wParam, lParam);
-            // ¹â±êÎ»ÖÃ
+            // å…‰æ ‡ä½ç½®
             WORD wIdx = LOWORD(dwRet);
             int cchLen = ::GetWindowTextLength(m_hWnd);
 
@@ -189,7 +189,7 @@ LRESULT CIPAddressWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                 if (EM_FIELD4 != m_eField) { lRes = OnKillFocus(uMsg, wParam, lParam, bHandled); }
 
-                //ÇĞ»»½¹µãÎ»ÖÃ
+                //åˆ‡æ¢ç„¦ç‚¹ä½ç½®
                 pOwner->MoveToNextField(eField);
             }
         }
@@ -198,7 +198,7 @@ LRESULT CIPAddressWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             DWORD dwRet = ::SendMessage(m_hWnd, EM_GETSEL, 0, 0);
             lRes = CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 
-            // ¹â±êÎ»ÖÃ
+            // å…‰æ ‡ä½ç½®
             if (0 == dwRet)
             {
                 CIPAddressUI *pOwner = m_pOwner;
@@ -206,7 +206,7 @@ LRESULT CIPAddressWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                 if (EM_FIELD1 != m_eField) { lRes = OnKillFocus(uMsg, wParam, lParam, bHandled); }
 
-                //ÇĞ»»½¹µãÎ»ÖÃ
+                //åˆ‡æ¢ç„¦ç‚¹ä½ç½®
                 pOwner->MoveToBeforeField(eField);
             }
         }
@@ -260,7 +260,7 @@ LRESULT CIPAddressWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             lRes = CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 
-            if (m_pOwner->IsEnabled() && m_bDrawCaret)    // todo:ÅĞ¶ÏÊÇ·ñenabled
+            if (m_pOwner->IsEnabled() && m_bDrawCaret)    // todo:åˆ¤æ–­æ˜¯å¦enabled
             {
                 RECT rcClient;
                 ::GetClientRect(m_hWnd, &rcClient);
@@ -297,7 +297,7 @@ LRESULT CIPAddressWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
             if (EM_FIELD4 != m_eField) { lRes = OnKillFocus(uMsg, wParam, lParam, bHandled); }
 
-            //ÇĞ»»½¹µãÎ»ÖÃ
+            //åˆ‡æ¢ç„¦ç‚¹ä½ç½®
             pOwner->MoveToNextField(eField);
             return lRes;
         }
@@ -321,10 +321,10 @@ LRESULT CIPAddressWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         lRes = CWindowWnd::HandleMessage(uMsg, wParam, lParam);
         // 2018-03-14
-        // 1. ²Ù×÷ÏµÍ³»á°ÑÒ»¸ö WM_IME_CHAR ÏûÏ¢×ª»»ÎªÁ½¸ö WM_CHAR ÏûÏ¢
-        // 2. ±à¼­¿òÖ»ÓĞ´¦ÀíÁËÁ½¸ö WM_CHAR ÏûÏ¢ºó£¬¸Ã×Ö·û²Å»á³öÏÖÔÚ±à¼­¿òÖĞ
-        // 3. ÎªÁËÖ§³ÖÔÚ±à¼­¿òÖĞ²åÈë¡¢Ñ¡Ôñ×Ö·ûºóÌæ»»ÊäÈëµÈ¹¦ÄÜ
-        // ¸ÃÏûÏ¢²»×÷×Ö·û¹ıÂË¡¢ÕıÔòÆ¥Åä¹¤×÷£¬¶øÊÇÉèÖÃ±êÊ¶£¬ÔÚ WM_CHARE ÏûÏ¢ÖĞ´¦Àí
+        // 1. æ“ä½œç³»ç»Ÿä¼šæŠŠä¸€ä¸ª WM_IME_CHAR æ¶ˆæ¯è½¬æ¢ä¸ºä¸¤ä¸ª WM_CHAR æ¶ˆæ¯
+        // 2. ç¼–è¾‘æ¡†åªæœ‰å¤„ç†äº†ä¸¤ä¸ª WM_CHAR æ¶ˆæ¯åï¼Œè¯¥å­—ç¬¦æ‰ä¼šå‡ºç°åœ¨ç¼–è¾‘æ¡†ä¸­
+        // 3. ä¸ºäº†æ”¯æŒåœ¨ç¼–è¾‘æ¡†ä¸­æ’å…¥ã€é€‰æ‹©å­—ç¬¦åæ›¿æ¢è¾“å…¥ç­‰åŠŸèƒ½
+        // è¯¥æ¶ˆæ¯ä¸ä½œå­—ç¬¦è¿‡æ»¤ã€æ­£åˆ™åŒ¹é…å·¥ä½œï¼Œè€Œæ˜¯è®¾ç½®æ ‡è¯†ï¼Œåœ¨ WM_CHARE æ¶ˆæ¯ä¸­å¤„ç†
         m_byDChar = 0 != HIBYTE(wParam) ? 1 : 0;
     }
 
@@ -359,14 +359,14 @@ LRESULT CIPAddressWnd::OnEditChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*
     int cchLen = ::GetWindowTextLength(m_hWnd) + 1;
     ::GetWindowText(m_hWnd, m_pOwner->m_sText.GetData(cchLen), cchLen);
 
-    // ¹ıÂË×ó²à×Ö·û 0
+    // è¿‡æ»¤å·¦ä¾§å­—ç¬¦ 0
     if (m_pOwner->m_sText.GetLength() > 1 && _T('0') == m_pOwner->m_sText[0])
     {
         m_pOwner->SetText(m_pOwner->m_sText.Mid(1));
         ::SendMessage(m_hWnd, EM_SETSEL, LOWORD(-2), HIWORD(-1));
     }
 
-    // Èç¹ûÖµ³¬³öÉÏÏŞ£¬Ç¿ÖÆ¸ÄÎª 255
+    // å¦‚æœå€¼è¶…å‡ºä¸Šé™ï¼Œå¼ºåˆ¶æ”¹ä¸º 255
     int n = _ttoi(m_pOwner->m_sText.GetData());
 
     if (n > 255)
@@ -384,7 +384,7 @@ LRESULT CIPAddressWnd::OnEditChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*
     return 0;
 }
 
-// bHandled ±ØĞëÎªTRUE
+// bHandled å¿…é¡»ä¸ºTRUE
 LRESULT CIPAddressWnd::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
 #ifndef UNICODE
@@ -405,7 +405,7 @@ LRESULT CIPAddressWnd::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHa
     if (!IsValidChar(wParam))
     {
         ::MessageBeep(MB_ICONWARNING);
-        // É¾³ı×Ö·û
+        // åˆ é™¤å­—ç¬¦
         wIdx -= 1;
 #ifndef UNICODE
         LPCTSTR start = (LPCTSTR)sTxt.GetData();
@@ -424,7 +424,7 @@ LRESULT CIPAddressWnd::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHa
     return 0;
 }
 
-// bHandled ±ØĞëÎªTRUE
+// bHandled å¿…é¡»ä¸ºTRUE
 LRESULT CIPAddressWnd::OnPaste(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
     CDuiString strValidTxt;
@@ -435,7 +435,7 @@ LRESULT CIPAddressWnd::OnPaste(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bH
 
     if (strValidTxt != buf)
     {
-        // Ôö¼ÓÕ³Ìù
+        // å¢åŠ ç²˜è´´
         SetWindowText(m_hWnd, strValidTxt);
         ::SendMessage(m_hWnd, EM_SETSEL, LOWORD(-2), HIWORD(-1));
     }
@@ -532,7 +532,7 @@ void CIPAddressUI::DoEvent(TEventUI &event)
     {
         if (m_pWindow) { return; }
 
-        // »ñÈ¡µ±Ç°Êó±êÎ»ÖÃ
+        // è·å–å½“å‰é¼ æ ‡ä½ç½®
         POINT pt;
         ::GetCursorPos(&pt);
         ::ScreenToClient(GetManager()->GetPaintWindow(), &pt);
@@ -558,7 +558,7 @@ void CIPAddressUI::DoEvent(TEventUI &event)
     {
         if (IsEnabled())
         {
-            // 2018-05-28 Ô­À´´úÂëÔÚmanagerÖĞ²¶»ñ£¬ÔÚ´ËÊÍ·Å¡£ĞŞ¸ÄCapture»úÖÆºó£¬ÓÉ¿Ø¼ş×Ô¼º¾ö¶¨ÊÇ·ñ²¶»ñ
+            // 2018-05-28 åŸæ¥ä»£ç åœ¨managerä¸­æ•è·ï¼Œåœ¨æ­¤é‡Šæ”¾ã€‚ä¿®æ”¹Captureæœºåˆ¶åï¼Œç”±æ§ä»¶è‡ªå·±å†³å®šæ˜¯å¦æ•è·
             // ReleaseCapture();
             EMIPField eField = EM_FIELD1;
 
@@ -792,7 +792,7 @@ void CIPAddressUI::MoveToNextField(EMIPField eField)
 {
     if (EM_FIELD4 == eField)
     {
-        // µ±Ç°½¹µãÔÚµÚ 4 ¸ö×Ö¶Î
+        // å½“å‰ç„¦ç‚¹åœ¨ç¬¬ 4 ä¸ªå­—æ®µ
         //MessageBeep(MB_ICONWARNING);
         return;
     }
@@ -808,7 +808,7 @@ void CIPAddressUI::MoveToBeforeField(EMIPField eField)
 {
     if (EM_FIELD1 == eField)
     {
-        // µ±Ç°½¹µãÔÚµÚ 1 ¸ö×Ö¶Î
+        // å½“å‰ç„¦ç‚¹åœ¨ç¬¬ 1 ä¸ªå­—æ®µ
         //MessageBeep(MB_ICONWARNING);
         return;
     }
@@ -886,10 +886,10 @@ SIZE CIPAddressUI::EstimateSize(SIZE szAvailable)
 void CIPAddressUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if (_tcscmp(pstrName, _T("readonly")) == 0) { SetReadOnly(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:dragenable")); }
-    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:drageimage")); }
-    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:dropenable")); }
-    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("²»Ö§³ÖÊôĞÔ:autowidth")); }
+    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:dragenable")); }
+    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:drageimage")); }
+    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:dropenable")); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("ä¸æ”¯æŒå±æ€§:autowidth")); }
     else { CLabelUI::SetAttribute(pstrName, pstrValue); }
 }
 

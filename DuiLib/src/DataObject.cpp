@@ -1,6 +1,6 @@
-/// \copyright Copyright(c) 2018, SuZhou Keda Technology Co., All rights reserved.
+ï»¿/// \copyright Copyright(c) 2018, SuZhou Keda Technology Co., All rights reserved.
 /// \file dataobject.cpp
-/// \brief Êı¾İ¶ÔÏó
+/// \brief æ•°æ®å¯¹è±¡
 ///
 ///
 /// \author zhuyadong
@@ -8,8 +8,8 @@
 /// \date 2018-04-27
 /// \note
 /// -----------------------------------------------------------------------------
-/// ĞŞ¸Ä¼ÇÂ¼£º
-/// ÈÕ  ÆÚ        °æ±¾        ĞŞ¸ÄÈË        ×ß¶ÁÈË    ĞŞ¸ÄÄÚÈİ
+/// ä¿®æ”¹è®°å½•ï¼š
+/// æ—¥  æœŸ        ç‰ˆæœ¬        ä¿®æ”¹äºº        èµ°è¯»äºº    ä¿®æ”¹å†…å®¹
 ///
 #include "stdafx.h"
 #include <ObjIdl.h>
@@ -263,8 +263,8 @@ HRESULT CDataObject::CopyMedium(FORMATETC *fmt, STGMEDIUM *stm, STGMEDIUM *dst)
         dst->hGlobal = (HGLOBAL)OleDuplicateData(stm->hGlobal, fmt->cfFormat, GPTR);
         break;
 
-    // OleDuplicateData ½öÖ§³ÖDDB£¬²»Ö§³ÖDIB¡£¼´ CreateDIBSection ´´½¨µÄ HBITMAP ÎŞ·¨¸´ÖÆ¡£
-    // Òò´Ë ÕâÀï²»¸´ÖÆÎ»Í¼£¬ÓÉÓÃ»§¸´ÖÆ
+    // OleDuplicateData ä»…æ”¯æŒDDBï¼Œä¸æ”¯æŒDIBã€‚å³ CreateDIBSection åˆ›å»ºçš„ HBITMAP æ— æ³•å¤åˆ¶ã€‚
+    // å› æ­¤ è¿™é‡Œä¸å¤åˆ¶ä½å›¾ï¼Œç”±ç”¨æˆ·å¤åˆ¶
     case TYMED_GDI:
         //dst->hBitmap = (HBITMAP)OleDuplicateData(stm->hBitmap, fmt->cfFormat, NULL);
         dst->hBitmap = stm->hBitmap;

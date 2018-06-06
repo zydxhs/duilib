@@ -1,4 +1,4 @@
-// XUnzip.cpp  Version 1.3.1
+﻿// XUnzip.cpp  Version 1.3.1
 //
 // Authors:      Mark Adler et al. (see below)
 //

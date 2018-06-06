@@ -762,7 +762,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 
     if (pFrame == NULL) { return 0; }
 
-    pFrame->Create(NULL, _T("%{title}"), UI_WNDSTYLE_FRAME | WS_CLIPCHILDREN, WS_EX_WINDOWEDGE);
+    pFrame->Create(NULL, _T("%[title]"), UI_WNDSTYLE_FRAME | WS_CLIPCHILDREN, WS_EX_WINDOWEDGE);
     pFrame->CenterWindow();
     //pFrame->ShowWindow(true);
     CPaintManagerUI::MessageLoop();
