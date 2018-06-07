@@ -1133,6 +1133,13 @@ void CListUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         SetItemHLineColor(clrColor);
     }
     else if (_tcscmp(pstrName, _T("itemshowhtml")) == 0) { SetItemShowHtml(_tcscmp(pstrValue, _T("true")) == 0); }
+    else if (_tcscmp(pstrName, _T("ischeckbox")) == 0)
+    {
+        m_bCheckBox = _tcscmp(pstrValue, _T("true")) == 0 ? true : false;
+        m_ListInfo.bCheckBox = m_bCheckBox;
+    }
+    else if (_tcscmp(pstrName, _T("unselimg")) == 0) { m_diUnSel.sDrawString = pstrValue; }
+    else if (_tcscmp(pstrName, _T("selimg")) == 0) { m_diSel.sDrawString = pstrValue; }
     else { CVerticalLayoutUI::SetAttribute(pstrName, pstrValue); }
 }
 
@@ -1251,6 +1258,41 @@ bool CListUI::SortItems(PULVCompareFunc pfnCompare, UINT_PTR dwData)
     }
 
     return bResult;
+}
+
+TDrawInfo &CListUI::GetUnSelImg(void)
+{
+    return m_diUnSel;
+}
+
+TDrawInfo &CListUI::GetSelImg(void)
+{
+    return m_diSel;
+}
+
+void CListUI::GetAllSelectedItem(CDuiValArray &arySelIdx)
+{
+    arySelIdx.Empty();
+
+    for (int i = 0; i < GetCount(); i++)
+    {
+        CListTextElementUI *pListText = (CListTextElementUI *)GetItemAt(i);
+
+        if (pListText->GetCheckBoxState())
+        {
+            arySelIdx.Add(&i);
+        }
+    }
+}
+
+void CListUI::SetAllItemSelected(bool bSelect)
+{
+    for (int i = 0; i < GetCount(); ++i)
+    {
+        CListTextElementUI *pItem = dynamic_cast<CListTextElementUI *>(GetItemAt(i));
+
+        if (NULL != pItem) { pItem->SetCheckBoxState(bSelect); }
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -2929,7 +2971,7 @@ void CListLabelElementUI::DrawItemText(HDC hDC, const RECT &rcItem)
 //
 //
 
-CListTextElementUI::CListTextElementUI() : m_nLinks(0), m_nHoverLink(-1), m_pOwner(NULL)
+CListTextElementUI::CListTextElementUI() : m_nLinks(0), m_nHoverLink(-1), m_pOwner(NULL), m_bCheckBoxSelect(0)
 {
     ::ZeroMemory(&m_rcLinks, sizeof(m_rcLinks));
 }
@@ -3041,6 +3083,20 @@ void CListTextElementUI::DoEvent(TEventUI &event)
     if (event.Type == UIEVENT_BUTTONUP && IsEnabled())
     {
         ReleaseCapture();
+
+        TListInfoUI *pInfo = m_pOwner->GetListInfo();
+        RECT rcItem = { pInfo->rcColumn[0].left, m_rcItem.top, pInfo->rcColumn[0].right, m_rcItem.bottom };
+        rcItem.left += pInfo->rcTextPadding.left;
+        rcItem.right -= pInfo->rcTextPadding.right;
+        rcItem.top += pInfo->rcTextPadding.top;
+        rcItem.bottom -= pInfo->rcTextPadding.bottom;
+
+        if (PtInRect(&rcItem, event.ptMouse) && pInfo->bCheckBox)
+        {
+            m_bCheckBoxSelect = !m_bCheckBoxSelect;
+            //m_pManager->SendNotify((CListUI *)m_pOwner, NTY_NAME_LTEN_CHECKBOX_CLICK, (WPARAM)this);
+            Invalidate();
+        }
 
         for (int i = 0; i < m_nLinks; i++)
         {
@@ -3288,12 +3344,41 @@ void CListTextElementUI::DrawItemText(HDC hDC, const RECT &rcItem)
             if (pCallback) { strText = pCallback->GetItemText(this, m_iIndex, i); }
             else { strText.Assign(GetText(i)); }
 
-            if (pInfo->bShowHtml)
-                CRenderEngine::DrawHtmlText(hDC, m_pManager, rcItem, strText.GetData(), iTextColor, \
-                                            &m_rcLinks[m_nLinks], &m_sLinks[m_nLinks], nLinks, pInfo->nFont, pInfo->uTextStyle);
+            if (0 == i && pInfo->bCheckBox)
+            {
+                CListUI *pListUI = (CListUI *)m_pOwner;
+                CListHeaderItemUI *pHeaderItem = (CListHeaderItemUI *)pListUI->GetHeader()->GetItemAt(0);
+                RECT rt = pHeaderItem->GetInset();
+                CDuiString str;
+
+                if (m_bCheckBoxSelect == false)
+                {
+                    TDrawInfo &di = pListUI->GetUnSelImg();
+                    str.Format(_T("{x %d}{i %s}{x 1}%s "), rt.left, di.sDrawString.GetData(), strText.GetData());
+                }
+                else
+                {
+                    TDrawInfo &di = pListUI->GetSelImg();
+                    str.Format(_T("{x %d}{i %s}{x 1}%s "), rt.left, di.sDrawString.GetData(), strText.GetData());
+                }
+
+                strText = str.GetData();
+                DWORD dwWriteStype = DT_SINGLELINE | pInfo->uTextStyle;
+                dwWriteStype = (dwWriteStype & (~DT_CENTER)) | DT_LEFT;
+                CRenderEngine::DrawHtmlText(hDC, m_pManager, rcItem, strText.GetData(), iTextColor,
+                                            &m_rcLinks[m_nLinks], &m_sLinks[m_nLinks], nLinks,
+                                            pInfo->nFont, dwWriteStype);
+            }
             else
-                CRenderEngine::DrawText(hDC, m_pManager, rcItem, strText.GetData(), iTextColor, \
-                                        pInfo->nFont, pInfo->uTextStyle);
+            {
+                if (pInfo->bShowHtml)
+                    CRenderEngine::DrawHtmlText(hDC, m_pManager, rcItem, strText.GetData(), iTextColor,
+                                                &m_rcLinks[m_nLinks], &m_sLinks[m_nLinks], nLinks,
+                                                pInfo->nFont, pInfo->uTextStyle);
+                else
+                    CRenderEngine::DrawText(hDC, m_pManager, rcItem, strText.GetData(), iTextColor,
+                                            pInfo->nFont, pInfo->uTextStyle);
+            }
 
             m_nLinks += nLinks;
             nLinks = LENGTHOF(m_rcLinks) - m_nLinks;
@@ -3329,6 +3414,19 @@ void CListTextElementUI::DrawItemText(HDC hDC, const RECT &rcItem)
         ::ZeroMemory(m_rcLinks + i, sizeof(RECT));
         ((CDuiString *)(m_sLinks + i))->Empty();
     }
+}
+
+void CListTextElementUI::SetCheckBoxState(bool bSelect)
+{
+    if (m_bCheckBoxSelect == bSelect) { return; }
+
+    m_bCheckBoxSelect = bSelect;
+    Invalidate();
+}
+
+bool CListTextElementUI::GetCheckBoxState(void)
+{
+    return m_bCheckBoxSelect;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////

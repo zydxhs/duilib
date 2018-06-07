@@ -42,6 +42,7 @@ typedef struct tagTListInfoUI
     DWORD dwVLineColor;
     bool bShowHtml;
     bool bMultiExpandable;
+    bool bCheckBox;
 } TListInfoUI;
 
 
@@ -209,6 +210,10 @@ public:
     virtual CScrollBarUI *GetHorizontalScrollBar() const;
     bool SortItems(PULVCompareFunc pfnCompare, UINT_PTR dwData);
 
+    TDrawInfo &GetUnSelImg(void);
+    TDrawInfo &GetSelImg(void);
+    void GetAllSelectedItem(CDuiValArray &arySelIdx);
+    void SetAllItemSelected(bool bSelect);
 protected:
     bool m_bScrollSelect;
     int m_iCurSel;
@@ -217,6 +222,10 @@ protected:
     CListBodyUI *m_pList;
     CListHeaderUI *m_pHeader;
     TListInfoUI m_ListInfo;
+
+    bool m_bCheckBox;
+    TDrawInfo m_diUnSel;
+    TDrawInfo m_diSel;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -408,6 +417,8 @@ public:
 
     void DrawItemText(HDC hDC, const RECT &rcItem);
 
+    void SetCheckBoxState(bool bSelect);
+    bool GetCheckBoxState(void);
 protected:
     enum { MAX_LINK = 8 };
     int m_nLinks;
@@ -418,6 +429,7 @@ protected:
     CDuiPtrArray m_aTexts;
 
     CDuiString m_sTextLast;
+    bool m_bCheckBoxSelect;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////
