@@ -1,5 +1,6 @@
 ﻿//2017-02-23 zhuyadong 添加菜单控件
 #include "stdafx.h"
+#include "UIShadow.h"
 
 namespace DuiLib {
 
@@ -374,6 +375,8 @@ LRESULT CMenuWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
+    bool bShowShadow = false;
+
     if (m_pOwner != NULL)
     {
         LONG styleValue = ::GetWindowLong(*this, GWL_STYLE);
@@ -414,6 +417,11 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandl
             }
         }
 
+        CShadowUI *pShadow = m_pm.GetShadow();
+        m_pOwner->GetManager()->GetShadow()->CopyShadow(pShadow);
+        bShowShadow = pShadow->IsShow();
+        pShadow->SetShow(false);
+
         m_pm.AttachDialog(pLayout);
         m_pm.SetLayered(m_pOwner->GetManager()->IsLayered());
         m_pm.AddNotifier(this);
@@ -422,15 +430,22 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandl
     else
     {
         m_pm.Init(m_hWnd);
-        //m_pm.SetForceUseSharedRes(true);
+        m_pm.SetForceUseSharedRes(true);
         CDialogBuilder builder;
         CControlUI *pRoot = builder.Create(m_xml, m_sSkinType.GetData(), this, &m_pm);
         ASSERT(pRoot);
+
+        CShadowUI *pShadow = m_pm.GetShadow();
+        bShowShadow = pShadow->IsShow();
+        pShadow->SetShow(false);
+
         m_pm.AttachDialog(pRoot);
         m_pm.AddNotifier(this);
         ResizeMenu();
     }
 
+    m_pm.GetShadow()->SetShow(bShowShadow);
+    m_pm.GetShadow()->Create(&m_pm);
     GetManager()->SetFocus(GetMenuUI());
     return 0;
 }

@@ -38,7 +38,7 @@
 #define __UISHADOW_H__
 
 #pragma once
-#include "map"
+#include <map>
 
 namespace DuiLib {
 

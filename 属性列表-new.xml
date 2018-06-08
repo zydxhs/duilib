@@ -67,7 +67,7 @@
         <Attribute name="layeredimage" default="false" type="BOOL" comment="分层窗体背景图，默认无"/>
         <!-- 扩展属性 -->
         <Attribute name="shadowshow" default="false" type="BOOL" comment="是否启用窗体阴影"/>
-        <Attribute name="shadowsize" default="0" type="BYTE" comment="算法阴影的宽度(-20到20)"/>
+        <Attribute name="shadowsize" default="5" type="BYTE" comment="算法阴影的宽度(-20到20),默认5"/>
         <Attribute name="shadowpos" default="0,0" type="SIZE" comment="算法阴影的偏移量"/>
         <Attribute name="shadowcolor" default="0x000000" type="DWORD" comment="算法阴影的颜色，不支持透明度，使用shadowdarkness设置透明度"/>
         <Attribute name="shadowsharpness" default="5" type="BYTE" comment="算法阴影的锐度(0~20)"/>
