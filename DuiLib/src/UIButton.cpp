@@ -441,9 +441,9 @@ BYTE CButtonUI::GetFadeAlphaDelta()
 
 SIZE CButtonUI::EstimateSize(SIZE szAvailable)
 {
-    if (m_cxyFixed.cy == 0) { return CDuiSize(m_cxyFixed.cx, m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 8); }
-
-    return CControlUI::EstimateSize(szAvailable);
+    //if (m_cxyFixed.cy == 0) { return CDuiSize(m_cxyFixed.cx, m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 8); }
+    //return CControlUI::EstimateSize(szAvailable);
+    return CLabelUI::EstimateSize(szAvailable);
 }
 
 void CButtonUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
@@ -492,7 +492,6 @@ void CButtonUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
     else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
     else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("不支持属性:dropenable")); }
-    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else { CLabelUI::SetAttribute(pstrName, pstrValue); }
 }
 

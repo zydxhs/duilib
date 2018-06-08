@@ -82,8 +82,10 @@ void CLabelUI::SetFixedHeight(int cy)
 
 void CLabelUI::SetText(LPCTSTR pstrText)
 {
-    CControlUI::SetText(pstrText);
     m_bNeedEstimateSize = true;
+    CControlUI::SetText(pstrText);
+
+    if (m_bAutoWidth) { NeedParentUpdate(); }
 
     if (m_bEnableEffect)
     {
@@ -107,6 +109,9 @@ void CLabelUI::SetTextStyle(UINT uStyle)
 {
     m_uTextStyle = uStyle;
     m_bNeedEstimateSize = true;
+
+    if (m_bAutoWidth) { NeedParentUpdate(); }
+
     Invalidate();
 }
 
@@ -159,6 +164,8 @@ void CLabelUI::SetFont(int index)
     m_iFont = index;
     m_bNeedEstimateSize = true;
     Invalidate();
+
+    if (m_bAutoWidth) { NeedParentUpdate(); }
 }
 
 int CLabelUI::GetFont() const
@@ -176,6 +183,8 @@ void CLabelUI::SetTextPadding(RECT rc)
     m_rcTextPadding = rc;
     m_bNeedEstimateSize = true;
     Invalidate();
+
+    if (m_bAutoWidth) { NeedParentUpdate(); }
 }
 
 bool CLabelUI::IsShowHtml()
@@ -190,11 +199,13 @@ void CLabelUI::SetShowHtml(bool bShowHtml)
     m_bShowHtml = bShowHtml;
     m_bNeedEstimateSize = true;
     Invalidate();
+
+    if (m_bAutoWidth) { NeedParentUpdate(); }
 }
 
 SIZE CLabelUI::EstimateSize(SIZE szAvailable)
 {
-    if (m_cxyFixed.cx > 0 && m_cxyFixed.cy > 0) { return m_cxyFixed; }
+    //if (m_cxyFixed.cx > 0 && m_cxyFixed.cy > 0) { return m_cxyFixed; }
 
     if ((m_uTextStyle & DT_SINGLELINE) == 0 &&
         (szAvailable.cx != m_szAvailableLast.cx || szAvailable.cy != m_szAvailableLast.cy))
@@ -216,7 +227,7 @@ SIZE CLabelUI::EstimateSize(SIZE szAvailable)
                 m_cxyFixedLast.cy += m_rcTextPadding.top + m_rcTextPadding.bottom;
             }
 
-            if (m_cxyFixedLast.cx == 0)
+            if (m_cxyFixedLast.cx == 0 || m_bAutoWidth)
             {
                 RECT rcText = { 0, 0, 9999, m_cxyFixedLast.cy };
 
@@ -236,7 +247,8 @@ SIZE CLabelUI::EstimateSize(SIZE szAvailable)
 
                 if (m_bAutoWidth)
                 {
-                    m_cxyFixed.cx = rcText.right - rcText.left + m_rcTextPadding.left + m_rcTextPadding.right;
+                    //m_cxyFixed.cx = rcText.right - rcText.left + m_rcTextPadding.left + m_rcTextPadding.right;
+                    m_cxyFixed.cx = m_cxyFixedLast.cx;
                 }
             }
         }
@@ -268,7 +280,8 @@ SIZE CLabelUI::EstimateSize(SIZE szAvailable)
             if (m_bAutoWidth)
             {
                 m_cxyFixedLast.cx = rcText.right - rcText.left + m_rcTextPadding.left + m_rcTextPadding.right;
-                m_cxyFixed.cx = rcText.right - rcText.left + m_rcTextPadding.left + m_rcTextPadding.right;
+                //m_cxyFixed.cx = rcText.right - rcText.left + m_rcTextPadding.left + m_rcTextPadding.right;
+                m_cxyFixed.cx = m_cxyFixedLast.cx;
             }
         }
     }
