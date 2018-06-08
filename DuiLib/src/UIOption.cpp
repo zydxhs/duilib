@@ -520,6 +520,10 @@ public:
 
     COptionUI *GetSelectedButton(void);
     int GetSelectedId(void);
+
+    void SetSelectedButton(int nId);
+    void SetSelectedButton(COptionUI *pBtn);
+
 private:
     typedef std::map<COptionUI *, int>     CMapBtnId;
     CMapBtnId   m_mapBtnIds;
@@ -578,6 +582,28 @@ int CButtonGroupImpl::GetSelectedId(void)
     return -1;
 }
 
+void CButtonGroupImpl::SetSelectedButton(int nId)
+{
+    for (CMapBtnId::iterator it(m_mapBtnIds.begin()); it != m_mapBtnIds.end(); ++it)
+    {
+        if (it->second == nId)
+        {
+            it->first->Selected(true);
+            break;
+        }
+    }
+}
+
+void CButtonGroupImpl::SetSelectedButton(COptionUI *pBtn)
+{
+    CMapBtnId::iterator it(m_mapBtnIds.find(pBtn));
+
+    if (it != m_mapBtnIds.end())
+    {
+        it->first->Selected(true);
+    }
+}
+
 CButtonGroup::CButtonGroup(void) : m_pBtnGroupImpl(NULL)
 {
     m_pBtnGroupImpl = new CButtonGroupImpl();
@@ -633,6 +659,16 @@ int CButtonGroup::GetSelectedId(void)
     if (NULL != m_pBtnGroupImpl) { return m_pBtnGroupImpl->GetSelectedId(); }
 
     return -1;
+}
+
+void CButtonGroup::SetSelectedButton(int nId)
+{
+    if (NULL != m_pBtnGroupImpl) { m_pBtnGroupImpl->SetSelectedButton(nId); }
+}
+
+void CButtonGroup::SetSelectedButton(COptionUI *pBtn)
+{
+    if (NULL != m_pBtnGroupImpl) { m_pBtnGroupImpl->SetSelectedButton(pBtn); }
 }
 
 }

@@ -104,6 +104,9 @@ public:
 
     COptionUI *GetSelectedButton(void);
     int        GetSelectedId(void);
+
+    void SetSelectedButton(int nId);
+    void SetSelectedButton(COptionUI *pBtn);
 private:
     CButtonGroupImpl *m_pBtnGroupImpl;
 };
