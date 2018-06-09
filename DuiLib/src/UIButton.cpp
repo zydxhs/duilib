@@ -102,7 +102,7 @@ void CButtonUI::DoEvent(TEventUI &event)
         if ((m_uButtonState & UISTATE_CAPTURED) != 0)
         {
             if (bDblClick) { bDblClick = false; }
-            else           { if (::PtInRect(&m_rcItem, event.ptMouse) && IsEnabled()) { Activate(); } }
+            else           { if (::PtInRect(&m_rcItem, event.ptMouse)) { Activate(); } }
 
             m_uButtonState &= ~(UISTATE_PUSHED | UISTATE_CAPTURED);
             Invalidate();

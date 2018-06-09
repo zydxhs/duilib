@@ -229,7 +229,7 @@ SIZE CLabelUI::EstimateSize(SIZE szAvailable)
 
             if (m_cxyFixedLast.cx == 0 || m_bAutoWidth)
             {
-                RECT rcText = { 0, 0, 9999, m_cxyFixedLast.cy };
+                RECT rcText = { 0, 0, MAX_CTRL_WIDTH, m_cxyFixedLast.cy };
 
                 if (m_bShowHtml)
                 {
@@ -259,7 +259,7 @@ SIZE CLabelUI::EstimateSize(SIZE szAvailable)
                 m_cxyFixedLast.cx = szAvailable.cx;
             }
 
-            RECT rcText = { 0, 0, m_cxyFixedLast.cx, 9999 };
+            RECT rcText = { 0, 0, m_cxyFixedLast.cx, MAX_CTRL_WIDTH };
             rcText.left += m_rcTextPadding.left;
             rcText.right -= m_rcTextPadding.right;
 
