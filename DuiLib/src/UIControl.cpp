@@ -39,7 +39,7 @@ CControlUI::CControlUI() :
     m_cXY.cx = m_cXY.cy = 0;
     m_cxyFixed.cx = m_cxyFixed.cy = 0;
     m_cxyMin.cx = m_cxyMin.cy = 0;
-    m_cxyMax.cx = m_cxyMax.cy = MAX_CTRL_WIDTH;
+    m_cxyMax.cx = m_cxyMax.cy = 9999;
     m_cxyBorderRound.cx = m_cxyBorderRound.cy = 0;
 
     ::ZeroMemory(&m_rcPadding, sizeof(RECT));

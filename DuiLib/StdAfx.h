@@ -56,8 +56,6 @@ T clamp(T x, T a, T b)
     return std::min<T>(b, std::max<T>(a, x));
 }
 
-#define MAX_CTRL_WIDTH          9999    // 控件最大宽度
-
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
