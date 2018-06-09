@@ -176,9 +176,7 @@ void CControlUI::SetText(LPCTSTR pstrText)
 
 void CControlUI::ReloadText(void)
 {
-    m_sText = m_sTextOrig;
-    CPaintManagerUI::ProcessMultiLanguageTokens(m_sText);
-    Invalidate();
+    SetText(m_sTextOrig);
 }
 
 DWORD CControlUI::GetBkColor() const

@@ -1071,9 +1071,7 @@ LPCTSTR CEditUI::GetTipText()
 
 void CEditUI::ReloadText(void)
 {
-    m_sTipText = m_sTipTextOrig;
-    CPaintManagerUI::ProcessMultiLanguageTokens(m_sTipText);
-    CLabelUI::ReloadText();
+    SetTipText(m_sTipTextOrig);
 }
 
 void CEditUI::SetTipColor(DWORD dwColor)

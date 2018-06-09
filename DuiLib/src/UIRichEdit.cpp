@@ -1820,9 +1820,8 @@ LPCTSTR CRichEditUI::GetTipText()
 
 void CRichEditUI::ReloadText(void)
 {
-    m_sTipText = m_sTipTextOrig;
-    CPaintManagerUI::ProcessMultiLanguageTokens(m_sTipText);
     CContainerUI::ReloadText();
+    SetTipText(m_sTipTextOrig);
 }
 
 void CRichEditUI::SetTipColor(DWORD dwColor)
