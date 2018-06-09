@@ -107,7 +107,10 @@ public:
 
     // 快捷键
     virtual TCHAR GetShortcut() const;
-    virtual void SetShortcut(TCHAR ch);
+    virtual bool IsNeedCtrl(void) const;
+    virtual bool IsNeedShift(void) const;
+    virtual bool IsNeedAlt(void) const;
+    virtual void SetShortcut(LPCTSTR pstrText);
 
     // 菜单
     virtual bool IsContextMenuUsed() const;
@@ -235,6 +238,9 @@ protected:
     CDuiString m_sToolTip;
     CDuiString m_sToolTipOrig;  // 翻译前的文本
     TCHAR m_chShortcut;
+    bool  m_bNeedCtrl;
+    bool  m_bNeedShift;
+    bool  m_bNeedAlt;
     CDuiString m_sUserData;
     UINT_PTR m_pTag;
 

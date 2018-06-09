@@ -44,8 +44,11 @@ typedef struct tagFINDTABINFO
 
 typedef struct tagFINDSHORTCUT
 {
-    TCHAR ch;
-    bool bPickNext;
+    TCHAR ch;           // ASCII
+    bool  bCtrl;        // true 表示 Ctrl  按下
+    bool  bShift;       // true 表示 Shift 按下
+    bool  bAlt;         // true 表示 Alt   按下
+    bool  bPickNext;    // true 表示找到快捷键
 } FINDSHORTCUT;
 
 typedef struct tagTIMERINFO
@@ -876,6 +879,29 @@ bool CPaintManagerUI::PreMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam,
         if (bHandled) { return true; }
     }
 
+    if (WM_KEYFIRST <= uMsg && WM_KEYLAST >= uMsg)
+    {
+        // 处理快捷键
+        if (m_pRoot == NULL) { return false; }
+
+        // Handle [CTRL|ALT|SHIFT]-shortcut key-combinations
+        FINDSHORTCUT fs = { 0, false, false, false, false };
+        fs.ch = toupper((int)wParam);
+        UINT dwKeyState = MapKeyState();
+        fs.bCtrl = (dwKeyState & MK_CONTROL) ? true : false;
+        fs.bShift = (dwKeyState & MK_SHIFT) ? true : false;
+        fs.bAlt = (dwKeyState & MK_ALT) ? true : false;
+        CControlUI *pControl = m_pRoot->FindControl(__FindControlFromShortcut, &fs,
+                                                    UIFIND_ENABLED | UIFIND_ME_FIRST | UIFIND_TOP_FIRST);
+
+        if (pControl != NULL)
+        {
+            pControl->SetFocus();
+            pControl->Activate();
+            return true;
+        }
+    }
+
     switch (uMsg)
     {
     case WM_KEYDOWN:
@@ -890,25 +916,6 @@ bool CPaintManagerUI::PreMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam,
                 }
 
                 SetNextTabControl(::GetKeyState(VK_SHIFT) >= 0);
-                return true;
-            }
-        }
-        break;
-
-    case WM_SYSCHAR:
-        {
-            if (m_pRoot == NULL) { return false; }
-
-            // Handle ALT-shortcut key-combinations
-            FINDSHORTCUT fs = { 0 };
-            fs.ch = toupper((int)wParam);
-            CControlUI *pControl = m_pRoot->FindControl(__FindControlFromShortcut, &fs,
-                                                        UIFIND_ENABLED | UIFIND_ME_FIRST | UIFIND_TOP_FIRST);
-
-            if (pControl != NULL)
-            {
-                pControl->SetFocus();
-                pControl->Activate();
                 return true;
             }
         }
@@ -4397,7 +4404,11 @@ CControlUI *CALLBACK CPaintManagerUI::__FindControlFromShortcut(CControlUI *pThi
 
     FINDSHORTCUT *pFS = static_cast<FINDSHORTCUT *>(pData);
 
-    if (pFS->ch == toupper(pThis->GetShortcut())) { pFS->bPickNext = true; }
+    if (pFS->ch == toupper(pThis->GetShortcut()) && pFS->bAlt == pThis->IsNeedAlt() &&
+        pFS->bShift == pThis->IsNeedShift() && pFS->bCtrl == pThis->IsNeedCtrl())
+    {
+        pFS->bPickNext = true;
+    }
 
     if (_tcsstr(pThis->GetClass(), DUI_CTR_LABEL) != NULL) { return NULL; }    // Labels never get focus!
 

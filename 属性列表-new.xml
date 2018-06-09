@@ -105,7 +105,7 @@
             <Attribute name="mouse" default="true" type="BOOL" comment="本控件是否可以响应鼠标操作,如(true)"/>
             <Attribute name="visible" default="true" type="BOOL" comment="是否可见,如(true)"/>
             <Attribute name="float" default="false" type="BOOL | RECT" comment="是否使用绝对定位,如(true)。值true时需要pos属性指定位置；值为RECT时，按比例(double)指定位置与大小,与pos属性有叠加效果"/>
-            <Attribute name="shortcut" default="" type="CHAR" comment="对应的快捷键,如(P).编辑框快捷键可以在标签上提示"/>
+            <Attribute name="shortcut" default="" type="STRING" comment="快捷键,如(CTRL+ALT+P),支持CTRL|SHIFT|ALT.编辑框快捷键可以在标签上提示"/>
             <Attribute name="menu" default="false" type="BOOL" comment="是否需要右键菜单,如(true)"/>
             <Attribute name="keyboard" default="true" type="BOOL" comment="非CButtonUI类忽略该值，为false时不支持TAB_STOP,且该对象不处理键盘信息"/>
             <Attribute name="virtualwnd" default="" type="string" comment="设置控件的虚拟窗体的名字"/>

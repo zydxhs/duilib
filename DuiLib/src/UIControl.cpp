@@ -22,6 +22,9 @@ CControlUI::CControlUI() :
     m_bFloat(false),
     m_bSetPos(false),
     m_chShortcut('\0'),
+    m_bNeedCtrl(false),
+    m_bNeedShift(false),
+    m_bNeedAlt(false),
     m_pTag(NULL),
     m_dwBackColor(0),
     m_dwBackColor2(0),
@@ -667,9 +670,67 @@ TCHAR CControlUI::GetShortcut() const
     return m_chShortcut;
 }
 
-void CControlUI::SetShortcut(TCHAR ch)
+void CControlUI::SetShortcut(LPCTSTR pstrText)
 {
-    m_chShortcut = ch;
+#if defined(UNICODE) || defined(_UNICODE)
+    typedef wstring tstring;
+#else
+    typedef string  tstring;
+#endif
+    LPTSTR pText = (LPTSTR)pstrText;
+    pText = _tcsupr(pText);
+    tstring sTxt(pText);
+
+    size_t nPos;
+    nPos = sTxt.find(_T("CTRL"));
+
+    if (tstring::npos != nPos)
+    {
+        m_bNeedCtrl = true;
+        sTxt.erase(nPos, 4);
+    }
+
+    nPos = sTxt.find(_T("SHIFT"));
+
+    if (tstring::npos != nPos)
+    {
+        m_bNeedShift = true;
+        sTxt.erase(nPos, 5);
+    }
+
+    nPos = sTxt.find(_T("ALT"));
+
+    if (tstring::npos != nPos)
+    {
+        m_bNeedAlt = true;
+        sTxt.erase(nPos, 3);
+    }
+
+    nPos = sTxt.find_first_of(_T("ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+
+    if (tstring::npos != nPos)
+    {
+        m_chShortcut = sTxt[nPos];
+    }
+    else
+    {
+        m_bNeedCtrl = m_bNeedShift = m_bNeedAlt = false;
+    }
+}
+
+bool CControlUI::IsNeedCtrl(void) const
+{
+    return m_bNeedCtrl;
+}
+
+bool CControlUI::IsNeedShift(void) const
+{
+    return m_bNeedShift;
+}
+
+bool CControlUI::IsNeedAlt(void) const
+{
+    return m_bNeedAlt;
 }
 
 bool CControlUI::IsContextMenuUsed() const
@@ -1376,7 +1437,7 @@ void CControlUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
             SetFloat(true);
         }
     }
-    else if (_tcscmp(pstrName, _T("shortcut")) == 0) { SetShortcut(pstrValue[0]); }
+    else if (_tcscmp(pstrName, _T("shortcut")) == 0) { SetShortcut(pstrValue); }
     else if (_tcscmp(pstrName, _T("menu")) == 0) { SetContextMenuUsed(_tcscmp(pstrValue, _T("true")) == 0); }
     else if (_tcscmp(pstrName, _T("virtualwnd")) == 0) { SetVirtualWnd(pstrValue); }
     else if (_tcscmp(pstrName, _T("weight")) == 0) { SetWeight(_ttoi(pstrValue)); }
