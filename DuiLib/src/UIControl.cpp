@@ -220,6 +220,19 @@ void CControlUI::SetBkColor3(DWORD dwBackColor)
     Invalidate();
 }
 
+void CControlUI::SetDirection(bool bHorizonal)
+{
+    if (m_bDirection == bHorizonal) { return; }
+
+    m_bDirection = bHorizonal;
+    Invalidate();
+}
+
+bool CControlUI::GetDirection(void)
+{
+    return m_bDirection;
+}
+
 LPCTSTR CControlUI::GetBkImage()
 {
     return m_diBk.sDrawString;
@@ -1283,6 +1296,7 @@ void CControlUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
         SetBkColor3(clrColor);
     }
+    else if (_tcscmp(pstrName, _T("direction")) == 0) { m_bDirection = _tcscmp(pstrValue, _T("true")) == 0; }
     else if (_tcscmp(pstrName, _T("bordercolor")) == 0)
     {
         if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
@@ -1488,14 +1502,41 @@ void CControlUI::PaintBkColor(HDC hDC)
             if (m_dwBackColor3 != 0)
             {
                 RECT rc = m_rcItem;
-                rc.bottom = (rc.bottom + rc.top) / 2;
-                CRenderEngine::DrawGradient(hDC, rc, GetAdjustColor(m_dwBackColor), GetAdjustColor(m_dwBackColor2), true, 8);
-                rc.top = rc.bottom;
-                rc.bottom = m_rcItem.bottom;
-                CRenderEngine::DrawGradient(hDC, rc, GetAdjustColor(m_dwBackColor2), GetAdjustColor(m_dwBackColor3), true, 8);
+
+                if (m_bDirection)
+                {
+                    // 水平渐变
+                    rc.right = (rc.right + rc.left) / 2;
+                    CRenderEngine::DrawGradient(hDC, rc,
+                                                GetAdjustColor(m_dwBackColor), GetAdjustColor(m_dwBackColor2),
+                                                false, 8);
+                    rc.left = rc.right;
+                    rc.right = m_rcItem.right;
+                    CRenderEngine::DrawGradient(hDC, rc,
+                                                GetAdjustColor(m_dwBackColor2), GetAdjustColor(m_dwBackColor3),
+                                                false, 8);
+                }
+                else
+                {
+                    // 垂直渐变
+                    rc.bottom = (rc.bottom + rc.top) / 2;
+                    CRenderEngine::DrawGradient(hDC, rc,
+                                                GetAdjustColor(m_dwBackColor), GetAdjustColor(m_dwBackColor2),
+                                                true, 8);
+                    rc.top = rc.bottom;
+                    rc.bottom = m_rcItem.bottom;
+                    CRenderEngine::DrawGradient(hDC, rc,
+                                                GetAdjustColor(m_dwBackColor2), GetAdjustColor(m_dwBackColor3),
+                                                true, 8);
+                }
+
             }
             else
-            { CRenderEngine::DrawGradient(hDC, m_rcItem, GetAdjustColor(m_dwBackColor), GetAdjustColor(m_dwBackColor2), true, 16); }
+            {
+                CRenderEngine::DrawGradient(hDC, m_rcItem,
+                                            GetAdjustColor(m_dwBackColor), GetAdjustColor(m_dwBackColor2),
+                                            m_bDirection, 16);
+            }
         }
         else if (m_dwBackColor >= 0xFF000000) { CRenderEngine::DrawColor(hDC, m_rcPaint, GetAdjustColor(m_dwBackColor)); }
         else { CRenderEngine::DrawColor(hDC, m_rcItem, GetAdjustColor(m_dwBackColor)); }
