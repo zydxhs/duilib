@@ -842,7 +842,7 @@ SIZE CMenuElementUI::EstimateSize(SIZE szAvailable)
             iTextColor = pInfo->dwDisabledTextColor;
         }
 
-        RECT rcText = { 0, 0, std::max<int>(szAvailable.cx, m_cxyFixed.cx), 9999 };
+        RECT rcText = { 0, 0, std::max<int>(szAvailable.cx, m_cxyFixed.cx), MAX_CTRL_WIDTH };
         rcText.left += pInfo->rcTextPadding.left;
         rcText.right -= pInfo->rcTextPadding.right;
 

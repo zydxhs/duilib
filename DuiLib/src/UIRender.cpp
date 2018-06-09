@@ -15,6 +15,11 @@ static int g_iFontID = MAX_FONT_ID;
 //
 //
 
+CRenderClip::CRenderClip() : hDC(NULL), hRgn(NULL), hOldRgn(NULL)
+{
+    rcItem.left = rcItem.top = rcItem.right = rcItem.bottom = 0;
+}
+
 CRenderClip::~CRenderClip()
 {
     ASSERT(::GetObjectType(hDC) == OBJ_DC || ::GetObjectType(hDC) == OBJ_MEMDC);
@@ -1798,7 +1803,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
     if (((uStyle & DT_CENTER) != 0 || (uStyle & DT_RIGHT) != 0 || (uStyle & DT_VCENTER) != 0 ||
          (uStyle & DT_BOTTOM) != 0) && (uStyle & DT_CALCRECT) == 0)
     {
-        RECT rcText = { 0, 0, 9999, 100 };
+        RECT rcText = { 0, 0, MAX_CTRL_WIDTH, 100 };
 
         if ((uStyle & DT_SINGLELINE) == 0)
         {
