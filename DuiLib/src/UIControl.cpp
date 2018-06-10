@@ -1455,6 +1455,9 @@ CDuiString CControlUI::GetAttributeList(bool bIgnoreDefault)
     return _T("");
 }
 
+// 解决 TreeeNode 控件不能通过Default设置的问题
+// horizattr, dotlineattr, folderattr, checkboxattr, itemattr 等复合属性的值，需要用 ? 包围起来
+// 示例：   <Default name="TreeNode" value="text=&quot;abc&quot; folderattr=?width=&quot;16&quot; height=&quot;16&quot; ? " />
 void CControlUI::SetAttributeList(LPCTSTR pstrList)
 {
     CDuiString sItem;
@@ -1479,11 +1482,12 @@ void CControlUI::SetAttributeList(LPCTSTR pstrList)
 
         if (*pstrList++ != _T('=')) { return; }
 
-        ASSERT(*pstrList == _T('\"'));
+        ASSERT(*pstrList == _T('\"') || *pstrList == _T('?'));
+        TCHAR ch = *pstrList++;
 
-        if (*pstrList++ != _T('\"')) { return; }
+        if (ch != _T('\"') && ch != _T('?')) { return; }
 
-        while (*pstrList != _T('\0') && *pstrList != _T('\"'))
+        while (*pstrList != _T('\0') && *pstrList != ch)
         {
             LPTSTR pstrTemp = ::CharNext(pstrList);
 
@@ -1493,13 +1497,15 @@ void CControlUI::SetAttributeList(LPCTSTR pstrList)
             }
         }
 
-        ASSERT(*pstrList == _T('\"'));
+        ASSERT(*pstrList == ch);
 
-        if (*pstrList++ != _T('\"')) { return; }
+        if (*pstrList++ != ch) { return; }
 
         SetAttribute(sItem, sValue);
 
         if (*pstrList++ != _T(' ')) { return; }
+
+        while (*pstrList == _T(' ')) { ++pstrList; }
     }
 }
 
