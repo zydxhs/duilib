@@ -1067,7 +1067,7 @@ void CControlUI::DoEvent(TEventUI &event)
 
         if (IsContextMenuUsed())
         {
-            m_pManager->SendNotify(this, DUI_MSGTYPE_MENU, event.wParam, event.lParam);
+            m_pManager->SendNotify(this, DUI_MSGTYPE_MENU, event.wParam, event.lParam, true);
             return;
         }
     }

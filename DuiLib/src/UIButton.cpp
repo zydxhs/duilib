@@ -116,7 +116,7 @@ void CButtonUI::DoEvent(TEventUI &event)
         if (IsContextMenuUsed() && IsEnabled())
         {
             ReleaseCapture();
-            m_pManager->SendNotify(this, DUI_MSGTYPE_MENU, event.wParam, event.lParam);
+            m_pManager->SendNotify(this, DUI_MSGTYPE_MENU, event.wParam, event.lParam, true);
         }
         // 2017-02-25 zhuyadong 消息传递给父控件，用于复杂组合控件的上下文菜单响应。
         else if (m_pParent != NULL) { m_pParent->DoEvent(event); }

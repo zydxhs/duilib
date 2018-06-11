@@ -1300,7 +1300,8 @@ void CMenuElementUI::OnLButtonUp(TEventUI &event)
         if (NULL != pManager)
         {
             HWND hWnd = pManager->GetPaintWindow();
-            PostMessage(hWnd, WM_MENUITEM_CLICK, NULL, (LPARAM)(IsChecked() ? TRUE : FALSE));
+            WPARAM wParam = MAKEWPARAM(event.ptMouse.x, event.ptMouse.y);
+            PostMessage(hWnd, WM_MENUITEM_CLICK, wParam, (LPARAM)(IsChecked() ? TRUE : FALSE));
             TNotifyUI msg;
             msg.pSender = NULL;
             msg.dwTimestamp = 0;
