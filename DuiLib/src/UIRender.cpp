@@ -1696,11 +1696,13 @@ void CRenderEngine::DrawLine(HDC hDC, const RECT &rc, int nSize, DWORD dwPenColo
 {
     ASSERT(::GetObjectType(hDC) == OBJ_DC || ::GetObjectType(hDC) == OBJ_MEMDC);
 
-    LOGPEN lg;
-    lg.lopnColor = RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor));
-    lg.lopnStyle = nStyle;
-    lg.lopnWidth.x = nSize;
-    HPEN hPen = CreatePenIndirect(&lg);
+    //LOGPEN lg;
+    //lg.lopnColor = RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor));
+    //lg.lopnStyle = nStyle;
+    //lg.lopnWidth.x = nSize;
+    //HPEN hPen = CreatePenIndirect(&lg);
+    LOGBRUSH lb = { BS_SOLID, RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor)), 0 };
+    HPEN hPen = ExtCreatePen(nStyle, nSize, &lb, 0, NULL);
     HPEN hOldPen = (HPEN)::SelectObject(hDC, hPen);
     POINT ptTemp = { 0 };
     ::MoveToEx(hDC, rc.left, rc.top, &ptTemp);

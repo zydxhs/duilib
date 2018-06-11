@@ -32,7 +32,7 @@ CControlUI::CControlUI() :
     m_dwBorderColor(0),
     m_dwFocusBorderColor(0),
     m_bColorHSL(false),
-    m_nBorderStyle(PS_SOLID),
+    m_nBorderStyle(PS_ENDCAP_SQUARE | PS_JOIN_BEVEL | PS_GEOMETRIC),
     m_nTooltipWidth(300),
     m_nWeight(100),
     m_bDropEnable(false),
@@ -1691,7 +1691,7 @@ void CControlUI::PaintBorder(HDC hDC)
         rcBorder = m_rcItem;
         rcBorder.top += m_rcBorderSize.top / 2;
         rcBorder.bottom = rcBorder.top;
-        rcBorder.left += m_rcBorderSize.left;
+        rcBorder.left += m_rcBorderSize.top / 2;
         rcBorder.right -= m_rcBorderSize.right;
 
         if (IsFocused() && m_dwFocusBorderColor != 0)
@@ -1729,7 +1729,7 @@ void CControlUI::PaintBorder(HDC hDC)
         rcBorder = m_rcItem;
         rcBorder.top = m_rcItem.bottom - m_rcBorderSize.bottom / 2 - m_rcBorderSize.bottom % 2;
         rcBorder.bottom = rcBorder.top;
-        rcBorder.left += m_rcBorderSize.left;
+        rcBorder.left += m_rcBorderSize.bottom / 2;
         rcBorder.right -= m_rcBorderSize.right;
 
         if (IsFocused() && m_dwFocusBorderColor != 0)
