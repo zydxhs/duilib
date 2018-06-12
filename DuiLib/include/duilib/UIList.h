@@ -214,6 +214,10 @@ public:
     TDrawInfo &GetSelImg(void);
     void GetAllSelectedItem(CDuiValArray &arySelIdx);
     void SetAllItemSelected(bool bSelect);
+    virtual void DoInit();
+
+protected:
+    bool OnFirstHeaderItemNotify(void *pParam);
 protected:
     bool m_bScrollSelect;
     int m_iCurSel;
@@ -473,6 +477,12 @@ public:
 
     SIZE EstimateSize(SIZE szAvailable);
 
+    void SetCheckBoxState(bool bSelect);
+    bool GetCheckBoxState(void);
+
+protected:
+    bool GetCheckBoxState(CContainerUI *pRoot);
+    void SetCheckBoxState(CContainerUI *pRoot, bool bSelect);
 protected:
     int m_iIndex;
     int m_iDrawIndex;

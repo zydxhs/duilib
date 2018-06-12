@@ -1276,12 +1276,12 @@ void CListUI::GetAllSelectedItem(CDuiValArray &arySelIdx)
 
     for (int i = 0; i < GetCount(); i++)
     {
-        CListTextElementUI *pListText = (CListTextElementUI *)GetItemAt(i);
+        CListTextElementUI *pItem = dynamic_cast<CListTextElementUI *>(GetItemAt(i));
+        CListContainerElementUI *pItem2 = dynamic_cast<CListContainerElementUI *>(GetItemAt(i));
 
-        if (pListText->GetCheckBoxState())
-        {
-            arySelIdx.Add(&i);
-        }
+        if (NULL != pItem && pItem->GetCheckBoxState()) { arySelIdx.Add(&i); }
+
+        if (NULL != pItem2 && pItem2->GetCheckBoxState()) { arySelIdx.Add(&i); }
     }
 }
 
@@ -1290,9 +1290,44 @@ void CListUI::SetAllItemSelected(bool bSelect)
     for (int i = 0; i < GetCount(); ++i)
     {
         CListTextElementUI *pItem = dynamic_cast<CListTextElementUI *>(GetItemAt(i));
+        CListContainerElementUI *pItem2 = dynamic_cast<CListContainerElementUI *>(GetItemAt(i));
 
         if (NULL != pItem) { pItem->SetCheckBoxState(bSelect); }
+
+        if (NULL != pItem2) { pItem2->SetCheckBoxState(bSelect); }
     }
+}
+
+void CListUI::DoInit()
+{
+    if (NULL == m_pHeader || !GetListInfo()->bCheckBox) { return; }
+
+    // 绑定表头第一列通知消息
+    CListHeaderItemUI *pHItem0 = (CListHeaderItemUI *)m_pHeader->GetItemAt(0);
+
+    for (int i = 0; i < pHItem0->GetCount(); ++i)
+    {
+        CControlUI *pCtrl = pHItem0->GetItemAt(i);
+
+        if (_tcscmp(pCtrl->GetClass(), DUI_CTR_CHECKBOX) == 0)
+        {
+            pCtrl->OnNotify += MakeDelegate(this, &CListUI::OnFirstHeaderItemNotify);
+            break;
+        }
+    }
+}
+
+bool CListUI::OnFirstHeaderItemNotify(void *pParam)
+{
+    if (NULL == pParam) { return false; }
+
+    TNotifyUI *pMsg = (TNotifyUI *)pParam;
+
+    if (pMsg->sType != DUI_MSGTYPE_SELECTCHANGED) { return false; }
+
+    // 列表支持复选框时，用户单击表头的第一列复选框，在此自动 选中/取消 列表中的所有项
+    SetAllItemSelected(((CCheckBoxUI *)pMsg->pSender)->IsSelected());
+    return true;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -3849,6 +3884,90 @@ SIZE CListContainerElementUI::EstimateSize(SIZE szAvailable)
     return cXY;
 }
 
+void CListContainerElementUI::SetCheckBoxState(bool bSelect)
+{
+    // 不支持复选框
+    if (!m_pOwner->GetListInfo()->bCheckBox) { return; }
+
+    CControlUI *pControl = static_cast<CControlUI *>(m_items[0]);
+
+    if (_tcscmp(pControl->GetClass(), DUI_CTR_CHECKBOX) == 0)
+    {
+        // CheckBox
+        return ((CCheckBoxUI *)pControl)->Selected(bSelect, false);
+    }
+    else
+    {
+        // 第一列是容器，遍历所有子控件，查找复选框
+        CContainerUI *pContainer = dynamic_cast<CContainerUI *>(pControl);
+
+        if (NULL == pContainer) { return; }
+
+        return SetCheckBoxState(pContainer, bSelect);
+    }
+}
+
+bool CListContainerElementUI::GetCheckBoxState(void)
+{
+    // 不支持复选框
+    if (!m_pOwner->GetListInfo()->bCheckBox) { return false; }
+
+    CControlUI *pControl = static_cast<CControlUI *>(m_items[0]);
+
+    if (_tcscmp(pControl->GetClass(), DUI_CTR_CHECKBOX) == 0)
+    {
+        // CheckBox
+        return ((CCheckBoxUI *)pControl)->IsSelected();
+    }
+    else
+    {
+        // 第一列是容器，遍历所有子控件，查找复选框
+        CContainerUI *pContainer = dynamic_cast<CContainerUI *>(pControl);
+
+        if (NULL == pContainer) { return false; }
+
+        return GetCheckBoxState(pContainer);
+    }
+}
+
+bool CListContainerElementUI::GetCheckBoxState(CContainerUI *pRoot)
+{
+    CControlUI *pControl = NULL;
+    CCheckBoxUI *pCheckBox = NULL;
+    CContainerUI *pContainer = NULL;
+
+    for (int i = 0; i < pRoot->GetCount(); ++i)
+    {
+        CControlUI *pCtrl = (CControlUI *)pRoot->GetItemAt(i);
+        pCheckBox = dynamic_cast<CCheckBoxUI *>(pCtrl);
+        pContainer = dynamic_cast<CContainerUI *>(pCtrl);
+
+        if (NULL != pCheckBox) { return pCheckBox->IsSelected(); }
+
+        if (NULL != pContainer) { return GetCheckBoxState(pContainer); }
+    }
+
+    return false;
+}
+
+void CListContainerElementUI::SetCheckBoxState(CContainerUI *pRoot, bool bSelect)
+{
+    CControlUI *pControl = NULL;
+    CCheckBoxUI *pCheckBox = NULL;
+    CContainerUI *pContainer = NULL;
+
+    for (int i = 0; i < pRoot->GetCount(); ++i)
+    {
+        CControlUI *pCtrl = (CControlUI *)pRoot->GetItemAt(i);
+        pCheckBox = dynamic_cast<CCheckBoxUI *>(pCtrl);
+        pContainer = dynamic_cast<CContainerUI *>(pCtrl);
+
+        if (NULL != pCheckBox) { pCheckBox->Selected(bSelect, false); break;}
+
+        if (NULL != pContainer) { SetCheckBoxState(pContainer, bSelect); break;}
+    }
+}
+
 /////////////////////////////////////////////////////////////////////////////////////
 //
 //
@@ -3903,6 +4022,16 @@ void CListHBoxElementUI::SetPos(RECT rc, bool bNeedInvalidate)
             RECT rcItem = { pInfo->rcColumn[iColumnIndex].left + rcPadding.left, m_rcItem.top + rcPadding.top,
                             pInfo->rcColumn[iColumnIndex].right - rcPadding.right, m_rcItem.bottom - rcPadding.bottom
                           };
+
+            CListHeaderUI *pHeader = ((IListUI *)m_pOwner)->GetHeader();
+
+            if (NULL != pHeader)
+            {
+                CListHeaderItemUI *pHItem0 = (CListHeaderItemUI *)pHeader->GetItemAt(it2);
+                RECT rtInset = pHItem0->GetInset();
+                rcItem.left += rtInset.left;
+                rcItem.right -= rtInset.right;
+            }
 
             if (pInfo->iVLineSize > 0 && iColumnIndex < pInfo->nColumns - 1)
             {
