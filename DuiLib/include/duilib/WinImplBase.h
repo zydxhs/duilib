@@ -11,6 +11,8 @@ enum UILIB_RESOURCETYPE
     UILIB_ZIPRESOURCE,  // 来自资源的zip压缩包
 };
 
+class CButtonUI;
+
 class DUILIB_API CWndImplBase
     : public CWindowWnd
     , public CNotifyPump
@@ -52,7 +54,7 @@ protected:
 
     // 窗体生命周期中，第一次和最后一次被调用的接口，且仅被调用一次。
     // .窗体创建后，绑定数据。比如控件与变量的绑定、控件属性设置等只需要设置一次的操作。
-    virtual void OnInitWindow(void) { }
+    virtual void OnInitWindow(void);
     // .窗体销毁后，类对象销毁前，最后被调用的接口。new 的窗体，在该接口中调用 delete 销毁对象。
     virtual void OnFinalMessage(HWND hWnd);
     // 窗体数据显示数据的初始化、保存
@@ -80,7 +82,7 @@ protected:
     virtual LRESULT OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
     virtual LRESULT OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
     virtual LRESULT OnMouseWheel(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
-    virtual LRESULT OnMouseHover(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
+    virtual LRESULT OnNcLButtonDblClk(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
 #endif
     virtual LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
     virtual LRESULT OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
@@ -92,6 +94,7 @@ protected:
     virtual LRESULT OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
     virtual LRESULT OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
     virtual LRESULT OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
+    virtual LRESULT OnMouseHover(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
     virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
 
     // 窗口处理过程，通常不需要重载。所有发送到窗口的消息，都可以在此截获
@@ -101,11 +104,16 @@ private:
     LRESULT OnWndDataUpdate(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 protected:
-    CPaintManagerUI m_pm;
     static LPBYTE m_lpResourceZIPBuffer;
 
+    CPaintManagerUI m_pm;
+
+    CButtonUI      *m_pbtnMin;              // 最小化
+    CButtonUI      *m_pbtnMax;              // 最大化
+    CButtonUI      *m_pbtnRestore;          // 还原
+    CButtonUI      *m_pbtnClose;            // 关闭
 private:
-    int     m_nWndState;            // 用于判断是否发送窗体数据初始化/保存消息
+    int             m_nWndState;            // 用于判断是否发送窗体数据初始化/保存消息
 };
 
 }

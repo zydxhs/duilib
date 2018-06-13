@@ -18,8 +18,21 @@ DUI_BEGIN_MESSAGE_MAP(CWndImplBase, CNotifyPump)
 DUI_ON_MSGTYPE(DUI_MSGTYPE_CLICK, OnClick)
 DUI_END_MESSAGE_MAP()
 
-CWndImplBase::CWndImplBase() : m_nWndState(ESTATE_UNKNOW)
+CWndImplBase::CWndImplBase()
+    : m_pbtnMin(NULL)
+    , m_pbtnMax(NULL)
+    , m_pbtnRestore(NULL)
+    , m_pbtnClose(NULL)
+    , m_nWndState(ESTATE_UNKNOW)
 {
+}
+
+void CWndImplBase::OnInitWindow(void)
+{
+    m_pbtnMin = static_cast<CButtonUI *>(m_pm.FindControl(_T("btnmin")));
+    m_pbtnMax = static_cast<CButtonUI *>(m_pm.FindControl(_T("btnmax")));
+    m_pbtnRestore = static_cast<CButtonUI *>(m_pm.FindControl(_T("btnrestore")));
+    m_pbtnClose = static_cast<CButtonUI *>(m_pm.FindControl(_T("btnclose")));
 }
 
 INLINE void CWndImplBase::OnFinalMessage(HWND hWnd)
@@ -211,6 +224,16 @@ INLINE LRESULT CWndImplBase::OnMouseWheel(UINT uMsg, WPARAM wParam, LPARAM lPara
     return 0;
 }
 
+LRESULT CWndImplBase::OnNcLButtonDblClk(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
+{
+    if ((m_pbtnMax && m_pbtnMax->IsVisible()) || (m_pbtnRestore && m_pbtnRestore->IsVisible()))
+    {
+        bHandled = FALSE;
+    }
+
+    return 0;
+}
+
 INLINE LRESULT CWndImplBase::OnMouseHover(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
     bHandled = FALSE;
@@ -261,14 +284,11 @@ LRESULT CWndImplBase::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 
     if (::IsZoomed(*this) != bZoomed)
     {
-        CControlUI *pbtnMax = static_cast<CControlUI *>(m_pm.FindControl(_T("btnmax")));        // max button
-        CControlUI *pbtnRestore = static_cast<CControlUI *>(m_pm.FindControl(_T("btnrestore"))); // restore button
-
         // toggle status of max and restore button
-        if (pbtnMax && pbtnRestore)
+        if (NULL != m_pbtnMax && NULL != m_pbtnRestore)
         {
-            pbtnMax->SetVisible(TRUE == bZoomed);
-            pbtnRestore->SetVisible(FALSE == bZoomed);
+            m_pbtnMax->SetVisible(TRUE == bZoomed);
+            m_pbtnRestore->SetVisible(FALSE == bZoomed);
         }
     }
 
@@ -456,6 +476,8 @@ LRESULT CWndImplBase::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     case WM_GETMINMAXINFO:  lRes = OnGetMinMaxInfo(uMsg, wParam, lParam, bHandled); break;
 
     case WM_MOUSEWHEEL:     lRes = OnMouseWheel(uMsg, wParam, lParam, bHandled); break;
+
+    case WM_NCLBUTTONDBLCLK: lRes = OnNcLButtonDblClk(uMsg, wParam, lParam, bHandled); break;
 #endif
 
     case WM_SIZE:           lRes = OnSize(uMsg, wParam, lParam, bHandled); break;
@@ -521,12 +543,10 @@ INLINE LRESULT CWndImplBase::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARA
 
 void CWndImplBase::OnClick(TNotifyUI &msg)
 {
-    CDuiString sCtrlName = msg.pSender->GetName();
-
-    if (sCtrlName == _T("btnclose"))          { Close(); }
-    else if (sCtrlName == _T("btnmin"))       { SendMessage(WM_SYSCOMMAND, SC_MINIMIZE, 0); }
-    else if (sCtrlName == _T("btnmax"))       { SendMessage(WM_SYSCOMMAND, SC_MAXIMIZE, 0); }
-    else if (sCtrlName == _T("btnrestore"))   { SendMessage(WM_SYSCOMMAND, SC_RESTORE, 0); }
+    if (m_pbtnClose == msg.pSender)         { Close(); }
+    else if (m_pbtnMin == msg.pSender)      { SendMessage(WM_SYSCOMMAND, SC_MINIMIZE, 0); }
+    else if (m_pbtnMax == msg.pSender)      { SendMessage(WM_SYSCOMMAND, SC_MAXIMIZE, 0); }
+    else if (m_pbtnRestore == msg.pSender)  { SendMessage(WM_SYSCOMMAND, SC_RESTORE, 0); }
 }
 
 void CWndImplBase::ShowWindow(bool bShow /*= true*/, bool bTakeFocus /*= true*/)

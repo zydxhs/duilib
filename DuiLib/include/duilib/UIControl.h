@@ -227,7 +227,7 @@ protected:
     bool m_bInternVisible;
     bool m_bEnabled;
     bool m_bMouseEnabled;
-    bool m_bKeyboardEnabled ;
+    bool m_bKeyboardEnabled;
     bool m_bFocused;
     bool m_bFloat;
     TPercentInfo m_piFloatPercent;
