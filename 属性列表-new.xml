@@ -202,7 +202,7 @@
         </Combo>
         <Label parent="Control" notifies="setfocus killfocus timer menu windowinit(root) dblclick">
             <Attribute name="align" default="left" type="STRING" comment="文字横向对齐方式,取值left、center、right"/>
-            <Attribute name="valign" default="center" type="STRING" comment="文字纵向对齐方式,取值top、vcenter、bottom"/>
+            <Attribute name="valign" default="vcenter" type="STRING" comment="文字纵向对齐方式,取值top、vcenter、bottom"/>
             <Attribute name="endellipsis" default="false" type="BOOL" comment="句末显示不全是否使用...代替,如(true)"/>
             <Attribute name="font" default="-1" type="INT" comment="字体id,如(0)"/>
             <Attribute name="textcolor" default="#00000000" type="DWORD" comment="字体颜色，0表示使用默认字体颜色,如(#FFFF0000)"/>

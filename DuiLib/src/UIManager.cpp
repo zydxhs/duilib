@@ -1736,7 +1736,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
             m_ptLastMousePos = pt;
             CControlUI *pControl = FindControl(pt);
 
-            if ((pControl == NULL || pControl->GetManager() != this) && m_pEventCapture != NULL) { break; }
+            if (NULL == pControl || pControl->GetManager() != this) { break; }
 
             if (m_pEventCapture != NULL) { pControl = m_pEventCapture; }
 
@@ -1762,7 +1762,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
             m_ptLastMousePos = pt;
             CControlUI *pControl = FindControl(pt);
 
-            if ((pControl == NULL || pControl->GetManager() != this) && m_pEventCapture != NULL) { break; }
+            if (NULL == pControl || pControl->GetManager() != this) { break; }
 
             if (m_pEventCapture != NULL) { pControl = m_pEventCapture; }
 
@@ -1782,7 +1782,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
             m_ptLastMousePos = pt;
             CControlUI *pControl = FindControl(pt);
 
-            if ((pControl == NULL || pControl->GetManager() != this) && m_pEventCapture != NULL) { break; }
+            if (NULL == pControl || pControl->GetManager() != this) { break; }
 
             if (m_pEventCapture != NULL) { pControl = m_pEventCapture; }
 
@@ -1813,7 +1813,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
             m_ptLastMousePos = pt;
             CControlUI *pControl = FindControl(pt);
 
-            if ((pControl == NULL || pControl->GetManager() != this) && m_pEventCapture != NULL) { break; }
+            if (NULL == pControl || pControl->GetManager() != this) { break; }
 
             if (m_pEventCapture != NULL) { pControl = m_pEventCapture; }
 
@@ -1836,7 +1836,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
             m_ptLastMousePos = pt;
             CControlUI *pControl = FindControl(pt);
 
-            if ((pControl == NULL || pControl->GetManager() != this) && m_pEventCapture != NULL) { break; }
+            if (NULL == pControl || pControl->GetManager() != this) { break; }
 
             if (m_pEventCapture != NULL) { pControl = m_pEventCapture; }
 
@@ -1863,7 +1863,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
             m_ptLastMousePos = pt;
             CControlUI *pControl = FindControl(pt);
 
-            if ((pControl == NULL || pControl->GetManager() != this) && m_pEventCapture != NULL) { break; }
+            if (NULL == pControl || pControl->GetManager() != this) { break; }
 
             if (m_pEventCapture != NULL) { pControl = m_pEventCapture; }
 
