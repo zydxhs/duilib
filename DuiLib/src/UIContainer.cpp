@@ -854,7 +854,7 @@ void CContainerUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if (_tcscmp(pstrName, _T("childvalign")) == 0)
     {
         if (_tcscmp(pstrValue, _T("top")) == 0) { m_iChildVAlign = DT_TOP; }
-        else if (_tcscmp(pstrValue, _T("vcenter")) == 0) { m_iChildVAlign = DT_VCENTER; }
+        else if (_tcscmp(pstrValue, _T("center")) == 0) { m_iChildVAlign = DT_VCENTER; }
         else if (_tcscmp(pstrValue, _T("bottom")) == 0) { m_iChildVAlign = DT_BOTTOM; }
     }
     else if (_tcscmp(pstrName, _T("autowidth")) == 0) { SetAutoWidth(_tcscmp(pstrValue, _T("true")) == 0); }

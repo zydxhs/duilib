@@ -124,7 +124,7 @@
             <Attribute name="hscrollbarstyle" default="" type="STRING" comment="水平滚动条模式"/>
             <Attribute name="childpadding" default="0" type="INT" comment="子控件之间的额外距离,如(4)"/>
             <Attribute name="childalign" default="left" type="STRING" comment="子控件水平对齐方式，取值left,center,right"/>
-            <Attribute name="childvalign" default="top" type="STRING" comment="子控件垂直对齐方式，取值top,vcenter,bottom"/>
+            <Attribute name="childvalign" default="top" type="STRING" comment="子控件垂直对齐方式，取值top,center,bottom"/>
             <!-- 扩展属性 -->
             <Attribute name="autowidth" default="false" type="BOOL" comment="是否自动计算宽度"/>
         </Container>
@@ -202,7 +202,7 @@
         </Combo>
         <Label parent="Control" notifies="setfocus killfocus timer menu windowinit(root) dblclick">
             <Attribute name="align" default="left" type="STRING" comment="文字横向对齐方式,取值left、center、right"/>
-            <Attribute name="valign" default="vcenter" type="STRING" comment="文字纵向对齐方式,取值top、vcenter、bottom"/>
+            <Attribute name="valign" default="center" type="STRING" comment="文字纵向对齐方式,取值top、center、bottom"/>
             <Attribute name="endellipsis" default="false" type="BOOL" comment="句末显示不全是否使用...代替,如(true)"/>
             <Attribute name="font" default="-1" type="INT" comment="字体id,如(0)"/>
             <Attribute name="textcolor" default="#00000000" type="DWORD" comment="字体颜色，0表示使用默认字体颜色,如(#FFFF0000)"/>
@@ -352,7 +352,7 @@
             <Attribute name="itemheight" default="0" type="INT" comment="item高度，如（0）"/>
             <Attribute name="itemfont" default="-1" type="INT" comment="item的字体id,如(0)"/>
             <Attribute name="itemalign" default="center" type="STRING" comment="item对齐方式,取值left、right、center，如(center)"/>
-            <Attribute name="itemvalign" default="center" type="STRING" comment="item纵向对齐方式,取值top、vcenter、bottom"/>
+            <Attribute name="itemvalign" default="center" type="STRING" comment="item纵向对齐方式,取值top、center、bottom"/>
             <Attribute name="itemendellipsis" default="false" type="BOOL" comment="item句末显示不全是否使用...代替,如(true)"/>
             <Attribute name="itemmultiline" default="true" type="BOOL" comment="是否支持多行文本,如(true)"/>
             <Attribute name="itemtextpadding" default="0,0,0,0" type="RECT" comment="item文字显示的边距,如(2,2,2,2)"/>
@@ -383,7 +383,7 @@
         <ListHeaderItem parent="Control" notifies="setfocus killfocus timer headerclick windowinit(root)">
             <Attribute name="dragable" default="true" type="BOOL" comment="是否可拖动改变大小,如(true)"/>
             <Attribute name="align" default="left" type="STRING" comment="文字对齐方式,取值left、right、cente，如(center)"/>
-            <Attribute name="valign" default="center" type="STRING" comment="item纵向对齐方式,取值top、vcenter、bottom"/>
+            <Attribute name="valign" default="center" type="STRING" comment="item纵向对齐方式,取值top、center、bottom"/>
             <Attribute name="endellipsis" default="false" type="BOOL" comment="句末显示不全是否使用...代替,如(true)"/>
             <Attribute name="multiline" default="true" type="BOOL" comment="是否使用多行,如(true)"/>
             <Attribute name="font" default="-1" type="INT" comment="字体id,如(0)"/>

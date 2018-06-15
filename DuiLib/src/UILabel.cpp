@@ -336,7 +336,7 @@ void CLabelUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
             m_uTextStyle |= DT_TOP;
         }
 
-        if (_tcsstr(pstrValue, _T("vcenter")) != NULL)
+        if (_tcsstr(pstrValue, _T("center")) != NULL)
         {
             m_uTextStyle &= ~(DT_TOP | DT_BOTTOM);
             m_uTextStyle |= DT_VCENTER;
