@@ -3,8 +3,7 @@
 /// \brief 拖放源
 ///
 ///
-/// \author zhuyadong
-/// Contact: zhuyadong@kedacom.com
+/// \author zhuyadong@kedacom.com
 /// \date 2018-04-27
 /// \note
 /// -----------------------------------------------------------------------------

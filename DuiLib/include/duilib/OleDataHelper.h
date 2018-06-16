@@ -3,8 +3,7 @@
 /// \brief Ole数据对象辅助类
 ///
 /// RegisterClipboardFormat 可以注册自己的数据格式
-/// \author zhuyadong
-/// Contact: zhuyadong@kedacom.com
+/// \author zhuyadong@kedacom.com
 /// \date 2018-04-28
 /// \note
 /// -----------------------------------------------------------------------------

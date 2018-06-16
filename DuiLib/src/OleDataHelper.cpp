@@ -3,8 +3,7 @@
 /// \brief Ole数据对象辅助类
 ///
 ///
-/// \author zhuyadong
-/// Contact: zhuyadong@kedacom.com
+/// \author zhuyadong@kedacom.com
 /// \date 2018-04-28
 /// \note
 /// -----------------------------------------------------------------------------

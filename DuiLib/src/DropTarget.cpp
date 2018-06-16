@@ -3,8 +3,7 @@
 /// \brief 拖放目标
 ///
 ///
-/// \author zhuyadong
-/// Contact: zhuyadong@kedacom.com
+/// \author zhuyadong@kedacom.com
 /// \date 2018-04-26
 /// \note
 /// -----------------------------------------------------------------------------
@@ -86,14 +85,14 @@ ULONG STDMETHODCALLTYPE CDropTarget::Release()
 {
     ULONG lRef = InterlockedDecrement(&m_lRefCount);
 
-    if (0 == lRef) { delete this; }
+    if (0 == lRef) { delete this;    return 0; }
 
     return m_lRefCount;
 }
 
 //进入
 HRESULT STDMETHODCALLTYPE CDropTarget::DragEnter(__RPC__in_opt IDataObject *pDataObj, DWORD grfKeyState,
-        POINTL pt, __RPC__inout DWORD *pdwEffect)
+                                                 POINTL pt, __RPC__inout DWORD *pdwEffect)
 {
     if (m_bUseDnDHelper) { m_piDropHelper->DragEnter(m_hWnd, pDataObj, (LPPOINT)&pt, *pdwEffect); }
 
@@ -118,7 +117,7 @@ HRESULT STDMETHODCALLTYPE CDropTarget::DragLeave()
 
 //释放
 HRESULT STDMETHODCALLTYPE CDropTarget::Drop(__RPC__in_opt IDataObject *pDataObj, DWORD grfKeyState,
-        POINTL pt, __RPC__inout DWORD *pdwEffect)
+                                            POINTL pt, __RPC__inout DWORD *pdwEffect)
 {
     m_piDropHelper->Drop(pDataObj, (LPPOINT)&pt, *pdwEffect);
     return m_pDuiDropTarget->OnDragDrop(pDataObj, grfKeyState, pt, pdwEffect);

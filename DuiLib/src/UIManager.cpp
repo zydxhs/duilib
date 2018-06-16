@@ -240,8 +240,12 @@ CPaintManagerUI::~CPaintManagerUI()
 
     m_aPreMessages.Remove(m_aPreMessages.Find(this));
     delete m_pWndShadow;
-    m_pDropTarget->DragDropRevoke(GetPaintWindow());
-    m_pDropTarget->Release();
+
+    if (NULL != m_pDropTarget)
+    {
+        m_pDropTarget->DragDropRevoke(GetPaintWindow());
+        m_pDropTarget->Release();
+    }
 }
 
 HRESULT CPaintManagerUI::OnDragEnter(IDataObject *pDataObj, DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect)
@@ -372,7 +376,7 @@ void CPaintManagerUI::Init(HWND hWnd, LPCTSTR pstrName)
         m_aPreMessages.Add(this);
     }
 
-    m_pDropTarget->DragDropRegister(this, GetPaintWindow());
+    if (NULL != m_pDropTarget) { m_pDropTarget->DragDropRegister(this, GetPaintWindow()); }
 }
 
 INLINE HINSTANCE CPaintManagerUI::GetInstance()
