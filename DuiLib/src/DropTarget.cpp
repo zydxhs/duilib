@@ -87,7 +87,7 @@ ULONG STDMETHODCALLTYPE CDropTarget::Release()
 
     if (0 == lRef) { delete this;    return 0; }
 
-    return m_lRefCount;
+    return lRef;
 }
 
 //进入

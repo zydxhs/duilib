@@ -3,6 +3,7 @@
 
 namespace DuiLib {
 
+namespace {
 typedef struct tagCtrlInfo
 {
     int         nIndex;     // 索引
@@ -17,7 +18,7 @@ typedef struct tagCtrlInfo
 } TCtrlInfo;
 
 typedef std::vector<TCtrlInfo>      CVecCtrlInfo;
-
+}
 
 CHWeightLayoutUI::CHWeightLayoutUI()
 {
