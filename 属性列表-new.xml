@@ -306,6 +306,7 @@
             <Attribute namle="charfilter" default="false" type="BOOL" comment="是否启用字符过滤,字符集调用成员函数设置。与numberonly/regexp属性互斥。" />
             <Attribute name="witelist" default="true" type="BOOL" comment="黑白名单过滤模式。白名单允许，黑名单禁止" />
             <Attribute namle="regexp" default="false" type="BOOL" comment="是否启用正则过滤,正则式调用成员函数设置,支持与Perl兼容的正则表达式基本语法。与numberonly/charfilter属性互斥。" />
+            <Attribute name="delaytxtchange" default="0" type="DWORD" comment="默认0,示编辑框内容更新立即通知；否则彼时指定的毫秒数后通知用户。" />
         </Edit>
         <ScrollBar parent="Control" notifies="timer menu scrolled windowinit(root)">
             <Attribute name="button1color" default="#00000000" type="DWORD" comment="左或上按钮普通状态颜色"/>

@@ -38,8 +38,7 @@ protected:
     enum
     {
         DEFAULT_TIMERID = 20,
-        // 2017-07-21 zhuyadong 添加 minmaxnumber 属性
-        CHECK_TIMERID,          // 用于检测用户输入的值是否越界
+        CHECK_TIMERID,          // 彼时通知编辑框内容变化
     };
 
     CEditUI *m_pOwner;
@@ -283,6 +282,14 @@ LRESULT CEditWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             return 0;
         }
 
+        // 通知用户，编辑框内容变化
+        if (CHECK_TIMERID == wParam)
+        {
+            KillTimer(m_hWnd, wParam);
+            m_pOwner->GetManager()->SendNotify(m_pOwner, DUI_MSGTYPE_TEXTCHANGED);
+            return 0;
+        }
+
         bHandled = FALSE;
     }
     else if (uMsg == WM_CHAR)
@@ -372,7 +379,12 @@ LRESULT CEditWnd::OnEditChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPara
     if (m_pOwner->IsNumberOnly() && !IsValidNumber(pstr)) { MessageBeep(MB_ICONWARNING); }
 
     m_pOwner->m_sText = pstr;
-    m_pOwner->GetManager()->SendNotify(m_pOwner, DUI_MSGTYPE_TEXTCHANGED);
+
+    if (!m_pOwner->IsDelayTxtChange())
+    {
+        m_pOwner->GetManager()->SendNotify(m_pOwner, DUI_MSGTYPE_TEXTCHANGED);
+    }
+    else { SetTimer(m_hWnd, CHECK_TIMERID, m_pOwner->GetDelayTxtChange(), NULL); }
 
     if (m_pOwner->GetManager()->IsLayered()) { m_pOwner->Invalidate(); }
 
@@ -513,7 +525,7 @@ bool CEditWnd::IsValidNumber(LPTSTR &pstr)
 CEditUI::CEditUI() : m_pWindow(NULL), m_uMaxChar(255), m_bReadOnly(false),
     m_bPasswordMode(false), m_cPasswordChar(_T('*')), m_bAutoSelAll(false), m_uButtonState(0),
     m_iWindowStyls(0), m_dwTipColor(0xFFBAC0C5), m_nMinNumber(0), m_nMaxNumber(0),
-    m_bCharFilter(false), m_bWiteList(true), m_bRegExp(false), m_pRegExp(NULL)
+    m_bCharFilter(false), m_bWiteList(true), m_bRegExp(false), m_pRegExp(NULL), m_dwDelayTime(0)
 {
     SetTextPadding(CDuiRect(4, 3, 4, 3));
     SetBkColor(0xFFFFFFFF);
@@ -973,6 +985,7 @@ void CEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     {
         SetRegExpFilter((_tcscmp(pstrValue, _T("true")) == 0) ? true : false);
     }
+    else if (_tcscmp(pstrName, _T("delaytxtchange")) == 0) { m_dwDelayTime = _ttoi(pstrValue); }
     else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
     else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
     else { CLabelUI::SetAttribute(pstrName, pstrValue); }
@@ -1274,6 +1287,21 @@ bool CEditUI::IsRegExpMatch(LPCTSTR pstr)
 
     int result = m_pRegExp->MatchExact(pstr).IsMatched();
     return (0 != result) ? true : false;
+}
+
+bool CEditUI::IsDelayTxtChange()
+{
+    return (0 != m_dwDelayTime) ? true : false;
+}
+
+DWORD CEditUI::GetDelayTxtChange()
+{
+    return m_dwDelayTime;
+}
+
+void CEditUI::SetDelayTxtChange(DWORD dwMiliSec)
+{
+    m_dwDelayTime = dwMiliSec;
 }
 
 }

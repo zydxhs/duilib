@@ -109,6 +109,11 @@ protected:
     bool IsRegExpMatch(TCHAR ch);
     bool IsRegExpMatch(LPCTSTR pstr);
 
+    // 编辑框内容变化时，是否延时通知，延时多少毫秒
+    bool IsDelayTxtChange();
+    DWORD GetDelayTxtChange();
+    void  SetDelayTxtChange(DWORD dwMiliSec);
+
 protected:
     CEditWnd *m_pWindow;
 
@@ -141,6 +146,8 @@ protected:
     CDuiString  m_sFilterCharSet;   // 字符过滤集
     CDuiString  m_sRegExp;          // 正则表达式
     CRegexpT<TCHAR>    *m_pRegExp;  // 正则表达式对象
+
+    DWORD   m_dwDelayTime;          // 编辑框内容变化时，延时多少毫秒通知。默认0,表示立即通知
 };
 
 }
