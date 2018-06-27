@@ -276,25 +276,22 @@ void CHorizontalLayoutUI::DoPostPaint(HDC hDC, const RECT &rcPaint)
 
 SIZE CHorizontalLayoutUI::EstimateSize(SIZE szAvailable)
 {
+    SIZE sz = CControlUI::EstimateSize(szAvailable);
+
     if (m_bAutoWidth)
     {
-        SIZE sz = { m_iChildPadding *(GetCount() - 1), 0 };
+        sz.cx = m_iChildPadding * (GetCount() - 1);
 
         for (int i = 0; i < GetCount(); ++i)
         {
-            SIZE szTmp = GetItemAt(i)->EstimateSize(szAvailable);
-            sz.cx += szTmp.cx;
-
-            if (szTmp.cy > sz.cy) { sz.cy = szTmp.cy; }
+            SIZE sz2 = GetItemAt(i)->EstimateSize(szAvailable);
+            sz.cx += sz2.cx;
         }
 
-        m_cxyFixed = sz;
-        return sz;
+        m_cxyFixed.cx = sz.cx;
     }
-    else
-    {
-        return CControlUI::EstimateSize(szAvailable);
-    }
+
+    return sz;
 }
 
 void CHorizontalLayoutUI::SetSepWidth(int iWidth)
@@ -328,6 +325,7 @@ void CHorizontalLayoutUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if (_tcscmp(pstrName, _T("sepwidth")) == 0) { SetSepWidth(_ttoi(pstrValue)); }
     else if (_tcscmp(pstrName, _T("sepimm")) == 0) { SetSepImmMode(_tcscmp(pstrValue, _T("true")) == 0); }
+    else if (_tcscmp(pstrName, _T("autoheight")) == 0) { DUITRACE(_T("不支持属性:autoheight")); }
     else { CContainerUI::SetAttribute(pstrName, pstrValue); }
 }
 

@@ -69,6 +69,8 @@ public:
     virtual void SetMouseChildEnabled(bool bEnable = true);
     void SetAutoWidth(bool bAutoWidth);
     bool GetAutoWidth(void);
+    void SetAutoHeight(bool bAutoHeight);
+    bool GetAutoHeight(void);
 
     virtual int FindSelectable(int iIndex, bool bForward = true) const;
 
@@ -133,6 +135,7 @@ protected:
     bool m_bMouseChildEnabled;
     bool m_bScrollProcess; // 防止SetPos循环调用
     bool m_bAutoWidth;
+    bool m_bAutoHeight;
 
     CScrollBarUI *m_pVerticalScrollBar;
     CScrollBarUI *m_pHorizontalScrollBar;

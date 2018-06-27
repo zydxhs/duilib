@@ -127,18 +127,25 @@
             <Attribute name="childvalign" default="top" type="STRING" comment="子控件垂直对齐方式，取值top,center,bottom"/>
             <!-- 扩展属性 -->
             <Attribute name="autowidth" default="false" type="BOOL" comment="是否自动计算宽度"/>
+            <Attribute name="autoheight" default="false" type="BOOL" comment="是否自动计算高度"/>
         </Container>
         <ChildLayout parent="Container" comment="不推荐使用。可以用 Include 标签代替" >
             <Attribute name="xmlfile" default="" type="STRING" comment="子窗体XML布局文件"/>
+            <!-- 不支持 autowidth/autoheight 属性 -->
         </ChildLayout>
         <VerticalLayout parent="Container" notifies="setfocus killfocus timer menu windowinit(root) dblclick">
             <Attribute name="sepheight" default="0" type="INT" comment="分隔符高度,正负表示分隔符在顶部还是底部,如(4)"/>
             <Attribute name="sepimm" default="false" type="BOOL" comment="拖动分隔符是否立即改变大小,如(false)"/>
+            <!-- 不支持 autowidth 属性 -->
         </VerticalLayout>
         <HorizontalLayout parent="Container" notifies="setfocus killfocus timer menu windowinit(root) dblclick">
             <Attribute name="sepwidth" default="0" type="INT" comment="分隔符宽,正负表示分隔符在左边还是右边,如(-4)"/>
             <Attribute name="sepimm" default="false" type="BOOL" comment="拖动分隔符是否立即改变大小,如(false)"/>
+            <!-- 不支持 autoheight 属性 -->
         </HorizontalLayout>
+        <HWeightLayout parent="HorizontalLayout" notifies="setfocus killfocus timer menu windowinit(root) dblclick">
+            <!-- 不支持 autoheight 属性 -->
+        </HWeightLayout>
         <TileLayout parent="Container" notifies="setfocus killfocus timer menu windowinit(root) dblclick">
             <Attribute name="columns" default="1" type="INT" comment="列数,如(4)"/>
             <Attribute name="itemsize" default="0,0" type="SIZE" comment="子项固定大小，如(128,128)"/>
@@ -146,9 +153,11 @@
             <!-- 扩展属性 -->
             <Attribute name="rows" default="1" type="INT" comment="行数,如(4)"/>
             <Attribute name="childrounded" default="false" type="BOOL" comment="子控件铺满整个控件，忽略itemsize属性"/>
+            <!-- 不支持 autowidth/autoheight 属性 -->
         </TileLayout>
         <TabLayout parent="Container" notifies="setfocus killfocus timer menu tabselect windowinit(root) dblclick">
             <Attribute name="selectedid" default="0" type="INT" comment="默认选中的页面id,如(0)"/>
+            <!-- 不支持 autowidth/autoheight 属性 -->
         </TabLayout>
         <ActiveX parent="Control" notifies="setfocus killfocus timer menu showactivex windowinit(root)">
             <Attribute name="clsid" default="" type="STRING" comment="activex的clsid,如({8856F961-340A-11D0-A96B-00C04FD705A2})"/>

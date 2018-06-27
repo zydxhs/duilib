@@ -19,6 +19,7 @@ public:
     bool IsSepImmMode() const;
     void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
     void DoEvent(TEventUI &event);
+    virtual SIZE EstimateSize(SIZE szAvailable);
 
     void SetPos(RECT rc, bool bNeedInvalidate = true);
     void DoPostPaint(HDC hDC, const RECT &rcPaint);

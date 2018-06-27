@@ -428,6 +428,26 @@ void CVerticalLayoutUI::DoEvent(TEventUI &event)
     CContainerUI::DoEvent(event);
 }
 
+SIZE CVerticalLayoutUI::EstimateSize(SIZE szAvailable)
+{
+    SIZE sz = CControlUI::EstimateSize(szAvailable);
+
+    if (m_bAutoHeight)
+    {
+        sz.cy = m_iChildPadding * (GetCount() - 1);
+
+        for (int i = 0; i < GetCount(); ++i)
+        {
+            SIZE sz2 = GetItemAt(i)->EstimateSize(szAvailable);
+            sz.cy += sz2.cy;
+        }
+
+        m_cxyFixed.cy = sz.cy;
+    }
+
+    return sz;
+}
+
 RECT CVerticalLayoutUI::GetThumbRect(bool bUseNew) const
 {
     if ((m_uButtonState & UISTATE_CAPTURED) != 0 && bUseNew)

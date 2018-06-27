@@ -29,6 +29,7 @@ void CChildLayoutUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if (_tcscmp(pstrName, _T("xmlfile")) == 0) { SetChildLayoutXML(pstrValue); }
     else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
+    else if (_tcscmp(pstrName, _T("autoheight")) == 0) { DUITRACE(_T("不支持属性:autoheight")); }
     else { CContainerUI::SetAttribute(pstrName, pstrValue); }
 }
 
