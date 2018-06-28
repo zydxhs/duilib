@@ -1751,7 +1751,7 @@ void CRenderEngine::DrawText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, LPCTS
 }
 
 void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, LPCTSTR pstrText,
-                                 DWORD dwTextColor, RECT *prcLinks, CDuiString *sLinks, int &nLinkRects,
+                                 DWORD dwTextColor, RECT *prcLinks, CDuiString *sLinks, int *pnLinkRects,
                                  int iDefaultFont, UINT uStyle)
 {
     // 考虑到在xml编辑器中使用<>符号不方便，可以使用{}符号代替
@@ -1779,6 +1779,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
 
     if (::IsRectEmpty(&rc)) { return; }
 
+    int nLinkRects = (NULL != pnLinkRects) ? *pnLinkRects : 0;
     bool bDraw = (uStyle & DT_CALCRECT) == 0;
 
     CDuiPtrArray aFontArray(10);
@@ -1813,8 +1814,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
             rcText.bottom = rc.bottom - rc.top;
         }
 
-        int nLinks = 0;
-        DrawHtmlText(hDC, pManager, rcText, pstrText, dwTextColor, NULL, NULL, nLinks, iDefaultFont,
+        DrawHtmlText(hDC, pManager, rcText, pstrText, dwTextColor, NULL, NULL, NULL, iDefaultFont,
                      uStyle | DT_CALCRECT & ~DT_CENTER & ~DT_RIGHT & ~DT_VCENTER & ~DT_BOTTOM);
 
         if ((uStyle & DT_SINGLELINE) != 0)
@@ -2911,6 +2911,8 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
     ::DeleteObject(hRgn);
 
     ::SelectObject(hDC, hOldFont);
+
+    if (NULL != pnLinkRects) { *pnLinkRects = nLinkRects; }
 }
 
 HBITMAP CRenderEngine::GenerateBitmap(CPaintManagerUI *pManager, RECT rc, CControlUI *pStopControl,

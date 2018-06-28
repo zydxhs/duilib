@@ -519,7 +519,6 @@ void CButtonUI::PaintText(HDC hDC)
 
     if (m_sText.IsEmpty()) { return; }
 
-    int nLinks = 0;
     RECT rc = m_rcItem;
     rc.left += m_rcTextPadding.left;
     rc.right -= m_rcTextPadding.right;
@@ -549,7 +548,7 @@ void CButtonUI::PaintText(HDC hDC)
 
         if (m_bShowHtml)
             CRenderEngine::DrawHtmlText(hDC, m_pManager, rc, m_sText, clrColor,
-                                        NULL, NULL, nLinks, m_iFont, m_uTextStyle);
+                                        NULL, NULL, NULL, m_iFont, m_uTextStyle);
         else
             CRenderEngine::DrawText(hDC, m_pManager, rc, m_sText, clrColor,
                                     m_iFont, m_uTextStyle);

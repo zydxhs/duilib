@@ -158,7 +158,7 @@ void CTextUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 
 void CTextUI::PaintText(HDC hDC)
 {
-    m_nLinks = 0;
+    m_nLinks = LENGTHOF(m_rcLinks);
     CLabelUI::PaintText(hDC);
     // if (m_sText.IsEmpty())
     // {
@@ -195,6 +195,11 @@ void CTextUI::PaintText(HDC hDC)
     //         CRenderEngine::DrawText(hDC, m_pManager, rc, m_sText, m_dwDisabledTextColor, \
     //                                 m_iFont, m_uTextStyle);
     // }
+}
+
+int *CTextUI::GetLinksNum(void)
+{
+    return &m_nLinks;
 }
 
 RECT * CTextUI::GetRectLinks(void)

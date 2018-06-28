@@ -2344,11 +2344,9 @@ void CListHeaderItemUI::PaintText(HDC hDC)
 
     if (m_sText.IsEmpty()) { return; }
 
-    int nLinks = 0;
-
     if (m_bShowHtml)
         CRenderEngine::DrawHtmlText(hDC, m_pManager, rcText, m_sText, m_dwTextColor,
-                                    NULL, NULL, nLinks, m_iFont, m_uTextStyle);
+                                    NULL, NULL, NULL, m_iFont, m_uTextStyle);
     else
         CRenderEngine::DrawText(hDC, m_pManager, rcText, m_sText, m_dwTextColor,
                                 m_iFont, m_uTextStyle);
@@ -2909,8 +2907,7 @@ SIZE CListLabelElementUI::EstimateSize(SIZE szAvailable)
 
                 if (pInfo->bShowHtml)
                 {
-                    int nLinks = 0;
-                    CRenderEngine::DrawHtmlText(m_pManager->GetPaintDC(), m_pManager, rcText, m_sText, 0, NULL, NULL, nLinks,
+                    CRenderEngine::DrawHtmlText(m_pManager->GetPaintDC(), m_pManager, rcText, m_sText, 0, NULL, NULL, NULL,
                                                 pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
                 }
                 else
@@ -2935,8 +2932,7 @@ SIZE CListLabelElementUI::EstimateSize(SIZE szAvailable)
 
             if (pInfo->bShowHtml)
             {
-                int nLinks = 0;
-                CRenderEngine::DrawHtmlText(m_pManager->GetPaintDC(), m_pManager, rcText, m_sText, 0, NULL, NULL, nLinks,
+                CRenderEngine::DrawHtmlText(m_pManager->GetPaintDC(), m_pManager, rcText, m_sText, 0, NULL, NULL, NULL,
                                             pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
             }
             else
@@ -2986,7 +2982,6 @@ void CListLabelElementUI::DrawItemText(HDC hDC, const RECT &rcItem)
         iTextColor = pInfo->dwDisabledTextColor;
     }
 
-    int nLinks = 0;
     RECT rcText = rcItem;
     rcText.left += pInfo->rcTextPadding.left;
     rcText.right -= pInfo->rcTextPadding.right;
@@ -2995,7 +2990,7 @@ void CListLabelElementUI::DrawItemText(HDC hDC, const RECT &rcItem)
 
     if (pInfo->bShowHtml)
         CRenderEngine::DrawHtmlText(hDC, m_pManager, rcText, m_sText, iTextColor,
-                                    NULL, NULL, nLinks, pInfo->nFont, pInfo->uTextStyle);
+                                    NULL, NULL, NULL, pInfo->nFont, pInfo->uTextStyle);
     else
         CRenderEngine::DrawText(hDC, m_pManager, rcText, m_sText, iTextColor,
                                 pInfo->nFont, pInfo->uTextStyle);
@@ -3283,8 +3278,7 @@ SIZE CListTextElementUI::EstimateSize(SIZE szAvailable)
 
                 if (pInfo->bShowHtml)
                 {
-                    int nLinks = 0;
-                    CRenderEngine::DrawHtmlText(m_pManager->GetPaintDC(), m_pManager, rcText, strText, 0, NULL, NULL, nLinks,
+                    CRenderEngine::DrawHtmlText(m_pManager->GetPaintDC(), m_pManager, rcText, strText, 0, NULL, NULL, NULL,
                                                 pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
                 }
                 else
@@ -3309,8 +3303,7 @@ SIZE CListTextElementUI::EstimateSize(SIZE szAvailable)
 
             if (pInfo->bShowHtml)
             {
-                int nLinks = 0;
-                CRenderEngine::DrawHtmlText(m_pManager->GetPaintDC(), m_pManager, rcText, strText, 0, NULL, NULL, nLinks,
+                CRenderEngine::DrawHtmlText(m_pManager->GetPaintDC(), m_pManager, rcText, strText, 0, NULL, NULL, NULL,
                                             pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
             }
             else
@@ -3401,14 +3394,14 @@ void CListTextElementUI::DrawItemText(HDC hDC, const RECT &rcItem)
                 DWORD dwWriteStype = DT_SINGLELINE | pInfo->uTextStyle;
                 dwWriteStype = (dwWriteStype & (~DT_CENTER)) | DT_LEFT;
                 CRenderEngine::DrawHtmlText(hDC, m_pManager, rcItem, strText.GetData(), iTextColor,
-                                            &m_rcLinks[m_nLinks], &m_sLinks[m_nLinks], nLinks,
+                                            &m_rcLinks[m_nLinks], &m_sLinks[m_nLinks], &nLinks,
                                             pInfo->nFont, dwWriteStype);
             }
             else
             {
                 if (pInfo->bShowHtml)
                     CRenderEngine::DrawHtmlText(hDC, m_pManager, rcItem, strText.GetData(), iTextColor,
-                                                &m_rcLinks[m_nLinks], &m_sLinks[m_nLinks], nLinks,
+                                                &m_rcLinks[m_nLinks], &m_sLinks[m_nLinks], &nLinks,
                                                 pInfo->nFont, pInfo->uTextStyle);
                 else
                     CRenderEngine::DrawText(hDC, m_pManager, rcItem, strText.GetData(), iTextColor,
@@ -3435,7 +3428,7 @@ void CListTextElementUI::DrawItemText(HDC hDC, const RECT &rcItem)
 
         if (pInfo->bShowHtml)
             CRenderEngine::DrawHtmlText(hDC, m_pManager, rcItem, strText.GetData(), iTextColor, \
-                                        &m_rcLinks[m_nLinks], &m_sLinks[m_nLinks], nLinks, pInfo->nFont, pInfo->uTextStyle);
+                                        &m_rcLinks[m_nLinks], &m_sLinks[m_nLinks], &nLinks, pInfo->nFont, pInfo->uTextStyle);
         else
             CRenderEngine::DrawText(hDC, m_pManager, rcItem, strText.GetData(), iTextColor, \
                                     pInfo->nFont, pInfo->uTextStyle);

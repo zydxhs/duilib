@@ -14,6 +14,7 @@ public:
     UINT GetControlFlags() const;
     LPVOID GetInterface(LPCTSTR pstrName);
 
+    virtual int *GetLinksNum(void);
     CDuiString *GetLinkContent(int iIndex);
 
     void DoEvent(TEventUI &event);

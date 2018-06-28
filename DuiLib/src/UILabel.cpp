@@ -233,8 +233,7 @@ SIZE CLabelUI::EstimateSize(SIZE szAvailable)
 
                 if (m_bShowHtml)
                 {
-                    int nLinks = 0;
-                    CRenderEngine::DrawHtmlText(m_pManager->GetPaintDC(), m_pManager, rcText, m_sText, 0, NULL, NULL, nLinks,
+                    CRenderEngine::DrawHtmlText(m_pManager->GetPaintDC(), m_pManager, rcText, m_sText, 0, NULL, NULL, NULL,
                                                 m_iFont, DT_CALCRECT | m_uTextStyle & ~DT_RIGHT & ~DT_CENTER);
                 }
                 else
@@ -265,8 +264,7 @@ SIZE CLabelUI::EstimateSize(SIZE szAvailable)
 
             if (m_bShowHtml)
             {
-                int nLinks = 0;
-                CRenderEngine::DrawHtmlText(m_pManager->GetPaintDC(), m_pManager, rcText, m_sText, 0, NULL, NULL, nLinks,
+                CRenderEngine::DrawHtmlText(m_pManager->GetPaintDC(), m_pManager, rcText, m_sText, 0, NULL, NULL, NULL,
                                             m_iFont, DT_CALCRECT | m_uTextStyle & ~DT_RIGHT & ~DT_CENTER);
             }
             else
@@ -456,13 +454,12 @@ void CLabelUI::PaintText(HDC hDC)
     {
         if (m_sText.IsEmpty()) { return; }
 
-        int nLinks = 0;
-
         if (IsEnabled())
         {
             if (m_bShowHtml)
                 CRenderEngine::DrawHtmlText(hDC, m_pManager, rc, m_sText, m_dwTextColor,
-                                            GetRectLinks(), GetStringLinks(), nLinks, m_iFont, m_uTextStyle);
+                                            GetRectLinks(), GetStringLinks(), GetLinksNum(),
+                                            m_iFont, m_uTextStyle);
             else
                 CRenderEngine::DrawText(hDC, m_pManager, rc, m_sText, m_dwTextColor,
                                         m_iFont, m_uTextStyle);
@@ -471,7 +468,8 @@ void CLabelUI::PaintText(HDC hDC)
         {
             if (m_bShowHtml)
                 CRenderEngine::DrawHtmlText(hDC, m_pManager, rc, m_sText, m_dwDisabledTextColor,
-                                            GetRectLinks(), GetStringLinks(), nLinks, m_iFont, m_uTextStyle);
+                                            GetRectLinks(), GetStringLinks(), GetLinksNum(),
+                                            m_iFont, m_uTextStyle);
             else
                 CRenderEngine::DrawText(hDC, m_pManager, rc, m_sText, m_dwDisabledTextColor,
                                         m_iFont, m_uTextStyle);

@@ -848,9 +848,8 @@ SIZE CMenuElementUI::EstimateSize(SIZE szAvailable)
 
         if (pInfo->bShowHtml)
         {
-            int nLinks = 0;
             CRenderEngine::DrawHtmlText(GetManager()->GetPaintDC(), GetManager(), rcText, m_sText, iTextColor,
-                                        NULL, NULL, nLinks, pInfo->nFont,
+                                        NULL, NULL, NULL, pInfo->nFont,
                                         DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
         }
         else
@@ -1040,7 +1039,6 @@ void CMenuElementUI::DrawItemText(HDC hDC, const RECT &rcItem)
         iTextColor = pInfo->dwDisabledTextColor;
     }
 
-    int nLinks = 0;
     RECT rcText = rcItem;
     rcText.left += pInfo->rcTextPadding.left;
     rcText.right -= pInfo->rcTextPadding.right;
@@ -1050,7 +1048,7 @@ void CMenuElementUI::DrawItemText(HDC hDC, const RECT &rcItem)
     if (pInfo->bShowHtml)
     {
         CRenderEngine::DrawHtmlText(hDC, GetManager(), rcText, m_sText, iTextColor,
-                                    NULL, NULL, nLinks, pInfo->nFont, DT_SINGLELINE | pInfo->uTextStyle);
+                                    NULL, NULL, NULL, pInfo->nFont, DT_SINGLELINE | pInfo->uTextStyle);
     }
     else
     {

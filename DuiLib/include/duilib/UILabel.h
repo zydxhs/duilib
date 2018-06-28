@@ -69,6 +69,7 @@ public:
 
 protected:
     void    PaintTextEffect(HDC hDC, RECT rt);
+    virtual int *GetLinksNum(void) { return NULL; }
     virtual RECT *GetRectLinks(void) { return NULL; }
     virtual CDuiString *GetStringLinks(void) { return NULL; }
 
