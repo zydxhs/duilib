@@ -1,6 +1,7 @@
 ﻿#include "stdafx.h"
 
 namespace DuiLib {
+
 CButtonUI::CButtonUI()
     : m_uButtonState(0)
     , m_dwHotTextColor(0)
@@ -525,21 +526,34 @@ void CButtonUI::PaintText(HDC hDC)
     rc.top += m_rcTextPadding.top;
     rc.bottom -= m_rcTextPadding.bottom;
 
-    DWORD clrColor = IsEnabled() ? m_dwTextColor : m_dwDisabledTextColor;
-
-    if (((m_uButtonState & UISTATE_PUSHED) != 0) && (GetPushedTextColor() != 0))
-    { clrColor = GetPushedTextColor(); }
-    else if (((m_uButtonState & UISTATE_HOT) != 0) && (GetHotTextColor() != 0))
-    { clrColor = GetHotTextColor(); }
-    else if (((m_uButtonState & UISTATE_FOCUSED) != 0) && (GetFocusedTextColor() != 0))
-    { clrColor = GetFocusedTextColor(); }
-
-    if (m_bShowHtml)
-        CRenderEngine::DrawHtmlText(hDC, m_pManager, rc, m_sText, clrColor,
-                                    NULL, NULL, nLinks, m_iFont, m_uTextStyle);
+    if (GetEnabledEffect())
+    {
+        PaintTextEffect(hDC, rc);
+    }
     else
-        CRenderEngine::DrawText(hDC, m_pManager, rc, m_sText, clrColor,
-                                m_iFont, m_uTextStyle);
+    {
+        DWORD clrColor = IsEnabled() ? m_dwTextColor : m_dwDisabledTextColor;
+
+        if (((m_uButtonState & UISTATE_PUSHED) != 0) && (GetPushedTextColor() != 0))
+        {
+            clrColor = GetPushedTextColor();
+        }
+        else if (((m_uButtonState & UISTATE_HOT) != 0) && (GetHotTextColor() != 0))
+        {
+            clrColor = GetHotTextColor();
+        }
+        else if (((m_uButtonState & UISTATE_FOCUSED) != 0) && (GetFocusedTextColor() != 0))
+        {
+            clrColor = GetFocusedTextColor();
+        }
+
+        if (m_bShowHtml)
+            CRenderEngine::DrawHtmlText(hDC, m_pManager, rc, m_sText, clrColor,
+                                        NULL, NULL, nLinks, m_iFont, m_uTextStyle);
+        else
+            CRenderEngine::DrawText(hDC, m_pManager, rc, m_sText, clrColor,
+                                    m_iFont, m_uTextStyle);
+    }
 }
 
 void CButtonUI::PaintStatusImage(HDC hDC)

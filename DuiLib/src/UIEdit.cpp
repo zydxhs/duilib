@@ -988,6 +988,18 @@ void CEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if (_tcscmp(pstrName, _T("delaytxtchange")) == 0) { m_dwDelayTime = _ttoi(pstrValue); }
     else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
     else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
+    else if (_tcscmp(pstrName, _T("enabledeffect")) == 0) { DUITRACE(_T("不支持属性:enabledeffect")); }
+    else if (_tcscmp(pstrName, _T("enabledluminous")) == 0) { DUITRACE(_T("不支持属性:enabledluminous")); }
+    else if (_tcscmp(pstrName, _T("luminousfuzzy")) == 0) { DUITRACE(_T("不支持属性:luminousfuzzy")); }
+    else if (_tcscmp(pstrName, _T("gradientangle")) == 0) { DUITRACE(_T("不支持属性:gradientangle")); }
+    else if (_tcscmp(pstrName, _T("enabledstroke")) == 0) { DUITRACE(_T("不支持属性:enabledstroke")); }
+    else if (_tcscmp(pstrName, _T("strokecolor")) == 0) { DUITRACE(_T("不支持属性:strokecolor")); }
+    else if (_tcscmp(pstrName, _T("enabledshadow")) == 0) { DUITRACE(_T("不支持属性:enabledshadow")); }
+    else if (_tcscmp(pstrName, _T("gradientlength")) == 0) { DUITRACE(_T("不支持属性:gradientlength")); }
+    else if (_tcscmp(pstrName, _T("shadowoffset")) == 0) { DUITRACE(_T("不支持属性:shadowoffset")); }
+    else if (_tcscmp(pstrName, _T("textcolor1")) == 0) { DUITRACE(_T("不支持属性:textcolor1")); }
+    else if (_tcscmp(pstrName, _T("textshadowcolora")) == 0) { DUITRACE(_T("不支持属性:textshadowcolora")); }
+    else if (_tcscmp(pstrName, _T("textshadowcolorb")) == 0) { DUITRACE(_T("不支持属性:textshadowcolorb")); }
     else { CLabelUI::SetAttribute(pstrName, pstrValue); }
 }
 

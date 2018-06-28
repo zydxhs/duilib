@@ -465,27 +465,10 @@ void COptionUI::PaintText(HDC hDC)
 {
     if ((m_uButtonState & UISTATE_SELECTED) != 0)
     {
-        if (m_sText.IsEmpty()) { return; }
-
-        if (m_dwTextColor == 0) { m_dwTextColor = m_pManager->GetDefaultFontColor(); }
-
-        if (m_dwDisabledTextColor == 0) { m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor(); }
-
-        int nLinks = 0;
-        RECT rc = m_rcItem;
-        rc.left += m_rcTextPadding.left;
-        rc.right -= m_rcTextPadding.right;
-        rc.top += m_rcTextPadding.top;
-        rc.bottom -= m_rcTextPadding.bottom;
-        DWORD dwTxtClr = (0 != m_dwPushedTextColor) ? m_dwPushedTextColor : m_dwTextColor;
-        dwTxtClr = IsEnabled() ? dwTxtClr : m_dwDisabledTextColor;
-
-        if (m_bShowHtml)
-            CRenderEngine::DrawHtmlText(hDC, m_pManager, rc, m_sText, dwTxtClr,
-                                        NULL, NULL, nLinks, m_iFont, m_uTextStyle);
-        else
-            CRenderEngine::DrawText(hDC, m_pManager, rc, m_sText, dwTxtClr,
-                                    m_iFont, m_uTextStyle);
+        DWORD dwSavedColor = m_dwTextColor;
+        m_dwTextColor = m_dwPushedTextColor;
+        CButtonUI::PaintText(hDC);
+        m_dwTextColor = dwSavedColor;
     }
     else
     {
@@ -494,6 +477,38 @@ void COptionUI::PaintText(HDC hDC)
         CButtonUI::PaintText(hDC);
         m_uButtonState = uSavedState;
     }
+
+    //if ((m_uButtonState & UISTATE_SELECTED) != 0)
+    //{
+    //    if (m_sText.IsEmpty()) { return; }
+    //
+    //    if (m_dwTextColor == 0) { m_dwTextColor = m_pManager->GetDefaultFontColor(); }
+    //
+    //    if (m_dwDisabledTextColor == 0) { m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor(); }
+    //
+    //    int nLinks = 0;
+    //    RECT rc = m_rcItem;
+    //    rc.left += m_rcTextPadding.left;
+    //    rc.right -= m_rcTextPadding.right;
+    //    rc.top += m_rcTextPadding.top;
+    //    rc.bottom -= m_rcTextPadding.bottom;
+    //    DWORD dwTxtClr = (0 != m_dwPushedTextColor) ? m_dwPushedTextColor : m_dwTextColor;
+    //    dwTxtClr = IsEnabled() ? dwTxtClr : m_dwDisabledTextColor;
+    //
+    //    if (m_bShowHtml)
+    //        CRenderEngine::DrawHtmlText(hDC, m_pManager, rc, m_sText, dwTxtClr,
+    //                                    NULL, NULL, nLinks, m_iFont, m_uTextStyle);
+    //    else
+    //        CRenderEngine::DrawText(hDC, m_pManager, rc, m_sText, dwTxtClr,
+    //                                m_iFont, m_uTextStyle);
+    //}
+    //else
+    //{
+    //    UINT uSavedState = m_uButtonState;
+    //    m_uButtonState &= ~UISTATE_PUSHED;
+    //    CButtonUI::PaintText(hDC);
+    //    m_uButtonState = uSavedState;
+    //}
 }
 
 void COptionUI::SwitchTabLayoutPage(void)

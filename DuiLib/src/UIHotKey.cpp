@@ -565,29 +565,31 @@ void CHotKeyUI::PaintStatusImage(HDC hDC)
 
 void CHotKeyUI::PaintText(HDC hDC)
 {
-    if (m_dwTextColor == 0) { m_dwTextColor = m_pManager->GetDefaultFontColor(); }
-
-    if (m_dwDisabledTextColor == 0) { m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor(); }
-
-    if (m_sText.IsEmpty()) { return; }
-
-    CDuiString sText = m_sText;
-    RECT rc = m_rcItem;
-    rc.left += m_rcTextPadding.left;
-    rc.right -= m_rcTextPadding.right;
-    rc.top += m_rcTextPadding.top;
-    rc.bottom -= m_rcTextPadding.bottom;
-
-    if (IsEnabled())
-    {
-        CRenderEngine::DrawText(hDC, m_pManager, rc, sText, m_dwTextColor, \
-                                m_iFont, DT_SINGLELINE | m_uTextStyle);
-    }
-    else
-    {
-        CRenderEngine::DrawText(hDC, m_pManager, rc, sText, m_dwDisabledTextColor, \
-                                m_iFont, DT_SINGLELINE | m_uTextStyle);
-    }
+    m_uTextStyle |= DT_SINGLELINE;
+    CLabelUI::PaintText(hDC);
+    // if (m_dwTextColor == 0) { m_dwTextColor = m_pManager->GetDefaultFontColor(); }
+    //
+    // if (m_dwDisabledTextColor == 0) { m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor(); }
+    //
+    // if (m_sText.IsEmpty()) { return; }
+    //
+    // CDuiString sText = m_sText;
+    // RECT rc = m_rcItem;
+    // rc.left += m_rcTextPadding.left;
+    // rc.right -= m_rcTextPadding.right;
+    // rc.top += m_rcTextPadding.top;
+    // rc.bottom -= m_rcTextPadding.bottom;
+    //
+    // if (IsEnabled())
+    // {
+    //     CRenderEngine::DrawText(hDC, m_pManager, rc, sText, m_dwTextColor, \
+    //                             m_iFont, DT_SINGLELINE | m_uTextStyle);
+    // }
+    // else
+    // {
+    //     CRenderEngine::DrawText(hDC, m_pManager, rc, sText, m_dwDisabledTextColor, \
+    //                             m_iFont, DT_SINGLELINE | m_uTextStyle);
+    // }
 }
 
 DWORD CHotKeyUI::GetHotKey() const

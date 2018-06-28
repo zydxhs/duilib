@@ -22,6 +22,10 @@ public:
     void PaintText(HDC hDC);
 
 protected:
+    virtual RECT *GetRectLinks(void);
+    virtual CDuiString *GetStringLinks(void);
+
+protected:
     enum { MAX_LINK = 8 };
     int m_nLinks;
     RECT m_rcLinks[MAX_LINK];

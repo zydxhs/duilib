@@ -158,42 +158,53 @@ void CTextUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 
 void CTextUI::PaintText(HDC hDC)
 {
-    if (m_sText.IsEmpty())
-    {
-        m_nLinks = 0;
-        return;
-    }
-
-    if (m_dwTextColor == 0) { m_dwTextColor = m_pManager->GetDefaultFontColor(); }
-
-    if (m_dwDisabledTextColor == 0) { m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor(); }
-
-    if (m_sText.IsEmpty()) { return; }
-
-    m_nLinks = LENGTHOF(m_rcLinks);
-    RECT rc = m_rcItem;
-    rc.left += m_rcTextPadding.left;
-    rc.right -= m_rcTextPadding.right;
-    rc.top += m_rcTextPadding.top;
-    rc.bottom -= m_rcTextPadding.bottom;
-
-    if (IsEnabled())
-    {
-        if (m_bShowHtml)
-            CRenderEngine::DrawHtmlText(hDC, m_pManager, rc, m_sText, m_dwTextColor, \
-                                        m_rcLinks, m_sLinks, m_nLinks, m_iFont, m_uTextStyle);
-        else
-            CRenderEngine::DrawText(hDC, m_pManager, rc, m_sText, m_dwTextColor, \
-                                    m_iFont, m_uTextStyle);
-    }
-    else
-    {
-        if (m_bShowHtml)
-            CRenderEngine::DrawHtmlText(hDC, m_pManager, rc, m_sText, m_dwDisabledTextColor, \
-                                        m_rcLinks, m_sLinks, m_nLinks, m_iFont, m_uTextStyle);
-        else
-            CRenderEngine::DrawText(hDC, m_pManager, rc, m_sText, m_dwDisabledTextColor, \
-                                    m_iFont, m_uTextStyle);
-    }
+    m_nLinks = 0;
+    CLabelUI::PaintText(hDC);
+    // if (m_sText.IsEmpty())
+    // {
+    //     m_nLinks = 0;
+    //     return;
+    // }
+    //
+    // if (m_dwTextColor == 0) { m_dwTextColor = m_pManager->GetDefaultFontColor(); }
+    //
+    // if (m_dwDisabledTextColor == 0) { m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor(); }
+    //
+    // m_nLinks = LENGTHOF(m_rcLinks);
+    // RECT rc = m_rcItem;
+    // rc.left += m_rcTextPadding.left;
+    // rc.right -= m_rcTextPadding.right;
+    // rc.top += m_rcTextPadding.top;
+    // rc.bottom -= m_rcTextPadding.bottom;
+    //
+    // if (IsEnabled())
+    // {
+    //     if (m_bShowHtml)
+    //         CRenderEngine::DrawHtmlText(hDC, m_pManager, rc, m_sText, m_dwTextColor, \
+    //                                     m_rcLinks, m_sLinks, m_nLinks, m_iFont, m_uTextStyle);
+    //     else
+    //         CRenderEngine::DrawText(hDC, m_pManager, rc, m_sText, m_dwTextColor, \
+    //                                 m_iFont, m_uTextStyle);
+    // }
+    // else
+    // {
+    //     if (m_bShowHtml)
+    //         CRenderEngine::DrawHtmlText(hDC, m_pManager, rc, m_sText, m_dwDisabledTextColor, \
+    //                                     m_rcLinks, m_sLinks, m_nLinks, m_iFont, m_uTextStyle);
+    //     else
+    //         CRenderEngine::DrawText(hDC, m_pManager, rc, m_sText, m_dwDisabledTextColor, \
+    //                                 m_iFont, m_uTextStyle);
+    // }
 }
+
+RECT * CTextUI::GetRectLinks(void)
+{
+    return m_rcLinks;
+}
+
+DuiLib::CDuiString * CTextUI::GetStringLinks(void)
+{
+    return m_sLinks;
+}
+
 }

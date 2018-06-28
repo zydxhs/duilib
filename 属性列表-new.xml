@@ -289,6 +289,7 @@
             <Attribute name="min" default="0" type="INT" comment="进度最小值，如(0)"/>
             <Attribute name="max" default="100" type="INT" comment="进度最大值，如(100)"/>
             <Attribute name="value" default="0" type="INT" comment="进度值，如(50)"/>
+            <!-- 不支持特效字相关属性 -->
         </Progress>
         <Slider parent="Progress" notifies="setfocus killfocus timer menu valuechanged windowinit(root) dblclick">
             <Attribute name="thumbimage" default="" type="STRING" comment="拖动滑块普通状态图片"/>
@@ -297,6 +298,7 @@
             <Attribute name="thumbsize" default="10,10" type="SIZE" comment="拖动滑块大小,如(10,10)"/>
             <Attribute name="step" default="1" type="INT" comment="进度步长，如(1)"/>
             <Attribute name="imm" default="false" type="BOOL" comment="在滑动过程中也发出消息"/>
+            <!-- 不支持特效字相关属性 -->
         </Slider>
         <Edit parent="Label" notifies="setfocus killfocus timer menu return textchanged windowinit(root)">
             <Attribute name="readonly" default="false" type="BOOL" comment="是否只读,如(false)"/>
@@ -316,6 +318,7 @@
             <Attribute name="witelist" default="true" type="BOOL" comment="黑白名单过滤模式。白名单允许，黑名单禁止" />
             <Attribute namle="regexp" default="false" type="BOOL" comment="是否启用正则过滤,正则式调用成员函数设置,支持与Perl兼容的正则表达式基本语法。与numberonly/charfilter属性互斥。" />
             <Attribute name="delaytxtchange" default="0" type="DWORD" comment="默认0,示编辑框内容更新立即通知；否则彼时指定的毫秒数后通知用户。" />
+            <!-- 不支持特效字相关属性 -->
         </Edit>
         <ScrollBar parent="Control" notifies="timer menu scrolled windowinit(root)">
             <Attribute name="button1color" default="#00000000" type="DWORD" comment="左或上按钮普通状态颜色"/>
@@ -510,6 +513,7 @@
         </MenuElement>
         <IPAddress parent="Label" notifies="setfocus killfocus timer menu windowinit(root) dblclick">
             <Attribute name="readonly" default="false" type="BOOL" comment="是否只读,如(false)" />
+            <!-- 不支持特效字相关属性 -->
         </IPAddress>
     </Controls>
 </Root>

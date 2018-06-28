@@ -68,6 +68,11 @@ public:
 #endif // USE_GDIPLUS
 
 protected:
+    void    PaintTextEffect(HDC hDC, RECT rt);
+    virtual RECT *GetRectLinks(void) { return NULL; }
+    virtual CDuiString *GetStringLinks(void) { return NULL; }
+
+protected:
     LPWSTR  m_pWideText;
     DWORD   m_dwTextColor;
     DWORD   m_dwDisabledTextColor;
