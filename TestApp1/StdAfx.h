@@ -14,22 +14,8 @@
 
 using namespace DuiLib;
 
-#ifdef _DEBUG
-    #ifdef _UNICODE
-        #pragma comment(lib, "..\\Lib\\DuiLib_ud.lib")
-    #else
-        #pragma comment(lib, "..\\Lib\\DuiLib_d.lib")
-    #endif
-#else
-    #ifdef _UNICODE
-        #pragma comment(lib, "..\\Lib\\DuiLib_u.lib")
-    #else
-        #pragma comment(lib, "..\\Lib\\DuiLib.lib")
-    #endif
-#endif
 
-
-//{{AFX_INSERT_LOCATION}}
+//{{AFX_INSER}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
 #endif // !defined(AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_)
