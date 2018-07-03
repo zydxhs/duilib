@@ -413,6 +413,7 @@ CControlUI *CDialogBuilder::_Parse(CMarkupNode *pRoot, CControlUI *pParent, CPai
                 if (_tcsicmp(pstrClass, DUI_CTR_CONTROL) == 0)               { pControl = new CControlUI; }
                 else if (_tcsicmp(pstrClass, DUI_CTR_ACTIVEX) == 0)          { pControl = new CActiveXUI; }
                 else if (_tcscmp(pstrClass, DUI_CTR_GIFANIM) == 0)           { pControl = new CGifAnimUI; }
+                else if (_tcscmp(pstrClass, DUI_CTR_BROWSER) == 0)           { pControl = new CWkeBrowserUI; }
 
                 break;
 

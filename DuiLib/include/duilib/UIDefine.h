@@ -293,7 +293,7 @@ struct DUI_MSGMAP_ENTRY //定义一个结构体，来存放消息信息
 #define DUI_CTR_ILISTOWNER                       (_T("IListOwner"))
 #define DUI_CTR_LISTHEADER                       (_T("ListHeader"))
 #define DUI_CTR_TILELAYOUT                       (_T("TileLayout"))
-#define DUI_CTR_WEBBROWSER                       (_T("WebBrowser"))
+// #define DUI_CTR_WEBBROWSER                       (_T("WebBrowser")) // 已废弃
 
 #define DUI_CTR_CHILDLAYOUT                      (_T("ChildLayout"))
 #define DUI_CTR_LISTELEMENT                      (_T("ListElement"))

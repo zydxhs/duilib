@@ -186,6 +186,12 @@
     <ClCompile Include="src\UIFlash.cpp">
       <Filter>Source Files\Control</Filter>
     </ClCompile>
+    <ClCompile Include="src\UIWkeBrowser.cpp">
+      <Filter>Source Files\Control</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wke_dll.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StdAfx.h">
@@ -340,6 +346,12 @@
     </ClInclude>
     <ClInclude Include="include\duilib\UIFlash.h">
       <Filter>Header Files\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="include\duilib\UIWkeBrowser.h">
+      <Filter>Header Files\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="include\duilib\wke_dll.h">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

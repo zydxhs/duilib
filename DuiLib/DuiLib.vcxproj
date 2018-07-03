@@ -621,8 +621,10 @@
     <ClCompile Include="src\UITileLayout.cpp" />
     <ClCompile Include="src\UITreeView.cpp" />
     <ClCompile Include="src\UIVerticalLayout.cpp" />
+    <ClCompile Include="src\UIWkeBrowser.cpp" />
     <ClCompile Include="src\Utils.cpp" />
     <ClCompile Include="src\WinImplBase.cpp" />
+    <ClCompile Include="src\wke_dll.cpp" />
     <ClCompile Include="src\XUnzip.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -688,8 +690,10 @@
     <ClInclude Include="include\duilib\UITileLayout.h" />
     <ClInclude Include="include\duilib\UITreeView.h" />
     <ClInclude Include="include\duilib\UIVerticalLayout.h" />
+    <ClInclude Include="include\duilib\UIWkeBrowser.h" />
     <ClInclude Include="include\duilib\Utils.h" />
     <ClInclude Include="include\duilib\WinImplBase.h" />
+    <ClInclude Include="include\duilib\wke_dll.h" />
     <ClInclude Include="include\UIlib.h" />
     <ClInclude Include="src\include\DataObject.h" />
     <ClInclude Include="src\include\deelx.h" />

@@ -130,6 +130,8 @@
 //#include "duilib/WebBrowserEventHandler.h"
 //#include "duilib/UIWebBrowser.h"
 #include "duilib/UIGifAnim.h"
+#include "duilib/wke_dll.h"
+#include "duilib/UIWkeBrowser.h"
 
 #include "duilib/UIMenu.h"
 #include "duilib/UIHotKey.h"
