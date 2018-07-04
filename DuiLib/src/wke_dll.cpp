@@ -1,4 +1,4 @@
-#include "stdafx.h"
+Ôªø#include "stdafx.h"
 #include <string>
 
 namespace DuiLib {
@@ -9,10 +9,10 @@ static int s_nInitCount = 0;
 
 std::string WStr2Utf8(const wchar_t *src)
 {
-    int ilen = WideCharToMultiByte(CP_UTF8, 0, src, -1, NULL, 0, NULL, NULL); //ªÒ»°≥§∂»
+    int ilen = WideCharToMultiByte(CP_UTF8, 0, src, -1, NULL, 0, NULL, NULL); //Ëé∑ÂèñÈïøÂ∫¶
     char *szBuf = new char[ilen + 1];
     memset(szBuf, 0, ilen + 1);
-    WideCharToMultiByte(CP_UTF8, 0, src, -1, szBuf, ilen, NULL, NULL); //UTF◊™¬Î
+    WideCharToMultiByte(CP_UTF8, 0, src, -1, szBuf, ilen, NULL, NULL); //UTFËΩ¨Á†Å
     std::string str(szBuf);
     delete []szBuf;
     return str;
@@ -20,10 +20,10 @@ std::string WStr2Utf8(const wchar_t *src)
 
 std::wstring Utf82WStr(const char *src)
 {
-    int ilen = MultiByteToWideChar(CP_UTF8, 0, src, -1, NULL, NULL); //ªÒ»°≥§∂»
+    int ilen = MultiByteToWideChar(CP_UTF8, 0, src, -1, NULL, NULL); //Ëé∑ÂèñÈïøÂ∫¶
     wchar_t *wszBuf = new wchar_t[ilen + 1];
     memset(wszBuf, 0, 2 * (ilen + 1));
-    MultiByteToWideChar(CP_UTF8, 0, src, -1, wszBuf, ilen); //UTF◊™¬Î
+    MultiByteToWideChar(CP_UTF8, 0, src, -1, wszBuf, ilen); //UTFËΩ¨Á†Å
     std::wstring str(wszBuf);
     delete []wszBuf;
     return str;
@@ -563,12 +563,12 @@ void wkeEditorRedo(wkeWebView webView)
     pfn ? pfn(webView) : pfn;
 }
 
-void wkeSetEditable(wkeWebView webView, bool editable)
-{
-    typedef void(*FUN)(wkeWebView, bool);
-    LOADFUN(wkeSetEditable);
-    pfn ? pfn(webView, editable) : pfn;
-}
+// void wkeSetEditable(wkeWebView webView, bool editable)
+// {
+//     typedef void(*FUN)(wkeWebView, bool);
+//     LOADFUN(wkeSetEditable);
+//     pfn ? pfn(webView, editable) : pfn;
+// }
 
 bool wkeFireMouseEvent(wkeWebView webView, unsigned int message, int x, int y, unsigned int flags)
 {
@@ -577,12 +577,12 @@ bool wkeFireMouseEvent(wkeWebView webView, unsigned int message, int x, int y, u
     return pfn ? pfn(webView, message, x, y, flags) : false;
 }
 
-bool wkeFireContextMenuEvent(wkeWebView webView, int x, int y, unsigned int flags)
-{
-    typedef bool(*FUN)(wkeWebView, int, int, unsigned int);
-    LOADFUN(wkeFireContextMenuEvent);
-    return pfn ? pfn(webView, x, y, flags) : false;
-}
+// bool wkeFireContextMenuEvent(wkeWebView webView, int x, int y, unsigned int flags)
+// {
+//     typedef bool(*FUN)(wkeWebView, int, int, unsigned int);
+//     LOADFUN(wkeFireContextMenuEvent);
+//     return pfn ? pfn(webView, x, y, flags) : false;
+// }
 
 bool wkeFireMouseWheelEvent(wkeWebView webView, int x, int y, int delta, unsigned int flags)
 {
@@ -891,17 +891,17 @@ void wkeLayoutIfNeeded(wkeWebView webView)
 void wkePaint(wkeWebView webView, void *bits, int pitch)
 {
     typedef void(*FUN)(wkeWebView, void *, int);
-    LOADFUN(wkePaint2);
+    LOADFUN(wkePaint);
     pfn ? pfn(webView, bits, pitch) : pfn;
 }
 
-void wkePaint2(wkeWebView webView, void *bits, int bufW, int bufH, int xDst, int yDst,
-               int w, int h, int xSrc, int ySrc, bool bCopyAlpha)
-{
-    typedef void(*FUN)(wkeWebView, void *, int, int, int, int, int, int, int, int, bool);
-    LOADFUN(wkePaint);
-    pfn ? pfn(webView, bits, bufW, bufH, xDst, yDst, w, h, xSrc, ySrc, bCopyAlpha) : pfn;
-}
+// void wkePaint2(wkeWebView webView, void *bits, int bufW, int bufH, int xDst, int yDst,
+//                int w, int h, int xSrc, int ySrc, bool bCopyAlpha)
+// {
+//     typedef void(*FUN)(wkeWebView, void *, int, int, int, int, int, int, int, int, bool);
+//     LOADFUN(wkePaint2);
+//     pfn ? pfn(webView, bits, bufW, bufH, xDst, yDst, w, h, xSrc, ySrc, bCopyAlpha) : pfn;
+// }
 
 bool wkeRepaintIfNeeded(wkeWebView webView)
 {
@@ -1485,7 +1485,7 @@ void wkeSetWindowTitleW(wkeWebView webWindow, const wchar_t *title)
 }
 
 //////////////////////////////////////////////////////////////////////////
-// “‘œ¬ «C/C++ ”Î JS ª•µ˜œ‡πÿ API
+// ‰ª•‰∏ãÊòØC/C++ ‰∏é JS ‰∫íË∞ÉÁõ∏ÂÖ≥ API
 
 jsValue wkeRunJSA(wkeWebView webView, const utf8 *script)
 {

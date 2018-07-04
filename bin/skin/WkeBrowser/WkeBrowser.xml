@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<Window size="1024,768" sizebox="4,4,6,6" caption="0,0,0,30" showshadow="true" shadowsize="4">
+    <Font name="微软雅黑" size="13"/>
+    <Font name="微软雅黑" size="16"/>
+    <Font name="微软雅黑" size="22"/>
+
+    <VerticalLayout inset="1,1,1,1" bkcolor="#FFA0A0A4" bordercolor="#FF3F71AB" bordersize="1">
+        <!-- 标题栏 -->
+        <HorizontalLayout inset="20,0,0,0" height="30" >
+            <Label text="MiniBlink 浏览器 Demo(Chromium49)" font="1" textcolor="#FFFFFFFF"/>
+            <Button name="btnmin" width="31" height="29" normalimage="file='BT_MIN.png' source='0,0,31,29'" hotimage="file='BT_MIN.png' source='31,0,62,29'" pushedimage="file='BT_MIN.png' source='62,0,93,29'" />
+            <Button name="btnclose" width="45" height="29" normalimage="file='BT_CLOSE.png' source='0,0,45,29'" hotimage="file='BT_CLOSE.png' source='45,0,90,29'" pushedimage="file='BT_CLOSE.png' source='90,0,135,29'" />
+        </HorizontalLayout>
+        <!-- 导航栏 -->
+        <HorizontalLayout height="30" inset="3,3,9,3" childpadding="5" >
+            <Button name="btnBack" text="向后" width="50" textcolor="#FF1C1C1C" font="0" hotbkcolor="#FF3F71AB" />
+            <Button name="btnforward" text="向前" width="50" textcolor="#FF1C1C1C" font="0" hotbkcolor="#FF3F71AB" />
+            <Edit name="urlEdit" height="26" textpadding="5,0,5,0" textcolor="#FF646464"  bkcolor="#FFFFFFFF" textcolor="#FF1C1C1C" font="0" />
+            <Button name="btnGo" text="前往" width="50" textcolor="#FF1C1C1C" font="0" hotbkcolor="#FF3F71AB" />
+            <Button name="btnRefresh" text="运行js命令" width="70" textcolor="#FF1C1C1C" font="0" hotbkcolor="#FF3F71AB" />
+        </HorizontalLayout>
+
+        <HorizontalLayout name="browser" >
+            <Browser name="ie" bkcolor="#FFFFFFFF" />  
+        </HorizontalLayout>
+
+        <!-- 状态栏 -->
+        <HorizontalLayout inset="20,0,0,0" height="30" >
+            <Label text="这是 MiniBlink 浏览器控件测试窗体" textcolor="#FF000000" font="0" />
+        </HorizontalLayout>
+    </VerticalLayout>
+</Window>

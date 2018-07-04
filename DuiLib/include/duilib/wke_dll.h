@@ -1,4 +1,4 @@
-#ifndef __WKE_DLL_H__
+ï»¿#ifndef __WKE_DLL_H__
 #define __WKE_DLL_H__
 #pragma once
 
@@ -492,7 +492,7 @@ typedef enum
     JSTYPE_ARRAY,
 } jsType;
 
-// cexer JS¶ÔÏó¡¢º¯Êı°ó¶¨Ö§³Ö
+// cexer JSå¯¹è±¡ã€å‡½æ•°ç»‘å®šæ”¯æŒ
 typedef jsValue(*jsGetPropertyCallback)(jsExecState es, jsValue object, const char *propertyName);
 typedef bool(*jsSetPropertyCallback)(jsExecState es, jsValue object, const char *propertyName, jsValue value);
 typedef jsValue(*jsCallAsFunctionCallback)(jsExecState es, jsValue object, jsValue *args, int argCount);
@@ -511,8 +511,8 @@ typedef struct tagjsData
 
 
 //////////////////////////////////////////////////////////////////////////
-// miniblink ¶¯Ì¬¿âµÄ¼ÓÔØÓë³õÊ¼»¯£¬±ØĞë³É¶Ôµ÷ÓÃ¡£
-// ÄÚ²¿Ê¹ÓÃÒıÓÃ¼ÆÊı£¬µ±ÒıÓÃ¼ÆÊıÎª0Ê±£¬Ğ¶ÔØ miniblink ¶¯Ì¬¿â
+// miniblink åŠ¨æ€åº“çš„åŠ è½½ä¸åˆå§‹åŒ–ï¼Œå¿…é¡»æˆå¯¹è°ƒç”¨ã€‚
+// å†…éƒ¨ä½¿ç”¨å¼•ç”¨è®¡æ•°ï¼Œå½“å¼•ç”¨è®¡æ•°ä¸º0æ—¶ï¼Œå¸è½½ miniblink åŠ¨æ€åº“
 DUILIB_API bool LoadWke(LPCTSTR szWkeDll);
 DUILIB_API void FreeWke(void);
 
@@ -637,11 +637,13 @@ DUILIB_API void            wkeEditorRedo(wkeWebView webView);
 #define         wkeUndo             wkeEditorUndo
 #define         wkeRedo             wkeEditorRedo
 
-DUILIB_API void            wkeSetEditable(wkeWebView webView, bool editable);
+// miniblink å†…éƒ¨æ²¡æœ‰å®ç°
+// DUILIB_API void            wkeSetEditable(wkeWebView webView, bool editable);
 
 DUILIB_API bool            wkeFireMouseEvent(wkeWebView webView, unsigned int message, int x, int y,
                                              unsigned int flags);
-DUILIB_API bool            wkeFireContextMenuEvent(wkeWebView webView, int x, int y, unsigned int flags);
+// miniblink å†…éƒ¨æ²¡æœ‰å®ç°
+// DUILIB_API bool            wkeFireContextMenuEvent(wkeWebView webView, int x, int y, unsigned int flags);
 DUILIB_API bool            wkeFireMouseWheelEvent(wkeWebView webView, int x, int y, int delta,
                                                   unsigned int flags);
 DUILIB_API bool            wkeFireKeyUpEvent(wkeWebView webView, unsigned int virtualKeyCode,
@@ -676,11 +678,11 @@ DUILIB_API void            wkeSetTouchEnabled(wkeWebView webView, bool b);
 DUILIB_API void            wkeSetNavigationToNewWindowEnable(wkeWebView webView, bool b);
 DUILIB_API void            wkeSetCspCheckEnable(wkeWebView webView, bool b);
 DUILIB_API void            wkeSetNpapiPluginsEnabled(wkeWebView webView, bool b);
-DUILIB_API void            wkeSetHeadlessEnabled(wkeWebView webView, bool b);  // ¿ÉÒÔ¹Ø±ÕäÖÈ¾
+DUILIB_API void            wkeSetHeadlessEnabled(wkeWebView webView, bool b);  // å¯ä»¥å…³é—­æ¸²æŸ“
 DUILIB_API void            wkeGetCursorInfoType(wkeWebView webView);
 
 DUILIB_API void            wkeSetDragEnable(wkeWebView webView,
-                                            bool b);       // ¿É¹Ø±ÕÍÏ×§ÎÄ¼ş¼ÓÔØÍøÒ³
+                                            bool b);       // å¯å…³é—­æ‹–æ‹½æ–‡ä»¶åŠ è½½ç½‘é¡µ
 DUILIB_API void            wkeSetDragFiles(wkeWebView webView, const POINT *clintPos, const POINT *screenPos,
                                            wkeString files[ ], int filesCount);
 
@@ -738,7 +740,7 @@ DUILIB_API void            wkeLoadFileW(wkeWebView webView, const wchar_t *filen
 #endif
 
 DUILIB_API const utf8     *wkeGetURLA(wkeWebView webView);
-DUILIB_API const wchar_t  *wkeGetURLW(wkeWebView webView);     // TODO Î´ÊµÏÖ
+DUILIB_API const wchar_t  *wkeGetURLW(wkeWebView webView);     // TODO æœªå®ç°
 #if defined(UNICODE) || defined(_UNICODE)
     #define wkeGetURL     wkeGetURLW
 #else
@@ -750,8 +752,9 @@ DUILIB_API bool            wkeIsDirty(wkeWebView webView);
 DUILIB_API void            wkeAddDirtyArea(wkeWebView webView, int x, int y, int w, int h);
 DUILIB_API void            wkeLayoutIfNeeded(wkeWebView webView);
 DUILIB_API void            wkePaint(wkeWebView webView, void *bits, int pitch);
-DUILIB_API void            wkePaint2(wkeWebView webView, void *bits, int bufW, int bufH, int xDst,
-                                     int yDst, int w, int h, int xSrc, int ySrc, bool bCopyAlpha);
+// miniblink å†…éƒ¨æ²¡æœ‰å®ç°
+// DUILIB_API void            wkePaint2(wkeWebView webView, void *bits, int bufW, int bufH, int xDst,
+//                                      int yDst, int w, int h, int xSrc, int ySrc, bool bCopyAlpha);
 DUILIB_API bool            wkeRepaintIfNeeded(wkeWebView webView);
 DUILIB_API HDC             wkeGetViewDC(wkeWebView webView);
 DUILIB_API HWND            wkeGetHostHWND(wkeWebView webView);
@@ -773,8 +776,8 @@ DUILIB_API bool            wkeIsCookieEnabled(wkeWebView webView);
 DUILIB_API void            wkeSetCookieEnabled(wkeWebView webView, bool enable);
 #define wkeCookieEnabled    wkeIsCookieEnabled
 
-// TODO unicode Î´ÊµÏÖ
-// cookie¸ñÊ½±ØĞëÊÇ:Set-cookie: PRODUCTINFO=webxpress; domain=.fidelity.com; path=/; secure")
+// TODO unicode æœªå®ç°
+// cookieæ ¼å¼å¿…é¡»æ˜¯:Set-cookie: PRODUCTINFO=webxpress; domain=.fidelity.com; path=/; secure")
 DUILIB_API void            wkeSetCookieA(wkeWebView webView, const utf8 *url, const utf8 *cookie);
 DUILIB_API void            wkeSetCookieW(wkeWebView webView, const wchar_t *url, const wchar_t *cookie);
 #if defined(UNICODE) || defined(_UNICODE)
@@ -786,7 +789,7 @@ DUILIB_API void            wkeSetCookieW(wkeWebView webView, const wchar_t *url,
 DUILIB_API void            wkeVisitAllCookie(void *params, wkeCookieVisitor visitor);
 DUILIB_API void            wkePerformCookieCommand(wkeCookieCommand command);
 
-// TODO ansi Î´ÊµÏÖ
+// TODO ansi æœªå®ç°
 DUILIB_API void            wkeSetCookieJarPathA(wkeWebView webView, const utf8 *path);
 DUILIB_API void            wkeSetCookieJarPathW(wkeWebView webView, const wchar_t *path);
 #if defined(UNICODE) || defined(_UNICODE)
@@ -795,7 +798,7 @@ DUILIB_API void            wkeSetCookieJarPathW(wkeWebView webView, const wchar_
     #define wkeSetCookieJarPath     wkeSetCookieJarPathA
 #endif
 
-// TODO ansi Î´ÊµÏÖ
+// TODO ansi æœªå®ç°
 DUILIB_API void            wkeSetCookieJarFullPathA(wkeWebView webView, const utf8 *path);
 DUILIB_API void            wkeSetCookieJarFullPathW(wkeWebView webView, const wchar_t *path);
 #if defined(UNICODE) || defined(_UNICODE)
@@ -804,7 +807,7 @@ DUILIB_API void            wkeSetCookieJarFullPathW(wkeWebView webView, const wc
     #define wkeSetCookieJarFullPath     wkeSetCookieJarFullPathA
 #endif
 
-// TODO ansi Î´ÊµÏÖ
+// TODO ansi æœªå®ç°
 DUILIB_API void            wkeSetLocalStorageFullPathA(wkeWebView webView, const utf8 *path);
 DUILIB_API void            wkeSetLocalStorageFullPathW(wkeWebView webView, const wchar_t *path);
 #if defined(UNICODE) || defined(_UNICODE)
@@ -813,7 +816,7 @@ DUILIB_API void            wkeSetLocalStorageFullPathW(wkeWebView webView, const
     #define wkeSetLocalStorageFullPath     wkeSetLocalStorageFullPathA
 #endif
 
-// TODO ansi Î´ÊµÏÖ
+// TODO ansi æœªå®ç°
 DUILIB_API void            wkeAddPluginDirectoryA(wkeWebView webView, const utf8 *path);
 DUILIB_API void            wkeAddPluginDirectoryW(wkeWebView webView, const wchar_t *path);
 #if defined(UNICODE) || defined(_UNICODE)
@@ -849,7 +852,7 @@ DUILIB_API const wchar_t  *wkeGetStringW(const wkeString string);
 #endif
 
 DUILIB_API void            wkeDeleteString(wkeString str);
-DUILIB_API wkeString       wkeCreateStringA(const utf8 *str, size_t len);  // TODO Î´ÊµÏÖ
+DUILIB_API wkeString       wkeCreateStringA(const utf8 *str, size_t len);  // TODO æœªå®ç°
 DUILIB_API wkeString       wkeCreateStringW(const wchar_t *str, size_t len);
 #if defined(UNICODE) || defined(_UNICODE)
     #define wkeCreateString     wkeCreateStringW
@@ -862,7 +865,7 @@ DUILIB_API bool            wkeAwake(wkeWebView webView);
 DUILIB_API bool            wkeIsAwake(wkeWebView webView);
 #define wkeAwaken   wkeAwake
 
-// TODO ĞèÒªÊµÏÖ unicode
+// TODO éœ€è¦å®ç° unicode
 DUILIB_API void            wkeSetUserKeyValue(wkeWebView webView, const char *key, void *value);
 DUILIB_API void           *wkeGetUserKeyValue(wkeWebView webView, const char *key);
 
@@ -872,15 +875,15 @@ DUILIB_API wkeTempCallbackInfo wkeGetTempCallbackInfo(wkeWebView webView);
 
 DUILIB_API void            wkeDeleteWillSendRequestInfo(wkeWebView webWindow, wkeWillSendRequestInfo *info);
 
-// TODO ĞèÒªÊµÏÖ unicode/ansi
+// TODO éœ€è¦å®ç° unicode/ansi
 DUILIB_API void            wkeNetSetMIMEType(void *job, char *type);
 DUILIB_API void            wkeNetGetMIMEType(void *job, wkeString mime);
 DUILIB_API void            wkeNetSetHTTPHeaderField(void *job, wchar_t *key, wchar_t *value, bool response);
 DUILIB_API const char     *wkeNetGetHTTPHeaderField(void *job, const char *key);
 DUILIB_API void            wkeNetSetURL(void *job, const char *url);
-// µ÷ÓÃ´Ëº¯Êıºó,ÍøÂç²ãÊÕµ½Êı¾İ»á´æ´¢ÔÚÒ»bufÄÚ,½ÓÊÕÊı¾İÍê³ÉºóÏìÓ¦OnLoadUrlEndÊÂ¼ş.#´Ëµ÷ÓÃÑÏÖØÓ°ÏìĞÔÄÜ,É÷ÓÃ
-// ´Ëº¯ÊıºÍwkeNetSetDataµÄÇø±ğÊÇ£¬wkeNetHookRequest»áÔÚ½ÓÊÜµ½ÕæÕıÍøÂçÊı¾İºóÔÙµ÷ÓÃ»Øµ÷£¬²¢ÔÊĞí»Øµ÷ĞŞ¸ÄÍøÂçÊı¾İ¡£
-// ¶øwkeNetSetDataÊÇÔÚÍøÂçÊı¾İ»¹Ã»·¢ËÍµÄÊ±ºòĞŞ¸Ä
+// è°ƒç”¨æ­¤å‡½æ•°å,ç½‘ç»œå±‚æ”¶åˆ°æ•°æ®ä¼šå­˜å‚¨åœ¨ä¸€bufå†…,æ¥æ”¶æ•°æ®å®Œæˆåå“åº”OnLoadUrlEndäº‹ä»¶.#æ­¤è°ƒç”¨ä¸¥é‡å½±å“æ€§èƒ½,æ…ç”¨
+// æ­¤å‡½æ•°å’ŒwkeNetSetDataçš„åŒºåˆ«æ˜¯ï¼ŒwkeNetHookRequestä¼šåœ¨æ¥å—åˆ°çœŸæ­£ç½‘ç»œæ•°æ®åå†è°ƒç”¨å›è°ƒï¼Œå¹¶å…è®¸å›è°ƒä¿®æ”¹ç½‘ç»œæ•°æ®ã€‚
+// è€ŒwkeNetSetDataæ˜¯åœ¨ç½‘ç»œæ•°æ®è¿˜æ²¡å‘é€çš„æ—¶å€™ä¿®æ”¹
 DUILIB_API void            wkeNetSetData(void *job, void *buf, int len);
 DUILIB_API void            wkeNetHookRequest(void *job);
 DUILIB_API void            wkeNetOnResponse(wkeWebView webView, wkeNetResponseCallback callback, void *param);
@@ -940,7 +943,7 @@ DUILIB_API void            wkeSetWindowTitleW(wkeWebView webWindow, const wchar_
 #endif
 
 //////////////////////////////////////////////////////////////////////////
-// ÒÔÏÂÊÇC/C++ Óë JS »¥µ÷Ïà¹Ø API
+// ä»¥ä¸‹æ˜¯C/C++ ä¸ JS äº’è°ƒç›¸å…³ API
 
 DUILIB_API jsValue      wkeRunJSA(wkeWebView webView, const utf8 *script);
 DUILIB_API jsValue      wkeRunJSW(wkeWebView webView, const wchar_t *script);
@@ -969,7 +972,7 @@ DUILIB_API void            jsBindSetterEx(const char *name, wkeJsNativeFunction 
 
 DUILIB_API int             jsArgCount(jsExecState es);
 DUILIB_API jsType          jsArgType(jsExecState es, int index);
-DUILIB_API jsValue         jsArgValue(jsExecState es, int index);  // TODO Ìí¼Ó¸Ã½Ó¿Ú£¬Óë jsArg ²¢´æ
+DUILIB_API jsValue         jsArgValue(jsExecState es, int index);  // TODO æ·»åŠ è¯¥æ¥å£ï¼Œä¸ jsArg å¹¶å­˜
 #define jsArg   jsArgValue
 
 DUILIB_API jsType          jsTypeOf(jsExecState es, jsValue v);

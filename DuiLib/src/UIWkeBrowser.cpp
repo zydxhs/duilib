@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 
 namespace DuiLib {
 void PaintUpdatedCallback(wkeWebView webView, void *param, const HDC hdc, int x, int y, int cx, int cy)
@@ -61,12 +61,12 @@ bool PromptBoxCallback(wkeWebView webView, void *param, const wkeString msg,
 
     return false;
 }
+
 //////////////////////////////////////////////////////////////////////////
 CWkeBrowserUI::CWkeBrowserUI(void) : m_pWeb(NULL)
 {
     LoadWke(_T("node.dll"));
 }
-
 
 CWkeBrowserUI::~CWkeBrowserUI(void)
 {
@@ -77,13 +77,13 @@ LPCTSTR CWkeBrowserUI::GetClass() const
 {
     return DUI_CTR_BROWSER;
 }
+
 LPVOID CWkeBrowserUI::GetInterface(LPCTSTR pstrName)
 {
     if (_tcscmp(pstrName, DUI_CTR_BROWSER) == 0) { return static_cast<CWkeBrowserUI *>(this); }
 
     return CControlUI::GetInterface(pstrName);
 }
-
 
 void CWkeBrowserUI::DoEvent(TEventUI &event)
 {
@@ -94,20 +94,20 @@ void CWkeBrowserUI::DoEvent(TEventUI &event)
     case UIEVENT_TIMER:
         if (event.wParam == DEFAULT_TIMERID)
         {
-            wkeRepaintIfNeeded((wkeWebView)m_pWeb);
+            wkeRepaintIfNeeded(m_pWeb);
             Invalidate();
         }
 
         break;
 
     //case UIEVENT_WINDOWSIZE:
-    //    wkeResize((wkeWebView)m_pWeb, GET_X_LPARAM(event.lParam), GET_Y_LPARAM(event.lParam));
+    //    wkeResize(m_pWeb, GET_X_LPARAM(event.lParam), GET_Y_LPARAM(event.lParam));
     //    Invalidate();
     //    break;
 
     case UIEVENT_BUTTONDOWN:
         {
-            wkeSetFocus((wkeWebView)m_pWeb);
+            wkeSetFocus(m_pWeb);
             SetCapture();
             int x = GET_X_LPARAM(event.lParam);
             int y = GET_Y_LPARAM(event.lParam);
@@ -126,7 +126,7 @@ void CWkeBrowserUI::DoEvent(TEventUI &event)
 
             if (event.wParam & MK_RBUTTON) { flags |= WKE_RBUTTON; }
 
-            bool handled = wkeFireMouseEvent((wkeWebView)m_pWeb, WM_LBUTTONDOWN, x, y, flags);
+            bool handled = wkeFireMouseEvent(m_pWeb, WM_LBUTTONDOWN, x, y, flags);
 
             if (handled) { return; }
         }
@@ -152,7 +152,7 @@ void CWkeBrowserUI::DoEvent(TEventUI &event)
 
             if (event.wParam & MK_RBUTTON) { flags |= WKE_RBUTTON; }
 
-            bool handled = wkeFireMouseEvent((wkeWebView)m_pWeb, WM_LBUTTONUP, x, y, flags);
+            bool handled = wkeFireMouseEvent(m_pWeb, WM_LBUTTONUP, x, y, flags);
 
             if (handled) { return; }
         }
@@ -177,7 +177,7 @@ void CWkeBrowserUI::DoEvent(TEventUI &event)
 
             if (event.wParam & MK_RBUTTON) { flags |= WKE_RBUTTON; }
 
-            bool handled = wkeFireMouseEvent((wkeWebView)m_pWeb, WM_MOUSEMOVE, x, y, flags);
+            bool handled = wkeFireMouseEvent(m_pWeb, WM_MOUSEMOVE, x, y, flags);
 
             if (handled) { return; }
         }
@@ -185,7 +185,7 @@ void CWkeBrowserUI::DoEvent(TEventUI &event)
 
     case UIEVENT_RBUTTONDOWN:
         {
-            wkeSetFocus((wkeWebView)m_pWeb);
+            wkeSetFocus(m_pWeb);
             int x = GET_X_LPARAM(event.lParam);
             int y = GET_Y_LPARAM(event.lParam);
             x -= m_rcPaint.left;
@@ -203,7 +203,7 @@ void CWkeBrowserUI::DoEvent(TEventUI &event)
 
             if (event.wParam & MK_RBUTTON) { flags |= WKE_RBUTTON; }
 
-            bool handled = wkeFireMouseEvent((wkeWebView)m_pWeb, WM_RBUTTONDOWN, x, y, flags);
+            bool handled = wkeFireMouseEvent(m_pWeb, WM_RBUTTONDOWN, x, y, flags);
 
             if (handled) { return; }
         }
@@ -228,7 +228,7 @@ void CWkeBrowserUI::DoEvent(TEventUI &event)
 
             if (event.wParam & MK_RBUTTON) { flags |= WKE_RBUTTON; }
 
-            bool handled = wkeFireMouseEvent((wkeWebView)m_pWeb, WM_RBUTTONUP, x, y, flags);
+            bool handled = wkeFireMouseEvent(m_pWeb, WM_RBUTTONUP, x, y, flags);
 
             if (handled) { return; }
         }
@@ -253,31 +253,31 @@ void CWkeBrowserUI::DoEvent(TEventUI &event)
 
             if (event.wParam & MK_RBUTTON) { flags |= WKE_RBUTTON; }
 
-            bool handled = wkeFireMouseEvent((wkeWebView)m_pWeb, WM_LBUTTONDBLCLK, x, y, flags);
+            bool handled = wkeFireMouseEvent(m_pWeb, WM_LBUTTONDBLCLK, x, y, flags);
 
             if (handled) { return; }
         }
         break;
 
-    case UIEVENT_CONTEXTMENU:
-        {
-            unsigned int flags = 0;
-
-            if (event.wParam & MK_CONTROL) { flags |= WKE_CONTROL; }
-
-            if (event.wParam & MK_SHIFT) { flags |= WKE_SHIFT; }
-
-            if (event.wParam & MK_LBUTTON) { flags |= WKE_LBUTTON; }
-
-            if (event.wParam & MK_MBUTTON) { flags |= WKE_MBUTTON; }
-
-            if (event.wParam & MK_RBUTTON) { flags |= WKE_RBUTTON; }
-
-            bool handled = wkeFireContextMenuEvent((wkeWebView)m_pWeb, event.ptMouse.x, event.ptMouse.y, flags);
-
-            if (handled) { return; }
-        }
-        break;
+    // case UIEVENT_CONTEXTMENU:
+    //     {
+    //         unsigned int flags = 0;
+    //
+    //         if (event.wParam & MK_CONTROL) { flags |= WKE_CONTROL; }
+    //
+    //         if (event.wParam & MK_SHIFT) { flags |= WKE_SHIFT; }
+    //
+    //         if (event.wParam & MK_LBUTTON) { flags |= WKE_LBUTTON; }
+    //
+    //         if (event.wParam & MK_MBUTTON) { flags |= WKE_MBUTTON; }
+    //
+    //         if (event.wParam & MK_RBUTTON) { flags |= WKE_RBUTTON; }
+    //
+    //         bool handled = wkeFireContextMenuEvent(m_pWeb, event.ptMouse.x, event.ptMouse.y, flags);
+    //
+    //         if (handled) { return; }
+    //     }
+    //     break;
 
     case UIEVENT_SCROLLWHEEL:
         {
@@ -303,7 +303,7 @@ void CWkeBrowserUI::DoEvent(TEventUI &event)
 
             if (event.wParam & MK_RBUTTON) { flags |= WKE_RBUTTON; }
 
-            bool handled = wkeFireMouseWheelEvent((wkeWebView)m_pWeb, pt.x, pt.y, delta, flags);
+            bool handled = wkeFireMouseWheelEvent(m_pWeb, pt.x, pt.y, delta, flags);
 
             if (handled) { return; }
         }
@@ -318,7 +318,7 @@ void CWkeBrowserUI::DoEvent(TEventUI &event)
 
             if (HIWORD(event.lParam) & KF_EXTENDED) { flags |= WKE_EXTENDED; }
 
-            bool handled = wkeFireKeyDownEvent((wkeWebView)m_pWeb, virtualKeyCode, flags, false);
+            bool handled = wkeFireKeyDownEvent(m_pWeb, virtualKeyCode, flags, false);
 
             if (event.wParam == VK_F5) { Reload(); }
 
@@ -335,7 +335,7 @@ void CWkeBrowserUI::DoEvent(TEventUI &event)
 
             if (HIWORD(event.lParam) & KF_EXTENDED) { flags |= WKE_EXTENDED; }
 
-            bool handled = wkeFireKeyUpEvent((wkeWebView)m_pWeb, virtualKeyCode, flags, false);
+            bool handled = wkeFireKeyUpEvent(m_pWeb, virtualKeyCode, flags, false);
 
             if (handled) { return; }
         }
@@ -350,7 +350,7 @@ void CWkeBrowserUI::DoEvent(TEventUI &event)
 
             if (HIWORD(event.lParam) & KF_EXTENDED) { flags |= WKE_EXTENDED; }
 
-            bool handled = wkeFireKeyPressEvent((wkeWebView)m_pWeb, charCode, flags, false);
+            bool handled = wkeFireKeyPressEvent(m_pWeb, charCode, flags, false);
 
             if (handled) { return; }
         }
@@ -358,7 +358,7 @@ void CWkeBrowserUI::DoEvent(TEventUI &event)
 
     case UIEVENT_IME_STARTCOMPOSITION:
         {
-            wkeRect caret = wkeGetCaretRect((wkeWebView)m_pWeb);
+            wkeRect caret = wkeGetCaretRect(m_pWeb);
 
             CANDIDATEFORM form;
             form.dwIndex = 0;
@@ -377,11 +377,11 @@ void CWkeBrowserUI::DoEvent(TEventUI &event)
         break;
 
     case UIEVENT_SETFOCUS:
-        wkeSetFocus((wkeWebView)m_pWeb);
+        wkeSetFocus(m_pWeb);
         break;
 
     case UIEVENT_KILLFOCUS:
-        wkeKillFocus((wkeWebView)m_pWeb);
+        wkeKillFocus(m_pWeb);
         break;
 
     default:
@@ -392,7 +392,7 @@ void CWkeBrowserUI::DoEvent(TEventUI &event)
 
 bool CWkeBrowserUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl)
 {
-    // »æÖÆÑ­Ðò£º±³¾°ÑÕÉ«->±³¾°Í¼->×´Ì¬Í¼->ÎÄ±¾->±ß¿ò
+    // ç»˜åˆ¶å¾ªåºï¼šèƒŒæ™¯é¢œè‰²->èƒŒæ™¯å›¾->çŠ¶æ€å›¾->æ–‡æœ¬->è¾¹æ¡†
     if (m_cxyBorderRound.cx > 0 || m_cxyBorderRound.cy > 0)
     {
         CRenderClip roundClip;
@@ -429,7 +429,7 @@ void CWkeBrowserUI::SetPos(RECT rc, bool bNeedInvalidate)
 
     if (m_pWeb)
     {
-        wkeResize((wkeWebView)m_pWeb, m_rcItem.right - m_rcItem.left, m_rcItem.bottom - m_rcItem.top);
+        wkeResize(m_pWeb, m_rcItem.right - m_rcItem.left, m_rcItem.bottom - m_rcItem.top);
     }
 }
 
@@ -458,18 +458,18 @@ jsValue JS_CALL js_msgBox(jsExecState es)
 void CWkeBrowserUI::InitBrowser(void)
 {
     m_pWeb = wkeCreateWebView();
-    wkeSetTransparent((wkeWebView)m_pWeb, false);
+    wkeSetTransparent(m_pWeb, false);
 
-    wkeOnPaintUpdated((wkeWebView)m_pWeb, PaintUpdatedCallback, this);
-    wkeOnTitleChanged((wkeWebView)m_pWeb, TitleChangedCallback, this);
-    wkeOnURLChanged((wkeWebView)m_pWeb, URLChangedCallback, this);
-    wkeOnAlertBox((wkeWebView)m_pWeb, AlertBoxCallback, this);
-    wkeOnConfirmBox((wkeWebView)m_pWeb, ConfirmBoxCallback, this);
-    wkeOnPromptBox((wkeWebView)m_pWeb, PromptBoxCallback, this);
+    wkeOnPaintUpdated(m_pWeb, PaintUpdatedCallback, this);
+    wkeOnTitleChanged(m_pWeb, TitleChangedCallback, this);
+    wkeOnURLChanged(m_pWeb, URLChangedCallback, this);
+    wkeOnAlertBox(m_pWeb, AlertBoxCallback, this);
+    wkeOnConfirmBox(m_pWeb, ConfirmBoxCallback, this);
+    wkeOnPromptBox(m_pWeb, PromptBoxCallback, this);
 
     CDuiRect rect(m_rcItem);
-    wkeResize((wkeWebView)m_pWeb, rect.GetWidth(), rect.GetHeight());
-    // wkeSetRepaintInterval((wkeWebView)m_pWeb, 15);
+    wkeResize(m_pWeb, rect.GetWidth(), rect.GetHeight());
+    // wkeSetRepaintInterval(m_pWeb, 15);
     m_pManager->SetTimer(this, DEFAULT_TIMERID, 15);
     jsBindFunction("msgBox", js_msgBox, 2);
 }
@@ -500,41 +500,41 @@ bool CWkeBrowserUI::SendNotify(void *pWebView, int nFlag, LPCTSTR sMsg, LPCTSTR 
 
 void CWkeBrowserUI::LoadUrl(LPCTSTR szUrl)
 {
-    wkeLoadURL((wkeWebView)m_pWeb, szUrl);
+    wkeLoadURL(m_pWeb, szUrl);
 }
 
 
 CDuiString CWkeBrowserUI::RunJS(LPCTSTR szJS)
 {
-    jsValue jsRet = wkeRunJS((wkeWebView)m_pWeb, szJS);
-    jsExecState jsState = wkeGlobalExec((wkeWebView)m_pWeb);
+    jsValue jsRet = wkeRunJS(m_pWeb, szJS);
+    jsExecState jsState = wkeGlobalExec(m_pWeb);
     CDuiString strRet = jsToTempString(jsState, jsRet);
     return strRet;
 }
 
 void CWkeBrowserUI::LoadFile(LPCTSTR szFile)
 {
-    wkeLoadFile((wkeWebView)m_pWeb, szFile);
+    wkeLoadFile(m_pWeb, szFile);
 }
 
 void CWkeBrowserUI::Reload(void)
 {
-    if (NULL != m_pWeb) { wkeReload((wkeWebView)m_pWeb); }
+    if (NULL != m_pWeb) { wkeReload(m_pWeb); }
 }
 
 void CWkeBrowserUI::GoBack()
 {
-    if (wkeCanGoBack((wkeWebView)m_pWeb)) { wkeGoBack((wkeWebView)m_pWeb); }
+    if (wkeCanGoBack(m_pWeb)) { wkeGoBack(m_pWeb); }
 }
 
 void CWkeBrowserUI::GoForward()
 {
-    if (wkeCanGoForward((wkeWebView)m_pWeb)) { wkeGoForward((wkeWebView)m_pWeb); }
+    if (wkeCanGoForward(m_pWeb)) { wkeGoForward(m_pWeb); }
 }
 
 void CWkeBrowserUI::PaintWebContent(HDC hDC, const RECT &rcPaint)
 {
-    HDC hDCWeb = wkeGetViewDC((wkeWebView)m_pWeb);
+    HDC hDCWeb = wkeGetViewDC(m_pWeb);
     RECT rc = GetClientPos();
     BitBlt(hDC, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, hDCWeb, 0, 0, SRCCOPY);
 }

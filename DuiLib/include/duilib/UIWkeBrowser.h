@@ -1,4 +1,4 @@
-#ifndef __WKE_BROWSER_H
+﻿#ifndef __WKE_BROWSER_H
 #define __WKE_BROWSER_H
 #pragma once
 
@@ -10,11 +10,11 @@ class DUILIB_API CWkeBrowserUI : public CControlUI
 public:
     enum
     {
-        ENTY_TITLE      = 1,    // ��ҳ����ı�
-        ENTY_URL,               // ��ҳURL �ı�
-        ENTY_ALERTBOX,          // ��ҳ���� ����
-        ENTY_CONFIRMBOX,        // ��ҳ���� ȷ��
-        ENTY_PROMPTBOX,         // ��ҳ���� ��ʾ
+        ENTY_TITLE      = 1,    // 网页标题改变
+        ENTY_URL,               // 网页URL 改变
+        ENTY_ALERTBOX,          // 网页弹框 提醒
+        ENTY_CONFIRMBOX,        // 网页弹框 确认
+        ENTY_PROMPTBOX,         // 网页弹框 提示
     };
 public:
     CWkeBrowserUI(void);
@@ -57,12 +57,12 @@ protected:
         DEFAULT_TIMERID = 10,
     };
 
-    void       *m_pWeb;
+    wkeWebView  m_pWeb;
 
-    // �ص�֪ͨ����
+    // 回调通知数据
     void       *m_pView;    //
-    CDuiString  m_sTitle;   // ��ǰ��ҳ����
-    CDuiString  m_sURL;     // ��ǰ��ҳ����
+    CDuiString  m_sTitle;   // 当前网页标题
+    CDuiString  m_sURL;     // 当前网页标题
     CDuiString  m_sMsg;
     CDuiString  m_sDefRet;
     CDuiString  m_sRet;
