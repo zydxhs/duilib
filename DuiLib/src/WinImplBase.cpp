@@ -318,9 +318,8 @@ LRESULT CWndImplBase::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bH
     {
         strResourcePath = m_pm.GetInstancePath();
         strResourcePath += GetSkinFolder().GetData();
+        m_pm.SetResourcePath(strResourcePath.GetData());
     }
-
-    m_pm.SetResourcePath(strResourcePath.GetData());
 
     switch (GetResourceType())
     {
