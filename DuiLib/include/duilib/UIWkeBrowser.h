@@ -33,7 +33,9 @@ public:
     void Reload(void);
 
     CDuiString RunJS(LPCTSTR strValue);
+    bool CanGoBack();
     void GoBack();
+    bool CanGoForward();
     void GoForward();
 
     const CDuiString &GetTitle(void) { return m_sTitle; }

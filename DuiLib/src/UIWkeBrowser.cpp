@@ -433,28 +433,6 @@ void CWkeBrowserUI::SetPos(RECT rc, bool bNeedInvalidate)
     }
 }
 
-jsValue JS_CALL js_msgBox(jsExecState es)
-{
-    int nCnt = jsArgCount(es);
-    jsType a = jsArgType(es, 0);
-    jsType b = jsArgType(es, 1);
-    jsValue a1 = jsArgValue(es, 0);
-    jsValue b1 = jsArgValue(es, 1);
-    //const wchar_t *msg = wkeJSToTempStringW(es, a1);
-    //const wchar_t *tit = wkeJSToTempStringW(es, b1);
-    //const utf8 *msg1 = wkeJSToTempStringA(es, a1);
-    //const utf8 *tit1 = wkeJSToTempStringA(es, b1);
-    wstring text(jsToTempStringW(es, jsArgValue(es, 0)));
-    wstring title(jsToTempStringW(es, jsArgValue(es, 1)));
-
-    //HWND hwnd = s_pDlg->GetHWND();
-
-    //MessageBoxW(NULL, text.c_str(), title.c_str(), 0);
-    DUITRACE(_T("msg=%s, title=%s"), text.c_str(), title.c_str());
-
-    return jsUndefined(es);
-}
-
 void CWkeBrowserUI::InitBrowser(void)
 {
     m_pWeb = wkeCreateWebView();
@@ -467,11 +445,8 @@ void CWkeBrowserUI::InitBrowser(void)
     wkeOnConfirmBox(m_pWeb, ConfirmBoxCallback, this);
     wkeOnPromptBox(m_pWeb, PromptBoxCallback, this);
 
-    CDuiRect rect(m_rcItem);
-    wkeResize(m_pWeb, rect.GetWidth(), rect.GetHeight());
-    // wkeSetRepaintInterval(m_pWeb, 15);
+    wkeResize(m_pWeb, m_rcItem.right - m_rcItem.left, m_rcItem.bottom - m_rcItem.top);
     m_pManager->SetTimer(this, DEFAULT_TIMERID, 15);
-    jsBindFunction("msgBox", js_msgBox, 2);
 }
 
 bool CWkeBrowserUI::SendNotify(void *pWebView, int nFlag, LPCTSTR sMsg, LPCTSTR sDefRet, LPCTSTR sRet)
@@ -503,15 +478,6 @@ void CWkeBrowserUI::LoadUrl(LPCTSTR szUrl)
     wkeLoadURL(m_pWeb, szUrl);
 }
 
-
-CDuiString CWkeBrowserUI::RunJS(LPCTSTR szJS)
-{
-    jsValue jsRet = wkeRunJS(m_pWeb, szJS);
-    jsExecState jsState = wkeGlobalExec(m_pWeb);
-    CDuiString strRet = jsToTempString(jsState, jsRet);
-    return strRet;
-}
-
 void CWkeBrowserUI::LoadFile(LPCTSTR szFile)
 {
     wkeLoadFile(m_pWeb, szFile);
@@ -522,14 +488,32 @@ void CWkeBrowserUI::Reload(void)
     if (NULL != m_pWeb) { wkeReload(m_pWeb); }
 }
 
+CDuiString CWkeBrowserUI::RunJS(LPCTSTR szJS)
+{
+    jsValue jsRet = wkeRunJS(m_pWeb, szJS);
+    jsExecState jsState = wkeGlobalExec(m_pWeb);
+    CDuiString strRet = jsToTempString(jsState, jsRet);
+    return strRet;
+}
+
+bool CWkeBrowserUI::CanGoBack()
+{
+    return wkeCanGoBack(m_pWeb);
+}
+
 void CWkeBrowserUI::GoBack()
 {
-    if (wkeCanGoBack(m_pWeb)) { wkeGoBack(m_pWeb); }
+    wkeGoBack(m_pWeb);
+}
+
+bool CWkeBrowserUI::CanGoForward()
+{
+    return wkeCanGoForward(m_pWeb);
 }
 
 void CWkeBrowserUI::GoForward()
 {
-    if (wkeCanGoForward(m_pWeb)) { wkeGoForward(m_pWeb); }
+    wkeGoForward(m_pWeb);
 }
 
 void CWkeBrowserUI::PaintWebContent(HDC hDC, const RECT &rcPaint)

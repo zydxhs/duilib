@@ -117,7 +117,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
     CPaintManagerUI::SetCurrentPath(CPaintManagerUI::GetInstancePath());
 
     s_pDlg = new CMainDlg;
-    s_pDlg->Create(NULL, _T("Redrain wke demo"), UI_WNDSTYLE_FRAME, WS_EX_WINDOWEDGE);
+    s_pDlg->Create(NULL, _T("Redrain wke demo"), UI_WNDSTYLE_FRAME, UI_WNDSTYLE_EX_FRAME);
     s_pDlg->CenterWindow();
     s_pDlg->ShowWindow(true);
     CPaintManagerUI::MessageLoop();
