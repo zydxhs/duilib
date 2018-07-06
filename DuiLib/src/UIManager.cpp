@@ -4021,9 +4021,12 @@ void CPaintManagerUI::SetWindowAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     {
         SetLayeredOpacity(_ttoi(pstrValue));
     }
-    else if (_tcscmp(pstrName, _T("layeredimage")) == 0)
+    else if (_tcscmp(pstrName, _T("layered")) == 0)
     {
         SetLayered(true);
+    }
+    else if (_tcscmp(pstrName, _T("shape")) == 0)
+    {
         SetLayeredImage(pstrValue);
     }
     else if (_tcsicmp(pstrName, _T("disabledfontcolor")) == 0)

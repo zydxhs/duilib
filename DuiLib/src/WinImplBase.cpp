@@ -177,8 +177,8 @@ LRESULT CWndImplBase::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL 
 
     RECT rcCaption = m_pm.GetCaptionRect();
 
-    if (pt.x >= rcClient.left + rcCaption.left && pt.x < rcClient.right - rcCaption.right \
-        && pt.y >= rcCaption.top && pt.y < rcCaption.bottom)
+    if ((pt.x >= rcClient.left + rcCaption.left && pt.x < rcClient.right - rcCaption.right) &&
+        ((pt.y >= rcCaption.top && pt.y < rcCaption.bottom) || -1 == rcCaption.bottom))
     {
         CControlUI *pControl = static_cast<CControlUI *>(m_pm.FindControl(pt));
 
@@ -189,6 +189,19 @@ LRESULT CWndImplBase::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL 
             return HTCAPTION;
         }
     }
+
+    // if (pt.x >= rcClient.left + rcCaption.left && pt.x < rcClient.right - rcCaption.right
+    //          && pt.y >= rcCaption.top && pt.y < rcCaption.bottom)
+    // {
+    //     CControlUI *pControl = static_cast<CControlUI *>(m_pm.FindControl(pt));
+    //
+    //     if (pControl && _tcsicmp(pControl->GetClass(), DUI_CTR_BUTTON) != 0 &&
+    //         _tcsicmp(pControl->GetClass(), DUI_CTR_OPTION) != 0 &&
+    //         _tcsicmp(pControl->GetClass(), DUI_CTR_TEXT) != 0)
+    //     {
+    //         return HTCAPTION;
+    //     }
+    // }
 
     return HTCLIENT;
 }

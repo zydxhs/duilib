@@ -63,8 +63,16 @@
         <Attribute name="showdirty" default="false" type="BOOL" comment="绘制脏矩形(屏幕上更新的区域被称为脏矩形)"/>
         <Attribute name="noactivate" default="false" type="BOOL" comment="是否允许激活，默认不允许"/>
         <Attribute name="opacity" default="255" type="BYTE" comment="窗体透明度(0-255)，默认不透明"/>
-        <Attribute name="layeredopacity" default="255" type="BYTE" comment="分层窗体透明度(0-255)，默认不透明还分层窗体"/>
-        <Attribute name="layeredimage" default="false" type="BOOL" comment="分层窗体背景图，默认无"/>
+        <Attribute name="layeredopacity" default="255" type="BYTE" comment="分层窗体透明度(0-255)，默认不透明"/>
+        <!-- opacity 与 layered 不能同时使用：opacity 属性会把 layered 设置为 false -->
+        <!-- 异形窗体与窗体阴影，不能同时使用； -->
+        <!-- 创建异形窗体：layered + shape , layered + 根布局的 bkimage + bkcolor(设置为0)。 -->
+        <!-- 前者：图片可视范围外的控件（部分），不会显示，真异形 -->
+        <!-- 后者：图片可视区域外的控件（部分），也会显示，伪异形。 -->
+        <!-- 伪异形存在的问题1:Label,Edit,Text,RichEdit控件字体透明，单击文件会穿透窗体 -->
+        <!-- 伪异形存在的问题1:上述静态控件如设置背影色，单击控件会穿透窗体 -->
+        <Attribute name="layered" default="false" type="BOOL" comment="是否使用分层窗体，默认不使用。"/>
+        <Attribute name="shape" default="" type="STRING" comment="分层窗体背景图，默认无。"/>
         <!-- 扩展属性 -->
         <Attribute name="shadowshow" default="false" type="BOOL" comment="是否启用窗体阴影"/>
         <Attribute name="shadowsize" default="5" type="BYTE" comment="算法阴影的宽度(-20到20),默认5"/>
@@ -241,7 +249,7 @@
             <Attribute name="disabledimage" default="" type="STRING" comment="禁用的状态图片"/>
             <Attribute name="foreimage" default="" type="STRING" comment="前景图片"/>
             <Attribute name="hotforeimage" default="" type="STRING" comment="鼠标悬浮状态前景图片"/>
-            <Attribute name="fivestatusimage" default="" type="STRING" comment="5态图片"/>
+            <Attribute name="fivestatusimage" default="" type="STRING" comment="5态图片，宽高相同，水平排列，顺序为：正常，按下，悬浮，焦点，禁用。"/>
             <Attribute name="fadedelta" default="0" type="BYTE" comment="普通图片透明度变化步长"/>
             <Attribute name="hotbkcolor" default="#00000000" type="DWORD" comment="鼠标悬浮状态背景色"/>
             <Attribute name="hottextcolor" default="#00000000" type="DWORD" comment="鼠标悬浮字体颜色，0表示不使用此颜色,如(#FFFF0000)"/>
@@ -275,11 +283,13 @@
             <!-- 扩展属性 -->
             <Attribute name="bindtablayout" default="" type="STRING" comment="TabLayout控件名"/>
             <Attribute name="bindtabindex" default="" type="INT" comment="单击后触发TabLayout页面的索引号"/>
+            <!-- 不支持 fivestatusimage -->
         </Option>
         <RadioBox parent="Option" notifies="setfocus killfocus timer menu click selectchanged windowinit(root) dblclick">
+            <!-- 不支持 fivestatusimage -->
         </RadioBox>
         <CheckBox parent="Option" notifies="setfocus killfocus timer menu click selectchanged windowinit(root) dblclick">
-            <!-- group属性无效 -->
+            <!-- 不支持 group, fivestatusimage -->
         </CheckBox>
         <Text parent="Label" notifies="setfocus killfocus timer menu link windowinit(root) dblclick">
         </Text>

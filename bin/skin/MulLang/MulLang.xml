@@ -3,7 +3,7 @@
 <Window size="360,600" sizebox="4,4,6,6" caption="0,0,0,24" roundcorner="4,4" shadowshow="true" shadowsize="8" shadowcolor="#FF4F4F4F" shadowsharpness="8" shadowdarkness="180" shadowpos="0,0" dropenable="true" >
     <Include source="default.xml" />
 
-	<VerticalLayout inset="10,6,10,6" bkcolor="#FFEA679F" colorhsl="true" bkimage="file='voice_rect.png' xtiled='true' ytiled='true' fade='200' dest='0,0,200,400'" bkcolor="#FFC8C8C8">
+	<VerticalLayout inset="10,6,10,6" bkcolor="#FFC8C8C8" colorhsl="true" bkimage="file='voice_rect.png' xtiled='true' ytiled='true' fade='200' dest='0,0,200,400'" >
         <HWeightLayout height="24" inset="10,0,0,0" >
             <Label name="apptitle" text="%[title]" width="30" minwidth="20" maxwidth="60" font="1" textcolor="#FFFFFFFF" bkcolor="#FF00F0F0" />
             <Label name="1" text="http://baidu.com" bkcolor="#FF0000F0" weight="-10" />

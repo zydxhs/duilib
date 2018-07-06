@@ -358,6 +358,7 @@ void COptionUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         m_nBindTabIndex = _ttoi(pstrValue);
         m_nBindTabIndex = m_nBindTabIndex >= 0 ? m_nBindTabIndex : 0;
     }
+    else if (_tcscmp(pstrName, _T("fivestatusimage")) == 0) { DUITRACE(_T("不支持属性:fivestatusimage")); }
     else { CButtonUI::SetAttribute(pstrName, pstrValue); }
 }
 
