@@ -24,6 +24,7 @@ CWndImplBase::CWndImplBase()
     , m_pbtnRestore(NULL)
     , m_pbtnClose(NULL)
     , m_nWndState(ESTATE_UNKNOW)
+    , m_aryCtrlStatic(7)
 {
 }
 
@@ -182,12 +183,7 @@ LRESULT CWndImplBase::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL 
     {
         CControlUI *pControl = static_cast<CControlUI *>(m_pm.FindControl(pt));
 
-        if (pControl && _tcsicmp(pControl->GetClass(), DUI_CTR_BUTTON) != 0 &&
-            _tcsicmp(pControl->GetClass(), DUI_CTR_OPTION) != 0 &&
-            _tcsicmp(pControl->GetClass(), DUI_CTR_TEXT) != 0)
-        {
-            return HTCAPTION;
-        }
+        if (pControl && IsCaptionCtrl(pControl)) { return HTCAPTION; }
     }
 
     // if (pt.x >= rcClient.left + rcCaption.left && pt.x < rcClient.right - rcCaption.right
@@ -404,6 +400,25 @@ LRESULT CWndImplBase::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bH
         m_pm.SetRoundCorner(0, 0);
     }
 
+    if (!(::GetWindowLong(*this, GWL_STYLE) & WS_CHILD))
+    {
+        AddIncludeCtrlForCaption(DUI_CTR_CONTROL);
+        AddIncludeCtrlForCaption(DUI_CTR_LABEL);
+        AddIncludeCtrlForCaption(DUI_CTR_TEXT);
+        AddIncludeCtrlForCaption(DUI_CTR_GIFANIM);
+        AddIncludeCtrlForCaption(DUI_CTR_PWDCHECK);
+        AddIncludeCtrlForCaption(DUI_CTR_PROGRESS);
+        AddIncludeCtrlForCaption(DUI_CTR_CONTAINER);
+        AddIncludeCtrlForCaption(DUI_CTR_CHILDLAYOUT);
+        AddIncludeCtrlForCaption(DUI_CTR_VERTICALLAYOUT);
+        AddIncludeCtrlForCaption(DUI_CTR_VBOX);
+        AddIncludeCtrlForCaption(DUI_CTR_HORIZONTALLAYOUT);
+        AddIncludeCtrlForCaption(DUI_CTR_HBOX);
+        AddIncludeCtrlForCaption(DUI_CTR_HWEIGHTLAYOUT);
+        AddIncludeCtrlForCaption(DUI_CTR_TILELAYOUT);
+        AddIncludeCtrlForCaption(DUI_CTR_TABLAYOUT);
+    }
+
     m_pm.AttachDialog(pRoot);
     m_pm.AddNotifier(this);
     OnInitWindow();
@@ -559,6 +574,28 @@ void CWndImplBase::OnClick(TNotifyUI &msg)
     else if (m_pbtnMin == msg.pSender)      { SendMessage(WM_SYSCOMMAND, SC_MINIMIZE, 0); }
     else if (m_pbtnMax == msg.pSender)      { SendMessage(WM_SYSCOMMAND, SC_MAXIMIZE, 0); }
     else if (m_pbtnRestore == msg.pSender)  { SendMessage(WM_SYSCOMMAND, SC_RESTORE, 0); }
+}
+
+void CWndImplBase::AddIncludeCtrlForCaption(LPCTSTR szCtrlName)
+{
+    if (-1 == m_aryCtrlStatic.Find((LPVOID)szCtrlName))
+    {
+        m_aryCtrlStatic.Add((LPVOID)szCtrlName);
+    }
+}
+
+bool CWndImplBase::IsCaptionCtrl(CControlUI *pCtrl)
+{
+    LPCTSTR szCtrlName = pCtrl->GetClass();
+
+    for (int i = 0; i < m_aryCtrlStatic.GetSize(); ++i)
+    {
+        LPCTSTR szName = (LPCTSTR)m_aryCtrlStatic.GetAt(i);
+
+        if (0 == _tcscmp(szCtrlName, szName)) { return true; }
+    }
+
+    return false;
 }
 
 void CWndImplBase::ShowWindow(bool bShow /*= true*/, bool bTakeFocus /*= true*/)

@@ -36,6 +36,12 @@ protected:
     DUI_DECLARE_MESSAGE_MAP()
     virtual void OnClick(TNotifyUI &msg);
 
+    // 添加在标题栏上不支持鼠标/键盘操作的控件。
+    // 默认已添加控件：Control/Label/Text//GifAnim/PwdCheck/Progress/所有布局控件
+    void AddIncludeCtrlForCaption(LPCTSTR szCtrlName);
+    //
+    bool IsCaptionCtrl(CControlUI *pCtrl);
+
 protected:
     // 窗口类相关接口
     virtual LPCTSTR GetWindowClassName(void) const = 0;
@@ -114,6 +120,7 @@ protected:
     CButtonUI      *m_pbtnClose;            // 关闭
 private:
     int             m_nWndState;            // 用于判断是否发送窗体数据初始化/保存消息
+    CDuiPtrArray    m_aryCtrlStatic;        // 标题栏上不支持鼠标/键盘操作的控件
 };
 
 }
