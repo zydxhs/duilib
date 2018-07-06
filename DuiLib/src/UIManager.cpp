@@ -2125,8 +2125,9 @@ void CPaintManagerUI::Invalidate(RECT &rcItem)
 
     if (rcItem.bottom < rcItem.top) { rcItem.bottom = rcItem.top; }
 
-    if (!m_bLayered) { ::InvalidateRect(m_hWndPaint, &rcItem, FALSE); }
-    else             { ::UnionRect(&m_rcLayeredUpdate, &m_rcLayeredUpdate, &rcItem); }
+    if (!m_bLayered) { ::UnionRect(&m_rcLayeredUpdate, &m_rcLayeredUpdate, &rcItem); }
+
+    ::InvalidateRect(m_hWndPaint, &rcItem, FALSE);
 }
 
 bool CPaintManagerUI::AttachDialog(CControlUI *pControl)
