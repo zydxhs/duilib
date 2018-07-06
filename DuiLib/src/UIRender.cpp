@@ -1551,7 +1551,8 @@ bool CRenderEngine::DrawImage(HDC hDC, CPaintManagerUI *pManager, const RECT &rc
     if (!::IntersectRect(&rcTemp, &rcDest, &rcPaint)) { return true; }
 
     DrawImage(hDC, drawInfo.pImageInfo->hBitmap, rcDest, rcPaint, drawInfo.rcBmpPart, drawInfo.rcScale9,
-              drawInfo.pImageInfo->bAlpha, drawInfo.uFade, drawInfo.bHole, drawInfo.bTiledX, drawInfo.bTiledY);
+              pManager->IsLayered() ? true : drawInfo.pImageInfo->bAlpha,
+              drawInfo.uFade, drawInfo.bHole, drawInfo.bTiledX, drawInfo.bTiledY);
     return true;
 }
 
@@ -1559,12 +1560,12 @@ void CRenderEngine::DrawColor(HDC hDC, const RECT &rc, DWORD color)
 {
     if (color <= 0x00FFFFFF) { return; }
 
-    if (color >= 0xFF000000)
-    {
-        ::SetBkColor(hDC, RGB(GetBValue(color), GetGValue(color), GetRValue(color)));
-        ::ExtTextOut(hDC, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
-    }
-    else
+    //if (color >= 0xFF000000)
+    //{
+    //    ::SetBkColor(hDC, RGB(GetBValue(color), GetGValue(color), GetRValue(color)));
+    //    ::ExtTextOut(hDC, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
+    //}
+    //else
     {
         // Create a new 32bpp bitmap with room for an alpha channel
         BITMAPINFO bmi = { 0 };

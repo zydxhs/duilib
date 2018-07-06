@@ -259,8 +259,8 @@ struct DUI_MSGMAP_ENTRY //定义一个结构体，来存放消息信息
 #define DUI_CTR_LIST                             (_T("List"))
 #define DUI_CTR_TEXT                             (_T("Text"))
 #define DUI_CTR_TREE                             (_T("Tree"))
-#define DUI_CTR_HBOX                             (_T("HBox"))
-#define DUI_CTR_VBOX                             (_T("VBox"))
+#define DUI_CTR_HBOX                             (_T("HBox"))   // HorizontalLayout
+#define DUI_CTR_VBOX                             (_T("VBox"))   // VerticalLayout
 
 #define DUI_CTR_ILIST                            (_T("IList"))
 #define DUI_CTR_COMBO                            (_T("Combo"))
@@ -279,7 +279,7 @@ struct DUI_MSGMAP_ENTRY //定义一个结构体，来存放消息信息
 #define DUI_CTR_RICHEDIT                         (_T("RichEdit"))
 #define DUI_CTR_CHECKBOX                         (_T("CheckBox"))
 #define DUI_CTR_RADIOBOX                         (_T("RadioBox"))
-#define DUI_CTR_COMBOBOX                         (_T("ComboBox"))
+#define DUI_CTR_COMBOBOX                         (_T("ComboBox"))   // Combo
 #define DUI_CTR_DATETIME                         (_T("DateTime"))
 #define DUI_CTR_TREEVIEW                         (_T("TreeView"))
 #define DUI_CTR_TREENODE                         (_T("TreeNode"))

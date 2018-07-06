@@ -62,7 +62,23 @@ void CEditWnd::Init(CEditUI *pOwner)
 {
     m_pOwner = pOwner;
     RECT rcPos = CalPos();
-    UINT uStyle = WS_CHILD | ES_AUTOHSCROLL | pOwner->GetWindowStyls();
+    UINT uStyle = 0;
+
+    if (pOwner->GetManager()->IsLayered())
+    {
+        uStyle = WS_POPUP | ES_AUTOHSCROLL | WS_VISIBLE;
+        RECT rcWnd = { 0 };
+        ::GetWindowRect(m_pOwner->GetManager()->GetPaintWindow(), &rcWnd);
+        rcPos.left += rcWnd.left;
+        rcPos.right += rcWnd.left;
+        rcPos.top += rcWnd.top;
+        rcPos.bottom += rcWnd.top;
+    }
+    else
+    {
+        uStyle = WS_CHILD | ES_AUTOHSCROLL | pOwner->GetWindowStyls();
+    }
+
     UINT uTextStyle = m_pOwner->GetTextStyle();
 
     if (uTextStyle & DT_LEFT) { uStyle |= ES_LEFT; }
