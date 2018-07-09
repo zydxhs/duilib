@@ -1132,12 +1132,6 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
                 if (!::GetUpdateRect(m_hWndPaint, &rcPaint, FALSE)) { return true; }
             }
 
-            // Set focus to first control?
-            if (m_bFocusNeeded)
-            {
-                SetNextTabControl();
-            }
-
             SetPainting(true);
 
             if (m_bUpdateNeeded)
@@ -1217,6 +1211,12 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
                 rcRoot.right -= m_rcLayeredInset.right;
                 rcRoot.bottom -= m_rcLayeredInset.bottom;
                 m_pRoot->SetPos(rcRoot, true);
+            }
+
+            // Set focus to first control?
+            if (m_bFocusNeeded)
+            {
+                SetNextTabControl();
             }
 
             //
