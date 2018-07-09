@@ -1316,6 +1316,52 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
                     pPostPaintControl->DoPostPaint(m_hDcOffscreen, rcPaint);
                 }
 
+                if (IsLayered())
+                {
+                    LPBYTE pOffScrBits = (LPBYTE)m_pOffscreenBits;
+                    long nClientWidth = rcClient.right - rcClient.left;
+#ifdef USE_GDIPLUS
+                    // 为RichEdit控件修补alpha
+                    CDuiPtrArray *pAryRichEdit = FindSubControlsByClass(m_pRoot, DUI_CTR_RICHEDIT, UIFIND_ALL | UIFIND_VISIBLE);
+
+                    for (int i = 0; i < pAryRichEdit->GetSize(); ++i)
+                    {
+                        CControlUI *pCtrl = (CControlUI *)pAryRichEdit->GetAt(i);
+                        RECT rcRichEdit = pCtrl->GetPos();
+
+                        if (IntersectRect(&rcRichEdit, &rcRichEdit, &rcPaint))
+                        {
+                            for (int y = rcRichEdit.top; y < rcRichEdit.bottom; ++y)
+                            {
+                                for (int x = rcRichEdit.left; x < rcRichEdit.right; ++x)
+                                {
+                                    int i = (y * nClientWidth + x) * 4;
+                                    pOffScrBits[i + 3] = 255;
+                                }
+                            }
+                        }
+                    }
+
+#else
+
+                    // 为整个绘图区域修补alpha
+                    for (int y = rcPaint.top; y < rcPaint.bottom; ++y)
+                    {
+                        for (int x = rcPaint.left; x < rcPaint.right; ++x)
+                        {
+                            int i = (y * nClientWidth + x) * 4;
+
+                            if ((pOffScrBits[i + 3] == 0) &&
+                                (pOffScrBits[i + 0] != 0 || pOffScrBits[i + 1] != 0 || pOffScrBits[i + 2] != 0))
+                            {
+                                pOffScrBits[i + 3] = 255;
+                            }
+                        }
+                    }
+
+#endif // USE_GDIPLUS
+                }
+
                 ::RestoreDC(m_hDcOffscreen, iSaveDC);
 
                 if (m_bLayered)
@@ -4344,13 +4390,13 @@ CControlUI *CPaintManagerUI::FindSubControlByClass(CControlUI *pParent, LPCTSTR 
     return pParent->FindControl(__FindControlFromClass, (LPVOID)pstrClass, UIFIND_ALL);
 }
 
-CDuiPtrArray *CPaintManagerUI::FindSubControlsByClass(CControlUI *pParent, LPCTSTR pstrClass)
+CDuiPtrArray *CPaintManagerUI::FindSubControlsByClass(CControlUI *pParent, LPCTSTR pstrClass, UINT uFlags)
 {
     if (pParent == NULL) { pParent = GetRoot(); }
 
     ASSERT(pParent);
     m_aFoundControls.Empty();
-    pParent->FindControl(__FindControlsFromClass, (LPVOID)pstrClass, UIFIND_ALL);
+    pParent->FindControl(__FindControlsFromClass, (LPVOID)pstrClass, uFlags);
     return &m_aFoundControls;
 }
 

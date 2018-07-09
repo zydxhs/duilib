@@ -410,7 +410,7 @@ HBITMAP CRenderEngine::CreateARGB32Bitmap(HDC hDC, int cx, int cy, COLORREF **pB
 
     lpbiSrc->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
     lpbiSrc->bmiHeader.biWidth = cx;
-    lpbiSrc->bmiHeader.biHeight = cy;
+    lpbiSrc->bmiHeader.biHeight = -cy;
     lpbiSrc->bmiHeader.biPlanes = 1;
     lpbiSrc->bmiHeader.biBitCount = 32;
     lpbiSrc->bmiHeader.biCompression = BI_RGB;
