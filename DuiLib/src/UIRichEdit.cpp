@@ -191,8 +191,7 @@ HRESULT InitDefaultCharFormat(CRichEditUI *re, CHARFORMAT2W *pcf, HFONT hfont)
     memset(pcf, 0, sizeof(CHARFORMAT2W));
     LOGFONT lf;
 
-    if (!hfont)
-    { hfont = re->GetManager()->GetFont(re->GetFont()); }
+    if (!hfont) { hfont = re->GetManager()->GetFont(re->GetFont()); }
 
     ::GetObject(hfont, sizeof(LOGFONT), &lf);
 
@@ -206,14 +205,11 @@ HRESULT InitDefaultCharFormat(CRichEditUI *re, CHARFORMAT2W *pcf, HFONT hfont)
     pcf->dwMask = CFM_SIZE | CFM_OFFSET | CFM_FACE | CFM_CHARSET | CFM_COLOR | CFM_BOLD | CFM_ITALIC |
                   CFM_UNDERLINE;
 
-    if (lf.lfWeight >= FW_BOLD)
-    { pcf->dwEffects |= CFE_BOLD; }
+    if (lf.lfWeight >= FW_BOLD) { pcf->dwEffects |= CFE_BOLD; }
 
-    if (lf.lfItalic)
-    { pcf->dwEffects |= CFE_ITALIC; }
+    if (lf.lfItalic) { pcf->dwEffects |= CFE_ITALIC; }
 
-    if (lf.lfUnderline)
-    { pcf->dwEffects |= CFE_UNDERLINE; }
+    if (lf.lfUnderline) { pcf->dwEffects |= CFE_UNDERLINE; }
 
     pcf->bCharSet = lf.lfCharSet;
     pcf->bPitchAndFamily = lf.lfPitchAndFamily;
@@ -255,10 +251,7 @@ HRESULT CreateHost(CRichEditUI *re, const CREATESTRUCT *pcs, CTxtWinHost **pptec
         }
     }
 
-    if (FAILED(hr))
-    {
-        delete phost;
-    }
+    if (FAILED(hr)) { delete phost; }
 
     return TRUE;
 }
@@ -288,12 +281,10 @@ BOOL CTxtWinHost::Init(CRichEditUI *re, const CREATESTRUCT *pcs)
     cRefs = 1;
 
     // Create and cache CHARFORMAT for this control
-    if (FAILED(InitDefaultCharFormat(re, &cf, NULL)))
-    { goto err; }
+    if (FAILED(InitDefaultCharFormat(re, &cf, NULL))) { goto err; }
 
     // Create and cache PARAFORMAT for this control
-    if (FAILED(InitDefaultParaFormat(re, &pf)))
-    { goto err; }
+    if (FAILED(InitDefaultParaFormat(re, &pf))) { goto err; }
 
     // edit controls created without a window are multiline by default
     // so that paragraph formats can be
@@ -314,13 +305,9 @@ BOOL CTxtWinHost::Init(CRichEditUI *re, const CREATESTRUCT *pcs)
         }
     }
 
-    if (!(dwStyle & ES_LEFT))
-    {
-        if (dwStyle & ES_CENTER)
-        { pf.wAlignment = PFA_CENTER; }
-        else if (dwStyle & ES_RIGHT)
-        { pf.wAlignment = PFA_RIGHT; }
-    }
+    if (dwStyle & ES_RIGHT) { pf.wAlignment = PFA_RIGHT; }
+    else if (dwStyle & ES_CENTER) { pf.wAlignment = PFA_CENTER; }
+    else { pf.wAlignment = PFA_LEFT; }
 
     fInplaceActive = TRUE;
 
@@ -347,10 +334,7 @@ BOOL CTxtWinHost::Init(CRichEditUI *re, const CREATESTRUCT *pcs)
     // with the private interface.
     pUnk->Release();
 
-    if (FAILED(hr))
-    {
-        goto err;
-    }
+    if (FAILED(hr)) { goto err; }
 
     // Set window text
     if (pcs && pcs->lpszName)
@@ -410,10 +394,7 @@ ULONG CTxtWinHost::Release(void)
 {
     ULONG c_Refs = --cRefs;
 
-    if (c_Refs == 0)
-    {
-        delete this;
-    }
+    if (c_Refs == 0) { delete this; }
 
     return c_Refs;
 }
@@ -565,10 +546,8 @@ BOOL CTxtWinHost::TxShowCaret(BOOL fShow)
 {
     fShowCaret = fShow;
 
-    if (fShow)
-    { return ::ShowCaret(m_re->GetManager()->GetPaintWindow()); }
-    else
-    { return ::HideCaret(m_re->GetManager()->GetPaintWindow()); }
+    if (fShow) { return ::ShowCaret(m_re->GetManager()->GetPaintWindow()); }
+    else        { return ::HideCaret(m_re->GetManager()->GetPaintWindow()); }
 }
 
 BOOL CTxtWinHost::TxSetCaretPos(INT x, INT y)
@@ -617,7 +596,7 @@ void CTxtWinHost::TxScrollWindowEx(INT dx, INT dy, LPCRECT lprcScroll, LPCRECT l
 void CTxtWinHost::TxSetCapture(BOOL fCapture)
 {
     if (fCapture) { m_re->SetCapture(); }
-    else { m_re->ReleaseCapture(); }
+    else           { m_re->ReleaseCapture(); }
 
     fCaptured = fCapture;
 }
@@ -732,50 +711,23 @@ HRESULT CTxtWinHost::TxGetPropertyBits(DWORD dwMask, DWORD *pdwBits)
 {
     DWORD dwProperties = 0;
 
-    if (fRich)
-    {
-        dwProperties = TXTBIT_RICHTEXT;
-    }
+    if (fRich)                     { dwProperties = TXTBIT_RICHTEXT; }
 
-    if (dwStyle & ES_MULTILINE)
-    {
-        dwProperties |= TXTBIT_MULTILINE;
-    }
+    if (dwStyle & ES_MULTILINE)    { dwProperties |= TXTBIT_MULTILINE; }
 
-    if (dwStyle & ES_READONLY)
-    {
-        dwProperties |= TXTBIT_READONLY;
-    }
+    if (dwStyle & ES_READONLY)     { dwProperties |= TXTBIT_READONLY; }
 
-    if (dwStyle & ES_PASSWORD)
-    {
-        dwProperties |= TXTBIT_USEPASSWORD;
-    }
+    if (dwStyle & ES_PASSWORD)     { dwProperties |= TXTBIT_USEPASSWORD; }
 
-    if (!(dwStyle & ES_NOHIDESEL))
-    {
-        dwProperties |= TXTBIT_HIDESELECTION;
-    }
+    if (!(dwStyle & ES_NOHIDESEL)) { dwProperties |= TXTBIT_HIDESELECTION; }
 
-    if (fEnableAutoWordSel)
-    {
-        dwProperties |= TXTBIT_AUTOWORDSEL;
-    }
+    if (fEnableAutoWordSel)       { dwProperties |= TXTBIT_AUTOWORDSEL; }
 
-    if (fWordWrap)
-    {
-        dwProperties |= TXTBIT_WORDWRAP;
-    }
+    if (fWordWrap)                 { dwProperties |= TXTBIT_WORDWRAP; }
 
-    if (fAllowBeep)
-    {
-        dwProperties |= TXTBIT_ALLOWBEEP;
-    }
+    if (fAllowBeep)                { dwProperties |= TXTBIT_ALLOWBEEP; }
 
-    if (fSaveSelection)
-    {
-        dwProperties |= TXTBIT_SAVESELECTION;
-    }
+    if (fSaveSelection)           { dwProperties |= TXTBIT_SAVESELECTION; }
 
     *pdwBits = dwProperties & dwMask;
     return NOERROR;
@@ -824,17 +776,10 @@ BOOL CTxtWinHost::IsReadOnly()
 
 void CTxtWinHost::SetReadOnly(BOOL fReadOnly)
 {
-    if (fReadOnly)
-    {
-        dwStyle |= ES_READONLY;
-    }
-    else
-    {
-        dwStyle &= ~ES_READONLY;
-    }
+    if (fReadOnly) { dwStyle |= ES_READONLY; }
+    else            { dwStyle &= ~ES_READONLY; }
 
-    pserv->OnTxPropertyBitsChange(TXTBIT_READONLY,
-                                  fReadOnly ? TXTBIT_READONLY : 0);
+    pserv->OnTxPropertyBitsChange(TXTBIT_READONLY, fReadOnly ? TXTBIT_READONLY : 0);
 }
 
 void CTxtWinHost::SetFont(HFONT hFont)
@@ -847,13 +792,13 @@ void CTxtWinHost::SetFont(HFONT hFont)
     cf.yHeight = -lf.lfHeight * LY_PER_INCH / yPixPerInch;
 
     if (lf.lfWeight >= FW_BOLD) { cf.dwEffects |= CFE_BOLD; }
-    else { cf.dwEffects &= ~CFE_BOLD; }
+    else                        { cf.dwEffects &= ~CFE_BOLD; }
 
     if (lf.lfItalic) { cf.dwEffects |= CFE_ITALIC; }
-    else { cf.dwEffects &= ~CFE_ITALIC; }
+    else             { cf.dwEffects &= ~CFE_ITALIC; }
 
     if (lf.lfUnderline) { cf.dwEffects |= CFE_UNDERLINE; }
-    else { cf.dwEffects &= ~CFE_UNDERLINE; }
+    else                { cf.dwEffects &= ~CFE_UNDERLINE; }
 
     cf.bCharSet = lf.lfCharSet;
     cf.bPitchAndFamily = lf.lfPitchAndFamily;
@@ -864,8 +809,7 @@ void CTxtWinHost::SetFont(HFONT hFont)
     MultiByteToWideChar(CP_ACP, 0, lf.lfFaceName, LF_FACESIZE, cf.szFaceName, LF_FACESIZE) ;
 #endif
 
-    pserv->OnTxPropertyBitsChange(TXTBIT_CHARFORMATCHANGE,
-                                  TXTBIT_CHARFORMATCHANGE);
+    pserv->OnTxPropertyBitsChange(TXTBIT_CHARFORMATCHANGE, TXTBIT_CHARFORMATCHANGE);
 }
 
 void CTxtWinHost::SetColor(DWORD dwColor)
@@ -929,8 +873,7 @@ void CTxtWinHost::SetAllowBeep(BOOL fAllowBeep)
 {
     fAllowBeep = fAllowBeep;
 
-    pserv->OnTxPropertyBitsChange(TXTBIT_ALLOWBEEP,
-                                  fAllowBeep ? TXTBIT_ALLOWBEEP : 0);
+    pserv->OnTxPropertyBitsChange(TXTBIT_ALLOWBEEP, fAllowBeep ? TXTBIT_ALLOWBEEP : 0);
 }
 
 WORD CTxtWinHost::GetDefaultAlign()
@@ -955,8 +898,7 @@ void CTxtWinHost::SetRichTextFlag(BOOL fNew)
 {
     fRich = fNew;
 
-    pserv->OnTxPropertyBitsChange(TXTBIT_RICHTEXT,
-                                  fNew ? TXTBIT_RICHTEXT : 0);
+    pserv->OnTxPropertyBitsChange(TXTBIT_RICHTEXT, fNew ? TXTBIT_RICHTEXT : 0);
 }
 
 LONG CTxtWinHost::GetDefaultLeftIndent()
@@ -990,8 +932,7 @@ BOOL CTxtWinHost::SetSaveSelection(BOOL f_SaveSelection)
     fSaveSelection = f_SaveSelection;
 
     // notify text services of property change
-    pserv->OnTxPropertyBitsChange(TXTBIT_SAVESELECTION,
-                                  fSaveSelection ? TXTBIT_SAVESELECTION : 0);
+    pserv->OnTxPropertyBitsChange(TXTBIT_SAVESELECTION, fSaveSelection ? TXTBIT_SAVESELECTION : 0);
 
     return fResult;
 }
@@ -1000,10 +941,7 @@ HRESULT CTxtWinHost::OnTxInPlaceDeactivate()
 {
     HRESULT hr = pserv->OnTxInPlaceDeactivate();
 
-    if (SUCCEEDED(hr))
-    {
-        fInplaceActive = FALSE;
-    }
+    if (SUCCEEDED(hr)) { fInplaceActive = FALSE; }
 
     return hr;
 }
@@ -1014,10 +952,7 @@ HRESULT CTxtWinHost::OnTxInPlaceActivate(LPCRECT prcClient)
 
     HRESULT hr = pserv->OnTxInPlaceActivate(prcClient);
 
-    if (FAILED(hr))
-    {
-        fInplaceActive = FALSE;
-    }
+    if (FAILED(hr)) { fInplaceActive = FALSE; }
 
     return hr;
 }
@@ -1074,8 +1009,7 @@ WCHAR CTxtWinHost::SetPasswordChar(WCHAR ch_PasswordChar)
     chPasswordChar = ch_PasswordChar;
 
     // notify text services of property change
-    pserv->OnTxPropertyBitsChange(TXTBIT_USEPASSWORD,
-                                  (chPasswordChar != 0) ? TXTBIT_USEPASSWORD : 0);
+    pserv->OnTxPropertyBitsChange(TXTBIT_USEPASSWORD, (chPasswordChar != 0) ? TXTBIT_USEPASSWORD : 0);
 
     return chOldPasswordChar;
 }
@@ -1085,13 +1019,9 @@ void CTxtWinHost::SetDisabled(BOOL fOn)
     cf.dwMask    |= CFM_COLOR | CFM_DISABLED;
     cf.dwEffects |= CFE_AUTOCOLOR | CFE_DISABLED;
 
-    if (!fOn)
-    {
-        cf.dwEffects &= ~CFE_DISABLED;
-    }
+    if (!fOn) { cf.dwEffects &= ~CFE_DISABLED; }
 
-    pserv->OnTxPropertyBitsChange(TXTBIT_CHARFORMATCHANGE,
-                                  TXTBIT_CHARFORMATCHANGE);
+    pserv->OnTxPropertyBitsChange(TXTBIT_CHARFORMATCHANGE, TXTBIT_CHARFORMATCHANGE);
 }
 
 LONG CTxtWinHost::SetSelBarWidth(LONG l_SelBarWidth)
@@ -1100,14 +1030,8 @@ LONG CTxtWinHost::SetSelBarWidth(LONG l_SelBarWidth)
 
     lSelBarWidth = l_SelBarWidth;
 
-    if (lSelBarWidth)
-    {
-        dwStyle |= ES_SELECTIONBAR;
-    }
-    else
-    {
-        dwStyle &= (~ES_SELECTIONBAR);
-    }
+    if (lSelBarWidth)  { dwStyle |= ES_SELECTIONBAR; }
+    else                { dwStyle &= (~ES_SELECTIONBAR); }
 
     pserv->OnTxPropertyBitsChange(TXTBIT_SELBARCHANGE, TXTBIT_SELBARCHANGE);
 
@@ -1836,8 +1760,7 @@ DWORD CRichEditUI::GetTipColor()
 
 void CRichEditUI::DoInit()
 {
-    if (m_bInited)
-    { return ; }
+    if (m_bInited) { return ; }
 
     CREATESTRUCT cs;
     cs.style = m_lTwhStyle;
@@ -1900,8 +1823,9 @@ bool CRichEditUI::OnTxViewChanged()
 bool CRichEditUI::SetDropAcceptFile(bool bAccept)
 {
     LRESULT lResult;
-    TxSendMessage(EM_SETEVENTMASK, 0, ENM_DROPFILES | ENM_LINK, // ENM_CHANGE| ENM_CORRECTTEXT | ENM_DRAGDROPDONE | ENM_DROPFILES | ENM_IMECHANGE | ENM_LINK | ENM_OBJECTPOSITIONS | ENM_PROTECTED | ENM_REQUESTRESIZE | ENM_SCROLL | ENM_SELCHANGE | ENM_UPDATE,
-                  &lResult);
+    // ENM_CHANGE| ENM_CORRECTTEXT | ENM_DRAGDROPDONE | ENM_DROPFILES | ENM_IMECHANGE | ENM_LINK |
+    // ENM_OBJECTPOSITIONS | ENM_PROTECTED | ENM_REQUESTRESIZE | ENM_SCROLL | ENM_SELCHANGE | ENM_UPDATE,
+    TxSendMessage(EM_SETEVENTMASK, 0, ENM_DROPFILES | ENM_LINK, &lResult);
     return (BOOL)lResult == FALSE;
 }
 
@@ -2388,7 +2312,8 @@ bool CRichEditUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl
     {
         RECT rc;
         m_pTwh->GetControlRect(&rc);
-        CRenderEngine::DrawText(hDC, m_pManager, rc, m_sTipText, m_dwTipColor, m_iFont, DT_VCENTER);
+        CRenderEngine::DrawText(hDC, m_pManager, rc, m_sTipText, m_dwTipColor, m_iFont,
+                                (m_lTwhStyle & ES_MULTILINE) ? DT_TOP : DT_VCENTER);
     }
 
     if (m_items.GetSize() > 0)
@@ -2755,7 +2680,5 @@ LRESULT CRichEditUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, boo
 
     return lResult;
 }
-
-
 
 } // namespace DuiLib
