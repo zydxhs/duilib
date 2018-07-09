@@ -2465,8 +2465,15 @@ bool CRichEditUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl
 
         if (::PtInRect(&m_rcItem, ptCaret))
         {
-            RECT rcCaret = { ptCaret.x, ptCaret.y, ptCaret.x, ptCaret.y + m_pTwh->GetCaretHeight() };
-            CRenderEngine::DrawLine(hDC, rcCaret, m_pTwh->GetCaretWidth(), 0xFF000000);
+            RECT rcCaret = { ptCaret.x, ptCaret.y,
+                             ptCaret.x + m_pTwh->GetCaretWidth(), ptCaret.y + m_pTwh->GetCaretHeight()
+                           };
+            //CRenderEngine::DrawLine(hDC, rcCaret, m_pTwh->GetCaretWidth(), 0xFF000000);
+            DWORD dwColor = GetTextColor();
+
+            if (dwColor == 0) { dwColor = GetManager()->GetDefaultFontColor(); }
+
+            CRenderEngine::DrawColor(hDC, rcCaret, dwColor);
         }
     }
 

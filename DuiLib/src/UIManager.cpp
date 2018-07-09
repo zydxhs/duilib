@@ -1105,7 +1105,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 
             RECT rcClient = { 0 };
             ::GetClientRect(m_hWndPaint, &rcClient);
-
+            m_rcLayeredUpdate = rcClient;
             RECT rcPaint = { 0 };
 
             if (m_bLayered)
@@ -4024,7 +4024,7 @@ void CPaintManagerUI::SetWindowAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     }
     else if (_tcscmp(pstrName, _T("layered")) == 0)
     {
-        SetLayered(true);
+        SetLayered(_tcscmp(pstrValue, _T("true")) == 0);
     }
     else if (_tcscmp(pstrName, _T("shape")) == 0)
     {
