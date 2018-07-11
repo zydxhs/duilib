@@ -11,64 +11,6 @@ namespace DuiLib {
 
 static int g_iFontID = MAX_FONT_ID;
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
-//
-
-CRenderClip::CRenderClip() : hDC(NULL), hRgn(NULL), hOldRgn(NULL)
-{
-    rcItem.left = rcItem.top = rcItem.right = rcItem.bottom = 0;
-}
-
-CRenderClip::~CRenderClip()
-{
-    ASSERT(::GetObjectType(hDC) == OBJ_DC || ::GetObjectType(hDC) == OBJ_MEMDC);
-    ASSERT(::GetObjectType(hRgn) == OBJ_REGION);
-    ASSERT(::GetObjectType(hOldRgn) == OBJ_REGION);
-    ::SelectClipRgn(hDC, hOldRgn);
-    ::DeleteObject(hOldRgn);
-    ::DeleteObject(hRgn);
-}
-
-void CRenderClip::GenerateClip(HDC hDC, RECT rc, CRenderClip &clip)
-{
-    RECT rcClip = { 0 };
-    ::GetClipBox(hDC, &rcClip);
-    clip.hOldRgn = ::CreateRectRgnIndirect(&rcClip);
-    clip.hRgn = ::CreateRectRgnIndirect(&rc);
-    ::ExtSelectClipRgn(hDC, clip.hRgn, RGN_AND);
-    clip.hDC = hDC;
-    clip.rcItem = rc;
-}
-
-void CRenderClip::GenerateRoundClip(HDC hDC, RECT rc, RECT rcItem, int width, int height, CRenderClip &clip)
-{
-    RECT rcClip = { 0 };
-    ::GetClipBox(hDC, &rcClip);
-    clip.hOldRgn = ::CreateRectRgnIndirect(&rcClip);
-    clip.hRgn = ::CreateRectRgnIndirect(&rc);
-    HRGN hRgnItem = ::CreateRoundRectRgn(rcItem.left, rcItem.top, rcItem.right + 1, rcItem.bottom + 1,
-                                         width, height);
-    ::CombineRgn(clip.hRgn, clip.hRgn, hRgnItem, RGN_AND);
-    ::ExtSelectClipRgn(hDC, clip.hRgn, RGN_AND);
-    clip.hDC = hDC;
-    clip.rcItem = rc;
-    ::DeleteObject(hRgnItem);
-}
-
-INLINE void CRenderClip::UseOldClipBegin(HDC hDC, CRenderClip &clip)
-{
-    ::SelectClipRgn(hDC, clip.hOldRgn);
-}
-
-INLINE void CRenderClip::UseOldClipEnd(HDC hDC, CRenderClip &clip)
-{
-    ::SelectClipRgn(hDC, clip.hRgn);
-}
-
-/////////////////////////////////////////////////////////////////////////////////////
-//
-//
 
 static const float OneThird = 1.0f / 3;
 
@@ -160,7 +102,7 @@ static BOOL WINAPI AlphaBitBlt(HDC hDC, int nDestX, int nDestY, int dwWidth, int
 
     if ((NULL == hSrcDib) || (NULL == pSrcBits))
     {
-        delete [] lpbiSrc;
+        delete[ ] lpbiSrc;
         ::DeleteDC(hTempDC);
         return FALSE;
     }
@@ -176,7 +118,7 @@ static BOOL WINAPI AlphaBitBlt(HDC hDC, int nDestX, int nDestY, int dwWidth, int
 
     if (lpbiDest == NULL)
     {
-        delete [] lpbiSrc;
+        delete[ ] lpbiSrc;
         ::DeleteObject(hSrcDib);
         ::DeleteDC(hTempDC);
         return FALSE;
@@ -199,7 +141,7 @@ static BOOL WINAPI AlphaBitBlt(HDC hDC, int nDestX, int nDestY, int dwWidth, int
 
     if ((NULL == hDestDib) || (NULL == pDestBits))
     {
-        delete [] lpbiSrc;
+        delete[ ] lpbiSrc;
         ::DeleteObject(hSrcDib);
         ::DeleteDC(hTempDC);
         return FALSE;
@@ -226,10 +168,10 @@ static BOOL WINAPI AlphaBitBlt(HDC hDC, int nDestX, int nDestY, int dwWidth, int
     ::BitBlt(hDC, nDestX, nDestY, dwWidth, dwHeight, hTempDC, 0, 0, SRCCOPY);
     ::SelectObject(hTempDC, hOldTempBmp);
 
-    delete [] lpbiDest;
+    delete[ ] lpbiDest;
     ::DeleteObject(hDestDib);
 
-    delete [] lpbiSrc;
+    delete[ ] lpbiSrc;
     ::DeleteObject(hSrcDib);
 
     ::DeleteDC(hTempDC);
@@ -247,6 +189,151 @@ static LPALPHABLEND GetAlphaBlend(void)
 
     return lpAlphaBlend;
 }
+
+//////////////////////////////////////////////////////////////////////////
+// UI开发离不开GDI，然后要用传统的GDI函数来处理alpha通道通常是一个恶梦：
+// 虽然有AlphaBlend这个API可以做alpha混合，但是前提必须是操作的DC中的位图有alpha通道的数据，
+// 问题的关键在于GDI函数在操作的地方会把原来的alpha通道清空。
+
+// 使用GDI做alpha混合还要增加透明度关键要解决2个问题：
+// 1、需要把内容画到一个临时位图上，同时保护好alpha通道。
+// 2、在于把临时位图的数据和原位图做混合，而且不能改变镂空部分原位图的alpha通道的值。
+// 辅助类，用于解决 GDI 不支持 alpha 的问题
+class CHDCHelper
+{
+public:
+    CHDCHelper(HDC hdc, LPCRECT pRect, BYTE byAlpha, BOOL bCopyBits = TRUE)
+        : m_hdc(hdc)
+        , m_byAlpha(byAlpha)
+        , m_pRc(pRect)
+        , m_bCopyBits(bCopyBits)
+    {
+        m_nWidth = pRect->right - pRect->left;
+        m_nHeight = pRect->bottom - pRect->top;
+        m_hBmp = CRenderEngine::CreateARGB32Bitmap(m_hdc, m_nWidth, m_nHeight, (COLORREF **)&m_pBits);
+        m_hMemDC = ::CreateCompatibleDC(hdc);
+        ::SetBkMode(m_hMemDC, TRANSPARENT);
+        ::SelectObject(m_hMemDC, m_hBmp);
+        ::SetViewportOrgEx(m_hMemDC, -pRect->left, -pRect->top, NULL);
+        //从原DC中获得画笔，画刷，字体，颜色等
+        m_hCurPen = ::SelectObject(hdc, GetStockObject(BLACK_PEN));
+        m_hCurBrush = ::SelectObject(hdc, GetStockObject(BLACK_BRUSH));
+        m_hCurFont = ::SelectObject(hdc, GetStockObject(DEFAULT_GUI_FONT));
+        COLORREF clrCur = ::GetTextColor(hdc);
+
+        //将画笔，画刷，字体设置到memdc里
+        ::SelectObject(m_hMemDC, m_hCurPen);
+        ::SelectObject(m_hMemDC, m_hCurBrush);
+        ::SelectObject(m_hMemDC, m_hCurFont);
+        ::SetTextColor(m_hMemDC, clrCur);
+
+        if (m_bCopyBits) { ::BitBlt(m_hMemDC, pRect->left, pRect->top, m_nWidth, m_nHeight, m_hdc, pRect->left, pRect->top, SRCCOPY); }
+
+        //将alpha全部强制修改为0xFF。
+        BYTE *p = m_pBits + 3;
+
+        for (int i = 0; i < m_nHeight; i++)
+        {
+            for (int j = 0; j < m_nWidth; j++, p += 4) { *p = 0xFF; }
+        }
+    }
+
+    ~CHDCHelper()
+    {
+        //将alpha为0xFF的改为0,为0的改为0xFF
+        BYTE *p = m_pBits + 3;
+
+        for (int i = 0; i < m_nHeight; i++)for (int j = 0; j < m_nWidth; j++, p += 4) { *p = ~(*p); }
+
+        BLENDFUNCTION bf = { AC_SRC_OVER, 0, m_byAlpha, AC_SRC_ALPHA };
+        BOOL bRet = GetAlphaBlend()(m_hdc, m_pRc->left, m_pRc->top, m_nWidth, m_nHeight, m_hMemDC, m_pRc->left,
+                                    m_pRc->top,
+                                    m_nWidth, m_nHeight, bf);
+        ::DeleteDC(m_hMemDC);
+        ::DeleteObject(m_hBmp);
+
+        //恢复原DC的画笔，画刷，字体
+        ::SelectObject(m_hdc, m_hCurPen);
+        ::SelectObject(m_hdc, m_hCurBrush);
+        ::SelectObject(m_hdc, m_hCurFont);
+    }
+
+    operator HDC() { return m_hMemDC; }
+
+protected:
+    HDC     m_hdc;
+    HDC     m_hMemDC;
+    HBITMAP m_hBmp;
+    LPBYTE  m_pBits;
+    BYTE    m_byAlpha;
+    LPCRECT m_pRc;
+    int     m_nWidth;
+    int     m_nHeight;
+    BOOL    m_bCopyBits;
+
+    HGDIOBJ m_hCurPen;
+    HGDIOBJ m_hCurBrush;
+    HGDIOBJ m_hCurFont;
+};
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+//
+
+CRenderClip::CRenderClip() : hDC(NULL), hRgn(NULL), hOldRgn(NULL)
+{
+    rcItem.left = rcItem.top = rcItem.right = rcItem.bottom = 0;
+}
+
+CRenderClip::~CRenderClip()
+{
+    ASSERT(::GetObjectType(hDC) == OBJ_DC || ::GetObjectType(hDC) == OBJ_MEMDC);
+    ASSERT(::GetObjectType(hRgn) == OBJ_REGION);
+    ASSERT(::GetObjectType(hOldRgn) == OBJ_REGION);
+    ::SelectClipRgn(hDC, hOldRgn);
+    ::DeleteObject(hOldRgn);
+    ::DeleteObject(hRgn);
+}
+
+void CRenderClip::GenerateClip(HDC hDC, RECT rc, CRenderClip &clip)
+{
+    RECT rcClip = { 0 };
+    ::GetClipBox(hDC, &rcClip);
+    clip.hOldRgn = ::CreateRectRgnIndirect(&rcClip);
+    clip.hRgn = ::CreateRectRgnIndirect(&rc);
+    ::ExtSelectClipRgn(hDC, clip.hRgn, RGN_AND);
+    clip.hDC = hDC;
+    clip.rcItem = rc;
+}
+
+void CRenderClip::GenerateRoundClip(HDC hDC, RECT rc, RECT rcItem, int width, int height, CRenderClip &clip)
+{
+    RECT rcClip = { 0 };
+    ::GetClipBox(hDC, &rcClip);
+    clip.hOldRgn = ::CreateRectRgnIndirect(&rcClip);
+    clip.hRgn = ::CreateRectRgnIndirect(&rc);
+    HRGN hRgnItem = ::CreateRoundRectRgn(rcItem.left, rcItem.top, rcItem.right + 1, rcItem.bottom + 1,
+                                         width, height);
+    ::CombineRgn(clip.hRgn, clip.hRgn, hRgnItem, RGN_AND);
+    ::ExtSelectClipRgn(hDC, clip.hRgn, RGN_AND);
+    clip.hDC = hDC;
+    clip.rcItem = rc;
+    ::DeleteObject(hRgnItem);
+}
+
+INLINE void CRenderClip::UseOldClipBegin(HDC hDC, CRenderClip &clip)
+{
+    ::SelectClipRgn(hDC, clip.hOldRgn);
+}
+
+INLINE void CRenderClip::UseOldClipEnd(HDC hDC, CRenderClip &clip)
+{
+    ::SelectClipRgn(hDC, clip.hRgn);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+//
 
 void CRenderEngine::ParseDrawInfo(TDrawInfo &drawInfo, CDuiString &sResType, DWORD &dwMask, bool &bHSL)
 {
@@ -1702,25 +1789,57 @@ void CRenderEngine::DrawLine(HDC hDC, const RECT &rc, int nSize, DWORD dwPenColo
     //lg.lopnStyle = nStyle;
     //lg.lopnWidth.x = nSize;
     //HPEN hPen = CreatePenIndirect(&lg);
+
+    // LOGBRUSH lb = { BS_SOLID, RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor)), 0 };
+    // HPEN hPen = ExtCreatePen(nStyle, nSize, &lb, 0, NULL);
+    // HPEN hOldPen = (HPEN)::SelectObject(hDC, hPen);
+    // POINT ptTemp = { 0 };
+    // ::MoveToEx(hDC, rc.left, rc.top, &ptTemp);
+    // ::LineTo(hDC, rc.right, rc.bottom);
+    // ::SelectObject(hDC, hOldPen);
+    // ::DeleteObject(hPen);
+    RECT rtTmp = rc;
+
+    if (rtTmp.left == rtTmp.right)
+    {
+        rtTmp.left -= nSize / 2;
+        rtTmp.right = rtTmp.left + nSize;
+    }
+    else if (rtTmp.top == rtTmp.bottom)
+    {
+        rtTmp.top -= nSize / 2;
+        rtTmp.bottom = rtTmp.top + nSize;
+    }
+
+    CHDCHelper dcHelper(hDC, &rtTmp, BYTE(dwPenColor >> 24));
     LOGBRUSH lb = { BS_SOLID, RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor)), 0 };
     HPEN hPen = ExtCreatePen(nStyle, nSize, &lb, 0, NULL);
-    HPEN hOldPen = (HPEN)::SelectObject(hDC, hPen);
+    HPEN hOldPen = (HPEN)::SelectObject(dcHelper, hPen);
     POINT ptTemp = { 0 };
-    ::MoveToEx(hDC, rc.left, rc.top, &ptTemp);
-    ::LineTo(hDC, rc.right, rc.bottom);
-    ::SelectObject(hDC, hOldPen);
+    ::MoveToEx(dcHelper, rc.left, rc.top, &ptTemp);
+    ::LineTo(dcHelper, rc.right, rc.bottom);
+    ::SelectObject(dcHelper, hOldPen);
     ::DeleteObject(hPen);
 }
 
 void CRenderEngine::DrawRect(HDC hDC, const RECT &rc, int nSize, DWORD dwPenColor, int nStyle)
 {
     ASSERT(::GetObjectType(hDC) == OBJ_DC || ::GetObjectType(hDC) == OBJ_MEMDC);
+    // HPEN hPen = ::CreatePen(nStyle | PS_INSIDEFRAME, nSize,
+    //                         RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor)));
+    // HPEN hOldPen = (HPEN)::SelectObject(hDC, hPen);
+    // ::SelectObject(hDC, ::GetStockObject(HOLLOW_BRUSH));
+    // ::Rectangle(hDC, rc.left, rc.top, rc.right, rc.bottom);
+    // ::SelectObject(hDC, hOldPen);
+    // ::DeleteObject(hPen);
+
+    CHDCHelper dcHelper(hDC, &rc, BYTE(dwPenColor >> 24));
     HPEN hPen = ::CreatePen(nStyle | PS_INSIDEFRAME, nSize,
                             RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor)));
-    HPEN hOldPen = (HPEN)::SelectObject(hDC, hPen);
-    ::SelectObject(hDC, ::GetStockObject(HOLLOW_BRUSH));
-    ::Rectangle(hDC, rc.left, rc.top, rc.right, rc.bottom);
-    ::SelectObject(hDC, hOldPen);
+    HPEN hOldPen = (HPEN)::SelectObject(dcHelper, hPen);
+    ::SelectObject(dcHelper, ::GetStockObject(HOLLOW_BRUSH));
+    ::Rectangle(dcHelper, rc.left, rc.top, rc.right, rc.bottom);
+    ::SelectObject(dcHelper, hOldPen);
     ::DeleteObject(hPen);
 }
 
@@ -1728,13 +1847,22 @@ void CRenderEngine::DrawRoundRect(HDC hDC, const RECT &rc, int nSize, int width,
                                   int nStyle)
 {
     ASSERT(::GetObjectType(hDC) == OBJ_DC || ::GetObjectType(hDC) == OBJ_MEMDC);
+    // HPEN hPen = ::CreatePen(nStyle | PS_INSIDEFRAME, nSize,
+    //                         RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor)));
+    // HPEN hOldPen = (HPEN)::SelectObject(hDC, hPen);
+    // ::SelectObject(hDC, ::GetStockObject(HOLLOW_BRUSH));
+    // ::RoundRect(hDC, rc.left, rc.top, rc.right, rc.bottom, width, height);
+    // ::SelectObject(hDC, hOldPen);
+    // ::DeleteObject(hPen);
+
+    CHDCHelper dcHelper(hDC, &rc, BYTE(dwPenColor >> 24));
     HPEN hPen = ::CreatePen(nStyle | PS_INSIDEFRAME, nSize,
                             RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor)));
-    HPEN hOldPen = (HPEN)::SelectObject(hDC, hPen);
-    ::SelectObject(hDC, ::GetStockObject(HOLLOW_BRUSH));
-    ::RoundRect(hDC, rc.left, rc.top, rc.right, rc.bottom, width, height);
-    ::SelectObject(hDC, hOldPen);
-    ::DeleteObject(hPen);
+    HPEN hOldPen = (HPEN)::SelectObject(dcHelper, hPen);
+    ::SelectObject(dcHelper, ::GetStockObject(HOLLOW_BRUSH));
+    ::RoundRect(dcHelper, rc.left, rc.top, rc.right, rc.bottom, width, height);
+    ::SelectObject(dcHelper, hOldPen);
+    ::DeleteObject(dcHelper);
 }
 
 void CRenderEngine::DrawText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, LPCTSTR pstrText,
@@ -1830,11 +1958,18 @@ void CRenderEngine::DrawText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, LPCTS
     else
     {
 #endif // USE_GDIPLUS
-        ::SetBkMode(hDC, TRANSPARENT);
-        ::SetTextColor(hDC, RGB(GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
-        HFONT hOldFont = (HFONT)::SelectObject(hDC, pManager->GetFont(iFont));
-        ::DrawText(hDC, pstrText, -1, &rc, uStyle | DT_NOPREFIX);
-        ::SelectObject(hDC, hOldFont);
+        // ::SetBkMode(hDC, TRANSPARENT);
+        // ::SetTextColor(hDC, RGB(GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
+        // HFONT hOldFont = (HFONT)::SelectObject(hDC, pManager->GetFont(iFont));
+        // ::DrawText(hDC, pstrText, -1, &rc, uStyle | DT_NOPREFIX);
+        // ::SelectObject(hDC, hOldFont);
+
+        CHDCHelper dcHelper(hDC, &rc, BYTE(dwTextColor >> 24));
+        ::SetBkMode(dcHelper, TRANSPARENT);
+        ::SetTextColor(dcHelper, RGB(GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
+        HFONT hOldFont = (HFONT)::SelectObject(dcHelper, pManager->GetFont(iFont));
+        ::DrawText(dcHelper, pstrText, -1, &rc, uStyle | DT_NOPREFIX);
+        ::SelectObject(dcHelper, hOldFont);
 #ifdef USE_GDIPLUS
     }
 
@@ -2091,7 +2226,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
                     //        clrColor = pManager->GetDefaultLinkHoverFontColor();
                     //}
                     aColorArray.Add((LPVOID)clrColor);
-                    ::SetTextColor(hDC,  RGB(GetBValue(clrColor), GetGValue(clrColor), GetRValue(clrColor)));
+                    ::SetTextColor(hDC, RGB(GetBValue(clrColor), GetGValue(clrColor), GetRValue(clrColor)));
                     TFontInfo *pFontInfo = pManager->GetFontInfo(iDefaultFont);
 
                     if (aFontArray.GetSize() > 0) { pFontInfo = (TFontInfo *)aFontArray.GetAt(aFontArray.GetSize() - 1); }
