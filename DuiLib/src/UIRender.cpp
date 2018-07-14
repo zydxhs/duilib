@@ -2069,6 +2069,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
         }
     }
 
+    CHDCHelper dcHelper(hDC, &rc, BYTE(dwTextColor >> 24), TRUE);
     bool bHoverLink = false;
     CDuiString sHoverLink;
     POINT ptMouse = pManager->GetMousePos();
@@ -2226,7 +2227,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
                     //        clrColor = pManager->GetDefaultLinkHoverFontColor();
                     //}
                     aColorArray.Add((LPVOID)clrColor);
-                    ::SetTextColor(hDC, RGB(GetBValue(clrColor), GetGValue(clrColor), GetRValue(clrColor)));
+                    ::SetTextColor(dcHelper, RGB(GetBValue(clrColor), GetGValue(clrColor), GetRValue(clrColor)));
                     TFontInfo *pFontInfo = pManager->GetFontInfo(iDefaultFont);
 
                     if (aFontArray.GetSize() > 0) { pFontInfo = (TFontInfo *)aFontArray.GetAt(aFontArray.GetSize() - 1); }
@@ -2246,7 +2247,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
                         pFontInfo = pManager->GetFontInfo(hFont);
                         aFontArray.Add(pFontInfo);
                         pTm = &pFontInfo->tm;
-                        ::SelectObject(hDC, pFontInfo->hFont);
+                        ::SelectObject(dcHelper, pFontInfo->hFont);
                         cyLine = std::max<int>(cyLine, pTm->tmHeight + pTm->tmExternalLeading +
                                                (int)aPIndentArray.GetAt(aPIndentArray.GetSize() - 1));
                     }
@@ -2278,7 +2279,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
                         pFontInfo = pManager->GetFontInfo(hFont);
                         aFontArray.Add(pFontInfo);
                         pTm = &pFontInfo->tm;
-                        ::SelectObject(hDC, pFontInfo->hFont);
+                        ::SelectObject(dcHelper, pFontInfo->hFont);
                         cyLine = std::max<int>(cyLine, pTm->tmHeight + pTm->tmExternalLeading +
                                                (int)aPIndentArray.GetAt(aPIndentArray.GetSize() - 1));
                     }
@@ -2295,7 +2296,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
 
                     DWORD clrColor = _tcstol(pstrText, const_cast<LPTSTR *>(&pstrText), 16);
                     aColorArray.Add((LPVOID)clrColor);
-                    ::SetTextColor(hDC, RGB(GetBValue(clrColor), GetGValue(clrColor), GetRValue(clrColor)));
+                    ::SetTextColor(dcHelper, RGB(GetBValue(clrColor), GetGValue(clrColor), GetRValue(clrColor)));
                 }
                 break;
 
@@ -2314,7 +2315,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
                         TFontInfo *pFontInfo = pManager->GetFontInfo(iFont);
                         aFontArray.Add(pFontInfo);
                         pTm = &pFontInfo->tm;
-                        ::SelectObject(hDC, pFontInfo->hFont);
+                        ::SelectObject(dcHelper, pFontInfo->hFont);
                     }
                     else
                     {
@@ -2373,7 +2374,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
                         TFontInfo *pFontInfo = pManager->GetFontInfo(hFont);
                         aFontArray.Add(pFontInfo);
                         pTm = &pFontInfo->tm;
-                        ::SelectObject(hDC, pFontInfo->hFont);
+                        ::SelectObject(dcHelper, pFontInfo->hFont);
                     }
 
                     cyLine = std::max<int>(cyLine, pTm->tmHeight + pTm->tmExternalLeading +
@@ -2426,7 +2427,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
                             pFontInfo = pManager->GetFontInfo(hFont);
                             aFontArray.Add(pFontInfo);
                             pTm = &pFontInfo->tm;
-                            ::SelectObject(hDC, pFontInfo->hFont);
+                            ::SelectObject(dcHelper, pFontInfo->hFont);
                             cyLine = std::max<int>(cyLine, pTm->tmHeight + pTm->tmExternalLeading +
                                                    (int)aPIndentArray.GetAt(aPIndentArray.GetSize() - 1));
                         }
@@ -2559,7 +2560,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
                                     rcBmpPart.left = iWidth * iImageListIndex;
                                     rcBmpPart.right = iWidth * (iImageListIndex + 1);
                                     CDuiRect rcCorner(0, 0, 0, 0);
-                                    DrawImage(hDC, pImageInfo->hBitmap, rcImage, rcImage, rcBmpPart, rcCorner,
+                                    DrawImage(dcHelper, pImageInfo->hBitmap, rcImage, rcImage, rcBmpPart, rcCorner,
                                               pImageInfo->bAlpha, 255);
                                 }
 
@@ -2640,8 +2641,8 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
 
                     if (bDraw && bLineDraw)
                     {
-                        if (bInSelected) { ::SetBkMode(hDC, OPAQUE); }
-                        else { ::SetBkMode(hDC, TRANSPARENT); }
+                        if (bInSelected) { ::SetBkMode(dcHelper, OPAQUE); }
+                        else             { ::SetBkMode(dcHelper, TRANSPARENT); }
                     }
                 }
                 break;
@@ -2668,7 +2669,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
                         pFontInfo = pManager->GetFontInfo(hFont);
                         aFontArray.Add(pFontInfo);
                         pTm = &pFontInfo->tm;
-                        ::SelectObject(hDC, pFontInfo->hFont);
+                        ::SelectObject(dcHelper, pFontInfo->hFont);
                         cyLine = std::max<int>(cyLine, pTm->tmHeight + pTm->tmExternalLeading +
                                                (int)aPIndentArray.GetAt(aPIndentArray.GetSize() - 1));
                     }
@@ -2720,7 +2721,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
 
                     if (aColorArray.GetSize() > 0) { clrColor = (int)aColorArray.GetAt(aColorArray.GetSize() - 1); }
 
-                    ::SetTextColor(hDC, RGB(GetBValue(clrColor), GetGValue(clrColor), GetRValue(clrColor)));
+                    ::SetTextColor(dcHelper, RGB(GetBValue(clrColor), GetGValue(clrColor), GetRValue(clrColor)));
                 }
                 break;
 
@@ -2746,8 +2747,8 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
 
                     if (bDraw && bLineDraw)
                     {
-                        if (bInSelected) { ::SetBkMode(hDC, OPAQUE); }
-                        else { ::SetBkMode(hDC, TRANSPARENT); }
+                        if (bInSelected) { ::SetBkMode(dcHelper, OPAQUE); }
+                        else             { ::SetBkMode(dcHelper, TRANSPARENT); }
                     }
                 }
                 break;
@@ -2771,7 +2772,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
 
                     if (aColorArray.GetSize() > 0) { clrColor = (int)aColorArray.GetAt(aColorArray.GetSize() - 1); }
 
-                    ::SetTextColor(hDC, RGB(GetBValue(clrColor), GetGValue(clrColor), GetRValue(clrColor)));
+                    ::SetTextColor(dcHelper, RGB(GetBValue(clrColor), GetGValue(clrColor), GetRValue(clrColor)));
                     bInLink = false;
                 }
 
@@ -2789,13 +2790,13 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
                     if (pTm->tmItalic && pFontInfo->bItalic == false)
                     {
                         ABC abc;
-                        ::GetCharABCWidths(hDC, _T(' '), _T(' '), &abc);
-                        pt.x += abc.abcC /
-                                2; // 简单修正一下斜体混排的问题, 正确做法应该是http://support.microsoft.com/kb/244798/en-us
+                        ::GetCharABCWidths(dcHelper, _T(' '), _T(' '), &abc);
+                        // 简单修正一下斜体混排的问题, 正确做法应该是http://support.microsoft.com/kb/244798/en-us
+                        pt.x += abc.abcC / 2;
                     }
 
                     pTm = &pFontInfo->tm;
-                    ::SelectObject(hDC, pFontInfo->hFont);
+                    ::SelectObject(dcHelper, pFontInfo->hFont);
                     cyLine = std::max<int>(cyLine, pTm->tmHeight + pTm->tmExternalLeading +
                                            (int)aPIndentArray.GetAt(aPIndentArray.GetSize() - 1));
                 }
@@ -2810,7 +2811,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
                  pstrText[1] == _T('}')))
         {
             SIZE szSpace = { 0 };
-            ::GetTextExtentPoint32(hDC, &pstrText[1], 1, &szSpace);
+            ::GetTextExtentPoint32(dcHelper, &pstrText[1], 1, &szSpace);
 
             if (bDraw && bLineDraw)
             {
@@ -2820,17 +2821,17 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
 
                 if (iVAlign == DT_VCENTER)
                 {
-                    ::TextOut(hDC, pt.x + cxOffset,
+                    ::TextOut(dcHelper, pt.x + cxOffset,
                               pt.y + (cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading) / 2,
                               &pstrText[1], 1);
                 }
                 else if (iVAlign == DT_TOP)
                 {
-                    ::TextOut(hDC, pt.x + cxOffset, pt.y, &pstrText[1], 1);
+                    ::TextOut(dcHelper, pt.x + cxOffset, pt.y, &pstrText[1], 1);
                 }
                 else
                 {
-                    ::TextOut(hDC, pt.x + cxOffset,
+                    ::TextOut(dcHelper, pt.x + cxOffset,
                               pt.y + cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading,
                               &pstrText[1], 1);
                 }
@@ -2845,7 +2846,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
                  pstrText[1] == _T('>')))
         {
             SIZE szSpace = { 0 };
-            ::GetTextExtentPoint32(hDC, &pstrText[1], 1, &szSpace);
+            ::GetTextExtentPoint32(dcHelper, &pstrText[1], 1, &szSpace);
 
             if (bDraw && bLineDraw)
             {
@@ -2855,17 +2856,17 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
 
                 if (iVAlign == DT_VCENTER)
                 {
-                    ::TextOut(hDC, pt.x + cxOffset,
+                    ::TextOut(dcHelper, pt.x + cxOffset,
                               pt.y + (cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading) / 2,
                               &pstrText[1], 1);
                 }
                 else if (iVAlign == DT_TOP)
                 {
-                    ::TextOut(hDC, pt.x + cxOffset, pt.y, &pstrText[1], 1);
+                    ::TextOut(dcHelper, pt.x + cxOffset, pt.y, &pstrText[1], 1);
                 }
                 else
                 {
-                    ::TextOut(hDC, pt.x + cxOffset,
+                    ::TextOut(dcHelper, pt.x + cxOffset,
                               pt.y + cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading,
                               &pstrText[1], 1);
                 }
@@ -2879,7 +2880,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
         else if (!bInRaw &&  *pstrText == _T(' '))
         {
             SIZE szSpace = { 0 };
-            ::GetTextExtentPoint32(hDC, _T(" "), 1, &szSpace);
+            ::GetTextExtentPoint32(dcHelper, _T(" "), 1, &szSpace);
 
             // Still need to paint the space because the font might have
             // underline formatting.
@@ -2891,17 +2892,17 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
 
                 if (iVAlign == DT_VCENTER)
                 {
-                    ::TextOut(hDC, pt.x + cxOffset,
+                    ::TextOut(dcHelper, pt.x + cxOffset,
                               pt.y + (cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading) / 2,
                               _T(" "), 1);
                 }
                 else if (iVAlign == DT_TOP)
                 {
-                    ::TextOut(hDC, pt.x + cxOffset, pt.y, _T(" "), 1);
+                    ::TextOut(dcHelper, pt.x + cxOffset, pt.y, _T(" "), 1);
                 }
                 else
                 {
-                    ::TextOut(hDC, pt.x + cxOffset,
+                    ::TextOut(dcHelper, pt.x + cxOffset,
                               pt.y + cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading,
                               _T(" "), 1);
                 }
@@ -2952,7 +2953,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
 
                 if (pt.x + szText.cx >= rc.right)
                 {
-                    ::GetTextExtentPoint32(hDC, pstrText, cchSize, &szText);
+                    ::GetTextExtentPoint32(dcHelper, pstrText, cchSize, &szText);
                 }
 
                 if (pt.x + szText.cx > rc.right)
@@ -3007,7 +3008,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
                 p = ::CharNext(p);
             }
 
-            ::GetTextExtentPoint32(hDC, pstrText, cchSize, &szText);
+            ::GetTextExtentPoint32(dcHelper, pstrText, cchSize, &szText);
 
             if (bDraw && bLineDraw)
             {
@@ -3017,17 +3018,17 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
 
                 if (iVAlign == DT_VCENTER)
                 {
-                    ::TextOut(hDC, pt.x + cxOffset,
+                    ::TextOut(dcHelper, pt.x + cxOffset,
                               pt.y + (cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading) / 2,
                               pstrText, cchSize);
                 }
                 else if (iVAlign == DT_TOP)
                 {
-                    ::TextOut(hDC, pt.x + cxOffset, pt.y, pstrText, cchSize);
+                    ::TextOut(dcHelper, pt.x + cxOffset, pt.y, pstrText, cchSize);
                 }
                 else
                 {
-                    ::TextOut(hDC, pt.x + cxOffset,
+                    ::TextOut(dcHelper, pt.x + cxOffset,
                               pt.y + cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading,
                               pstrText, cchSize);
                 }
@@ -3036,17 +3037,17 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
                 {
                     if (iVAlign == DT_VCENTER)
                     {
-                        ::TextOut(hDC, pt.x + cxOffset + szText.cx,
+                        ::TextOut(dcHelper, pt.x + cxOffset + szText.cx,
                                   pt.y + (cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading) / 2,
                                   _T("..."), 3);
                     }
                     else if (iVAlign == DT_TOP)
                     {
-                        ::TextOut(hDC, pt.x + cxOffset + szText.cx, pt.y, _T("..."), 3);
+                        ::TextOut(dcHelper, pt.x + cxOffset + szText.cx, pt.y, _T("..."), 3);
                     }
                     else
                     {
-                        ::TextOut(hDC, pt.x + cxOffset + szText.cx,
+                        ::TextOut(dcHelper, pt.x + cxOffset + szText.cx,
                                   pt.y + cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading,
                                   _T("..."), 3);
                     }
@@ -3088,15 +3089,15 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
 
                 if (aColorArray.GetSize() > 0) { clrColor = (int)aColorArray.GetAt(aColorArray.GetSize() - 1); }
 
-                ::SetTextColor(hDC, RGB(GetBValue(clrColor), GetGValue(clrColor), GetRValue(clrColor)));
+                ::SetTextColor(dcHelper, RGB(GetBValue(clrColor), GetGValue(clrColor), GetRValue(clrColor)));
                 TFontInfo *pFontInfo = (TFontInfo *)aFontArray.GetAt(aFontArray.GetSize() - 1);
 
                 if (pFontInfo == NULL) { pFontInfo = pManager->GetFontInfo(iDefaultFont); }
 
                 pTm = &pFontInfo->tm;
-                ::SelectObject(hDC, pFontInfo->hFont);
+                ::SelectObject(dcHelper, pFontInfo->hFont);
 
-                if (bInSelected) { ::SetBkMode(hDC, OPAQUE); }
+                if (bInSelected) { ::SetBkMode(dcHelper, OPAQUE); }
             }
             else
             {
@@ -3136,7 +3137,7 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
     ::DeleteObject(hOldRgn);
     ::DeleteObject(hRgn);
 
-    ::SelectObject(hDC, hOldFont);
+    ::SelectObject(dcHelper, hOldFont);
 
     if (NULL != pnLinkRects) { *pnLinkRects = nLinkRects; }
 }
