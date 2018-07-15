@@ -58,8 +58,12 @@ protected:
 protected:
     enum
     {
-        FADE_TIMERID = 11,
-        FADE_ELLAPSE = 30,
+        // 按钮图片透明度变化
+        TIMERID_FADE = 11,
+        ELLAPSE_FADE = 40,
+        // 按钮响应频率控制定时器
+        TIMERID_DISABLE = 12,
+        ELLAPSE_DISABLE = 500,
     };
 
     UINT m_uButtonState;
@@ -71,8 +75,10 @@ protected:
     DWORD m_dwHotTextColor;         // 鼠标悬浮 前景色
     DWORD m_dwFocusedTextColor;     // 焦点状态 前景色
     DWORD m_dwPushedTextColor;      // 鼠标按下 前景色
-    BYTE m_uFadeAlpha;
-    BYTE m_uFadeAlphaDelta;
+    BYTE m_byFadeAlpha;
+    BYTE m_byFadeAlphaDelta;
+    BYTE m_byDisableSeconds;        // 鼠标/键盘动作响应频率。默认0，关闭该特性，非0表示间隔秒数。
+    BYTE m_byEllapseSeconds;        // 响应鼠标/键盘动作后，流逝的秒数
 
     TDrawInfo m_diNormal;
     TDrawInfo m_diHot;

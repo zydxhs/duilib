@@ -554,7 +554,8 @@ void CIPAddressUI::DoEvent(TEventUI &event)
         Invalidate();
     }
 
-    if (event.Type == UIEVENT_BUTTONDOWN || event.Type == UIEVENT_DBLCLICK || event.Type == UIEVENT_RBUTTONDOWN)
+    if (event.Type == UIEVENT_BUTTONDOWN || event.Type == UIEVENT_LBUTTONDBLDOWN ||
+        event.Type == UIEVENT_RBUTTONDOWN)
     {
         if (IsEnabled())
         {

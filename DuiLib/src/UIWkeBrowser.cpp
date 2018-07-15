@@ -234,7 +234,7 @@ void CWkeBrowserUI::DoEvent(TEventUI &event)
         }
         break;
 
-    case UIEVENT_DBLCLICK:
+    case UIEVENT_LBUTTONDBLDOWN:
         {
             int x = GET_X_LPARAM(event.lParam);
             int y = GET_Y_LPARAM(event.lParam);

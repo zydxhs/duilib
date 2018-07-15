@@ -249,8 +249,10 @@
             <Attribute name="disabledimage" default="" type="STRING" comment="禁用的状态图片"/>
             <Attribute name="foreimage" default="" type="STRING" comment="前景图片"/>
             <Attribute name="hotforeimage" default="" type="STRING" comment="鼠标悬浮状态前景图片"/>
+            <!-- 扩展属性 -->
             <Attribute name="fivestatusimage" default="" type="STRING" comment="5态图片，宽高相同，水平排列，顺序为：正常，按下，悬浮，焦点，禁用。"/>
             <Attribute name="fadedelta" default="0" type="BYTE" comment="普通图片透明度变化步长"/>
+            <Attribute name="disableseconds" default="0" type="BYTE" comment="下次响应鼠标/键盘事件需要等待的秒数。默认0，表示关闭该特性。"/>
             <Attribute name="hotbkcolor" default="#00000000" type="DWORD" comment="鼠标悬浮状态背景色"/>
             <Attribute name="hottextcolor" default="#00000000" type="DWORD" comment="鼠标悬浮字体颜色，0表示不使用此颜色,如(#FFFF0000)"/>
             <Attribute name="pushedtextcolor" default="#00000000" type="DWORD" comment="鼠标按下字体颜色，0表示不使用此颜色,如(#FFFF0000)"/>

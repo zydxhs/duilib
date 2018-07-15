@@ -2152,7 +2152,7 @@ void CListHeaderItemUI::DoEvent(TEventUI &event)
         Invalidate();
     }
 
-    if (event.Type == UIEVENT_BUTTONDOWN || event.Type == UIEVENT_DBLCLICK)
+    if (event.Type == UIEVENT_BUTTONDOWN || event.Type == UIEVENT_LBUTTONDBLDOWN)
     {
         if (!IsEnabled()) { return; }
 
@@ -2192,11 +2192,16 @@ void CListHeaderItemUI::DoEvent(TEventUI &event)
         {
             m_uButtonState &= ~UISTATE_PUSHED;
             Invalidate();
-            // 2018-05-23 单击事件放在鼠标弹起时发送
-            m_pManager->SendNotify(this, DUI_MSGTYPE_HEADERCLICK);
         }
 
         return;
+    }
+
+    if (event.Type == UIEVENT_CLICK && IsEnabled())
+    {
+        // 2018-05-23 单击事件放在鼠标弹起时发送
+        // 2018-07-15 单击事件放在单击消息中发送
+        m_pManager->SendNotify(this, DUI_MSGTYPE_HEADERCLICK);
     }
 
     if (event.Type == UIEVENT_MOUSEMOVE)

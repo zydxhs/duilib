@@ -8,8 +8,10 @@ CButtonUI::CButtonUI()
     , m_dwPushedTextColor(0)
     , m_dwFocusedTextColor(0)
     , m_dwHotBkColor(0)
-    , m_uFadeAlphaDelta(0)
-    , m_uFadeAlpha(255)
+    , m_byFadeAlphaDelta(0)
+    , m_byFadeAlpha(255)
+    , m_byDisableSeconds(0)
+    , m_byEllapseSeconds(0)
 {
     m_uTextStyle = DT_SINGLELINE | DT_VCENTER | DT_CENTER;
 }
@@ -33,8 +35,6 @@ UINT CButtonUI::GetControlFlags() const
 
 void CButtonUI::DoEvent(TEventUI &event)
 {
-    static bool bDblClick = false;
-
     if (!IsMouseEnabled() && event.Type > UIEVENT__MOUSEBEGIN && event.Type < UIEVENT__MOUSEEND)
     {
         if (m_pParent != NULL) { m_pParent->DoEvent(event); }
@@ -60,24 +60,28 @@ void CButtonUI::DoEvent(TEventUI &event)
             if (event.chKey == VK_SPACE || event.chKey == VK_RETURN)
             {
                 Activate();
+
+                // 2018-07-15 如果启用了响应频率控制，并且处理于可用状态
+                // 有可能用户响应事件后，设置按钮为禁用，此时就不能启动该特性，避免超时后置按钮为可用状态
+                if (0 != m_byDisableSeconds && IsEnabled())
+                {
+                    m_byEllapseSeconds = 0;
+                    m_pManager->SetTimer(this, TIMERID_DISABLE, ELLAPSE_DISABLE);
+                    SetEnabled(false);
+                }
+
                 return;
             }
         }
     }
 
-    if (event.Type == UIEVENT_BUTTONDOWN || event.Type == UIEVENT_DBLCLICK)
+    if (event.Type == UIEVENT_BUTTONDOWN || event.Type == UIEVENT_LBUTTONDBLDOWN)
     {
         if (::PtInRect(&m_rcItem, event.ptMouse) && IsEnabled())
         {
             SetCapture();
             m_uButtonState |= UISTATE_PUSHED | UISTATE_CAPTURED;
             Invalidate();
-
-            if (event.Type == UIEVENT_DBLCLICK)
-            {
-                bDblClick = true;
-                m_pManager->SendNotify(this, DUI_MSGTYPE_DBLCLICK);
-            }
         }
 
         return;
@@ -102,14 +106,32 @@ void CButtonUI::DoEvent(TEventUI &event)
 
         if ((m_uButtonState & UISTATE_CAPTURED) != 0)
         {
-            if (bDblClick) { bDblClick = false; }
-            else           { if (::PtInRect(&m_rcItem, event.ptMouse)) { Activate(); } }
-
             m_uButtonState &= ~(UISTATE_PUSHED | UISTATE_CAPTURED);
             Invalidate();
         }
 
         return;
+    }
+
+    if ((event.Type == UIEVENT_DBLCLICK || event.Type == UIEVENT_CLICK) && IsEnabled())
+    {
+        if (::PtInRect(&m_rcItem, event.ptMouse))
+        {
+            if (event.Type == UIEVENT_CLICK)         { Activate(); }
+            else if (event.Type == UIEVENT_DBLCLICK) { m_pManager->SendNotify(this, DUI_MSGTYPE_DBLCLICK); }
+
+            // 2018-07-15 如果启用了响应频率控制，并且处理于可用状态
+            // 有可能用户响应事件后，设置按钮为禁用，此时就不能启动该特性，避免超时后置按钮为可用状态
+            if (0 != m_byDisableSeconds && IsEnabled())
+            {
+                m_byEllapseSeconds = 0;
+                m_pManager->SetTimer(this, TIMERID_DISABLE, ELLAPSE_DISABLE);
+                m_sText.Format(_T("%s %d ..."), m_sTextOrig.GetData(), m_byDisableSeconds);
+                SetEnabled(false);
+            }
+
+            return;
+        }
     }
 
     if (event.Type == UIEVENT_CONTEXTMENU)
@@ -141,7 +163,7 @@ void CButtonUI::DoEvent(TEventUI &event)
 
         if (GetFadeAlphaDelta() > 0)
         {
-            m_pManager->SetTimer(this, FADE_TIMERID, FADE_ELLAPSE);
+            m_pManager->SetTimer(this, TIMERID_FADE, ELLAPSE_FADE);
         }
     }
 
@@ -162,7 +184,7 @@ void CButtonUI::DoEvent(TEventUI &event)
 
             if (GetFadeAlphaDelta() > 0)
             {
-                m_pManager->SetTimer(this, FADE_TIMERID, FADE_ELLAPSE);
+                m_pManager->SetTimer(this, TIMERID_FADE, ELLAPSE_FADE);
             }
         }
         else
@@ -179,29 +201,51 @@ void CButtonUI::DoEvent(TEventUI &event)
         return;
     }
 
-    if (event.Type == UIEVENT_TIMER  && event.wParam == FADE_TIMERID)
+    if (event.Type == UIEVENT_TIMER)
     {
-        if ((m_uButtonState & UISTATE_HOT) != 0)
+        if (event.wParam == TIMERID_FADE)
         {
-            if (m_uFadeAlpha > m_uFadeAlphaDelta) { m_uFadeAlpha -= m_uFadeAlphaDelta; }
+            if ((m_uButtonState & UISTATE_HOT) != 0)
+            {
+                if (m_byFadeAlpha > m_byFadeAlphaDelta) { m_byFadeAlpha -= m_byFadeAlphaDelta; }
+                else
+                {
+                    m_byFadeAlpha = 0;
+                    m_pManager->KillTimer(this, TIMERID_FADE);
+                }
+            }
             else
             {
-                m_uFadeAlpha = 0;
-                m_pManager->KillTimer(this, FADE_TIMERID);
+                if (m_byFadeAlpha < 255 - m_byFadeAlphaDelta) { m_byFadeAlpha += m_byFadeAlphaDelta; }
+                else
+                {
+                    m_byFadeAlpha = 255;
+                    m_pManager->KillTimer(this, TIMERID_FADE);
+                }
             }
-        }
-        else
-        {
-            if (m_uFadeAlpha < 255 - m_uFadeAlphaDelta) { m_uFadeAlpha += m_uFadeAlphaDelta; }
-            else
-            {
-                m_uFadeAlpha = 255;
-                m_pManager->KillTimer(this, FADE_TIMERID);
-            }
-        }
 
-        Invalidate();
-        return;
+            Invalidate();
+            return;
+        }
+        else if (event.wParam == TIMERID_DISABLE)
+        {
+            m_byEllapseSeconds += 1;
+            BYTE byEllapseSec = m_byEllapseSeconds / 2;
+
+            if (byEllapseSec == m_byDisableSeconds)
+            {
+                m_pManager->KillTimer(this, TIMERID_DISABLE);
+                m_sText = m_sTextOrig;
+                SetEnabled(true);
+            }
+            else
+            {
+                m_sText.Format(_T("%s %d ..."), m_sTextOrig.GetData(), m_byDisableSeconds - byEllapseSec);
+                Invalidate();
+            }
+
+            return;
+        }
     }
 
     CLabelUI::DoEvent(event);
@@ -432,12 +476,12 @@ void CButtonUI::SetFiveStatusImage(LPCTSTR pStrImage)
 
 void CButtonUI::SetFadeAlphaDelta(BYTE uDelta)
 {
-    m_uFadeAlphaDelta = uDelta;
+    m_byFadeAlphaDelta = uDelta;
 }
 
 BYTE CButtonUI::GetFadeAlphaDelta()
 {
-    return m_uFadeAlphaDelta;
+    return m_byFadeAlphaDelta;
 }
 
 SIZE CButtonUI::EstimateSize(SIZE szAvailable)
@@ -489,6 +533,10 @@ void CButtonUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         LPTSTR pstr = NULL;
         DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
         SetFocusedTextColor(clrColor);
+    }
+    else if (_tcscmp(pstrName, _T("disableseconds")) == 0)
+    {
+        m_byDisableSeconds = (BYTE)_ttoi(pstrValue);
     }
     else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
     else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
@@ -682,7 +730,7 @@ void CButtonUI::DrawNormalBkImg(HDC hDC, TDrawInfo &diNormal, TDrawInfo *pdiHot,
 
     if (GetFadeAlphaDelta() > 0)
     {
-        if (m_uFadeAlpha == 255)
+        if (m_byFadeAlpha == 255)
         {
             pdiNormal->uFade = 255;
             DrawImage(hDC, *pdiNormal);
@@ -691,11 +739,11 @@ void CButtonUI::DrawNormalBkImg(HDC hDC, TDrawInfo &diNormal, TDrawInfo *pdiHot,
         {
             if (NULL != pdiHot)
             {
-                pdiHot->uFade = 255 - m_uFadeAlpha;
+                pdiHot->uFade = 255 - m_byFadeAlpha;
                 DrawImage(hDC, *pdiHot);
             }
 
-            pdiNormal->uFade = m_uFadeAlpha;
+            pdiNormal->uFade = m_byFadeAlpha;
             DrawImage(hDC, *pdiNormal);
         }
     }

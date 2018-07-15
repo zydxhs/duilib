@@ -13,6 +13,9 @@ extern ZRESULT CloseZipU(HZIP hz);
 
 namespace DuiLib {
 
+#define TIMERID_LAYEREDUPDATE   0x2000
+#define TIMERID_DBLCLICK        0x2001      // 判断单击、双击的定时器
+
 /////////////////////////////////////////////////////////////////////////////////////
 //
 //
@@ -818,12 +821,12 @@ void CPaintManagerUI::SetLayered(bool bLayered)
         if (bLayered)
         {
             dwNewExStyle |= WS_EX_LAYERED;
-            ::SetTimer(m_hWndPaint, LAYEREDUPDATE_TIMERID, 10L, NULL);
+            ::SetTimer(m_hWndPaint, TIMERID_LAYEREDUPDATE, 10L, NULL);
         }
         else
         {
             dwNewExStyle &= ~WS_EX_LAYERED;
-            ::KillTimer(m_hWndPaint, LAYEREDUPDATE_TIMERID);
+            ::KillTimer(m_hWndPaint, TIMERID_LAYEREDUPDATE);
         }
 
         if (dwExStyle != dwNewExStyle) { ::SetWindowLong(m_hWndPaint, GWL_EXSTYLE, dwNewExStyle); }
@@ -1535,7 +1538,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 
     case WM_TIMER:
         {
-            if (LOWORD(wParam) == LAYEREDUPDATE_TIMERID)
+            if (LOWORD(wParam) == TIMERID_LAYEREDUPDATE)
             {
                 if (m_bLayered && !::IsRectEmpty(&m_rcLayeredUpdate))
                 {
@@ -1545,6 +1548,20 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 
                     break;
                 }
+            }
+
+            if (LOWORD(wParam) == TIMERID_DBLCLICK)
+            {
+                // 2018-07-15 鼠标左键按下开始计时，系统双击时间超时后，发送单击、双击消息
+                ::KillTimer(m_hWndPaint, LOWORD(wParam));
+                CControlUI *pControl = FindControl(m_tEvtBtn.ptMouse);
+
+                if (NULL != pControl && pControl->GetManager() == this)
+                {
+                    pControl->Event(m_tEvtBtn);
+                }
+
+                break;
             }
 
             for (int i = 0; i < m_aTimers.GetSize(); i++)
@@ -1775,6 +1792,8 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 
     case WM_LBUTTONDOWN:
         {
+            ::SetTimer(m_hWndPaint, TIMERID_DBLCLICK, GetDoubleClickTime(), NULL);
+
             // We alway set focus back to our app (this helps
             // when Win32 child windows are placed on the dialog
             // and we need to remove them on focus change).
@@ -1801,6 +1820,9 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
             event.wKeyState = (WORD)wParam;
             event.dwTimestamp = ::GetTickCount();
             pControl->Event(event);
+            // 鼠标单击事件
+            m_tEvtBtn = event;
+            m_tEvtBtn.Type = UIEVENT_CLICK;
         }
         break;
 
@@ -1817,17 +1839,23 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
             if (m_pEventCapture != NULL) { pControl = m_pEventCapture; }
 
             TEventUI event = { 0 };
-            event.Type = UIEVENT_DBLCLICK;
+            event.Type = UIEVENT_LBUTTONDBLDOWN;
             event.pSender = pControl;
+            event.wParam = wParam;
+            event.lParam = lParam;
             event.ptMouse = pt;
             event.wKeyState = (WORD)wParam;
             event.dwTimestamp = ::GetTickCount();
             pControl->Event(event);
+            // 鼠标又击事件
+            m_tEvtBtn = event;
+            m_tEvtBtn.Type = UIEVENT_DBLCLICK;
         }
         break;
 
     case WM_LBUTTONUP:
         {
+            DUITRACE(_T("MessageHandler: WM_LBUTTONUP"));
             POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
             m_ptLastMousePos = pt;
             CControlUI *pControl = FindControl(pt);

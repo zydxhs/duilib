@@ -21,7 +21,6 @@ enum EMCUSTOM_EVENT
 
 #define _USEIMM                 1
 #define MAX_FONT_ID             30000
-#define LAYEREDUPDATE_TIMERID   0x2000
 #define RES_TYPE_COLOR          _T("*COLOR*")
 #define SCROLLBAR_LINESIZE      8
 

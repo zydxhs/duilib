@@ -60,7 +60,7 @@ void CTextUI::DoEvent(TEventUI &event)
         }
     }
 
-    if ((event.Type == UIEVENT_BUTTONDOWN || event.Type == UIEVENT_DBLCLICK) && IsEnabled())
+    if ((event.Type == UIEVENT_BUTTONDOWN || event.Type == UIEVENT_LBUTTONDBLDOWN) && IsEnabled())
     {
         SetCapture();
 
@@ -202,12 +202,12 @@ int *CTextUI::GetLinksNum(void)
     return &m_nLinks;
 }
 
-RECT * CTextUI::GetRectLinks(void)
+RECT *CTextUI::GetRectLinks(void)
 {
     return m_rcLinks;
 }
 
-DuiLib::CDuiString * CTextUI::GetStringLinks(void)
+DuiLib::CDuiString *CTextUI::GetStringLinks(void)
 {
     return m_sLinks;
 }

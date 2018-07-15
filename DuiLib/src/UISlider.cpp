@@ -130,7 +130,7 @@ void CSliderUI::DoEvent(TEventUI &event)
         return;
     }
 
-    if (event.Type == UIEVENT_BUTTONDOWN || event.Type == UIEVENT_DBLCLICK)
+    if (event.Type == UIEVENT_BUTTONDOWN || event.Type == UIEVENT_LBUTTONDBLDOWN)
     {
         if (IsEnabled())
         {

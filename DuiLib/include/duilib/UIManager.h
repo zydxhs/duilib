@@ -28,11 +28,16 @@ typedef enum EVENTTYPE_UI
     UIEVENT_MOUSELEAVE,
     UIEVENT_MOUSEENTER,
     UIEVENT_MOUSEHOVER,
-    UIEVENT_BUTTONDOWN,
-    UIEVENT_BUTTONUP,
-    UIEVENT_RBUTTONDOWN,
-    UIEVENT_RBUTTONUP,
-    UIEVENT_DBLCLICK,
+    UIEVENT_BUTTONDOWN,         // 只处理状态，不发送通知消息。
+    UIEVENT_LBUTTONDBLDOWN,     // 只处理状态，不发送通知消息。鼠标左键双击按下。
+    UIEVENT_BUTTONUP,           // 只处理状态，不发送通知消息。
+    UIEVENT_RBUTTONDOWN,        // 只处理状态，不发送通知消息。
+    UIEVENT_RBUTTONDBLDOWN,     // 只处理状态，不发送通知消息。鼠标右键双击按下
+    UIEVENT_RBUTTONUP,          // 只处理状态，不发送通知消息。
+    UIEVENT_CLICK,              // 鼠标左键单击消息。
+    UIEVENT_DBLCLICK,           // 鼠标左键双击消息。
+    UIEVENT_RCLICK,             // 鼠标右键单击消息。
+    UIEVENT_RDBLCLICK,          // 鼠标右键双击消息。
     UIEVENT_CONTEXTMENU,
     UIEVENT_SCROLLWHEEL,
     UIEVENT__MOUSEEND,
@@ -536,6 +541,7 @@ private:
     CControlUI     *m_pEventDrop;       // 当前接收拖放的控件
     IDataObject    *m_pDataObject;      // 拖放携带的数据对象
 
+    TEventUI        m_tEvtBtn;          // 鼠标单击、双击消息
     //
     static HINSTANCE m_hResourceInstance;
     static CDuiString m_pStrResourcePath;
