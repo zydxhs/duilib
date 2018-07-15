@@ -54,11 +54,6 @@ protected:
     void PaintWebContent(HDC hDC, const RECT &rcPaint);
 
 protected:
-    enum
-    {
-        DEFAULT_TIMERID = 10,
-    };
-
     wkeWebView  m_pWeb;
 
     // 回调通知数据

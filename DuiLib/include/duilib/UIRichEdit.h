@@ -138,11 +138,6 @@ public:
     LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool &bHandled);
 
 protected:
-    enum
-    {
-        DEFAULT_TIMERID = 20,
-    };
-
     CTxtWinHost *m_pTwh;
     bool m_bVScrollBarFixing;
     bool m_bWantTab;

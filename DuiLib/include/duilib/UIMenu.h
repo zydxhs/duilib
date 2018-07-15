@@ -166,8 +166,6 @@ private:
     void OnKeyDown(TEventUI &event);
 
 private:
-    enum { TIMERID_MOUSEENTER = 30, TIMERID_MOUSELEAVE = 31 };
-
     CMenuWnd   *m_pSubMenuWnd;
 
     //菜单项图标

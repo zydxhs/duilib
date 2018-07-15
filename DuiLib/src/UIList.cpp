@@ -1305,6 +1305,8 @@ void CListUI::DoInit()
     // 绑定表头第一列通知消息
     CListHeaderItemUI *pHItem0 = (CListHeaderItemUI *)m_pHeader->GetItemAt(0);
 
+    if (NULL == pHItem0) { return; }
+
     for (int i = 0; i < pHItem0->GetCount(); ++i)
     {
         CControlUI *pCtrl = pHItem0->GetItemAt(i);

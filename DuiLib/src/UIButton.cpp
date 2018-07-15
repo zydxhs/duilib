@@ -1,6 +1,17 @@
 ﻿#include "stdafx.h"
 
 namespace DuiLib {
+enum
+{
+    // 定时器ID
+    TIMERID_FADE        = 1,    // 按钮图片透明度变化
+    TIMERID_DISABLE     = 2,    // 按钮响应频率控制定时器
+
+    // 定时器超时时间
+    ELLAPSE_FADE = 40,
+    ELLAPSE_DISABLE = 500,
+};
+
 
 CButtonUI::CButtonUI()
     : m_uButtonState(0)

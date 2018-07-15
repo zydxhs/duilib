@@ -1,6 +1,11 @@
 ﻿#include "StdAfx.h"
 
 namespace DuiLib {
+enum
+{
+    TIMERID_WEB_REFRESH = 1,        // 网页内容刷新定时器ID
+};
+
 void PaintUpdatedCallback(wkeWebView webView, void *param, const HDC hdc, int x, int y, int cx, int cy)
 {
     if (NULL != param)
@@ -92,7 +97,7 @@ void CWkeBrowserUI::DoEvent(TEventUI &event)
     switch (event.Type)
     {
     case UIEVENT_TIMER:
-        if (event.wParam == DEFAULT_TIMERID)
+        if (event.wParam == TIMERID_WEB_REFRESH)
         {
             wkeRepaintIfNeeded(m_pWeb);
             Invalidate();
@@ -446,7 +451,7 @@ void CWkeBrowserUI::InitBrowser(void)
     wkeOnPromptBox(m_pWeb, PromptBoxCallback, this);
 
     wkeResize(m_pWeb, m_rcItem.right - m_rcItem.left, m_rcItem.bottom - m_rcItem.top);
-    m_pManager->SetTimer(this, DEFAULT_TIMERID, 15);
+    m_pManager->SetTimer(this, TIMERID_WEB_REFRESH, 15);
 }
 
 bool CWkeBrowserUI::SendNotify(void *pWebView, int nFlag, LPCTSTR sMsg, LPCTSTR sDefRet, LPCTSTR sRet)

@@ -13,6 +13,14 @@ enum EMIPField
     EM_FIELD4,
 };
 
+enum
+{
+    TIMERID_CARET = 1,      // 光标定时器ID
+    // 2017-07-21 zhuyadong 添加 minmaxnumber 属性
+    TIMERID_CHECK = 2,      // 用于检测用户输入的值是否越界
+};
+
+
 class CIPAddressWnd : public CWindowWnd
 {
 public:
@@ -36,13 +44,6 @@ public:
 protected:
     bool IsValidChar(TCHAR ch);
 protected:
-    enum
-    {
-        DEFAULT_TIMERID = 20,
-        // 2017-07-21 zhuyadong 添加 minmaxnumber 属性
-        CHECK_TIMERID,          // 用于检测用户输入的值是否越界
-    };
-
     CIPAddressUI   *m_pOwner;
     EMIPField       m_eField;
     HBRUSH m_hBkBrush;
@@ -152,7 +153,7 @@ LRESULT CIPAddressWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         if (m_pOwner->GetManager()->IsLayered())
         {
-            ::SetTimer(m_hWnd, DEFAULT_TIMERID, ::GetCaretBlinkTime(), NULL);
+            ::SetTimer(m_hWnd, TIMERID_CARET, ::GetCaretBlinkTime(), NULL);
         }
 
         bHandled = FALSE;
@@ -277,7 +278,7 @@ LRESULT CIPAddressWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
     else if (uMsg == WM_TIMER)
     {
-        if (wParam == DEFAULT_TIMERID)
+        if (wParam == TIMERID_CARET)
         {
             m_bDrawCaret = !m_bDrawCaret;
             RECT rcClient;

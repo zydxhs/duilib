@@ -56,16 +56,6 @@ protected:
     void DrawNormalBkImg(HDC hDC, TDrawInfo &diNormal, TDrawInfo *pdiHot = NULL, bool bHot = false);
 
 protected:
-    enum
-    {
-        // 按钮图片透明度变化
-        TIMERID_FADE = 11,
-        ELLAPSE_FADE = 40,
-        // 按钮响应频率控制定时器
-        TIMERID_DISABLE = 12,
-        ELLAPSE_DISABLE = 500,
-    };
-
     UINT m_uButtonState;
 
     // Control::m_dwBackColor       正常 背景色

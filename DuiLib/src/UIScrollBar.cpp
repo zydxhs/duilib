@@ -1,6 +1,12 @@
 ﻿#include "stdafx.h"
 
 namespace DuiLib {
+enum
+{
+    TIMERID_REPEAT = 1,             // 滚动条定时器ID
+
+    DEFAULT_SCROLLBAR_SIZE = 16,    // 滚动条默认宽度/高度
+};
 
 CScrollBarUI::CScrollBarUI() :
     m_bHorizontal(false),
@@ -756,7 +762,7 @@ void CScrollBarUI::DoEvent(TEventUI &event)
         SetCapture();
         m_nLastScrollOffset = 0;
         m_nScrollRepeatDelay = 0;
-        m_pManager->SetTimer(this, DEFAULT_TIMERID, 50U);
+        m_pManager->SetTimer(this, TIMERID_REPEAT, 50U);
 
         if (::PtInRect(&m_rcButton1, event.ptMouse))
         {
@@ -832,7 +838,7 @@ void CScrollBarUI::DoEvent(TEventUI &event)
         ReleaseCapture();
         m_nScrollRepeatDelay = 0;
         m_nLastScrollOffset = 0;
-        m_pManager->KillTimer(this, DEFAULT_TIMERID);
+        m_pManager->KillTimer(this, TIMERID_REPEAT);
 
         if ((m_uThumbState & UISTATE_CAPTURED) != 0)
         {
@@ -917,7 +923,7 @@ void CScrollBarUI::DoEvent(TEventUI &event)
         return;
     }
 
-    if (event.Type == UIEVENT_TIMER && event.wParam == DEFAULT_TIMERID)
+    if (event.Type == UIEVENT_TIMER && event.wParam == TIMERID_REPEAT)
     {
         ++m_nScrollRepeatDelay;
 

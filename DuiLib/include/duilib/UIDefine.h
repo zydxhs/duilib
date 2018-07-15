@@ -23,6 +23,7 @@ enum EMCUSTOM_EVENT
 #define MAX_FONT_ID             30000
 #define RES_TYPE_COLOR          _T("*COLOR*")
 #define SCROLLBAR_LINESIZE      8
+#define TIMERID_USER_MIN        1024    // 用户定时器ID的最小值。小于该值的定时器为duilib内部保留
 
 enum DuiSig
 {

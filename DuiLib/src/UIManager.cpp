@@ -13,8 +13,11 @@ extern ZRESULT CloseZipU(HZIP hz);
 
 namespace DuiLib {
 
-#define TIMERID_LAYEREDUPDATE   0x2000
-#define TIMERID_DBLCLICK        0x2001      // 判断单击、双击的定时器
+enum
+{
+    TIMERID_LAYEREDUPDATE   = 1,
+    TIMERID_DBLCLICK        = 2,     // 判断单击、双击的定时器
+};
 
 /////////////////////////////////////////////////////////////////////////////////////
 //

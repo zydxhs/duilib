@@ -1,6 +1,10 @@
 ﻿#include "StdAfx.h"
 
 namespace DuiLib {
+enum
+{
+    TIMERID_CARET = 1,          // 光标定时器ID
+};
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -37,11 +41,6 @@ protected:
     LRESULT OnPrint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
 
 protected:
-    enum
-    {
-        DEFAULT_TIMERID = 20,
-    };
-
     CActiveXCtrl *m_pOwner;
     int m_iLayeredTick;
     bool m_bDrawCaret;
@@ -961,7 +960,7 @@ LRESULT CActiveXWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHa
 
     if (m_pOwner->m_pOwner->GetManager()->IsLayered())
     {
-        ::SetTimer(m_hWnd, DEFAULT_TIMERID, 50, NULL);
+        ::SetTimer(m_hWnd, TIMERID_CARET, 50, NULL);
     }
 
     return 0;
@@ -969,7 +968,7 @@ LRESULT CActiveXWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHa
 
 LRESULT CActiveXWnd::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
-    if (wParam == DEFAULT_TIMERID)
+    if (wParam == TIMERID_CARET)
     {
         if (m_pOwner->m_pOwner->GetManager()->IsLayered())
         {

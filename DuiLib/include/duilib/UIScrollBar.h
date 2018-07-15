@@ -98,13 +98,6 @@ public:
     void PaintRail(HDC hDC);
 
 protected:
-
-    enum
-    {
-        DEFAULT_SCROLLBAR_SIZE = 16,
-        DEFAULT_TIMERID = 10,
-    };
-
     bool m_bHorizontal;
     int m_nRange;
     int m_nScrollPos;

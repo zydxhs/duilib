@@ -7,6 +7,10 @@
 // sizes used for initialization and reset in RichEdit 1.0
 
 namespace DuiLib {
+enum
+{
+    TIMERID_CARET = 1,         // 光标闪烁定时器ID
+};
 
 const LONG cInitTextMax = (32 * 1024) - 1;
 
@@ -1780,7 +1784,7 @@ void CRichEditUI::DoInit()
         m_pTwh->OnTxInPlaceActivate(NULL);
         m_pManager->AddMessageFilter(this);
 
-        if (m_pManager->IsLayered()) { m_pManager->SetTimer(this, DEFAULT_TIMERID, ::GetCaretBlinkTime()); }
+        if (m_pManager->IsLayered()) { m_pManager->SetTimer(this, TIMERID_CARET, ::GetCaretBlinkTime()); }
     }
 
     m_bInited = true;
@@ -2032,7 +2036,7 @@ void CRichEditUI::DoEvent(TEventUI &event)
     }
     else if (event.Type == UIEVENT_TIMER)
     {
-        if (event.wParam == DEFAULT_TIMERID)
+        if (event.wParam == TIMERID_CARET)
         {
             if (m_pTwh && m_pManager->IsLayered() && IsFocused())
             {
