@@ -12,6 +12,22 @@ enum EMWndState
     ESTATE_CLOSE,       // 销毁窗体
 };
 
+// 功能选项控件关联的子窗体类型字符串或控件指针
+struct TBudddyItem
+{
+    CDuiString          m_strDlg;   // 对话框类型字符串，用于工厂模式创建对话框
+    CControlUI         *m_pCtrl;    // 控件指针
+
+    TBudddyItem(void) { Reset(); }
+    TBudddyItem(CDuiString strDlg, CControlUI *pCtrl) : m_strDlg(strDlg), m_pCtrl(pCtrl) { }
+    void Reset(void)
+    {
+        m_strDlg.Empty();
+        m_pCtrl = NULL;
+    }
+};
+
+
 LPBYTE CWndImplBase::m_lpResourceZIPBuffer = NULL;
 
 DUI_BEGIN_MESSAGE_MAP(CWndImplBase, CNotifyPump)
@@ -25,6 +41,7 @@ CWndImplBase::CWndImplBase()
     , m_pbtnClose(NULL)
     , m_nWndState(ESTATE_UNKNOW)
     , m_aryCtrlStatic(7)
+    , m_pCtrlPlaceHolder(NULL)
 {
 }
 
@@ -543,12 +560,122 @@ LRESULT CWndImplBase::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 }
 
+void CWndImplBase::AddChild(CDuiString strType, CWndImplBase *pWnd)
+{
+    m_mapChild.Set(strType, pWnd);
+}
+
+void CWndImplBase::DelChild(CDuiString strType)
+{
+    m_mapChild.Remove(strType);
+}
+
+CWndImplBase *CWndImplBase::GetChild(CDuiString strType)
+{
+    LPVOID p = m_mapChild.Find(strType);
+    return (CWndImplBase *)p;
+}
+
+void CWndImplBase::DestroyChildDlg()
+{
+    for (int i = 0; i < m_mapChild.GetSize(); ++i)
+    {
+        CWndImplBase *pWnd = (CWndImplBase *)m_mapChild.GetAt(i);
+
+        if (NULL != pWnd && ::IsWindow(pWnd->GetHWND())) { pWnd->Close(); }
+    }
+
+    m_mapChild.RemoveAll();
+}
+
+void CWndImplBase::DestroyChildDlg(CDuiString strType)
+{
+    CWndImplBase *pWnd = (CWndImplBase *)m_mapChild.Find(strType);
+
+    if (NULL != pWnd && ::IsWindow(pWnd->GetHWND())) { pWnd->Close(); }
+
+    m_mapChild.Remove(strType);
+}
+
+void CWndImplBase::MakeCtrlSizeNty(CContainerUI *pCtrl)
+{
+    ASSERT(NULL != pCtrl);
+
+    if (NULL != pCtrl)
+    {
+        m_pCtrlPlaceHolder = pCtrl;
+        pCtrl->OnSize += MakeDelegate(this, &CWndImplBase::Relayout);
+    }
+}
+
+void CWndImplBase::AddBtnDlgItem(CDuiString strBtnName, CDuiString strDlgType, CControlUI *pCtrl)
+{
+    m_mapBtnItem.Set(strBtnName, new TBudddyItem(strDlgType, pCtrl));
+}
+
+void CWndImplBase::ResetBtnDlgItem(void)
+{
+    for (int i = 0; i < m_mapBtnItem.GetSize(); ++i)
+    {
+        TBudddyItem *pItem = (TBudddyItem *)m_mapBtnItem.GetAt(i);
+
+        if (NULL != pItem) { delete pItem; }
+    }
+
+    m_mapBtnItem.RemoveAll();
+}
+
+void CWndImplBase::SwitchChildDlg(CDuiString strBtnName)
+{
+    TBudddyItem *pItem = (TBudddyItem *)m_mapBtnItem.Find(strBtnName);
+    ASSERT(pItem);
+
+    if (NULL == pItem || m_strChildDlgType == pItem->m_strDlg) { return; }
+
+    CWndImplBase *pWnd = (CWndImplBase *)m_mapChild.Find(pItem->m_strDlg);
+    ASSERT(pWnd);
+
+    if (NULL != pWnd)
+    {
+        // 销毁子窗口，保存数据
+        DestroyChildDlg(m_strChildDlgType);
+        m_strChildDlgType.Empty();
+    }
+
+    pWnd = CreateWnd(pItem->m_strDlg);
+
+    if (NULL != pWnd)
+    {
+        m_strChildDlgType = pItem->m_strDlg;
+        AddChild(m_strChildDlgType, pWnd);
+        Relayout(NULL);
+        pWnd->ShowWindow(true);
+    }
+}
+
 LRESULT CWndImplBase::OnWndDataUpdate(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     if (EPARAM_INIT == wParam) { OnDataInit(); }
     else                       { OnDataSave(); }
 
     return 0;
+}
+
+bool CWndImplBase::Relayout(void *pParam)
+{
+    if (NULL == m_pm.GetRoot()) { return false; }
+
+    CWndImplBase *pWndChild = (CWndImplBase *)m_mapChild.Find(m_strChildDlgType);
+    ASSERT(NULL != pWndChild);
+
+    if (NULL == pWndChild) { return false; }
+
+    CDuiRect rt = m_pCtrlPlaceHolder->GetPos();
+    CDuiRect rtInset = m_pCtrlPlaceHolder->GetInset();
+    ::SetWindowPos(pWndChild->GetHWND(), NULL, rt.left + rtInset.left, rt.top + rtInset.top,
+                   rt.GetWidth() - rtInset.left - rtInset.right, rt.GetHeight() - rtInset.top - rtInset.bottom,
+                   SWP_SHOWWINDOW);
+    return true;
 }
 
 INLINE LRESULT CWndImplBase::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)

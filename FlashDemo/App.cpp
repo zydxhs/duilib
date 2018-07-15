@@ -12,6 +12,7 @@ public:
     UINT GetClassStyle() const { return UI_CLASSSTYLE_DIALOG; };
     virtual CDuiString GetSkinFolder() { return _T(""); }
     virtual CDuiString GetSkinFile() { return _T("ui.xml"); }
+    virtual CWndImplBase *CreateWnd(CDuiString strDlgType) { return NULL; }
     void OnFinalMessage(HWND /*hWnd*/)
     {
         delete this;

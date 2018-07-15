@@ -55,6 +55,9 @@ protected:
     virtual CDuiString GetZIPFileName() const { return _T(""); }
     virtual LPCTSTR GetResourceID() const { return _T(""); }
 
+    // 创建子窗体
+    virtual CWndImplBase *CreateWnd(CDuiString strDlgType) = 0;
+
     // IDialogBuilderCallback 接口，创建自定义控件
     virtual CControlUI *CreateControl(LPCTSTR pstrClass) { return NULL; }
 
@@ -78,6 +81,8 @@ protected:
     // 自定义消息处理。发送到窗口的消息，在交给 CPaintManagerUI 处理之前截获
     virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
 
+
+    // 窗体消息处理函数
     virtual LRESULT OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
     virtual LRESULT OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
 
@@ -106,8 +111,28 @@ protected:
     // 窗口处理过程，通常不需要重载。所有发送到窗口的消息，都可以在此截获
     virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
+protected:
+    // 子窗口。派生类通常不需要调用。
+    void AddChild(CDuiString strType, CWndImplBase *pWnd);
+    void DelChild(CDuiString strType);
+    CWndImplBase *GetChild(CDuiString strType);
+    void DestroyChildDlg();
+    void DestroyChildDlg(CDuiString strType);
+
+    // pCtrl指向的容器大小改变时，触发Relayout调用，自动调整子窗体的大小/位置
+    void MakeCtrlSizeNty(CContainerUI *pCtrl);
+
+    // 功能选项按钮
+    void AddBtnDlgItem(CDuiString strBtnName, CDuiString strDlgType, CControlUI *pCtrl = NULL);
+    void ResetBtnDlgItem(void);
+
+    // 子窗口切换。用户必须实现 CreateWnd，以实现子窗口的创建。
+    void SwitchChildDlg(CDuiString strBtnName);
+
 private:
     LRESULT OnWndDataUpdate(UINT uMsg, WPARAM wParam, LPARAM lParam);
+    // 调用时机：父窗口改变大小、子窗口初次添加到父窗口
+    bool Relayout(void *pParam);
 
 protected:
     static LPBYTE m_lpResourceZIPBuffer;
@@ -121,6 +146,22 @@ protected:
 private:
     int             m_nWndState;            // 用于判断是否发送窗体数据初始化/保存消息
     CDuiPtrArray    m_aryCtrlStatic;        // 标题栏上不支持鼠标/键盘操作的控件
+
+    // 2018-07-15 设计思路：
+    // 1. 每个窗体类与一个字符串关联，用字符串表示窗体类。只支持同时显示一个子窗口。
+    // 2. 支持子窗体，放置在占位符容器中；并且当占位符容器大小/位置改变时，自动调整子窗体的大小/位置
+    //    用户需要做的是：调用 MakeCtrlSizeNty 设置占位符容器；
+    //                    添加子窗口到 m_mapChild 关联容器中。
+    // 3. 当窗体拥有多个子窗口，并且每个子窗口与窗体上的某个控件关联时（比如 tab 标签页功能）
+    //    用户只需要调用 AddBtnDlgItem 将窗体控件名，与子窗体类型或相关控件指针关联起来就可以了。
+    //    单击窗体上的控件时，调用 SwitchChildDlg 即可切换到对应的子窗口，用户必须实现 CreateWnd。
+    CContainerUI   *m_pCtrlPlaceHolder;     // 占位符，用于放置子窗体
+    CDuiString      m_strChildDlgType;      // 当前子窗口类型
+    // key=窗体类型字符串，唯一标识一个窗体；value=子窗口指针(CWndImplBase*)
+    CDuiStringPtrMap    m_mapChild;         // 子窗体列表，用于窗体大小/位置变化时调整子窗口大小/位置。
+    // key=控件的名字；value=控件关联的子窗体类型字符串或控件指针(TBuddyItem*)
+    CDuiStringPtrMap    m_mapBtnItem;       // 功能选项按钮与关联子窗体映射关系
+
 };
 
 }

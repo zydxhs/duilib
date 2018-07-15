@@ -7,20 +7,14 @@ class CColorPicker : public CWndImplBase
 {
 public:
     CColorPicker(ChatDialog *chat_dialog, POINT ptMouse);
-
     LPCTSTR GetWindowClassName() const;
-
     virtual void OnFinalMessage(HWND hWnd);
-
     void Notify(TNotifyUI &msg);
-
     void InitWindow();
-
     virtual CDuiString GetSkinFile();
-
     virtual CDuiString GetSkinFolder();
-
     virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
+    virtual CWndImplBase *CreateWnd(CDuiString strDlgType) { return NULL; }
 
 private:
     POINT based_point_;

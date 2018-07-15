@@ -7,50 +7,49 @@
 class MainFrame : public CWndImplBase
 {
 public:
-
-	MainFrame();
-	~MainFrame();
+    MainFrame();
+    ~MainFrame();
 
 public:
-
-	LPCTSTR GetWindowClassName() const;	
-	virtual void OnFinalMessage(HWND hWnd);
-	virtual void InitWindow();
-	virtual LRESULT ResponseDefaultKeyEvent(WPARAM wParam);
-	virtual CDuiString GetSkinFile();
-	virtual CDuiString GetSkinFolder();
-	virtual UILIB_RESOURCETYPE GetResourceType() const;
-	virtual CControlUI* CreateControl(LPCTSTR pstrClass);
-	virtual LRESULT OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-	virtual LRESULT OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-	virtual LPCTSTR GetResourceID() const;
+    LPCTSTR GetWindowClassName() const;
+    virtual void OnFinalMessage(HWND hWnd);
+    virtual void InitWindow();
+    virtual LRESULT ResponseDefaultKeyEvent(WPARAM wParam);
+    virtual CDuiString GetSkinFile();
+    virtual CDuiString GetSkinFolder();
+    virtual UILIB_RESOURCETYPE GetResourceType() const;
+    virtual CControlUI *CreateControl(LPCTSTR pstrClass);
+    virtual LRESULT OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
+    virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
+    virtual LRESULT OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
+    virtual LPCTSTR GetResourceID() const;
+    virtual CWndImplBase *CreateWnd(CDuiString strDlgType) { return NULL; }
 
     DWORD GetBkColor();
     void SetBkColor(DWORD dwBackColor);
 
-protected:	
+protected:
 
-	void Notify(TNotifyUI& msg);
-	void OnPrepare(TNotifyUI& msg);
-	void OnExit(TNotifyUI& msg);
-	void OnTimer(TNotifyUI& msg);
-
-private:
-
-	void UpdateFriendsList();
-
-	void UpdateGroupsList();
-
-	void UpdateMicroBlogList();
+    void Notify(TNotifyUI &msg);
+    void OnPrepare(TNotifyUI &msg);
+    void OnExit(TNotifyUI &msg);
+    void OnTimer(TNotifyUI &msg);
 
 private:
-	int bk_image_index_;
 
-	FriendListItemInfo myself_info_;
-	std::vector<FriendListItemInfo> friends_;
+    void UpdateFriendsList();
 
-	SkinChangedObserver skin_changed_observer_;
+    void UpdateGroupsList();
+
+    void UpdateMicroBlogList();
+
+private:
+    int bk_image_index_;
+
+    FriendListItemInfo myself_info_;
+    std::vector<FriendListItemInfo> friends_;
+
+    SkinChangedObserver skin_changed_observer_;
 };
 
 #endif // MAINFRAME_HPP

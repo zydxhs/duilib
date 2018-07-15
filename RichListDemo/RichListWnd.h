@@ -57,6 +57,7 @@ public:
     virtual LRESULT OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
     virtual UILIB_RESOURCETYPE GetResourceType() const;
     virtual CDuiString GetZIPFileName() const;
+    virtual CWndImplBase *CreateWnd(CDuiString strDlgType) { return NULL; }
 
     DUI_DECLARE_MESSAGE_MAP()
     virtual void OnClick(TNotifyUI &msg);
