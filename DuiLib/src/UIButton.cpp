@@ -422,64 +422,67 @@ void CButtonUI::SetHotForeImage(LPCTSTR pStrImage)
 void CButtonUI::SetFiveStatusImage(LPCTSTR pStrImage)
 {
     m_diNormal.Clear();
-    m_diNormal.sDrawString = pStrImage;
-    DrawImage(NULL, m_diNormal);
-
-    if (m_diNormal.pImageInfo)
-    {
-        LONG width = m_diNormal.pImageInfo->nX / 5;
-        LONG height = m_diNormal.pImageInfo->nY;
-        m_diNormal.rcBmpPart = CDuiRect(0, 0, width, height);
-
-        if (m_bFloat && m_cxyFixed.cx == 0 && m_cxyFixed.cy == 0)
-        {
-            m_cxyFixed.cx = width;
-            m_cxyFixed.cy = height;
-        }
-    }
-
     m_diPushed.Clear();
-    m_diPushed.sDrawString = pStrImage;
-    DrawImage(NULL, m_diPushed);
-
-    if (m_diPushed.pImageInfo)
-    {
-        LONG width = m_diPushed.pImageInfo->nX / 5;
-        LONG height = m_diPushed.pImageInfo->nY;
-        m_diPushed.rcBmpPart = CDuiRect(width, 0, width * 2, height);
-    }
-
     m_diHot.Clear();
-    m_diHot.sDrawString = pStrImage;
-    DrawImage(NULL, m_diHot);
-
-    if (m_diHot.pImageInfo)
-    {
-        LONG width = m_diHot.pImageInfo->nX / 5;
-        LONG height = m_diHot.pImageInfo->nY;
-        m_diHot.rcBmpPart = CDuiRect(width * 2, 0, width * 3, height);
-    }
-
     m_diFocused.Clear();
-    m_diFocused.sDrawString = pStrImage;
-    DrawImage(NULL, m_diFocused);
+    m_diDisabled.Clear();
+    m_diNormal.sDrawString = pStrImage;
+    int nPos = m_diNormal.sDrawString.Find(_T(','));
+    // 'H' 水平排列，'V' 垂直排列。默认 'H'
+    TCHAR ch = _T('H');
 
-    if (m_diFocused.pImageInfo)
+    if (-1 != nPos)
     {
-        LONG width = m_diFocused.pImageInfo->nX / 5;
-        LONG height = m_diFocused.pImageInfo->nY;
-        m_diFocused.rcBmpPart = CDuiRect(width * 3, 0, width * 4, height);
+        ch = m_diNormal.sDrawString[0];
+        m_diNormal.sDrawString = m_diNormal.sDrawString.Right(m_diNormal.sDrawString.GetLength() - 2);
+        ch = (_T('V') == ch || _T('v') == ch) ? _T('V') : _T('H');
     }
 
-    m_diDisabled.Clear();
+    m_diPushed.sDrawString = pStrImage;
+    m_diHot.sDrawString = pStrImage;
+    m_diFocused.sDrawString = pStrImage;
     m_diDisabled.sDrawString = pStrImage;
-    DrawImage(NULL, m_diDisabled);
 
-    if (m_diDisabled.pImageInfo)
+    // Load 图片
+    CDuiString sResType;
+    DWORD dwMask            = 0;
+    bool bHSL               = false;
+    CRenderEngine::ParseDrawInfo(m_diNormal, sResType, dwMask, bHSL);
+    m_diNormal.pImageInfo   = m_pManager->AddImage((LPCTSTR)m_diNormal.sImageName,
+                                                   (LPCTSTR)sResType, dwMask, bHSL, true);
+    m_diPushed.pImageInfo   = m_diNormal.pImageInfo;
+    m_diHot.pImageInfo      = m_diNormal.pImageInfo;
+    m_diFocused.pImageInfo  = m_diNormal.pImageInfo;
+    m_diDisabled.pImageInfo = m_diNormal.pImageInfo;
+
+    if (!m_diNormal.pImageInfo) { return; }
+
+    // 分割图片
+    if (_T('H') == ch)
     {
-        LONG width = m_diDisabled.pImageInfo->nX / 5;
-        LONG height = m_diDisabled.pImageInfo->nY;
-        m_diDisabled.rcBmpPart = CDuiRect(width * 4, 0, width * 5, height);
+        LONG nW                = m_diNormal.pImageInfo->nX / 5;
+        LONG nH                = m_diNormal.pImageInfo->nY;
+        m_diNormal.rcBmpPart   = CDuiRect(nW * 0, 0, nW * 1, nH);
+        m_diPushed.rcBmpPart   = CDuiRect(nW * 1, 0, nW * 2, nH);
+        m_diHot.rcBmpPart      = CDuiRect(nW * 2, 0, nW * 3, nH);
+        m_diFocused.rcBmpPart  = CDuiRect(nW * 3, 0, nW * 4, nH);
+        m_diDisabled.rcBmpPart = CDuiRect(nW * 4, 0, nW * 5, nH);
+    }
+    else
+    {
+        LONG nW                 = m_diNormal.pImageInfo->nX;
+        LONG nH                 = m_diNormal.pImageInfo->nY / 5;
+        m_diNormal.rcBmpPart    = CDuiRect(0, nH * 0, nW, nH * 1);
+        m_diPushed.rcBmpPart    = CDuiRect(0, nH * 1, nW, nH * 2);
+        m_diHot.rcBmpPart       = CDuiRect(0, nH * 2, nW, nH * 3);
+        m_diFocused.rcBmpPart   = CDuiRect(0, nH * 3, nW, nH * 4);
+        m_diDisabled.rcBmpPart  = CDuiRect(0, nH * 4, nW, nH * 5);
+    }
+
+    if (m_bFloat && m_cxyFixed.cx == 0 && m_cxyFixed.cy == 0)
+    {
+        m_cxyFixed.cx = m_diNormal.rcBmpPart.right;
+        m_cxyFixed.cy = m_diNormal.rcBmpPart.bottom;
     }
 
     Invalidate();

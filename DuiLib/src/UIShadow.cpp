@@ -241,12 +241,10 @@ void CShadowUI::Update(HWND hParent)
             DWORD dwMask = 0;
             bool bHSL = false;
             CRenderEngine::ParseDrawInfo(m_diImgShadow, sResType, dwMask, bHSL);
-            const TImageInfo *data = data = m_pManager->GetImageEx((LPCTSTR)m_diImgShadow.sImageName,
-                                                                   (LPCTSTR)sResType, 0, false);
+            m_diImgShadow.pImageInfo = m_pManager->GetImageEx((LPCTSTR)m_diImgShadow.sImageName,
+                                                              (LPCTSTR)sResType, dwMask, bHSL);
 
-            if (!data) { return; }
-
-            m_diImgShadow.pImageInfo = data;
+            if (!m_diImgShadow.pImageInfo) { return; }
         }
 
         nShadWndWid = WndRect.right - WndRect.left + m_diImgShadow.rcScale9.left + m_diImgShadow.rcScale9.right;
