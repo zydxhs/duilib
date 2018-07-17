@@ -1030,7 +1030,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
     // Custom handling of events
     switch (uMsg)
     {
-    case WM_APP + 1:
+    case WM_ASYNC_NOTIFY:
         {
             m_bAsyncNotifyPosted = false;
 
@@ -3818,7 +3818,7 @@ void CPaintManagerUI::PostAsyncNotify()
 {
     if (!m_bAsyncNotifyPosted)
     {
-        ::PostMessage(m_hWndPaint, WM_APP + 1, 0, 0L);
+        ::PostMessage(m_hWndPaint, WM_ASYNC_NOTIFY, 0, 0L);
         m_bAsyncNotifyPosted = true;
     }
 }

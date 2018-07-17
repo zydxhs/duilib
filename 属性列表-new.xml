@@ -127,7 +127,8 @@
             <Attribute name="dragimage" default="" type="STRING" comment="拖拽时显示的图片"/>
         </Control>
         <Container parent="Control" notifies="setfocus killfocus timer menu windowinit(root) dblclick">
-            <Attribute name="inset" default="0,0,0,0" type="RECT" comment="容器的内边距,如(2,2,2,2)"/>
+            <Attribute name="inset" default="0,0,0,0" type="RECT" comment="内边距,如(2,2,2,2)"/>
+            <Attribute name="padding" default="0,0,0,0" type="RECT" comment="内边距,如(2,2,2,2)。等同于inset"/>
             <Attribute name="mousechild" default="true" type="BOOL" comment="本控件的子控件是否可以响应用户操作,如(true)"/>
             <Attribute name="vscrollbar" default="false" type="BOOL" comment="是否使用竖向滚动条,如(true)"/>
             <Attribute name="vscrollbarstyle" default="" type="STRING" comment="垂直滚动条样式"/>

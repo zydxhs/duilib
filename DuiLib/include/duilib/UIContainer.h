@@ -76,7 +76,7 @@ public:
 
     virtual void ReloadText(void);
 
-    RECT GetClientPos() const;
+    RECT GetClientPos() const;      // 返回客户区域（除去scrollbar和inset/padding）
     void SetPos(RECT rc, bool bNeedInvalidate = true);
     void Move(SIZE szOffset, bool bNeedInvalidate = true);
     bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl);
@@ -126,11 +126,11 @@ protected:
 
 protected:
     CDuiPtrArray m_items;
-    RECT m_rcInset;
-    int m_iChildMargin;
-    UINT m_iChildAlign;
-    UINT m_iChildVAlign;
-    bool m_bAutoDestroy;
+    RECT m_rcInset;         // 内边距
+    int m_iChildMargin;     // 子控件外边距
+    UINT m_iChildAlign;     // 子控件水平对齐方式
+    UINT m_iChildVAlign;    // 子控件垂直对齐方式
+    bool m_bAutoDestroy;    // 自动销毁子控件
     bool m_bDelayedDestroy;
     bool m_bMouseChildEnabled;
     bool m_bScrollProcess; // 防止SetPos循环调用

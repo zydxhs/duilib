@@ -11,16 +11,30 @@ enum EMParamUpdateDirection
     EPARAM_SAVE,        // 保存
 };
 
+// 消息ID定义说明：
+// 0        - WM_USER-1 系统预留
+// WM_USER  - 0x7FFF    私有窗口类使用的整形消息
+// WM_APP   - 0xBFFF    可以被应用程序使用的消息
+// 0xC000   - 0xFFFF    被应用程序使用的字符串消息
+// 0xFFFF   -           系统预留
 //自定义消息
 enum EMCUSTOM_EVENT
 {
-    WM_MENUITEM_CLICK = WM_USER + 60000,    // 用来接收菜单单击的消息
-    WM_LANGUAGE_UPDATE,                     // 更新界面语言
+    // duilib 内部使用的消息
+    WM_ASYNC_NOTIFY = WM_APP,               // 异步通知消息   duilib内部使用
+    WM_LBUTTON_CLICK,                       // 左键 单击 消息 duilib内部使用
+    WM_LBUTTON_DBLCLK,                      // 左键 双击 消息 duilib内部使用
+    WM_RBUTTON_CLICK,                       // 右键 单击 消息 duilib内部使用
+    WM_RBUTTON_DBLCLK,                      // 右键 双击 消息 duilib内部使用
     WM_WNDDATA_UPDATE,                      // 窗体数据 初始化/保存 WPARAM=EMParamUpdateDirection
-    WM_LBUTTON_CLICK,                       // 左键 单击 消息
-    WM_LBUTTON_DBLCLK,                      // 左键 双击 消息
-    WM_RBUTTON_CLICK,                       // 右键 单击 消息
-    WM_RBUTTON_DBLCLK,                      // 右键 双击 消息
+
+    WM_DUILIB_INNER_MAX = WM_APP + 200,     // DUILIB 内部消息的最大值
+
+    // duilib 发出的消息，用户程序也可以接收这些消息
+    WM_LANGUAGE_UPDATE,                     // 更新界面语言。用户通常只需要重载处理函数即可。
+    WM_MENUITEM_CLICK,                      // 用来接收菜单单击的消息。还可以处理 Notify 通知。
+
+    WM_DUILIB_PUB_MAX = 0xBFFF,             // 这里定义的消息ID，不能大于该值
 };
 
 #define _USEIMM                 1

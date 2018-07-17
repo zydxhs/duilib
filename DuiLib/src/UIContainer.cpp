@@ -814,7 +814,7 @@ void CContainerUI::Move(SIZE szOffset, bool bNeedInvalidate)
 
 void CContainerUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("inset")) == 0)
+    if (_tcscmp(pstrName, _T("inset")) == 0 || _tcscmp(pstrName, _T("padding")) == 0)
     {
         RECT rcInset = { 0 };
         LPTSTR pstr = NULL;
