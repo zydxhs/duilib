@@ -516,8 +516,8 @@ private:
 
     BYTE m_nOpacity;
     bool m_bLayered;
-    RECT m_rcLayeredInset;
     bool m_bLayeredChanged;
+    RECT m_rcLayeredInset;
     RECT m_rcLayeredUpdate;
     TDrawInfo m_diLayered;
 
@@ -526,19 +526,27 @@ private:
     bool m_bIsPainting;
     bool m_bUsedVirtualWnd;
     bool m_bAsyncNotifyPosted;
+    // 是否延迟发送单击事件
+    // windows 单击消息序列：按下，弹起；    双击消息序列：按下、弹起、双击、弹起
+    // 因此 windows 在发送双击事件前，总会先发送一个单击事件。为解决双击时先触发单击消息问题，添加该属性变量。
+    // false : 默认值，与 windows 特性一致。消息响应没有延时
+    // true  : 在收到按下消息时，会设置定时器等待第二个按下（双击）消息。如果等到了即为双击，否则为单击。
+    //         由于定时器的存在，单击消息的响应会有一个双击最大时间间隔的延时；双击消息没有延时。
+    bool             m_bDelayClick;
+    TEventUI         m_tEvtBtn;          // 鼠标单击、双击消息
 
     //
-    CDuiPtrArray m_aNotifiers;
-    CDuiPtrArray m_aTimers;
-    CDuiPtrArray m_aPreMessageFilters;
-    CDuiPtrArray m_aMessageFilters;
-    CDuiPtrArray m_aPostPaintControls;
-    CDuiPtrArray m_aNativeWindow;
-    CDuiPtrArray m_aNativeWindowControl;
-    CDuiPtrArray m_aDelayedCleanup;
-    CDuiPtrArray m_aAsyncNotify;
-    CDuiPtrArray m_aFoundControls;
-    CDuiPtrArray m_aNeedMouseLeaveNeeded;
+    CDuiPtrArray     m_aNotifiers;
+    CDuiPtrArray     m_aTimers;
+    CDuiPtrArray     m_aPreMessageFilters;
+    CDuiPtrArray     m_aMessageFilters;
+    CDuiPtrArray     m_aPostPaintControls;
+    CDuiPtrArray     m_aNativeWindow;
+    CDuiPtrArray     m_aNativeWindowControl;
+    CDuiPtrArray     m_aDelayedCleanup;
+    CDuiPtrArray     m_aAsyncNotify;
+    CDuiPtrArray     m_aFoundControls;
+    CDuiPtrArray     m_aNeedMouseLeaveNeeded;
     CDuiStringPtrMap m_mNameHash;
     CDuiStringPtrMap m_mWindowAttrHash;
     CDuiStringPtrMap m_mOptionGroup;
@@ -554,7 +562,6 @@ private:
     CControlUI     *m_pEventDrop;       // 当前接收拖放的控件
     IDataObject    *m_pDataObject;      // 拖放携带的数据对象
 
-    TEventUI        m_tEvtBtn;          // 鼠标单击、双击消息
     //
     static HINSTANCE m_hResourceInstance;
     static CDuiString m_pStrResourcePath;

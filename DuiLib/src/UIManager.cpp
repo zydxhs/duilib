@@ -144,6 +144,7 @@ CPaintManagerUI::CPaintManagerUI() :
     m_bOffscreenPaint(true),
     m_bUsedVirtualWnd(false),
     m_bAsyncNotifyPosted(false),
+    m_bDelayClick(false),
     m_bForceUseSharedRes(false),
     m_nOpacity(0xFF),
     m_bLayered(false),
@@ -1559,7 +1560,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
                 ::KillTimer(m_hWndPaint, LOWORD(wParam));
                 CControlUI *pControl = FindControl(m_tEvtBtn.ptMouse);
 
-                if (NULL != pControl && pControl->GetManager() == this)
+                if (NULL != pControl && pControl == m_tEvtBtn.pSender && pControl->GetManager() == this)
                 {
                     pControl->Event(m_tEvtBtn);
                 }
@@ -1584,6 +1585,19 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
                     pTimer->pSender->Event(event);
                     break;
                 }
+            }
+        }
+        break;
+
+    case WM_LBUTTON_CLICK:
+    case WM_LBUTTON_DBLCLK:
+        {
+            CControlUI *pControl = FindControl(m_tEvtBtn.ptMouse);
+
+            if (NULL != pControl && pControl == m_tEvtBtn.pSender && pControl->GetManager() == this)
+            {
+                pControl->Event(m_tEvtBtn);
+                return true;
             }
         }
         break;
@@ -1795,7 +1809,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 
     case WM_LBUTTONDOWN:
         {
-            ::SetTimer(m_hWndPaint, TIMERID_DBLCLICK, GetDoubleClickTime(), NULL);
+            if (m_bDelayClick) { ::SetTimer(m_hWndPaint, TIMERID_DBLCLICK, GetDoubleClickTime(), NULL); }
 
             // We alway set focus back to our app (this helps
             // when Win32 child windows are placed on the dialog
@@ -1850,7 +1864,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
             event.wKeyState = (WORD)wParam;
             event.dwTimestamp = ::GetTickCount();
             pControl->Event(event);
-            // 鼠标又击事件
+            // 鼠标双击事件
             m_tEvtBtn = event;
             m_tEvtBtn.Type = UIEVENT_DBLCLICK;
         }
@@ -1858,7 +1872,11 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 
     case WM_LBUTTONUP:
         {
-            DUITRACE(_T("MessageHandler: WM_LBUTTONUP"));
+            if (!m_bDelayClick)
+            {
+                PostMessage(m_hWndPaint, (m_tEvtBtn.Type == UIEVENT_CLICK) ? WM_LBUTTON_CLICK : WM_LBUTTON_DBLCLK, 0, 0);
+            }
+
             POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
             m_ptLastMousePos = pt;
             CControlUI *pControl = FindControl(pt);
@@ -4148,6 +4166,7 @@ void CPaintManagerUI::SetWindowAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         SetDefaultSelectedBkColor(clrColor);
     }
     else if (_tcscmp(pstrName, _T("dropenable")) == 0) { m_bDropEnable = _tcscmp(pstrValue, _T("true")) == 0; }
+    else if (_tcscmp(pstrName, _T("delayclick")) == 0) { m_bDelayClick = _tcscmp(pstrValue, _T("true")) == 0; }
     else if (_tcscmp(pstrName, _T("shadowshow")) == 0) { m_pWndShadow->SetShow(_tcscmp(pstrValue, _T("true")) == 0); }
     else if (_tcsicmp(pstrName, _T("shadowsize")) == 0) { m_pWndShadow->SetSize(_ttoi(pstrValue)); }
     else if (_tcsicmp(pstrName, _T("shadowpos")) == 0)

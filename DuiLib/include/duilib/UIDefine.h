@@ -17,6 +17,10 @@ enum EMCUSTOM_EVENT
     WM_MENUITEM_CLICK = WM_USER + 60000,    // 用来接收菜单单击的消息
     WM_LANGUAGE_UPDATE,                     // 更新界面语言
     WM_WNDDATA_UPDATE,                      // 窗体数据 初始化/保存 WPARAM=EMParamUpdateDirection
+    WM_LBUTTON_CLICK,                       // 左键 单击 消息
+    WM_LBUTTON_DBLCLK,                      // 左键 双击 消息
+    WM_RBUTTON_CLICK,                       // 右键 单击 消息
+    WM_RBUTTON_DBLCLK,                      // 右键 双击 消息
 };
 
 #define _USEIMM                 1
