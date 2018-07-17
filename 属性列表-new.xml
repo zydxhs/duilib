@@ -90,7 +90,7 @@
         <Control parent="" notifies="setfocus killfocus timer menu windowinit(root) dblclick">
             <Attribute name="name" default="" type="STRING" comment="控件名字，同一窗口内必须唯一，如(testbtn)"/>
             <Attribute name="pos" default="0,0,0,0" type="RECT" comment="位置，如果为float控件则指定位置和大小，否则只指定大小,如(0,0,100,100)"/>
-            <Attribute name="margin" default="0,0,0,0" type="RECT" comment="外边距,如(2,2,2,2)"/>
+            <Attribute name="margin" default="0,0,0,0" type="RECT" comment="外边距,如(2,2,2,2)。采用 IE 的盒子模型，控件宽/高包含边框和padding"/>
             <Attribute name="bkcolor" default="#00000000" type="DWORD" comment="背景颜色,如(#FFFF0000),使用bkcolor1取代"/>
             <Attribute name="bkcolor2" default="#00000000" type="DWORD" comment="背景渐变色2,和bkcolor配合使用,如(#FFFFFF00)"/>
             <Attribute name="bkcolor3" default="#00000000" type="DWORD" comment="背景渐变色3,和bkcolor、bkcolor2配合使用,如(#FFFF00FF)"/>
