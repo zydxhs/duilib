@@ -22,8 +22,16 @@ public:
     void SetCheck(bool bCheck, bool bTriggerEvent = true);
     bool GetCheck() const;
 
-    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+    void SetSelText(LPCTSTR pstrValue);
+    CDuiString GetSelText(void);
 
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+    virtual void PaintText(HDC hDC);
+    virtual void ReloadText(void);
+
+protected:
+    CDuiString  m_sSelText;     // 选中状态显示的文本。用于状态切换时自动改变显示文本。
+    CDuiString  m_sSelTextOrig;
 };
 
 }

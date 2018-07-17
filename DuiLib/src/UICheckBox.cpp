@@ -25,9 +25,46 @@ bool  CCheckBoxUI::GetCheck() const
 
 void CCheckBoxUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
+    if (_tcscmp(pstrName, _T("seltext")) == 0) { SetSelText(pstrValue); }
     // 复选框，group属性无效
-    if (_tcscmp(pstrName, _T("group")) == 0) { DUITRACE(_T("不支持属性:group")); }
+    else if (_tcscmp(pstrName, _T("group")) == 0) { DUITRACE(_T("不支持属性:group")); }
     else { COptionUI::SetAttribute(pstrName, pstrValue); }
+}
+
+void CCheckBoxUI::PaintText(HDC hDC)
+{
+    if (!m_sSelText.IsEmpty() && IsSelected())
+    {
+        CDuiString sText = m_sText;
+        m_sText = m_sSelText;
+        COptionUI::PaintText(hDC);
+        m_sText = sText;
+    }
+    else
+    {
+        COptionUI::PaintText(hDC);
+    }
+}
+
+void CCheckBoxUI::ReloadText(void)
+{
+    COptionUI::ReloadText();
+    SetSelText(m_sSelTextOrig);
+}
+
+void CCheckBoxUI::SetSelText(LPCTSTR pstrValue)
+{
+    if (m_sSelText == pstrValue) { return; }
+
+    m_sSelText = pstrValue;
+    m_sSelTextOrig = m_sSelText;
+    CPaintManagerUI::ProcessMultiLanguageTokens(m_sSelText);
+    Invalidate();
+}
+
+CDuiString CCheckBoxUI::GetSelText(void)
+{
+    return m_sSelText;
 }
 
 }

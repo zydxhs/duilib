@@ -293,6 +293,7 @@
             <!-- 不支持 fivestatusimage -->
         </RadioBox>
         <CheckBox parent="Option" notifies="setfocus killfocus timer menu click selectchanged windowinit(root) dblclick">
+            <Attribute name="seltext" default="" type="STRING" comment="选中状态的文本。用于选中状态切换时自动改变显示文本。"/>
             <!-- 不支持 group, fivestatusimage -->
         </CheckBox>
         <Text parent="Label" notifies="setfocus killfocus timer menu link windowinit(root) dblclick">
