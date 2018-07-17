@@ -83,8 +83,8 @@ void tagTDrawInfo::Clear()
 {
     sDrawString.Empty();
     sImageName.Empty();
-    ::ZeroMemory(&bLoaded, sizeof(tagTDrawInfo) - offsetof(tagTDrawInfo, bLoaded));
-    uFade = 255;
+    ::ZeroMemory(&pImageInfo, sizeof(tagTDrawInfo) - offsetof(tagTDrawInfo, pImageInfo));
+    byFade = 255;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////

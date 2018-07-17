@@ -1540,21 +1540,13 @@ bool CControlUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl)
         CRenderClip roundClip;
         CRenderClip::GenerateRoundClip(hDC, m_rcPaint,  m_rcItem, m_cxyBorderRound.cx, m_cxyBorderRound.cy,
                                        roundClip);
-        PaintBkColor(hDC);
-        PaintBkImage(hDC);
-        PaintStatusImage(hDC);
-        PaintText(hDC);
-        PaintBorder(hDC);
-    }
-    else
-    {
-        PaintBkColor(hDC);
-        PaintBkImage(hDC);
-        PaintStatusImage(hDC);
-        PaintText(hDC);
-        PaintBorder(hDC);
     }
 
+    PaintBkColor(hDC);
+    PaintBkImage(hDC);
+    PaintStatusImage(hDC);
+    PaintText(hDC);
+    PaintBorder(hDC);
     return true;
 }
 

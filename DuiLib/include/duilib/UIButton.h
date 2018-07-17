@@ -34,8 +34,12 @@ public:
 
     // 对应按钮的5个状态图
     void SetFiveStatusImage(LPCTSTR pStrImage);
+    // 按钮背景色渐变
     void SetFadeAlphaDelta(BYTE uDelta);
     BYTE GetFadeAlphaDelta();
+    // 按钮响应频率
+    void SetDisabledSeconds(BYTE bySecs);
+    BYTE GetDisabledSeconds();
 
     void SetHotBkColor(DWORD dwColor);
     DWORD GetHotBkColor() const;

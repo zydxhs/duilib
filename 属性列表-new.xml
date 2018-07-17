@@ -43,11 +43,13 @@
     </Image>
     <!-- 图片属性说明：-->
     <!-- file 指明文件; res 和 restype 指明资源 id 和类型; color 指定颜色; 或从文件加载，或从资源加载，或直接指定颜色； -->
-    <!-- dest 指明绘制在控件的目标位置; source 指明图片中的一部分; fade 指明图片绘制的透明度(0~255); -->
+    <!-- dest 指明绘制到控件的目标位置，相对于控件left/top的偏移量; -->
+    <!-- source 指明图片中的一部分; fade 指明图片绘制的透明度(0~255); -->
     <!-- corner/scale9 指明九宫格缩放属性; hole 配合 scale9 使用，指明中央区域是否绘制，true 不显示; -->
     <!-- xtiled/ytiled 配合 scale9 属性使用, true 时中央区域在 水平/垂直 方向平铺，fasle 时在 水平/垂直 方向拉伸； -->
     <!-- hsl 指明是否使用色相/饱合度/明度模式。 -->
     <!-- mask 属性给不支持 alpha 通道的图片指定透明色-->
+    <!-- align|valign 属性指明图片 水平|垂直 对齐方式，图片不会被拉伸。会使 xtiled/ytiled 属性失效。 -->
     <Window parent="">
         <Attribute name="size" default="0,0" type="SIZE" comment="窗口的初始化大小,如(800,600)"/>
         <Attribute name="sizebox" default="0,0,0,0" type="RECT" comment="窗口可拖动改变窗口大小的边距,如(4,4,6,6)"/>
@@ -250,9 +252,9 @@
             <Attribute name="foreimage" default="" type="STRING" comment="前景图片"/>
             <Attribute name="hotforeimage" default="" type="STRING" comment="鼠标悬浮状态前景图片"/>
             <!-- 扩展属性 -->
-            <Attribute name="fivestatusimage" default="" type="STRING" comment="5态图片，宽高相同，水平或垂直排列(h|v)，顺序为：正常，按下，悬浮，焦点，禁用。例如：v,five.png"/>
+            <Attribute name="fivestatusimage" default="" type="STRING" comment="5态图片，宽高相同，水平排列，顺序为：正常，按下，悬浮，焦点，禁用。"/>
             <Attribute name="fadedelta" default="0" type="BYTE" comment="普通图片透明度变化步长"/>
-            <Attribute name="disableseconds" default="0" type="BYTE" comment="下次响应鼠标/键盘事件需要等待的秒数。默认0，表示关闭该特性。"/>
+            <Attribute name="disableseconds" default="0" type="BYTE" comment="下次响应鼠标/键盘事件需要等待的秒数,[0,100]。默认0，表示关闭该特性。"/>
             <Attribute name="hotbkcolor" default="#00000000" type="DWORD" comment="鼠标悬浮状态背景色"/>
             <Attribute name="hottextcolor" default="#00000000" type="DWORD" comment="鼠标悬浮字体颜色，0表示不使用此颜色,如(#FFFF0000)"/>
             <Attribute name="pushedtextcolor" default="#00000000" type="DWORD" comment="鼠标按下字体颜色，0表示不使用此颜色,如(#FFFF0000)"/>

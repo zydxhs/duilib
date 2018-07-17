@@ -498,6 +498,16 @@ BYTE CButtonUI::GetFadeAlphaDelta()
     return m_byFadeAlphaDelta;
 }
 
+void CButtonUI::SetDisabledSeconds(BYTE bySecs)
+{
+    m_byDisableSeconds = (bySecs <= 100) ? bySecs : 100;
+}
+
+BYTE CButtonUI::GetDisabledSeconds()
+{
+    return m_byDisableSeconds;
+}
+
 SIZE CButtonUI::EstimateSize(SIZE szAvailable)
 {
     //if (m_cxyFixed.cy == 0) { return CDuiSize(m_cxyFixed.cx, m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 8); }
@@ -550,7 +560,7 @@ void CButtonUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     }
     else if (_tcscmp(pstrName, _T("disableseconds")) == 0)
     {
-        m_byDisableSeconds = (BYTE)_ttoi(pstrValue);
+        SetDisabledSeconds((BYTE)_ttoi(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
     else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
@@ -746,18 +756,18 @@ void CButtonUI::DrawNormalBkImg(HDC hDC, TDrawInfo &diNormal, TDrawInfo *pdiHot,
     {
         if (m_byFadeAlpha == 255)
         {
-            pdiNormal->uFade = 255;
+            pdiNormal->byFade = 255;
             DrawImage(hDC, *pdiNormal);
         }
         else
         {
             if (NULL != pdiHot)
             {
-                pdiHot->uFade = 255 - m_byFadeAlpha;
+                pdiHot->byFade = 255 - m_byFadeAlpha;
                 DrawImage(hDC, *pdiHot);
             }
 
-            pdiNormal->uFade = m_byFadeAlpha;
+            pdiNormal->byFade = m_byFadeAlpha;
             DrawImage(hDC, *pdiNormal);
         }
     }

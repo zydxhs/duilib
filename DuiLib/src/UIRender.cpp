@@ -340,6 +340,7 @@ void CRenderEngine::ParseDrawInfo(TDrawInfo &drawInfo, CDuiString &sResType, DWO
     // 1、aaa.jpg
     // 2、file='aaa.jpg' res='' restype='0' dest='0,0,0,0' source='0,0,0,0' scale9='0,0,0,0'
     // mask='#FF0000' fade='255' hole='false' xtiled='false' ytiled='false' hsl='false'
+    // align='left' valign='center'
     if (drawInfo.sDrawString.IsEmpty()) { return; }
 
     CDuiString sImageName = drawInfo.sDrawString;
@@ -436,7 +437,7 @@ void CRenderEngine::ParseDrawInfo(TDrawInfo &drawInfo, CDuiString &sResType, DWO
             }
             else if (sItem == _T("fade"))
             {
-                drawInfo.uFade = (BYTE)_tcstoul(sValue.GetData(), &pstr, 10);
+                drawInfo.byFade = (BYTE)_tcstoul(sValue.GetData(), &pstr, 10);
             }
             else if (sItem == _T("hole"))
             {
@@ -453,6 +454,22 @@ void CRenderEngine::ParseDrawInfo(TDrawInfo &drawInfo, CDuiString &sResType, DWO
             else if (sItem == _T("hsl"))
             {
                 bHSL = (_tcscmp(sValue.GetData(), _T("true")) == 0);
+            }
+            else if (sItem == _T("align"))
+            {
+                if (_tcscmp(sValue.GetData(), _T("left")) == 0) { drawInfo.byAlign |= EPIC_ALIGN_LEFT; }
+
+                if (_tcscmp(sValue.GetData(), _T("center")) == 0) { drawInfo.byAlign |= EPIC_ALIGN_CENTER; }
+
+                if (_tcscmp(sValue.GetData(), _T("right")) == 0) { drawInfo.byAlign |= EPIC_ALIGN_RIGHT; }
+            }
+            else if (sItem == _T("valign"))
+            {
+                if (_tcscmp(sValue.GetData(), _T("top")) == 0) { drawInfo.byAlign |= EPIC_ALIGN_TOP; }
+
+                if (_tcscmp(sValue.GetData(), _T("center")) == 0) { drawInfo.byAlign |= EPIC_ALIGN_VCENTER; }
+
+                if (_tcscmp(sValue.GetData(), _T("bottom")) == 0) { drawInfo.byAlign |= EPIC_ALIGN_BOTTOM; }
             }
         }
 
@@ -1021,7 +1038,7 @@ void CRenderEngine::DrawImage(HDC hDC, HBITMAP hBitmap, const RECT &rc, const RE
     ASSERT(::GetObjectType(hDC) == OBJ_DC || ::GetObjectType(hDC) == OBJ_MEMDC);
     static LPALPHABLEND lpAlphaBlend = GetAlphaBlend();
 
-    if (hBitmap == NULL) { return; }
+    if (hDC == NULL || hBitmap == NULL) { return; }
 
     HDC hCloneDC = ::CreateCompatibleDC(hDC);
     HBITMAP hOldBitmap = (HBITMAP) ::SelectObject(hCloneDC, hBitmap);
@@ -1613,8 +1630,6 @@ bool CRenderEngine::DrawImage(HDC hDC, CPaintManagerUI *pManager, const RECT &rc
 
     if (drawInfo.rcBmpPart.bottom > drawInfo.pImageInfo->nY) { drawInfo.rcBmpPart.bottom = drawInfo.pImageInfo->nY; }
 
-    if (hDC == NULL) { return true; }
-
     RECT rcDest = rcItem;
 
     if (drawInfo.rcDestOffset.left != 0 || drawInfo.rcDestOffset.top != 0 ||
@@ -1631,15 +1646,62 @@ bool CRenderEngine::DrawImage(HDC hDC, CPaintManagerUI *pManager, const RECT &rc
         if (rcDest.bottom > rcItem.bottom) { rcDest.bottom = rcItem.bottom; }
     }
 
+    // 2018-07-16 根据图片对齐属性，调整绘制大小、位置
+    if (EPIC_ALIGN_NONE != drawInfo.byAlign)
+    {
+        LONG nW = rcDest.right - rcDest.left;
+        LONG nH = rcDest.bottom - rcDest.top;
+
+        if (nW > drawInfo.pImageInfo->nX)
+        {
+            // 水平对齐
+            if (drawInfo.byAlign & EPIC_ALIGN_LEFT)
+            {
+                rcDest.right = rcDest.left + drawInfo.pImageInfo->nX;
+            }
+
+            if (drawInfo.byAlign & EPIC_ALIGN_RIGHT)
+            {
+                rcDest.left = rcDest.right - drawInfo.pImageInfo->nX;
+            }
+
+            if (drawInfo.byAlign & EPIC_ALIGN_CENTER)
+            {
+                rcDest.left = rcDest.left + (nW - drawInfo.pImageInfo->nX) / 2;
+                rcDest.right = rcDest.left + drawInfo.pImageInfo->nX;
+            }
+        }
+
+        if (nH > drawInfo.pImageInfo->nY)
+        {
+            // 垂直对齐
+            if (drawInfo.byAlign & EPIC_ALIGN_TOP)
+            {
+                rcDest.bottom = rcDest.top + drawInfo.pImageInfo->nY;
+            }
+
+            if (drawInfo.byAlign & EPIC_ALIGN_BOTTOM)
+            {
+                rcDest.top = rcDest.bottom - drawInfo.pImageInfo->nY;
+            }
+
+            if (drawInfo.byAlign & EPIC_ALIGN_VCENTER)
+            {
+                rcDest.top = rcDest.top + (nH - drawInfo.pImageInfo->nY) / 2;
+                rcDest.bottom = rcDest.top + drawInfo.pImageInfo->nY;
+            }
+        }
+    }
+
     RECT rcTemp;
 
     if (!::IntersectRect(&rcTemp, &rcDest, &rcItem)) { return true; }
 
     if (!::IntersectRect(&rcTemp, &rcDest, &rcPaint)) { return true; }
 
-    DrawImage(hDC, drawInfo.pImageInfo->hBitmap, rcDest, rcPaint, drawInfo.rcBmpPart, drawInfo.rcScale9,
-              pManager->IsLayered() ? true : drawInfo.pImageInfo->bAlpha,
-              drawInfo.uFade, drawInfo.bHole, drawInfo.bTiledX, drawInfo.bTiledY);
+    DrawImage(hDC, drawInfo.pImageInfo->hBitmap, rcDest, rcPaint, drawInfo.rcBmpPart,
+              drawInfo.rcScale9, pManager->IsLayered() ? true : drawInfo.pImageInfo->bAlpha,
+              drawInfo.byFade, drawInfo.bHole, drawInfo.bTiledX, drawInfo.bTiledY);
     return true;
 }
 

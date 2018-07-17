@@ -115,22 +115,35 @@ typedef struct DUILIB_API tagTImageInfo
     DWORD dwMask;
 } TImageInfo;
 
+enum EMPicAlign
+{
+    EPIC_ALIGN_NONE    = 0x00,
+    EPIC_ALIGN_LEFT    = 0x01,  // 水平 左
+    EPIC_ALIGN_CENTER  = 0x02,  // 水平 中
+    EPIC_ALIGN_RIGHT   = 0x04,  // 水平 右
+    EPIC_ALIGN_TOP     = 0x10,  // 垂直 上
+    EPIC_ALIGN_VCENTER = 0x20,  // 垂直 中
+    EPIC_ALIGN_BOTTOM  = 0x40   // 垂直 下
+};
+
 typedef struct DUILIB_API tagTDrawInfo
 {
     tagTDrawInfo();
     tagTDrawInfo(LPCTSTR lpsz);
     void Clear();
+
     CDuiString sDrawString;
     CDuiString sImageName;
-    bool bLoaded;
     const TImageInfo *pImageInfo;
-    RECT rcDestOffset;
-    RECT rcBmpPart;
-    RECT rcScale9;
-    BYTE uFade;
-    bool bHole;
-    bool bTiledX;
-    bool bTiledY;
+    RECT rcDestOffset;  // 指明要把图片绘制到控件上的目标区域
+    RECT rcBmpPart;     // 指明绘制图片中的源区域
+    RECT rcScale9;      // 图片 9 宫格，4 个角不会被拉伸
+    bool bLoaded;       // true 表示图片已经加载
+    BYTE byFade;        // 图片绘制的透明度。[0,255]
+    bool bHole;         // 配置 rcScale9 使用，指明中央区域是否绘制。默认 false，绘制；true 不绘制。
+    bool bTiledX;       // 配合 rcScale9 使用，中央区域水平 平铺/拉伸。默认 false，拉伸；true 平铺。自动调整 rcDestOffset
+    bool bTiledY;       // 配合 rcScale9 使用，中央区域垂直 平铺/拉伸。默认 false，拉伸；true 平铺。自动调整 rcDestOffset
+    BYTE byAlign;       // 图片对齐方式，详见 EMPicAlign
 } TDrawInfo;
 
 typedef struct DUILIB_API tagTPercentInfo
