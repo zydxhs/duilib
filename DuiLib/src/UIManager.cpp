@@ -1591,6 +1591,8 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 
     case WM_LBUTTON_CLICK:
     case WM_LBUTTON_DBLCLK:
+    case WM_RBUTTON_CLICK:
+    case WM_RBUTTON_DBLCLK:
         {
             CControlUI *pControl = FindControl(m_tEvtBtn.ptMouse);
 
@@ -1906,6 +1908,8 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 
     case WM_RBUTTONDOWN:
         {
+            if (m_bDelayClick) { ::SetTimer(m_hWndPaint, TIMERID_DBLCLICK, GetDoubleClickTime(), NULL); }
+
             if (!m_bNoActivate) { ::SetFocus(m_hWndPaint); }
 
             POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
@@ -1926,11 +1930,46 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
             event.wKeyState = (WORD)wParam;
             event.dwTimestamp = ::GetTickCount();
             pControl->Event(event);
+            // 鼠标单击事件
+            m_tEvtBtn = event;
+            m_tEvtBtn.Type = UIEVENT_RCLICK;
+        }
+        break;
+
+    case WM_RBUTTONDBLCLK:
+        {
+            if (!m_bNoActivate) { ::SetFocus(m_hWndPaint); }
+
+            POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+            m_ptLastMousePos = pt;
+            CControlUI *pControl = FindControl(pt);
+
+            if (NULL == pControl || pControl->GetManager() != this) { break; }
+
+            if (m_pEventCapture != NULL) { pControl = m_pEventCapture; }
+
+            TEventUI event = { 0 };
+            event.Type = UIEVENT_RBUTTONDBLDOWN;
+            event.pSender = pControl;
+            event.wParam = wParam;
+            event.lParam = lParam;
+            event.ptMouse = pt;
+            event.wKeyState = (WORD)wParam;
+            event.dwTimestamp = ::GetTickCount();
+            pControl->Event(event);
+            // 鼠标双击事件
+            m_tEvtBtn = event;
+            m_tEvtBtn.Type = UIEVENT_RDBLCLICK;
         }
         break;
 
     case WM_RBUTTONUP:                 //右键弹起
         {
+            if (!m_bDelayClick)
+            {
+                PostMessage(m_hWndPaint, (m_tEvtBtn.Type == UIEVENT_RCLICK) ? WM_RBUTTON_CLICK : WM_RBUTTON_DBLCLK, 0, 0);
+            }
+
             POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
             m_ptLastMousePos = pt;
             CControlUI *pControl = FindControl(pt);
