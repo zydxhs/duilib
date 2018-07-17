@@ -984,6 +984,9 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
             case WM_LBUTTONDOWN:
             case WM_LBUTTONDBLCLK:
             case WM_LBUTTONUP:
+            case WM_RBUTTONDOWN:
+            case WM_RBUTTONDBLCLK:
+            case WM_RBUTTONUP:
                 {
                     POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
                     m_ptLastMousePos = pt;
@@ -1594,10 +1597,11 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
     case WM_RBUTTON_CLICK:
     case WM_RBUTTON_DBLCLK:
         {
-            CControlUI *pControl = FindControl(m_tEvtBtn.ptMouse);
+            CControlUI *pControl = FindControl(m_ptLastMousePos);
 
             if (NULL != pControl && pControl == m_tEvtBtn.pSender && pControl->GetManager() == this)
             {
+                m_tEvtBtn.ptMouse = m_ptLastMousePos;
                 pControl->Event(m_tEvtBtn);
                 return true;
             }
