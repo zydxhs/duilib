@@ -7,7 +7,7 @@ namespace DuiLib {
 //
 
 CContainerUI::CContainerUI()
-    : m_iChildPadding(0)
+    : m_iChildMargin(0)
     , m_iChildAlign(DT_LEFT)
     , m_iChildVAlign(DT_TOP)
     , m_bAutoDestroy(true)
@@ -213,16 +213,16 @@ void CContainerUI::SetInset(RECT rcInset)
     NeedUpdate();
 }
 
-int CContainerUI::GetChildPadding() const
+int CContainerUI::GetChildMargin() const
 {
-    return m_iChildPadding;
+    return m_iChildMargin;
 }
 
-void CContainerUI::SetChildPadding(int iPadding)
+void CContainerUI::SetChildMargin(int iMargin)
 {
-    m_iChildPadding = iPadding;
+    m_iChildMargin = iMargin;
 
-    if (m_iChildPadding < 0) { m_iChildPadding = 0; }
+    if (m_iChildMargin < 0) { m_iChildMargin = 0; }
 
     NeedUpdate();
 }
@@ -845,7 +845,7 @@ void CContainerUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 
         if (GetHorizontalScrollBar()) { GetHorizontalScrollBar()->SetAttributeList(pstrValue); }
     }
-    else if (_tcscmp(pstrName, _T("childpadding")) == 0) { SetChildPadding(_ttoi(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("childmargin")) == 0) { SetChildMargin(_ttoi(pstrValue)); }
     else if (_tcscmp(pstrName, _T("childalign")) == 0)
     {
         if (_tcscmp(pstrValue, _T("left")) == 0) { m_iChildAlign = DT_LEFT; }

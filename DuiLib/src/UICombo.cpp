@@ -94,9 +94,9 @@ bool CComboBodyUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopContro
                     if (pListInfo && pListInfo->iHLineSize > 0)
                     {
                         // 因为没有为最后一个预留分割条长度，如果list铺满，最后一条不会显示
-                        RECT rcPadding = pControl->GetPadding();
+                        RECT rcMargin = pControl->GetMargin();
                         const RECT &rcPos = pControl->GetPos();
-                        RECT rcBottomLine = { rcPos.left, rcPos.bottom + rcPadding.bottom, rcPos.right, rcPos.bottom + rcPadding.bottom + pListInfo->iHLineSize };
+                        RECT rcBottomLine = { rcPos.left, rcPos.bottom + rcMargin.bottom, rcPos.right, rcPos.bottom + rcMargin.bottom + pListInfo->iHLineSize };
 
                         if (::IntersectRect(&rcTemp, &rcPaint, &rcBottomLine))
                         {

@@ -72,8 +72,8 @@ void CVerticalLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
         if (pControl->IsFloat()) { continue; }
 
         szControlAvailable = szAvailable;
-        RECT rcPadding = pControl->GetPadding();
-        szControlAvailable.cx -= rcPadding.left + rcPadding.right;
+        RECT rcMargin = pControl->GetMargin();
+        szControlAvailable.cx -= rcMargin.left + rcMargin.right;
         iControlMaxWidth = pControl->GetFixedWidth();
         iControlMaxHeight = pControl->GetFixedHeight();
 
@@ -98,7 +98,7 @@ void CVerticalLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
             if (sz.cy > pControl->GetMaxHeight()) { sz.cy = pControl->GetMaxHeight(); }
         }
 
-        cyFixed += sz.cy + pControl->GetPadding().top + pControl->GetPadding().bottom;
+        cyFixed += sz.cy + pControl->GetMargin().top + pControl->GetMargin().bottom;
 
         sz.cx = std::max<int>(sz.cx, 0);
 
@@ -106,11 +106,11 @@ void CVerticalLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
 
         if (sz.cx > pControl->GetMaxWidth()) { sz.cx = pControl->GetMaxWidth(); }
 
-        cxNeeded = std::max<int>(cxNeeded, sz.cx + rcPadding.left + rcPadding.right);
+        cxNeeded = std::max<int>(cxNeeded, sz.cx + rcMargin.left + rcMargin.right);
         nEstimateNum++;
     }
 
-    cyFixed += (nEstimateNum - 1) * m_iChildPadding;
+    cyFixed += (nEstimateNum - 1) * m_iChildMargin;
 
     // Place elements
     int cyNeeded = 0;
@@ -144,11 +144,11 @@ void CVerticalLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
         }
 
         iEstimate += 1;
-        RECT rcPadding = pControl->GetPadding();
-        szRemaining.cy -= rcPadding.top;
+        RECT rcMargin = pControl->GetMargin();
+        szRemaining.cy -= rcMargin.top;
 
         szControlAvailable = szRemaining;
-        szControlAvailable.cx -= rcPadding.left + rcPadding.right;
+        szControlAvailable.cx -= rcMargin.left + rcMargin.right;
         iControlMaxWidth = pControl->GetFixedWidth();
         iControlMaxHeight = pControl->GetFixedHeight();
 
@@ -160,9 +160,9 @@ void CVerticalLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
 
         if (szControlAvailable.cy > iControlMaxHeight) { szControlAvailable.cy = iControlMaxHeight; }
 
-        cyFixedRemaining = cyFixedRemaining - (rcPadding.top + rcPadding.bottom);
+        cyFixedRemaining = cyFixedRemaining - (rcMargin.top + rcMargin.bottom);
 
-        if (iEstimate > 1) { cyFixedRemaining = cyFixedRemaining - m_iChildPadding; }
+        if (iEstimate > 1) { cyFixedRemaining = cyFixedRemaining - m_iChildMargin; }
 
         SIZE sz = pControl->EstimateSize(szControlAvailable);
 
@@ -174,7 +174,7 @@ void CVerticalLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
             // Distribute remaining to last element (usually round-off left-overs)
             if (iAdjustable == nAdjustables)
             {
-                sz.cy = std::max<int>(0, szRemaining.cy - rcPadding.bottom - cyFixedRemaining);
+                sz.cy = std::max<int>(0, szRemaining.cy - rcMargin.bottom - cyFixedRemaining);
             }
 
             if (sz.cy < pControl->GetMinHeight()) { sz.cy = pControl->GetMinHeight(); }
@@ -192,7 +192,7 @@ void CVerticalLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
 
         sz.cx = pControl->GetMaxWidth();
 
-        if (sz.cx == 0) { sz.cx = szAvailable.cx - rcPadding.left - rcPadding.right; }
+        if (sz.cx == 0) { sz.cx = szAvailable.cx - rcMargin.left - rcMargin.right; }
 
         if (sz.cx < 0) { sz.cx = 0; }
 
@@ -212,7 +212,7 @@ void CVerticalLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
                 iPosX -= m_pHorizontalScrollBar->GetScrollPos();
             }
 
-            RECT rcCtrl = { iPosX - sz.cx / 2, iPosY + rcPadding.top, iPosX + sz.cx - sz.cx / 2, iPosY + sz.cy + rcPadding.top };
+            RECT rcCtrl = { iPosX - sz.cx / 2, iPosY + rcMargin.top, iPosX + sz.cx - sz.cx / 2, iPosY + sz.cy + rcMargin.top };
             pControl->SetPos(rcCtrl, false);
         }
         else if (iChildAlign == DT_RIGHT)
@@ -225,7 +225,7 @@ void CVerticalLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
                 iPosX -= m_pHorizontalScrollBar->GetScrollPos();
             }
 
-            RECT rcCtrl = { iPosX - rcPadding.right - sz.cx, iPosY + rcPadding.top, iPosX - rcPadding.right, iPosY + sz.cy + rcPadding.top };
+            RECT rcCtrl = { iPosX - rcMargin.right - sz.cx, iPosY + rcMargin.top, iPosX - rcMargin.right, iPosY + sz.cy + rcMargin.top };
             pControl->SetPos(rcCtrl, false);
         }
         else
@@ -237,16 +237,16 @@ void CVerticalLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
                 iPosX -= m_pHorizontalScrollBar->GetScrollPos();
             }
 
-            RECT rcCtrl = { iPosX + rcPadding.left, iPosY + rcPadding.top, iPosX + rcPadding.left + sz.cx, iPosY + sz.cy + rcPadding.top };
+            RECT rcCtrl = { iPosX + rcMargin.left, iPosY + rcMargin.top, iPosX + rcMargin.left + sz.cx, iPosY + sz.cy + rcMargin.top };
             pControl->SetPos(rcCtrl, false);
         }
 
-        iPosY += sz.cy + m_iChildPadding + rcPadding.top + rcPadding.bottom;
-        cyNeeded += sz.cy + rcPadding.top + rcPadding.bottom;
-        szRemaining.cy -= sz.cy + m_iChildPadding + rcPadding.bottom;
+        iPosY += sz.cy + m_iChildMargin + rcMargin.top + rcMargin.bottom;
+        cyNeeded += sz.cy + rcMargin.top + rcMargin.bottom;
+        szRemaining.cy -= sz.cy + m_iChildMargin + rcMargin.bottom;
     }
 
-    cyNeeded += (nEstimateNum - 1) * m_iChildPadding;
+    cyNeeded += (nEstimateNum - 1) * m_iChildMargin;
 
     // Process the scrollbar
     ProcessScrollBar(rc, cxNeeded, cyNeeded);
@@ -434,7 +434,7 @@ SIZE CVerticalLayoutUI::EstimateSize(SIZE szAvailable)
 
     if (m_bAutoHeight)
     {
-        sz.cy = m_iChildPadding * (GetCount() - 1);
+        sz.cy = m_iChildMargin * (GetCount() - 1);
 
         for (int i = 0; i < GetCount(); ++i)
         {

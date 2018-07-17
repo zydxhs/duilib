@@ -95,8 +95,8 @@ void CHWeightLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
         if (pCtrl->IsFloat()) { continue; }
 
         szControlAvailable = szAvailable;
-        RECT rcPadding = pCtrl->GetPadding();
-        szControlAvailable.cy -= rcPadding.top + rcPadding.bottom;
+        RECT rcMargin = pCtrl->GetMargin();
+        szControlAvailable.cy -= rcMargin.top + rcMargin.bottom;
         iControlMaxWidth = pCtrl->GetFixedWidth();
         iControlMaxHeight = pCtrl->GetFixedHeight();
 
@@ -133,7 +133,7 @@ void CHWeightLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
             }
         }
 
-        cxFixed += sz.cx + pCtrl->GetPadding().left + pCtrl->GetPadding().right;
+        cxFixed += sz.cx + pCtrl->GetMargin().left + pCtrl->GetMargin().right;
 
         sz.cy = std::max<int>(sz.cy, 0);
 
@@ -141,7 +141,7 @@ void CHWeightLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
 
         if (sz.cy > pCtrl->GetMaxHeight()) { sz.cy = pCtrl->GetMaxHeight(); }
 
-        cyNeeded = std::max<int>(cyNeeded, sz.cy + rcPadding.top + rcPadding.bottom);
+        cyNeeded = std::max<int>(cyNeeded, sz.cy + rcMargin.top + rcMargin.bottom);
         nEstimateNum++;
         vecCtrls.push_back(TCtrlInfo(i, pCtrl->GetWeight(), sz.cx, pCtrl));
     }
@@ -152,7 +152,7 @@ void CHWeightLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
         return lhs.nWeight < rhs.nWeight;
     });
 
-    cxFixed += (nEstimateNum - 1) * m_iChildPadding;
+    cxFixed += (nEstimateNum - 1) * m_iChildMargin;
 
     // 如果空间不足，尝试权重从低到高缩减控件大小
     if (szAvailable.cx < cxFixed)
@@ -183,7 +183,7 @@ void CHWeightLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
         {
             HideMinHeightCtrl(it->nIndex);
             cxFixed -= it->nSpace;
-            cxFixed -= m_iChildPadding;
+            cxFixed -= m_iChildMargin;
             it->nSpace = 0;
 
             if (it->pCtrl->GetFixedWidth() == 0) { --nAdjustables; }
@@ -220,11 +220,11 @@ void CHWeightLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
         }
 
         iEstimate += 1;
-        RECT rcPadding = pCtrl->GetPadding();
-        szRemaining.cx -= rcPadding.left;
+        RECT rcMargin = pCtrl->GetMargin();
+        szRemaining.cx -= rcMargin.left;
 
         szControlAvailable = szRemaining;
-        szControlAvailable.cy -= rcPadding.top + rcPadding.bottom;
+        szControlAvailable.cy -= rcMargin.top + rcMargin.bottom;
         iControlMaxWidth = pCtrl->GetFixedWidth();
         iControlMaxHeight = pCtrl->GetFixedHeight();
 
@@ -236,9 +236,9 @@ void CHWeightLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
 
         if (szControlAvailable.cy > iControlMaxHeight) { szControlAvailable.cy = iControlMaxHeight; }
 
-        cxFixedRemaining = cxFixedRemaining - (rcPadding.left + rcPadding.right);
+        cxFixedRemaining = cxFixedRemaining - (rcMargin.left + rcMargin.right);
 
-        if (iEstimate > 1) { cxFixedRemaining = cxFixedRemaining - m_iChildPadding; }
+        if (iEstimate > 1) { cxFixedRemaining = cxFixedRemaining - m_iChildMargin; }
 
         SIZE sz = pCtrl->EstimateSize(szControlAvailable);
 
@@ -250,7 +250,7 @@ void CHWeightLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
             // Distribute remaining to last element (usually round-off left-overs)
             if (iAdjustable == nAdjustables)
             {
-                sz.cx = std::max<int>(0, szRemaining.cx - rcPadding.right - cxFixedRemaining);
+                sz.cx = std::max<int>(0, szRemaining.cx - rcMargin.right - cxFixedRemaining);
             }
 
             if (sz.cx < pCtrl->GetMinWidth()) { sz.cx = pCtrl->GetMinWidth(); }
@@ -268,7 +268,7 @@ void CHWeightLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
 
         sz.cy = pCtrl->GetMaxHeight();
 
-        if (sz.cy == 0) { sz.cy = szAvailable.cy - rcPadding.top - rcPadding.bottom; }
+        if (sz.cy == 0) { sz.cy = szAvailable.cy - rcMargin.top - rcMargin.bottom; }
 
         if (sz.cy < 0) { sz.cy = 0; }
 
@@ -294,7 +294,7 @@ void CHWeightLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
                 iPosY -= m_pVerticalScrollBar->GetScrollPos();
             }
 
-            RECT rcCtrl = { iPosX + rcPadding.left, iPosY - sz.cy / 2, iPosX + sz.cx + rcPadding.left, iPosY + sz.cy - sz.cy / 2 };
+            RECT rcCtrl = { iPosX + rcMargin.left, iPosY - sz.cy / 2, iPosX + sz.cx + rcMargin.left, iPosY + sz.cy - sz.cy / 2 };
             pCtrl->SetPos(rcCtrl, false);
         }
         else if (iChildAlign == DT_BOTTOM)
@@ -307,7 +307,7 @@ void CHWeightLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
                 iPosY -= m_pVerticalScrollBar->GetScrollPos();
             }
 
-            RECT rcCtrl = { iPosX + rcPadding.left, iPosY - rcPadding.bottom - sz.cy, iPosX + sz.cx + rcPadding.left, iPosY - rcPadding.bottom };
+            RECT rcCtrl = { iPosX + rcMargin.left, iPosY - rcMargin.bottom - sz.cy, iPosX + sz.cx + rcMargin.left, iPosY - rcMargin.bottom };
             pCtrl->SetPos(rcCtrl, false);
         }
         else
@@ -319,16 +319,16 @@ void CHWeightLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
                 iPosY -= m_pVerticalScrollBar->GetScrollPos();
             }
 
-            RECT rcCtrl = { iPosX + rcPadding.left, iPosY + rcPadding.top, iPosX + sz.cx + rcPadding.left, iPosY + sz.cy + rcPadding.top };
+            RECT rcCtrl = { iPosX + rcMargin.left, iPosY + rcMargin.top, iPosX + sz.cx + rcMargin.left, iPosY + sz.cy + rcMargin.top };
             pCtrl->SetPos(rcCtrl, false);
         }
 
-        iPosX += sz.cx + m_iChildPadding + rcPadding.left + rcPadding.right;
-        cxNeeded += sz.cx + rcPadding.left + rcPadding.right;
-        szRemaining.cx -= sz.cx + m_iChildPadding + rcPadding.right;
+        iPosX += sz.cx + m_iChildMargin + rcMargin.left + rcMargin.right;
+        cxNeeded += sz.cx + rcMargin.left + rcMargin.right;
+        szRemaining.cx -= sz.cx + m_iChildMargin + rcMargin.right;
     }
 
-    cxNeeded += (nEstimateNum - 1) * m_iChildPadding;
+    cxNeeded += (nEstimateNum - 1) * m_iChildMargin;
 
     // Process the scrollbar
     ProcessScrollBar(rc, cxNeeded, cyNeeded);

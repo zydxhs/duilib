@@ -18,8 +18,8 @@ public:
     void SetFixedColumns(int iColums);
     int GetFixedRows() const;
     void SetFixedRows(int iRows);
-    int GetChildVPadding() const;
-    void SetChildVPadding(int iPadding);
+    int GetChildVMargin() const;
+    void SetChildVMargin(int iMargin);
     bool GetChildRounded() const;
     void SetChildRounded(bool bRound);
 
@@ -38,7 +38,7 @@ protected:
 
     int m_nColumnsFixed;            // 属性：子控件列数
     int m_nRowsFixed;               // 属性：子控件行数
-    int m_iChildVPadding;           // 属性：子控件垂直方向间距
+    int m_iChildVMargin;           // 属性：子控件垂直方向间距
     bool m_bChildRounded;           // 属性：子控件水平、垂直铺满，忽略子控件大小
 };
 }

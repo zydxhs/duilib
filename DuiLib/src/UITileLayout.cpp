@@ -2,7 +2,7 @@
 
 namespace DuiLib {
 CTileLayoutUI::CTileLayoutUI() : m_nColumns(1), m_nRows(0)
-    , m_nColumnsFixed(0), m_iChildVPadding(0)
+    , m_nColumnsFixed(0), m_iChildVMargin(0)
     , m_nRowsFixed(0), m_bChildRounded(false)
 {
     m_szItem.cx = m_szItem.cy = 80;
@@ -48,14 +48,14 @@ void CTileLayoutUI::SetFixedRows(int iRows)
     }
 }
 
-int CTileLayoutUI::GetChildVPadding() const
+int CTileLayoutUI::GetChildVMargin() const
 {
-    return m_iChildVPadding;
+    return m_iChildVMargin;
 }
 
-void CTileLayoutUI::SetChildVPadding(int iPadding)
+void CTileLayoutUI::SetChildVMargin(int iMargin)
 {
-    m_iChildVPadding = (iPadding < 0) ? 0 : iPadding;
+    m_iChildVMargin = (iMargin < 0) ? 0 : iMargin;
     NeedUpdate();
 }
 
@@ -111,10 +111,10 @@ void CTileLayoutUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         m_nColumnsFixed = _ttoi(pstrValue);
         m_nColumnsFixed = m_nColumnsFixed > 0 ? m_nColumnsFixed : 1;
     }
-    else if (_tcscmp(pstrName, _T("childvpadding")) == 0)
+    else if (_tcscmp(pstrName, _T("childvmargin")) == 0)
     {
-        m_iChildVPadding = _ttoi(pstrValue);
-        m_iChildVPadding = m_iChildVPadding >= 0 ? m_iChildVPadding : 0;
+        m_iChildVMargin = _ttoi(pstrValue);
+        m_iChildVMargin = m_iChildVMargin >= 0 ? m_iChildVMargin : 0;
     }
     else if (_tcscmp(pstrName, _T("rows")) == 0)
     {
@@ -192,7 +192,7 @@ void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
 
     int cxNeeded = 0;
     int cyNeeded = 0;
-    int iChildPadding = m_iChildPadding;
+    int iChildPadding = m_iChildMargin;
     int nXRemainder = 0; // 水平方向 等分后剩余像素数
     int nYRemainder = 0; // 水平方向 等分后剩余像素数
     int nCoord = 0;      // 子控件的索引位置（从左到右，从上到下，从0开即递增），用于计算子控件的行列号
@@ -225,7 +225,7 @@ void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
         }
 
         m_nRows = (nEstimateNum - 1) / m_nColumns + 1;
-        cyNeeded = m_nRows * m_szItem.cy + (m_nRows - 1) * m_iChildVPadding;
+        cyNeeded = m_nRows * m_szItem.cy + (m_nRows - 1) * m_iChildVMargin;
     }
     else
     {
@@ -256,7 +256,7 @@ void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
             else { cxNeeded = nEstimateNum * m_szItem.cx + (nEstimateNum - 1) * iChildPadding; }
 
             m_nRows = (nEstimateNum - 1) / m_nColumns + 1;
-            cyNeeded = m_nRows * m_szItem.cy + (m_nRows - 1) * m_iChildVPadding;
+            cyNeeded = m_nRows * m_szItem.cy + (m_nRows - 1) * m_iChildVMargin;
         }
         else
         {
@@ -264,8 +264,8 @@ void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
             m_nColumns = m_nColumnsFixed;
             m_szItem.cx = (rc.right - rc.left - iChildPadding * (m_nColumnsFixed - 1)) / m_nColumnsFixed;
             nXRemainder = (rc.right - rc.left - iChildPadding * (m_nColumnsFixed - 1)) % m_nColumnsFixed;
-            m_szItem.cy = (rc.bottom - rc.top - m_iChildVPadding * (m_nRowsFixed - 1)) / m_nRowsFixed;
-            nYRemainder = (rc.bottom - rc.top - m_iChildVPadding * (m_nRowsFixed - 1)) % m_nRowsFixed;
+            m_szItem.cy = (rc.bottom - rc.top - m_iChildVMargin * (m_nRowsFixed - 1)) / m_nRowsFixed;
+            nYRemainder = (rc.bottom - rc.top - m_iChildVMargin * (m_nRowsFixed - 1)) % m_nRowsFixed;
         }
     }
 
@@ -281,10 +281,10 @@ void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
             continue;
         }
 
-        RECT rcPadding = pControl->GetPadding();
+        RECT rcMargin = pControl->GetMargin();
         SIZE sz = m_szItem;
-        sz.cx -= rcPadding.left + rcPadding.right;
-        sz.cy -= rcPadding.top + rcPadding.bottom;
+        sz.cx -= rcMargin.left + rcMargin.right;
+        sz.cy -= rcMargin.top + rcMargin.bottom;
 
         if (sz.cx > pControl->GetMaxWidth()) { sz.cx = pControl->GetMaxWidth(); }
 
@@ -305,7 +305,7 @@ void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
             iPosX -= m_pHorizontalScrollBar->GetScrollPos();
         }
 
-        int iPosY = rc.top + iRowIndex * (m_szItem.cy + m_iChildVPadding);
+        int iPosY = rc.top + iRowIndex * (m_szItem.cy + m_iChildVMargin);
 
         if (m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible())
         {
@@ -327,26 +327,26 @@ void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
             {
                 if (iChildVAlign == DT_VCENTER)
                 {
-                    rcCtrl.left = iPosX + (szTmp.cx - sz.cx) / 2 + rcPadding.left;
-                    rcCtrl.top = iPosY + (szTmp.cy - sz.cy) / 2 + rcPadding.top;
-                    rcCtrl.right = iPosX + szTmp.cx - rcPadding.right;
-                    rcCtrl.bottom = iPosY + szTmp.cy - rcPadding.bottom;
+                    rcCtrl.left = iPosX + (szTmp.cx - sz.cx) / 2 + rcMargin.left;
+                    rcCtrl.top = iPosY + (szTmp.cy - sz.cy) / 2 + rcMargin.top;
+                    rcCtrl.right = iPosX + szTmp.cx - rcMargin.right;
+                    rcCtrl.bottom = iPosY + szTmp.cy - rcMargin.bottom;
                     pControl->SetPos(rcCtrl, false);
                 }
                 else if (iChildVAlign == DT_BOTTOM)
                 {
-                    rcCtrl.left = iPosX + (szTmp.cx - sz.cx) / 2 + rcPadding.left;
-                    rcCtrl.top = iPosY + rcPadding.top;
-                    rcCtrl.right = iPosX + szTmp.cx - rcPadding.right;
-                    rcCtrl.bottom = iPosY + szTmp.cy - rcPadding.bottom;
+                    rcCtrl.left = iPosX + (szTmp.cx - sz.cx) / 2 + rcMargin.left;
+                    rcCtrl.top = iPosY + rcMargin.top;
+                    rcCtrl.right = iPosX + szTmp.cx - rcMargin.right;
+                    rcCtrl.bottom = iPosY + szTmp.cy - rcMargin.bottom;
                     pControl->SetPos(rcCtrl, false);
                 }
                 else
                 {
-                    rcCtrl.left = iPosX + (szTmp.cx - sz.cx) / 2 + rcPadding.left;
-                    rcCtrl.top = iPosY + rcPadding.top;
-                    rcCtrl.right = iPosX + szTmp.cx - rcPadding.right;
-                    rcCtrl.bottom = iPosY + szTmp.cy - rcPadding.bottom;
+                    rcCtrl.left = iPosX + (szTmp.cx - sz.cx) / 2 + rcMargin.left;
+                    rcCtrl.top = iPosY + rcMargin.top;
+                    rcCtrl.right = iPosX + szTmp.cx - rcMargin.right;
+                    rcCtrl.bottom = iPosY + szTmp.cy - rcMargin.bottom;
                     pControl->SetPos(rcCtrl, false);
                 }
             }
@@ -354,26 +354,26 @@ void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
             {
                 if (iChildVAlign == DT_VCENTER)
                 {
-                    rcCtrl.left = iPosX + szTmp.cx - sz.cx + rcPadding.left;
-                    rcCtrl.top = iPosY + (szTmp.cy - sz.cy) / 2 + rcPadding.top;
-                    rcCtrl.right = iPosX + szTmp.cx - rcPadding.right;
-                    rcCtrl.bottom = iPosY + (szTmp.cy - sz.cy) / 2 + sz.cy - rcPadding.bottom;
+                    rcCtrl.left = iPosX + szTmp.cx - sz.cx + rcMargin.left;
+                    rcCtrl.top = iPosY + (szTmp.cy - sz.cy) / 2 + rcMargin.top;
+                    rcCtrl.right = iPosX + szTmp.cx - rcMargin.right;
+                    rcCtrl.bottom = iPosY + (szTmp.cy - sz.cy) / 2 + sz.cy - rcMargin.bottom;
                     pControl->SetPos(rcCtrl, false);
                 }
                 else if (iChildVAlign == DT_BOTTOM)
                 {
-                    rcCtrl.left = iPosX + szTmp.cx - sz.cx + rcPadding.left;
-                    rcCtrl.top = iPosY + szTmp.cy - sz.cy + rcPadding.top;
-                    rcCtrl.right = iPosX + szTmp.cx - rcPadding.right;
-                    rcCtrl.bottom = iPosY + szTmp.cy - rcPadding.bottom;
+                    rcCtrl.left = iPosX + szTmp.cx - sz.cx + rcMargin.left;
+                    rcCtrl.top = iPosY + szTmp.cy - sz.cy + rcMargin.top;
+                    rcCtrl.right = iPosX + szTmp.cx - rcMargin.right;
+                    rcCtrl.bottom = iPosY + szTmp.cy - rcMargin.bottom;
                     pControl->SetPos(rcCtrl, false);
                 }
                 else
                 {
-                    rcCtrl.left = iPosX + szTmp.cx - sz.cx + rcPadding.left;
-                    rcCtrl.top = iPosY + rcPadding.top;
-                    rcCtrl.right = iPosX + szTmp.cx - rcPadding.right;
-                    rcCtrl.bottom = iPosY + szTmp.cy - rcPadding.bottom;
+                    rcCtrl.left = iPosX + szTmp.cx - sz.cx + rcMargin.left;
+                    rcCtrl.top = iPosY + rcMargin.top;
+                    rcCtrl.right = iPosX + szTmp.cx - rcMargin.right;
+                    rcCtrl.bottom = iPosY + szTmp.cy - rcMargin.bottom;
                     pControl->SetPos(rcCtrl, false);
                 }
             }
@@ -381,26 +381,26 @@ void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
             {
                 if (iChildVAlign == DT_VCENTER)
                 {
-                    rcCtrl.left = iPosX + rcPadding.left;
-                    rcCtrl.top = iPosY + (szTmp.cy - sz.cy) / 2 + rcPadding.top;
-                    rcCtrl.right = iPosX + szTmp.cx - rcPadding.right;
-                    rcCtrl.bottom = iPosY + szTmp.cy - rcPadding.bottom;
+                    rcCtrl.left = iPosX + rcMargin.left;
+                    rcCtrl.top = iPosY + (szTmp.cy - sz.cy) / 2 + rcMargin.top;
+                    rcCtrl.right = iPosX + szTmp.cx - rcMargin.right;
+                    rcCtrl.bottom = iPosY + szTmp.cy - rcMargin.bottom;
                     pControl->SetPos(rcCtrl, false);
                 }
                 else if (iChildVAlign == DT_BOTTOM)
                 {
-                    rcCtrl.left = iPosX + rcPadding.left;
-                    rcCtrl.top = iPosY + rcPadding.top;
-                    rcCtrl.right = iPosX + szTmp.cx - rcPadding.right;
-                    rcCtrl.bottom = iPosY + szTmp.cy - rcPadding.bottom;
+                    rcCtrl.left = iPosX + rcMargin.left;
+                    rcCtrl.top = iPosY + rcMargin.top;
+                    rcCtrl.right = iPosX + szTmp.cx - rcMargin.right;
+                    rcCtrl.bottom = iPosY + szTmp.cy - rcMargin.bottom;
                     pControl->SetPos(rcCtrl, false);
                 }
                 else
                 {
-                    rcCtrl.left = iPosX + rcPadding.left;
-                    rcCtrl.top = iPosY + rcPadding.top;
-                    rcCtrl.right = iPosX + szTmp.cx - rcPadding.right;
-                    rcCtrl.bottom = iPosY + szTmp.cy - rcPadding.bottom;
+                    rcCtrl.left = iPosX + rcMargin.left;
+                    rcCtrl.top = iPosY + rcMargin.top;
+                    rcCtrl.right = iPosX + szTmp.cx - rcMargin.right;
+                    rcCtrl.bottom = iPosY + szTmp.cy - rcMargin.bottom;
                     pControl->SetPos(rcCtrl, false);
                 }
             }
@@ -411,26 +411,26 @@ void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
             {
                 if (iChildVAlign == DT_VCENTER)
                 {
-                    rcCtrl.left = iPosX + (m_szItem.cx - sz.cx) / 2 + rcPadding.left;
-                    rcCtrl.top = iPosY + (m_szItem.cy - sz.cy) / 2 + rcPadding.top;
-                    rcCtrl.right = iPosX + (m_szItem.cx - sz.cx) / 2 + sz.cx - rcPadding.right;
-                    rcCtrl.bottom = iPosY + (m_szItem.cy - sz.cy) / 2 + sz.cy - rcPadding.bottom;
+                    rcCtrl.left = iPosX + (m_szItem.cx - sz.cx) / 2 + rcMargin.left;
+                    rcCtrl.top = iPosY + (m_szItem.cy - sz.cy) / 2 + rcMargin.top;
+                    rcCtrl.right = iPosX + (m_szItem.cx - sz.cx) / 2 + sz.cx - rcMargin.right;
+                    rcCtrl.bottom = iPosY + (m_szItem.cy - sz.cy) / 2 + sz.cy - rcMargin.bottom;
                     pControl->SetPos(rcCtrl, false);
                 }
                 else if (iChildVAlign == DT_BOTTOM)
                 {
-                    rcCtrl.left = iPosX + (m_szItem.cx - sz.cx) / 2 + rcPadding.left;
-                    rcCtrl.top = iPosY + m_szItem.cy - sz.cy + rcPadding.top;
-                    rcCtrl.right = iPosX + (m_szItem.cx - sz.cx) / 2 + sz.cx - rcPadding.right;
-                    rcCtrl.bottom = iPosY + m_szItem.cy - rcPadding.bottom;
+                    rcCtrl.left = iPosX + (m_szItem.cx - sz.cx) / 2 + rcMargin.left;
+                    rcCtrl.top = iPosY + m_szItem.cy - sz.cy + rcMargin.top;
+                    rcCtrl.right = iPosX + (m_szItem.cx - sz.cx) / 2 + sz.cx - rcMargin.right;
+                    rcCtrl.bottom = iPosY + m_szItem.cy - rcMargin.bottom;
                     pControl->SetPos(rcCtrl, false);
                 }
                 else
                 {
-                    rcCtrl.left = iPosX + (m_szItem.cx - sz.cx) / 2 + rcPadding.left;
-                    rcCtrl.top = iPosY + rcPadding.top;
-                    rcCtrl.right = iPosX + (m_szItem.cx - sz.cx) / 2 + sz.cx - rcPadding.right;
-                    rcCtrl.bottom = iPosY + sz.cy - rcPadding.bottom;
+                    rcCtrl.left = iPosX + (m_szItem.cx - sz.cx) / 2 + rcMargin.left;
+                    rcCtrl.top = iPosY + rcMargin.top;
+                    rcCtrl.right = iPosX + (m_szItem.cx - sz.cx) / 2 + sz.cx - rcMargin.right;
+                    rcCtrl.bottom = iPosY + sz.cy - rcMargin.bottom;
                     pControl->SetPos(rcCtrl, false);
                 }
             }
@@ -438,26 +438,26 @@ void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
             {
                 if (iChildVAlign == DT_VCENTER)
                 {
-                    rcCtrl.left = iPosX + m_szItem.cx - sz.cx + rcPadding.left;
-                    rcCtrl.top = iPosY + (m_szItem.cy - sz.cy) / 2 + rcPadding.top;
-                    rcCtrl.right = iPosX + m_szItem.cx - rcPadding.right;
-                    rcCtrl.bottom = iPosY + (m_szItem.cy - sz.cy) / 2 + sz.cy - rcPadding.bottom;
+                    rcCtrl.left = iPosX + m_szItem.cx - sz.cx + rcMargin.left;
+                    rcCtrl.top = iPosY + (m_szItem.cy - sz.cy) / 2 + rcMargin.top;
+                    rcCtrl.right = iPosX + m_szItem.cx - rcMargin.right;
+                    rcCtrl.bottom = iPosY + (m_szItem.cy - sz.cy) / 2 + sz.cy - rcMargin.bottom;
                     pControl->SetPos(rcCtrl, false);
                 }
                 else if (iChildVAlign == DT_BOTTOM)
                 {
-                    rcCtrl.left = iPosX + m_szItem.cx - sz.cx + rcPadding.left;
-                    rcCtrl.top = iPosY + m_szItem.cy - sz.cy + rcPadding.top;
-                    rcCtrl.right = iPosX + m_szItem.cx - rcPadding.right;
-                    rcCtrl.bottom = iPosY + m_szItem.cy - rcPadding.bottom;
+                    rcCtrl.left = iPosX + m_szItem.cx - sz.cx + rcMargin.left;
+                    rcCtrl.top = iPosY + m_szItem.cy - sz.cy + rcMargin.top;
+                    rcCtrl.right = iPosX + m_szItem.cx - rcMargin.right;
+                    rcCtrl.bottom = iPosY + m_szItem.cy - rcMargin.bottom;
                     pControl->SetPos(rcCtrl, false);
                 }
                 else
                 {
-                    rcCtrl.left = iPosX + m_szItem.cx - sz.cx + rcPadding.left;
-                    rcCtrl.top = iPosY + rcPadding.top;
-                    rcCtrl.right = iPosX + m_szItem.cx - rcPadding.right;
-                    rcCtrl.bottom = iPosY + sz.cy - rcPadding.bottom;
+                    rcCtrl.left = iPosX + m_szItem.cx - sz.cx + rcMargin.left;
+                    rcCtrl.top = iPosY + rcMargin.top;
+                    rcCtrl.right = iPosX + m_szItem.cx - rcMargin.right;
+                    rcCtrl.bottom = iPosY + sz.cy - rcMargin.bottom;
                     pControl->SetPos(rcCtrl, false);
                 }
             }
@@ -465,26 +465,26 @@ void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
             {
                 if (iChildVAlign == DT_VCENTER)
                 {
-                    rcCtrl.left = iPosX + rcPadding.left;
-                    rcCtrl.top = iPosY + (m_szItem.cy - sz.cy) / 2 + rcPadding.top;
-                    rcCtrl.right = iPosX + sz.cx - rcPadding.right;
-                    rcCtrl.bottom = iPosY + (m_szItem.cy - sz.cy) / 2 + sz.cy - rcPadding.bottom;
+                    rcCtrl.left = iPosX + rcMargin.left;
+                    rcCtrl.top = iPosY + (m_szItem.cy - sz.cy) / 2 + rcMargin.top;
+                    rcCtrl.right = iPosX + sz.cx - rcMargin.right;
+                    rcCtrl.bottom = iPosY + (m_szItem.cy - sz.cy) / 2 + sz.cy - rcMargin.bottom;
                     pControl->SetPos(rcCtrl, false);
                 }
                 else if (iChildVAlign == DT_BOTTOM)
                 {
-                    rcCtrl.left = iPosX + rcPadding.left;
-                    rcCtrl.top = iPosY + szTmp.cy - sz.cy + rcPadding.top;
-                    rcCtrl.right = iPosX + sz.cx - rcPadding.right;
-                    rcCtrl.bottom = iPosY + szTmp.cy - rcPadding.bottom;
+                    rcCtrl.left = iPosX + rcMargin.left;
+                    rcCtrl.top = iPosY + szTmp.cy - sz.cy + rcMargin.top;
+                    rcCtrl.right = iPosX + sz.cx - rcMargin.right;
+                    rcCtrl.bottom = iPosY + szTmp.cy - rcMargin.bottom;
                     pControl->SetPos(rcCtrl, false);
                 }
                 else
                 {
-                    rcCtrl.left = iPosX + rcPadding.left;
-                    rcCtrl.top = iPosY + rcPadding.top;
-                    rcCtrl.right = iPosX + sz.cx - rcPadding.right;
-                    rcCtrl.bottom = iPosY + sz.cy - rcPadding.bottom;
+                    rcCtrl.left = iPosX + rcMargin.left;
+                    rcCtrl.top = iPosY + rcMargin.top;
+                    rcCtrl.right = iPosX + sz.cx - rcMargin.right;
+                    rcCtrl.bottom = iPosY + sz.cy - rcMargin.bottom;
                     pControl->SetPos(rcCtrl, false);
                 }
             }

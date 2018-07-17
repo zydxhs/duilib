@@ -126,8 +126,8 @@ public:
     void EnsureVisible(int iIndex);
     void Scroll(int dx, int dy);
 
-    int GetChildPadding() const;
-    void SetChildPadding(int iPadding);
+    int GetChildMargin() const;
+    void SetChildMargin(int iMargin);
 
     CListHeaderUI *GetHeader() const;
     CContainerUI *GetList() const;

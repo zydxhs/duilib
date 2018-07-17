@@ -90,7 +90,7 @@
         <Control parent="" notifies="setfocus killfocus timer menu windowinit(root) dblclick">
             <Attribute name="name" default="" type="STRING" comment="控件名字，同一窗口内必须唯一，如(testbtn)"/>
             <Attribute name="pos" default="0,0,0,0" type="RECT" comment="位置，如果为float控件则指定位置和大小，否则只指定大小,如(0,0,100,100)"/>
-            <Attribute name="padding" default="0,0,0,0" type="RECT" comment="外边距,如(2,2,2,2)"/>
+            <Attribute name="margin" default="0,0,0,0" type="RECT" comment="外边距,如(2,2,2,2)"/>
             <Attribute name="bkcolor" default="#00000000" type="DWORD" comment="背景颜色,如(#FFFF0000),使用bkcolor1取代"/>
             <Attribute name="bkcolor2" default="#00000000" type="DWORD" comment="背景渐变色2,和bkcolor配合使用,如(#FFFFFF00)"/>
             <Attribute name="bkcolor3" default="#00000000" type="DWORD" comment="背景渐变色3,和bkcolor、bkcolor2配合使用,如(#FFFF00FF)"/>
@@ -133,7 +133,7 @@
             <Attribute name="vscrollbarstyle" default="" type="STRING" comment="垂直滚动条样式"/>
             <Attribute name="hscrollbar" default="false" type="BOOL" comment="是否使用横向滚动条,如(true)"/>
             <Attribute name="hscrollbarstyle" default="" type="STRING" comment="水平滚动条模式"/>
-            <Attribute name="childpadding" default="0" type="INT" comment="子控件之间的额外距离,如(4)"/>
+            <Attribute name="childmargin" default="0" type="INT" comment="子控件之间的额外距离,如(4)"/>
             <Attribute name="childalign" default="left" type="STRING" comment="子控件水平对齐方式，取值left,center,right"/>
             <Attribute name="childvalign" default="top" type="STRING" comment="子控件垂直对齐方式，取值top,center,bottom"/>
             <!-- 扩展属性 -->
@@ -160,7 +160,7 @@
         <TileLayout parent="Container" notifies="setfocus killfocus timer menu windowinit(root) dblclick">
             <Attribute name="columns" default="1" type="INT" comment="列数,如(4)"/>
             <Attribute name="itemsize" default="0,0" type="SIZE" comment="子项固定大小，如(128,128)"/>
-            <Attribute name="childvpadding" default="0" type="INT" comment="子控件之间垂直方向的额外距离，如（4）"/>
+            <Attribute name="childvmargin" default="0" type="INT" comment="子控件之间垂直方向的额外距离，如（4）"/>
             <!-- 扩展属性 -->
             <Attribute name="rows" default="1" type="INT" comment="行数,如(4)"/>
             <Attribute name="childrounded" default="false" type="BOOL" comment="子控件铺满整个控件，忽略itemsize属性"/>
@@ -370,7 +370,6 @@
         <List parent="VerticalLayout" notifies="setfocus killfocus timer menu itemselect windowinit(root) dblclick">
             <Attribute name="vscrollbar" default="false" type="BOOL" comment="是否使用竖向滚动条,如(true)"/>
             <Attribute name="hscrollbar" default="false" type="BOOL" comment="是否使用横向滚动条,如(true)"/>
-            <Attribute name="childpadding" default="0" type="INT" comment="子控件之间的额外距离,如(4)"/>
             <Attribute name="sepheight" default="0" type="INT" comment="分隔符高度,正负表示分隔符在顶部还是底部,如(4)"/>
             <Attribute name="sepimm" default="false" type="BOOL" comment="拖动分隔符是否立即改变大小,如(false)"/>
             
