@@ -190,7 +190,7 @@
       <Filter>Source Files\Control</Filter>
     </ClCompile>
     <ClCompile Include="src\wke_dll.cpp">
-      <Filter>Source Files\Utils</Filter>
+      <Filter>Source Files\Control</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -351,7 +351,7 @@
       <Filter>Header Files\Control</Filter>
     </ClInclude>
     <ClInclude Include="include\duilib\wke_dll.h">
-      <Filter>Header Files\Utils</Filter>
+      <Filter>Header Files\Control</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
