@@ -15,6 +15,7 @@ CControlUI::CControlUI() :
     m_bAsyncNotify(false),
     m_bVisible(true),
     m_bInternVisible(true),
+    m_bHot(false),
     m_bFocused(false),
     m_bEnabled(true),
     m_bMouseEnabled(true),
@@ -30,6 +31,7 @@ CControlUI::CControlUI() :
     m_dwBackColor2(0),
     m_dwBackColor3(0),
     m_dwBorderColor(0),
+    m_dwHotBorderColor(0),
     m_dwFocusBorderColor(0),
     m_bColorHSL(false),
     m_nBorderStyle(PS_SOLID),
@@ -265,7 +267,20 @@ void CControlUI::SetBorderColor(DWORD dwBorderColor)
 {
     if (m_dwBorderColor == dwBorderColor) { return; }
 
-    m_dwBorderColor = dwBorderColor;
+    m_dwBorderColor = (dwBorderColor > 0x00ffffff) ? dwBorderColor : 0;
+    Invalidate();
+}
+
+DWORD CControlUI::GetHotBorderColor() const
+{
+    return m_dwHotBorderColor;
+}
+
+void CControlUI::SetHotBorderColor(DWORD dwBorderColor)
+{
+    if (m_dwHotBorderColor == dwBorderColor) { return; }
+
+    m_dwHotBorderColor = (dwBorderColor > 0x00ffffff) ? dwBorderColor : 0;
     Invalidate();
 }
 
@@ -278,7 +293,7 @@ void CControlUI::SetFocusBorderColor(DWORD dwBorderColor)
 {
     if (m_dwFocusBorderColor == dwBorderColor) { return; }
 
-    m_dwFocusBorderColor = dwBorderColor;
+    m_dwFocusBorderColor = (dwBorderColor > 0x00ffffff) ? dwBorderColor : 0;
     Invalidate();
 }
 
@@ -834,6 +849,11 @@ void CControlUI::SetKeyboardEnabled(bool bEnabled)
     m_bKeyboardEnabled = bEnabled ;
 }
 
+bool CControlUI::IsHot() const
+{
+    return m_bHot;
+}
+
 bool CControlUI::IsFocused() const
 {
     return m_bFocused;
@@ -1084,6 +1104,22 @@ void CControlUI::DoEvent(TEventUI &event)
     {
         OnDoDragDrop(event);
         return;
+    }
+
+    if (event.Type == UIEVENT_MOUSEENTER)
+    {
+        if (::PtInRect(&m_rcItem, event.ptMouse) && IsEnabled())
+        {
+            m_bHot = true;
+        }
+    }
+
+    if (event.Type == UIEVENT_MOUSELEAVE)
+    {
+        if (!::PtInRect(&m_rcItem, event.ptMouse) && IsEnabled())
+        {
+            m_bHot = false;
+        }
     }
 
     if (m_pParent != NULL) { m_pParent->DoEvent(event); }
@@ -1364,6 +1400,14 @@ void CControlUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
         SetBorderColor(clrColor);
     }
+    else if (_tcscmp(pstrName, _T("hotbordercolor")) == 0)
+    {
+        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
+
+        LPTSTR pstr = NULL;
+        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+        SetHotBorderColor(clrColor);
+    }
     else if (_tcscmp(pstrName, _T("focusbordercolor")) == 0)
     {
         if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
@@ -1617,7 +1661,7 @@ void CControlUI::PaintText(HDC hDC)
 
 void CControlUI::PaintBorder(HDC hDC)
 {
-    if ((0 == m_dwBorderColor && 0 == m_dwFocusBorderColor) ||
+    if ((0 == m_dwBorderColor && 0 == m_dwHotBorderColor && 0 == m_dwFocusBorderColor) ||
         (0 == m_rcBorderSize.left && 0 == m_rcBorderSize.right &&
          0 == m_rcBorderSize.top && 0 == m_rcBorderSize.bottom))
     {
@@ -1627,15 +1671,21 @@ void CControlUI::PaintBorder(HDC hDC)
     if (m_rcBorderSize.left > 0 && (m_cxyBorderRound.cx > 0 || m_cxyBorderRound.cy > 0))
     {
         //画圆角边框
+        DWORD clrBorder = GetAdjustColor(m_dwBorderColor);
+
         if (IsFocused() && m_dwFocusBorderColor != 0)
         {
-            CRenderEngine::DrawRoundRect(hDC, m_rcItem, m_rcBorderSize.left, m_cxyBorderRound.cx, m_cxyBorderRound.cy,
-                                         GetAdjustColor(m_dwFocusBorderColor), m_nBorderStyle);
+            clrBorder = GetAdjustColor(m_dwFocusBorderColor);
         }
-        else
+        else if (m_bHot && m_dwHotBorderColor != 0)
+        {
+            clrBorder = GetAdjustColor(m_dwHotBorderColor);
+        }
+
+        if (0 != clrBorder)
         {
             CRenderEngine::DrawRoundRect(hDC, m_rcItem, m_rcBorderSize.left, m_cxyBorderRound.cx, m_cxyBorderRound.cy,
-                                         GetAdjustColor(m_dwBorderColor), m_nBorderStyle);
+                                         clrBorder, m_nBorderStyle);
         }
 
         return;
@@ -1644,15 +1694,20 @@ void CControlUI::PaintBorder(HDC hDC)
     if (m_rcBorderSize.left == m_rcBorderSize.right && m_rcBorderSize.top == m_rcBorderSize.bottom &&
         m_rcBorderSize.left == m_rcBorderSize.top)
     {
+        DWORD clrBorder = GetAdjustColor(m_dwBorderColor);
+
         if (IsFocused() && m_dwFocusBorderColor != 0)
         {
-            CRenderEngine::DrawRect(hDC, m_rcItem, m_rcBorderSize.left,
-                                    GetAdjustColor(m_dwFocusBorderColor), m_nBorderStyle);
+            clrBorder = GetAdjustColor(m_dwFocusBorderColor);
         }
-        else
+        else if (m_bHot && m_dwHotBorderColor != 0)
         {
-            CRenderEngine::DrawRect(hDC, m_rcItem, m_rcBorderSize.left,
-                                    GetAdjustColor(m_dwBorderColor), m_nBorderStyle);
+            clrBorder = GetAdjustColor(m_dwHotBorderColor);
+        }
+
+        if (0 != clrBorder)
+        {
+            CRenderEngine::DrawRect(hDC, m_rcItem, m_rcBorderSize.left, clrBorder, m_nBorderStyle);
         }
 
         return;

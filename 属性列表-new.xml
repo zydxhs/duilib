@@ -97,6 +97,7 @@
             <Attribute name="direction" default="false" type="BOOL" comment="渐变方向。true/false分别表示水平/垂直"/>
             <Attribute name="colorhsl" default="false" type="BOOL" comment="本控件的颜色是否随窗口的hsl变化而变化,如(false)"/>
             <Attribute name="bordercolor" default="#00000000" type="DWORD" comment="边框颜色,如(#FF000000)"/>
+            <Attribute name="hotbordercolor" default="#00000000" type="DWORD" comment="鼠标悬停时边框颜色,如(#FF00F000)"/>
             <Attribute name="focusbordercolor" default="#00000000" type="DWORD" comment="获得焦点时边框的颜色,如(#FFFF0000)"/>
             <Attribute name="bordersize" default="0" type="INT | RECT" comment="可以设置INT或RECT类型的值。当值为INT时则左、上、右、下都用该值作为宽。值为RECT类型时则分别设置左、上、右、下的边框"/>
             <Attribute name="borderstyle" default="0" type="INT" comment="边框样式的设置，可以组合多种样式，详见 PS_SOLID"/>

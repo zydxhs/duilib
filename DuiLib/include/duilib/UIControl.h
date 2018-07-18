@@ -51,8 +51,6 @@ public:
     bool GetDirection(void);
     LPCTSTR GetBkImage();
     void SetBkImage(LPCTSTR pStrImage);
-    DWORD GetFocusBorderColor() const;
-    void SetFocusBorderColor(DWORD dwBorderColor);
     bool IsColorHSL() const;
     void SetColorHSL(bool bColorHSL);
     SIZE GetBorderRound() const;
@@ -62,6 +60,10 @@ public:
     //边框相关
     DWORD GetBorderColor() const;
     void SetBorderColor(DWORD dwBorderColor);
+    DWORD GetHotBorderColor() const;
+    void SetHotBorderColor(DWORD dwBorderColor);
+    DWORD GetFocusBorderColor() const;
+    void SetFocusBorderColor(DWORD dwBorderColor);
     RECT GetBorderSize() const;
     void SetBorderSize(RECT rc);
     void SetBorderSize(int iSize);
@@ -133,6 +135,7 @@ public:
     virtual void SetMouseEnabled(bool bEnable = true);
     virtual bool IsKeyboardEnabled() const;
     virtual void SetKeyboardEnabled(bool bEnable = true);
+    bool IsHot() const;
     virtual bool IsFocused() const;
     virtual void SetFocus();
     virtual bool IsFloat() const;
@@ -228,10 +231,9 @@ protected:
     bool m_bEnabled;
     bool m_bMouseEnabled;
     bool m_bKeyboardEnabled;
-    bool m_bFocused;
+    bool m_bSetPos; // 防止SetPos循环调用
     bool m_bFloat;
     TPercentInfo m_piFloatPercent;
-    bool m_bSetPos; // 防止SetPos循环调用
 
     CDuiString m_sText;
     CDuiString m_sTextOrig;     // 翻译前的文本
@@ -248,11 +250,14 @@ protected:
     DWORD m_dwBackColor2;
     DWORD m_dwBackColor3;
     bool  m_bDirection;         // 渐变方向
+    bool m_bColorHSL;
+    bool m_bHot;                // 鼠标悬停
+    bool m_bFocused;            // 焦点
     TDrawInfo m_diBk;
     TDrawInfo m_diFore;
-    DWORD m_dwBorderColor;
-    DWORD m_dwFocusBorderColor;
-    bool m_bColorHSL;
+    DWORD m_dwBorderColor;      // 边框颜色
+    DWORD m_dwHotBorderColor;   // 鼠标悬停状态边框颜色
+    DWORD m_dwFocusBorderColor; // 焦点状态边框颜色
     int m_nBorderStyle;
     int m_nTooltipWidth;
     SIZE m_cxyBorderRound;
@@ -260,10 +265,10 @@ protected:
     RECT m_rcBorderSize;
     CDuiStringPtrMap m_mCustomAttrHash;
     int m_nWeight;                      // 权重，默认100。值越小，权重越小，空间不足时优先裁减其大小直到隐藏
+    bool m_bCapture;                    // true 表示捕获鼠标
     bool m_bDropEnable;                 // 是否接受拖放(拖放目标）
     bool m_bDragEnable;                 // 是否允许拖动（拖放源）
     TDrawInfo m_diDrag;                 // 拖拽时显示的图片
-    bool m_bCapture;                    // true 表示捕获鼠标
 };
 
 } // namespace DuiLib

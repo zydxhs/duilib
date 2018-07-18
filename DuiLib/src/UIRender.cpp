@@ -1924,7 +1924,7 @@ void CRenderEngine::DrawRoundRect(HDC hDC, const RECT &rc, int nSize, int width,
     ::SelectObject(dcHelper, ::GetStockObject(HOLLOW_BRUSH));
     ::RoundRect(dcHelper, rc.left, rc.top, rc.right, rc.bottom, width, height);
     ::SelectObject(dcHelper, hOldPen);
-    ::DeleteObject(dcHelper);
+    ::DeleteObject(hPen);
 }
 
 void CRenderEngine::DrawText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, LPCTSTR pstrText,
