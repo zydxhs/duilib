@@ -1707,7 +1707,8 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
             if (m_pRoot == NULL) { break; }
 
             // 2018-06-02 修复编辑框获取焦点后不显示Tooltip的问题
-            if (m_hwndTooltip != NULL && !::PtInRect(&m_pEventHover->GetPos(), m_ptLastMousePos))
+            if (m_hwndTooltip != NULL && NULL != m_pEventHover &&
+                !::PtInRect(&m_pEventHover->GetPos(), m_ptLastMousePos))
             {
                 ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, FALSE, (LPARAM)&m_ToolTip);
             }

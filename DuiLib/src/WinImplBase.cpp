@@ -632,8 +632,7 @@ void CWndImplBase::SwitchChildDlg(CDuiString strBtnName)
 
     if (NULL == pItem || m_strChildDlgType == pItem->m_strDlg) { return; }
 
-    CWndImplBase *pWnd = (CWndImplBase *)m_mapChild.Find(pItem->m_strDlg);
-    ASSERT(pWnd);
+    CWndImplBase *pWnd = (CWndImplBase *)m_mapChild.Find(m_strChildDlgType);
 
     if (NULL != pWnd)
     {
@@ -666,7 +665,6 @@ bool CWndImplBase::Relayout(void *pParam)
     if (NULL == m_pm.GetRoot()) { return false; }
 
     CWndImplBase *pWndChild = (CWndImplBase *)m_mapChild.Find(m_strChildDlgType);
-    ASSERT(NULL != pWndChild);
 
     if (NULL == pWndChild) { return false; }
 
