@@ -72,6 +72,7 @@ protected:
     virtual int *GetLinksNum(void) { return NULL; }
     virtual RECT *GetRectLinks(void) { return NULL; }
     virtual CDuiString *GetStringLinks(void) { return NULL; }
+    RECT GetTextRect(RECT rc);
 
 protected:
     LPWSTR  m_pWideText;
