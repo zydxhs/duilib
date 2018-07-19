@@ -11,7 +11,7 @@ static Color ARGB2Color(DWORD dwColor)
 
 CLabelUI::CLabelUI()
     : m_pWideText(0)
-    , m_uTextStyle(DT_VCENTER | DT_SINGLELINE)
+    , m_uTextStyle(DT_SINGLELINE)
     , m_dwTextColor(0)
     , m_dwDisabledTextColor(0)
     , m_iFont(-1)
@@ -461,8 +461,26 @@ void CLabelUI::PaintText(HDC hDC)
                                             GetRectLinks(), GetStringLinks(), GetLinksNum(),
                                             m_iFont, m_uTextStyle);
             else
+            {
+                if (!(m_uTextStyle & DT_SINGLELINE) && ((m_uTextStyle & DT_VCENTER) || (m_uTextStyle & DT_BOTTOM)))
+                {
+                    RECT rcText = { 0, 0, MAX_CTRL_WIDTH, m_cxyFixedLast.cy };
+                    CRenderEngine::DrawText(m_pManager->GetPaintDC(), m_pManager, rcText, m_sText, 0, m_iFont,
+                                            DT_CALCRECT | m_uTextStyle & ~DT_RIGHT & ~DT_CENTER);
+
+                    if (m_uTextStyle & DT_VCENTER)
+                    {
+                        rc.top += (rc.bottom - rc.top - rcText.bottom + rcText.top) / 2;
+                    }
+                    else if (m_uTextStyle & DT_BOTTOM)
+                    {
+                        rc.top += (rc.bottom - rc.top - rcText.bottom + rcText.top);
+                    }
+                }
+
                 CRenderEngine::DrawText(hDC, m_pManager, rc, m_sText, m_dwTextColor,
                                         m_iFont, m_uTextStyle);
+            }
         }
         else
         {
