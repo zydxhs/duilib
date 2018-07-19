@@ -129,10 +129,12 @@ protected:
     // 子窗口切换。用户必须实现 CreateWnd，以实现子窗口的创建。
     void SwitchChildDlg(CDuiString strBtnName);
 
+    // 以下两个函数，DuiLib自动创建的子窗体，用户不需要调用；主要用于用户创建子窗体的维护。
+    void SetCurDlgType(CDuiString strDlgType);  // 设置当前子窗口类型
+    bool Relayout(void *pParam = NULL);         // 调用时机：父窗口改变大小、子窗口初次添加到父窗口
+
 private:
     LRESULT OnWndDataUpdate(UINT uMsg, WPARAM wParam, LPARAM lParam);
-    // 调用时机：父窗口改变大小、子窗口初次添加到父窗口
-    bool Relayout(void *pParam);
 
 protected:
     static LPBYTE m_lpResourceZIPBuffer;
@@ -155,6 +157,20 @@ private:
     // 3. 当窗体拥有多个子窗口，并且每个子窗口与窗体上的某个控件关联时（比如 tab 标签页功能）
     //    用户只需要调用 AddBtnDlgItem 将窗体控件名，与子窗体类型或相关控件指针关联起来就可以了。
     //    单击窗体上的控件时，调用 SwitchChildDlg 即可切换到对应的子窗口，用户必须实现 CreateWnd。
+    //
+    // 自动创建维护子窗体：
+    // 1. 调用 MakeCtrlSizeNty 设置子窗体的位置占位符容器；
+    // 2. 调用 AddBtnDlgItem 把一个按钮名、子窗体类型绑定；
+    // 3. 调用 SwitchChildDlg 切换到按钮关联的子窗体；
+    // 4. 调用 ResetBtnDlgItem 删除按钮名、子窗体类型的绑定关系；此时已经创建的子窗体，不会销毁；
+    //
+    // 用户创建的子窗体，要想实现跟随父窗体大小变化，需要如下步骤：
+    // 1. 调用 MakeCtrlSizeNty 设置子窗体的位置占位符容器；
+    // 2. 调用 SetCurDlgType 设置当前子窗体类型；
+    // 3. 子窗体第一次创建时，调用 AddChild 把子窗体类型和其指针关联起来；
+    //    调用 Relayout 调整子窗体大小、位置；
+    // 4. 如果子窗体改变了，必须调用 SetCurDlgType 更新当前子窗体类型；
+    // 5. 子窗体销毁时，需要调用 DellChild 删除窗体类型与其指针的绑定关系。
     CContainerUI   *m_pCtrlPlaceHolder;     // 占位符，用于放置子窗体
     CDuiString      m_strChildDlgType;      // 当前子窗口类型
     // key=窗体类型字符串，唯一标识一个窗体；value=子窗口指针(CWndImplBase*)

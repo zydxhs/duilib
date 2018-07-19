@@ -760,4 +760,9 @@ LRESULT CWndImplBase::OnLanguageUpdate(UINT uMsg, WPARAM wParam, LPARAM lParam)
     return 0L;
 }
 
+void CWndImplBase::SetCurDlgType(CDuiString strDlgType)
+{
+    m_strChildDlgType = strDlgType;
+}
+
 }
