@@ -2305,7 +2305,7 @@ bool CPaintManagerUI::AttachDialog(CControlUI *pControl)
     m_bFocusNeeded = true;
 
     // 如果是子窗体，则不创建阴影
-    if (!(::GetWindowLong(*this, GWL_STYLE) & WS_CHILD))
+    if (!(::GetWindowLong(m_hWndPaint, GWL_STYLE) & WS_CHILD))
     {
         m_pWndShadow->Create(this);
     }
