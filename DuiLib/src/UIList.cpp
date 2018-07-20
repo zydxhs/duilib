@@ -3369,11 +3369,6 @@ void CListTextElementUI::DrawItemText(HDC hDC, const RECT &rcItem)
                 rcItem.right -= pInfo->iVLineSize;
             }
 
-            rcItem.left += pInfo->rcTextPadding.left;
-            rcItem.right -= pInfo->rcTextPadding.right;
-            rcItem.top += pInfo->rcTextPadding.top;
-            rcItem.bottom -= pInfo->rcTextPadding.bottom;
-
             CDuiString strText;//不使用LPCTSTR，否则限制太多 by cddjr 2011/10/20
 
             if (pCallback) { strText = pCallback->GetItemText(this, m_iIndex, i); }
@@ -3406,6 +3401,11 @@ void CListTextElementUI::DrawItemText(HDC hDC, const RECT &rcItem)
             }
             else
             {
+                rcItem.left += pInfo->rcTextPadding.left;
+                rcItem.right -= pInfo->rcTextPadding.right;
+                rcItem.top += pInfo->rcTextPadding.top;
+                rcItem.bottom -= pInfo->rcTextPadding.bottom;
+
                 if (pInfo->bShowHtml)
                     CRenderEngine::DrawHtmlText(hDC, m_pManager, rcItem, strText.GetData(), iTextColor,
                                                 &m_rcLinks[m_nLinks], &m_sLinks[m_nLinks], &nLinks,
