@@ -4,7 +4,7 @@
 
 namespace DuiLib {
 
-// 窗体数据更新方向
+// 窗体数据更新方向。用户通常不需要
 enum EMParamUpdateDirection
 {
     EPARAM_INIT,        // 初始化
@@ -37,11 +37,14 @@ enum EMCUSTOM_EVENT
     WM_DUILIB_PUB_MAX = 0xBFFF,             // 这里定义的消息ID，不能大于该值
 };
 
+//
+#define TIMERID_USER_BEGIN      1024    // 用户定时器ID的最小值。小于该值的定时器为duilib内部保留
+
+// 用户不需要的常量
 #define _USEIMM                 1
 #define MAX_FONT_ID             30000
 #define RES_TYPE_COLOR          _T("*COLOR*")
 #define SCROLLBAR_LINESIZE      8
-#define TIMERID_USER_MIN        1024    // 用户定时器ID的最小值。小于该值的定时器为duilib内部保留
 
 enum DuiSig
 {

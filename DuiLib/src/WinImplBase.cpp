@@ -39,6 +39,7 @@ CWndImplBase::CWndImplBase()
     , m_pbtnMax(NULL)
     , m_pbtnRestore(NULL)
     , m_pbtnClose(NULL)
+    , m_bModified(false)
     , m_nWndState(ESTATE_UNKNOW)
     , m_aryCtrlStatic(7)
     , m_pCtrlPlaceHolder(NULL)
@@ -674,6 +675,16 @@ bool CWndImplBase::Relayout(void *pParam)
                    rt.GetWidth() - rtInset.left - rtInset.right, rt.GetHeight() - rtInset.top - rtInset.bottom,
                    SWP_SHOWWINDOW);
     return true;
+}
+
+void CWndImplBase::SetModified(bool bModified)
+{
+    m_bModified = bModified;
+}
+
+bool CWndImplBase::IsModified(void)
+{
+    return m_bModified;
 }
 
 INLINE LRESULT CWndImplBase::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)

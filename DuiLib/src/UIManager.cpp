@@ -2304,7 +2304,11 @@ bool CPaintManagerUI::AttachDialog(CControlUI *pControl)
     m_bFirstLayout = true;
     m_bFocusNeeded = true;
 
-    m_pWndShadow->Create(this);
+    // 如果是子窗体，则不创建阴影
+    if (!(::GetWindowLong(*this, GWL_STYLE) & WS_CHILD))
+    {
+        m_pWndShadow->Create(this);
+    }
 
     // Initiate all control
     return InitControls(pControl);

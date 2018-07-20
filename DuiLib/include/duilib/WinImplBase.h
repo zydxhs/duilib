@@ -133,6 +133,10 @@ protected:
     void SetCurDlgType(CDuiString strDlgType);  // 设置当前子窗口类型
     bool Relayout(void *pParam = NULL);         // 调用时机：父窗口改变大小、子窗口初次添加到父窗口
 
+    // 设置/查询 窗体数据修改状态。用户使用。
+    void SetModified(bool bModified = true);
+    bool IsModified(void);
+
 private:
     LRESULT OnWndDataUpdate(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -145,6 +149,11 @@ protected:
     CButtonUI      *m_pbtnMax;              // 最大化
     CButtonUI      *m_pbtnRestore;          // 还原
     CButtonUI      *m_pbtnClose;            // 关闭
+
+    // true 表示窗体数据有修改，窗体闭关/隐藏前要提示用户。
+    // 这是给用户提供的功能。
+    bool            m_bModified;
+
 private:
     int             m_nWndState;            // 用于判断是否发送窗体数据初始化/保存消息
     CDuiPtrArray    m_aryCtrlStatic;        // 标题栏上不支持鼠标/键盘操作的控件
