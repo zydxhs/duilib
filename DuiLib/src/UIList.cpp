@@ -1846,7 +1846,7 @@ SIZE CListHeaderUI::EstimateSize(SIZE szAvailable)
 //
 
 CListHeaderItemUI::CListHeaderItemUI() : m_bDragable(true), m_uButtonState(0), m_iSepWidth(4),
-    m_uTextStyle(DT_CENTER | DT_VCENTER | DT_SINGLELINE), m_dwTextColor(0), m_dwSepColor(0),
+    m_uTextStyle(DT_LEFT | DT_VCENTER | DT_SINGLELINE), m_dwTextColor(0), m_dwSepColor(0),
     m_iFont(-1), m_bShowHtml(false)
 {
     //设置内边距，防止遮挡拖放的间隔条
