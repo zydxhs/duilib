@@ -40,9 +40,12 @@ CListUI::CListUI() : m_pCallback(NULL), m_bScrollSelect(false), m_iCurSel(-1), m
     CVerticalLayoutUI::Add(m_pList);
 
     m_ListInfo.nColumns = 0;
+    ::ZeroMemory(&m_ListInfo.rcColumn, sizeof(m_ListInfo.rcColumn));
     m_ListInfo.uFixedHeight = 0;
     m_ListInfo.nFont = -1;
     m_ListInfo.uTextStyle = DT_VCENTER | DT_SINGLELINE | DT_END_ELLIPSIS;
+    m_ListInfo.rcTextPadding.left = m_ListInfo.rcTextPadding.right = 0;
+    m_ListInfo.rcTextPadding.top = m_ListInfo.rcTextPadding.bottom = 0;
     m_ListInfo.dwTextColor = 0xFF000000;
     m_ListInfo.dwBkColor = 0;
     m_ListInfo.bAlternateBk = false;
@@ -58,8 +61,7 @@ CListUI::CListUI() : m_pCallback(NULL), m_bScrollSelect(false), m_iCurSel(-1), m
     m_ListInfo.dwVLineColor = 0xFF3C3C3C;
     m_ListInfo.bShowHtml = false;
     m_ListInfo.bMultiExpandable = false;
-    ::ZeroMemory(&m_ListInfo.rcTextPadding, sizeof(m_ListInfo.rcTextPadding));
-    ::ZeroMemory(&m_ListInfo.rcColumn, sizeof(m_ListInfo.rcColumn));
+    m_ListInfo.bCheckBox = false;
 }
 
 LPCTSTR CListUI::GetClass() const
