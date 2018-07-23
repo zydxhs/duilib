@@ -115,7 +115,15 @@ CControlUI *CDialogBuilder::Create(IDialogBuilderCallback *pCallback, CPaintMana
                     }
                 }
 
-                if (pImageName) { pManager->AddImage(pImageName, pImageResType, mask, bUseHSL, shared); }
+                if (pImageName)
+                {
+                    const TImageInfo *data = pManager->GetImage(pImageName);
+
+                    if (!data)
+                    {
+                        pManager->AddImage(pImageName, pImageResType, mask, bUseHSL, shared);
+                    }
+                }
             }
             else if (_tcsicmp(pstrClass, _T("Font")) == 0)
             {
