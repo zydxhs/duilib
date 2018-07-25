@@ -4,6 +4,9 @@
 #pragma once
 
 namespace DuiLib {
+
+enum { EPS_WEAK = 1, EPS_MIDDLE, EPS_STRONG };
+
 class DUILIB_API CPwdCheckUI : public CLabelUI //CControlUI
 {
 public:
@@ -30,12 +33,12 @@ public:
     virtual CDuiString GetText(void) const;
     virtual void SetText(LPCTSTR pstrText);
 
+    BYTE GetPwdStrongth();
+
 private:
     int CalcPwdStrongth(void);
 
 private:
-    enum {EPS_WEAK = 1, EPS_MIDDLE, EPS_STRONG };
-
     BYTE        m_byPwdStrongth;    // 密码强度
     bool        m_bShowTxt;         // 是否显示文本
 

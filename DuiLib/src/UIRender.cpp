@@ -2025,12 +2025,24 @@ void CRenderEngine::DrawText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, LPCTS
         // ::DrawText(hDC, pstrText, -1, &rc, uStyle | DT_NOPREFIX);
         // ::SelectObject(hDC, hOldFont);
 
-        CHDCHelper dcHelper(hDC, &rc, BYTE(dwTextColor >> 24));
-        ::SetBkMode(dcHelper, TRANSPARENT);
-        ::SetTextColor(dcHelper, RGB(GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
-        HFONT hOldFont = (HFONT)::SelectObject(dcHelper, pManager->GetFont(iFont));
-        ::DrawText(dcHelper, pstrText, -1, &rc, uStyle | DT_NOPREFIX);
-        ::SelectObject(dcHelper, hOldFont);
+        if (DT_CALCRECT & uStyle)
+        {
+            // 由于 CHDCHelper 的构造和析构需要消耗大量时间，因此计算文本占用的矩形时直接在原HDC上进行
+            ::SetBkMode(hDC, TRANSPARENT);
+            ::SetTextColor(hDC, RGB(GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
+            HFONT hOldFont = (HFONT)::SelectObject(hDC, pManager->GetFont(iFont));
+            ::DrawText(hDC, pstrText, -1, &rc, uStyle | DT_NOPREFIX);
+            ::SelectObject(hDC, hOldFont);
+        }
+        else
+        {
+            CHDCHelper dcHelper(hDC, &rc, BYTE(dwTextColor >> 24));
+            ::SetBkMode(dcHelper, TRANSPARENT);
+            ::SetTextColor(dcHelper, RGB(GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
+            HFONT hOldFont = (HFONT)::SelectObject(dcHelper, pManager->GetFont(iFont));
+            ::DrawText(dcHelper, pstrText, -1, &rc, uStyle | DT_NOPREFIX);
+            ::SelectObject(dcHelper, hOldFont);
+        }
 #ifdef USE_GDIPLUS
     }
 

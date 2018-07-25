@@ -224,6 +224,11 @@ void CPwdCheckUI::SetText(LPCTSTR pstrText)
     NeedUpdate();
 }
 
+INLINE BYTE CPwdCheckUI::GetPwdStrongth()
+{
+    return m_byPwdStrongth;
+}
+
 int CPwdCheckUI::CalcPwdStrongth(void)
 {
     if (m_sPwd.GetLength() < 5) { return EPS_WEAK; }
