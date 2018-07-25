@@ -258,35 +258,48 @@
             <Attribute name="fivestatusimage" default="" type="STRING" comment="5态图片，宽高相同，水平排列，顺序为：正常，按下，悬浮，焦点，禁用。"/>
             <Attribute name="fadedelta" default="0" type="BYTE" comment="普通图片透明度变化步长"/>
             <Attribute name="disableseconds" default="0" type="BYTE" comment="下次响应鼠标/键盘事件需要等待的秒数,[0,100]。默认0，表示关闭该特性。"/>
-            <Attribute name="hotbkcolor" default="#00000000" type="DWORD" comment="鼠标悬浮状态背景色"/>
+            <Attribute name="hotbkcolor" default="#00000000" type="DWORD" comment="鼠标悬浮状态背景色,0表示不使用此颜色,如(#FFFF0000)"/>
+            <Attribute name="focusedbkcolor" default="#00000000" type="DWORD" comment="焦点状态背景颜色,0表示不使用此颜色,如(#FFFF0000)"/>
+            <Attribute name="pushedbkcolor" default="#00000000" type="DWORD" comment="鼠标按下背景色,0表示不使用此颜色,如(#FFFF0000)"/>
+            <Attribute name="disabledbkcolor" default="#00000000" type="DWORD" comment="禁用状态背景色,0表示不使用此颜色,如(#FFFF0000)"/>
             <Attribute name="hottextcolor" default="#00000000" type="DWORD" comment="鼠标悬浮字体颜色，0表示不使用此颜色,如(#FFFF0000)"/>
-            <Attribute name="pushedtextcolor" default="#00000000" type="DWORD" comment="鼠标按下字体颜色，0表示不使用此颜色,如(#FFFF0000)"/>
             <Attribute name="focusedtextcolor" default="#00000000" type="DWORD" comment="获得焦点字体颜色，0表示不使用此颜色,如(#FFFF0000)"/>
+            <Attribute name="pushedtextcolor" default="#00000000" type="DWORD" comment="鼠标按下字体颜色，0表示不使用此颜色,如(#FFFF0000)"/>
             <!--5态 颜色设置。
-                禁用：前景(disabledtextcolor)   焦点：前景(focusedtextcolor)    按下：前景(pushedtextcolor)
                 正常：前景(textcolor)/背景(bkcolor/bkcolor2/bkcolor3) 
-                悬浮：前景(hottextcolor)/背景(hotbkcolor)  -->
+                悬浮：前景(hottextcolor)/背景(hotbkcolor)
+                焦点：前景(focusedtextcolor)/背景(focusedbkcolor)
+                按下：前景(pushedtextcolor)/背景(pushedbkcolor)
+                禁用：前景(disabledtextcolor)/背景(disabledbkcolor) -->
         </Button>
         <Option parent="Button" notifies="setfocus killfocus timer menu click selectchanged windowinit(root) dblclick">
+            <!-- 弃用的属性 -->
+            <Attribute name="selectedimage" default="" type="STRING" comment="选中的状态图片,弃用,由selnormalimg代替"/>
+            <Attribute name="selectedhotimage" default="" type="STRING" comment="选中+鼠标悬浮的状态图片,弃用,由selhotimg代替"/>
+            <!-- 以上为弃用的属性 -->
             <Attribute name="group" default="" type="STRING" comment="所属组的名称，可不设"/>
             <Attribute name="selected" default="false" type="BOOL" comment="是否选中"/>
             <Attribute name="foreimage" default="" type="STRING" comment="前景图片"/>
-            <Attribute name="selectedimage" default="" type="STRING" comment="选中的状态图片"/>
-            <Attribute name="selectedhotimage" default="" type="STRING" comment="选中+鼠标悬浮的状态图片"/>
+            <!-- 优化与扩展属性 -->
             <Attribute name="selnormalimg" default="" type="STRING" comment="选中正常状态图片,同selectedimage" />
             <Attribute name="selhotimg" default="" type="STRING" comment="选中鼠标悬浮图片,同selectedhotimage" />
             <Attribute name="selfocusedimg" default="" type="STRING" comment="选中焦点状态图片" />
             <Attribute name="selpushedimg" default="" type="STRING" comment="选中鼠标按下图片" />
             <Attribute name="seldisabledimg" default="" type="STRING" comment="选中禁用状态图片" />
-            <Attribute name="unselnormalimg" default="" type="STRING" comment="未选中正常状态图片" />
-            <Attribute name="unselhotimg" default="" type="STRING" comment="未选中鼠标悬浮图片" />
-            <Attribute name="unselfocusedimg" default="" type="STRING" comment="未选中焦点状态图片" />
-            <Attribute name="unselpushedimg" default="" type="STRING" comment="未选中鼠标按下图片" />
-            <Attribute name="unseldisabledimg" default="" type="STRING" comment="未选中禁用状态图片" />
+            <Attribute name="unselnormalimg" default="" type="STRING" comment="未选中正常状态图片,等同Button相同状态的属性" />
+            <Attribute name="unselhotimg" default="" type="STRING" comment="未选中鼠标悬浮图片,等同Button相同状态的属性" />
+            <Attribute name="unselfocusedimg" default="" type="STRING" comment="未选中焦点状态图片,等同Button相同状态的属性" />
+            <Attribute name="unselpushedimg" default="" type="STRING" comment="未选中鼠标按下图片,等同Button相同状态的属性" />
+            <Attribute name="unseldisabledimg" default="" type="STRING" comment="未选中禁用状态图片,等同Button相同状态的属性" />
             <Attribute name="seltextcolor" default="#00000000" type="DWORD" comment="选中/按下状态背景颜色，0表示不使用此颜色,如(#FFFF0000)"/>
-            <Attribute name="selbkcolor" default="#00000000" type="DWORD" comment="选中正常状态背景颜色，0表示不使用此颜色,如(#FFFF0000)"/>
+            <Attribute name="selnormalbkcolor" default="#00000000" type="DWORD" comment="选中正常状态背景颜色，0表示不使用此颜色,如(#FFFF0000)"/>
             <Attribute name="selhotbkcolor" default="#00000000" type="DWORD" comment="选中+鼠标悬浮背景颜色，0表示不使用此颜色,如(#FFFF0000)"/>
-            <!--5态 颜色设置。未选中：同 Button         选中：正常/悬浮 背景色有效 -->
+            <Attribute name="selfocusedbkcolor" default="#00000000" type="DWORD" comment="选中+焦点背景颜色，0表示不使用此颜色,如(#FFFF0000)"/>
+            <Attribute name="selpushedbkcolor" default="#00000000" type="DWORD" comment="选中+鼠标按下背景颜色，0表示不使用此颜色,如(#FFFF0000)"/>
+            <Attribute name="seldisabledbkcolor" default="#00000000" type="DWORD" comment="选中+禁用背景颜色，0表示不使用此颜色,如(#FFFF0000)"/>
+            <!-- 5态 背景色：未选中：同 Button      选中：全状态有效 -->
+            <!-- 背景色绘制优先级：选中各状态颜色->选中正常状态颜色->未选中状态颜色->未选中正常状态颜色 -->
+            <!-- 文本颜色  ：未选中：同 Button      选中：全状态一个颜色(seltextcolor) -->
             <!-- 扩展属性 -->
             <Attribute name="bindtablayout" default="" type="STRING" comment="TabLayout控件名"/>
             <Attribute name="bindtabindex" default="" type="INT" comment="单击后触发TabLayout页面的索引号"/>

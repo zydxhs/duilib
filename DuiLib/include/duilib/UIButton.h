@@ -41,14 +41,24 @@ public:
     void SetDisabledSeconds(BYTE bySecs);
     BYTE GetDisabledSeconds();
 
+    // 背景色
     void SetHotBkColor(DWORD dwColor);
     DWORD GetHotBkColor() const;
+    void SetFocusedBkColor(DWORD dwColor);
+    DWORD GetFocusedBkColor() const;
+    void SetPushedBkColor(DWORD dwColor);
+    DWORD GetPushedBkColor() const;
+    void SetDisabledBkColor(DWORD dwColor);
+    DWORD GetDisabledBkColor() const;
+
+    // 前景色
     void SetHotTextColor(DWORD dwColor);
     DWORD GetHotTextColor() const;
-    void SetPushedTextColor(DWORD dwColor);
-    DWORD GetPushedTextColor() const;
     void SetFocusedTextColor(DWORD dwColor);
     DWORD GetFocusedTextColor() const;
+    void SetPushedTextColor(DWORD dwColor);
+    DWORD GetPushedTextColor() const;
+
     SIZE EstimateSize(SIZE szAvailable);
     void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
@@ -62,13 +72,20 @@ protected:
 protected:
     UINT m_uButtonState;
 
+    // 背景色
     // Control::m_dwBackColor       正常 背景色
+    DWORD m_dwHotBkColor;           // 鼠标悬浮
+    DWORD m_dwFocusedBkColor;       // 焦点状态
+    DWORD m_dwPushedBkColor;        // 鼠标按下
+    DWORD m_dwDisabledBkColor;      // 禁用状态
+
+    // 前景色
     // Label::m_dwTextColor         正常 前景色
+    DWORD m_dwHotTextColor;         // 鼠标悬浮
+    DWORD m_dwFocusedTextColor;     // 焦点状态
+    DWORD m_dwPushedTextColor;      // 鼠标按下
     // Label::m_dwDisabledTextColor 禁用 前景色
-    DWORD m_dwHotBkColor;           // 鼠标悬浮 背景色
-    DWORD m_dwHotTextColor;         // 鼠标悬浮 前景色
-    DWORD m_dwFocusedTextColor;     // 焦点状态 前景色
-    DWORD m_dwPushedTextColor;      // 鼠标按下 前景色
+
     BYTE m_byFadeAlpha;
     BYTE m_byFadeAlphaDelta;
     BYTE m_byDisableSeconds;        // 鼠标/键盘动作响应频率。默认0，关闭该特性，非0表示间隔秒数。

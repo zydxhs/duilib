@@ -2,7 +2,14 @@
 #include <map>
 
 namespace DuiLib {
-COptionUI::COptionUI() : m_bSelected(false), m_dwSelBkColor(0), m_dwSelHotBkColor(0), m_nBindTabIndex(0)
+COptionUI::COptionUI()
+    : m_bSelected(false)
+    , m_dwSelNormalBkColor(0)
+    , m_dwSelHotBkColor(0)
+    , m_dwSelFocusedBkColor(0)
+    , m_dwSelPushedBkColor(0)
+    , m_dwSelDisabledBkColor(0)
+    , m_nBindTabIndex(0)
 {
 }
 
@@ -33,7 +40,7 @@ void COptionUI::SetManager(CPaintManagerUI *pManager, CControlUI *pParent, bool 
     }
 }
 
-LPCTSTR COptionUI::GetGroup() const
+INLINE LPCTSTR COptionUI::GetGroup() const
 {
     return m_sGroupName;
 }
@@ -67,7 +74,7 @@ void COptionUI::SetGroup(LPCTSTR pStrGroupName)
     Selected(m_bSelected);
 }
 
-bool COptionUI::IsSelected() const
+INLINE bool COptionUI::IsSelected() const
 {
     return m_bSelected;
 }
@@ -132,7 +139,7 @@ void COptionUI::SetEnabled(bool bEnable)
     }
 }
 
-LPCTSTR COptionUI::GetSelNormalImg()
+INLINE LPCTSTR COptionUI::GetSelNormalImg()
 {
     return m_diSelNormal.sDrawString;
 }
@@ -146,7 +153,7 @@ void COptionUI::SetSelNormalImg(LPCTSTR pStrImage)
     Invalidate();
 }
 
-LPCTSTR COptionUI::GetSelHotImg()
+INLINE LPCTSTR COptionUI::GetSelHotImg()
 {
     return m_diSelHot.sDrawString;
 }
@@ -160,7 +167,7 @@ void COptionUI::SetSelHotImg(LPCTSTR pStrImage)
     Invalidate();
 }
 
-LPCTSTR COptionUI::GetSelFocusedImg()
+INLINE LPCTSTR COptionUI::GetSelFocusedImg()
 {
     return m_diSelFocused.sDrawString;
 }
@@ -174,7 +181,7 @@ void COptionUI::SetSelFocusedImg(LPCTSTR pStrImage)
     Invalidate();
 }
 
-LPCTSTR COptionUI::GetSelPushedImg()
+INLINE LPCTSTR COptionUI::GetSelPushedImg()
 {
     return m_diSelPushed.sDrawString;
 }
@@ -188,7 +195,7 @@ void COptionUI::SetSelPushedImg(LPCTSTR pStrImage)
     Invalidate();
 }
 
-LPCTSTR COptionUI::GetSelDisabledImg()
+INLINE LPCTSTR COptionUI::GetSelDisabledImg()
 {
     return m_diSelDisabled.sDrawString;
 }
@@ -202,87 +209,135 @@ void COptionUI::SetSelDisabledImg(LPCTSTR pStrImage)
     Invalidate();
 }
 
-LPCTSTR COptionUI::GetUnselNormalImg()
+INLINE LPCTSTR COptionUI::GetUnselNormalImg()
 {
     return m_diNormal.sDrawString;
 }
 
-void COptionUI::SetUnselNormalImg(LPCTSTR pStrImage)
+INLINE void COptionUI::SetUnselNormalImg(LPCTSTR pStrImage)
 {
     SetNormalImage(pStrImage);
 }
 
-LPCTSTR COptionUI::GetUnselHotImg()
+INLINE LPCTSTR COptionUI::GetUnselHotImg()
 {
     return m_diHot.sDrawString;
 }
 
-void COptionUI::SetUnselHotImg(LPCTSTR pStrImage)
+INLINE void COptionUI::SetUnselHotImg(LPCTSTR pStrImage)
 {
     SetHotImage(pStrImage);
 }
 
-LPCTSTR COptionUI::GetUnselFocusedImg()
+INLINE LPCTSTR COptionUI::GetUnselFocusedImg()
 {
     return m_diFocused.sDrawString;
 }
 
-void COptionUI::SetUnselFocusedImg(LPCTSTR pStrImage)
+INLINE void COptionUI::SetUnselFocusedImg(LPCTSTR pStrImage)
 {
     SetFocusedImage(pStrImage);
 }
 
-LPCTSTR COptionUI::GetUnselPushedImg()
+INLINE LPCTSTR COptionUI::GetUnselPushedImg()
 {
     return m_diPushed.sDrawString;
 }
 
-void COptionUI::SetUnselPushedImg(LPCTSTR pStrImage)
+INLINE void COptionUI::SetUnselPushedImg(LPCTSTR pStrImage)
 {
     SetPushedImage(pStrImage);
 }
 
-LPCTSTR COptionUI::GetUnselDisabledImg()
+INLINE LPCTSTR COptionUI::GetUnselDisabledImg()
 {
     return m_diDisabled.sDrawString;
 }
 
-void COptionUI::SetUnselDisabledImg(LPCTSTR pStrImage)
+INLINE void COptionUI::SetUnselDisabledImg(LPCTSTR pStrImage)
 {
     SetDisabledImage(pStrImage);
 }
 
-void COptionUI::SetSelTextColor(DWORD dwTextColor)
+INLINE void COptionUI::SetSelTextColor(DWORD dwTextColor)
 {
+    if (m_dwPushedTextColor == dwTextColor) { return; }
+
     m_dwPushedTextColor = dwTextColor;
+    Invalidate();
 }
 
-DWORD COptionUI::GetSelTextColor()
+INLINE DWORD COptionUI::GetSelTextColor()
 {
     return m_dwPushedTextColor;
 }
 
-void COptionUI::SetSelBkColor(DWORD dwBkColor)
+INLINE void COptionUI::SetSelNormalBkColor(DWORD dwColor)
 {
-    m_dwSelBkColor = dwBkColor;
+    if (m_dwSelNormalBkColor == dwColor) { return; }
+
+    m_dwSelNormalBkColor = dwColor;
+    Invalidate();
 }
 
-DWORD COptionUI::GetSelBkColor()
+INLINE DWORD COptionUI::GetSelNormalBkColor()
 {
-    return m_dwSelBkColor;
+    return m_dwSelNormalBkColor;
 }
 
-void COptionUI::SetSelHotBkColor(DWORD dwHotBkColor)
+INLINE void COptionUI::SetSelHotBkColor(DWORD dwkColor)
 {
-    m_dwSelHotBkColor = dwHotBkColor;
+    if (m_dwSelHotBkColor == dwkColor) { return; }
+
+    m_dwSelHotBkColor = dwkColor;
+    Invalidate();
 }
 
-DWORD COptionUI::GetSelHotBkColor()
+INLINE DWORD COptionUI::GetSelHotBkColor()
 {
     return m_dwSelHotBkColor;
 }
 
-LPCTSTR COptionUI::GetForeImage()
+void COptionUI::SetSelFocusedBkColor(DWORD dwColor)
+{
+    if (m_dwSelFocusedBkColor == dwColor) { return; }
+
+    m_dwSelFocusedBkColor = dwColor;
+    Invalidate();
+}
+
+INLINE DWORD COptionUI::GetSelFocusedBkColor()
+{
+    return m_dwSelFocusedBkColor;
+}
+
+void COptionUI::SetSelPushedBkColor(DWORD dwColor)
+{
+    if (m_dwSelPushedBkColor == dwColor) { return; }
+
+    m_dwSelPushedBkColor = dwColor;
+    Invalidate();
+}
+
+INLINE DWORD COptionUI::GetSelPushedBkColor()
+{
+    return m_dwSelPushedBkColor;
+}
+
+void COptionUI::SetSelDisabledBkColor(DWORD dwColor)
+{
+    if (m_dwSelDisabledBkColor = dwColor) { return; }
+
+    m_dwSelDisabledBkColor = dwColor;
+    Invalidate();
+}
+
+INLINE DWORD COptionUI::GetSelDisabledBkColor()
+{
+    return m_dwSelDisabledBkColor;
+}
+
+INLINE LPCTSTR COptionUI::GetForeImage()
 {
     return m_diFore.sDrawString;
 }
@@ -325,13 +380,13 @@ void COptionUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     { SetUnselPushedImg(pstrValue); }
     else if (_tcscmp(pstrName, _T("unseldisabledimg")) == 0 || _tcscmp(pstrName, _T("disabledimage")) == 0)
     { SetUnselDisabledImg(pstrValue); }
-    else if (_tcscmp(pstrName, _T("selbkcolor")) == 0)
+    else if (_tcscmp(pstrName, _T("selnormalbkcolor")) == 0)
     {
         if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
 
         LPTSTR pstr = NULL;
         DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetSelBkColor(clrColor);
+        SetSelNormalBkColor(clrColor);
     }
     else if (_tcscmp(pstrName, _T("selhotbkcolor")) == 0)
     {
@@ -340,6 +395,30 @@ void COptionUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         LPTSTR pstr = NULL;
         DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
         SetSelHotBkColor(clrColor);
+    }
+    else if (_tcscmp(pstrName, _T("selfocusedbkcolor")) == 0)
+    {
+        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
+
+        LPTSTR pstr = NULL;
+        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+        SetSelFocusedBkColor(clrColor);
+    }
+    else if (_tcscmp(pstrName, _T("selpushedbkcolor")) == 0)
+    {
+        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
+
+        LPTSTR pstr = NULL;
+        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+        SetSelPushedBkColor(clrColor);
+    }
+    else if (_tcscmp(pstrName, _T("seldisabledbkcolor")) == 0)
+    {
+        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
+
+        LPTSTR pstr = NULL;
+        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
+        SetSelDisabledBkColor(clrColor);
     }
     else if (_tcscmp(pstrName, _T("seltextcolor")) == 0 || _tcscmp(pstrName, _T("pushedtextcolor")) == 0)
     {
@@ -366,13 +445,25 @@ void COptionUI::PaintBkColor(HDC hDC)
 {
     if (m_uButtonState & UISTATE_SELECTED)
     {
-        if (0 != (m_uButtonState & UISTATE_HOT) && 0 != m_dwSelHotBkColor)
+        if (!IsEnabled() && 0 != m_dwSelDisabledBkColor)
+        {
+            CRenderEngine::DrawColor(hDC, m_rcPaint, GetAdjustColor(m_dwSelDisabledBkColor));
+        }
+        else if (0 != (m_uButtonState & UISTATE_PUSHED) && 0 != m_dwSelPushedBkColor)
+        {
+            CRenderEngine::DrawColor(hDC, m_rcPaint, GetAdjustColor(m_dwSelPushedBkColor));
+        }
+        else if (IsFocused() && 0 != m_dwSelFocusedBkColor)
+        {
+            CRenderEngine::DrawColor(hDC, m_rcPaint, GetAdjustColor(m_dwSelFocusedBkColor));
+        }
+        else if (0 != (m_uButtonState & UISTATE_HOT) && 0 != m_dwSelHotBkColor)
         {
             CRenderEngine::DrawColor(hDC, m_rcPaint, GetAdjustColor(m_dwSelHotBkColor));
         }
-        else if (0 != m_dwSelBkColor)
+        else if (0 != m_dwSelNormalBkColor)
         {
-            CRenderEngine::DrawColor(hDC, m_rcPaint, GetAdjustColor(m_dwSelBkColor));
+            CRenderEngine::DrawColor(hDC, m_rcPaint, GetAdjustColor(m_dwSelNormalBkColor));
         }
         else
         {
@@ -381,14 +472,7 @@ void COptionUI::PaintBkColor(HDC hDC)
     }
     else
     {
-        if (0 != (m_uButtonState & UISTATE_PUSHED) && 0 != m_dwSelBkColor)
-        {
-            CRenderEngine::DrawColor(hDC, m_rcPaint, GetAdjustColor(m_dwSelBkColor));
-        }
-        else
-        {
-            CButtonUI::PaintBkColor(hDC);
-        }
+        CButtonUI::PaintBkColor(hDC);
     }
 }
 

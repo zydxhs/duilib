@@ -21,11 +21,17 @@ public:
     void SetSelTextColor(DWORD dwTextColor);
     DWORD GetSelTextColor();
 
-    void SetSelBkColor(DWORD dwBkColor);
-    DWORD GetSelBkColor();
-
-    void SetSelHotBkColor(DWORD dwHotBkColor);
+    // 选中时背景色。未选中时背影色，参考Buttton
+    void SetSelNormalBkColor(DWORD dwColor);
+    DWORD GetSelNormalBkColor();
+    void SetSelHotBkColor(DWORD dwColor);
     DWORD GetSelHotBkColor();
+    void SetSelFocusedBkColor(DWORD dwColor);
+    DWORD GetSelFocusedBkColor();
+    void SetSelPushedBkColor(DWORD dwColor);
+    DWORD GetSelPushedBkColor();
+    void SetSelDisabledBkColor(DWORD dwColor);
+    DWORD GetSelDisabledBkColor();
 
     // 选中
     LPCTSTR GetSelNormalImg();
@@ -71,10 +77,12 @@ protected:
     bool            m_bSelected;
     CDuiString      m_sGroupName;
 
-    // 5态颜色 选中时仅正常、悬浮背景色有效
-    // Button::m_dwPushedTextColor      按下/选中 前景色 其它颜色见Buttton
-    DWORD           m_dwSelBkColor;     // 按下/选中 背景色
-    DWORD           m_dwSelHotBkColor;  // 悬浮/选中 背景色
+    // 选中时 5 态颜色
+    DWORD           m_dwSelNormalBkColor;       // 正常
+    DWORD           m_dwSelHotBkColor;          // 悬浮/选中 背景色
+    DWORD           m_dwSelFocusedBkColor;      // 悬浮
+    DWORD           m_dwSelPushedBkColor;       // 按下 / 选中 前景色 其它颜色见Buttton
+    DWORD           m_dwSelDisabledBkColor;     // 按下/选中 背景色
 
     TDrawInfo       m_diSelNormal;      // 选中状态 正常
     TDrawInfo       m_diSelHot;         // 选中状态 鼠标悬浮
