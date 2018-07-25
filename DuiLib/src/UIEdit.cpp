@@ -425,6 +425,8 @@ LRESULT CEditWnd::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled
     WORD wIdx = LOWORD(::SendMessage(m_hWnd, EM_GETSEL, 0, 0));
     CDuiString sTxt = m_pOwner->m_sText;
 
+    if (m_pOwner->IsReadOnly()) { return 0; }
+
     if ((m_pOwner->IsCharFilter() && !m_pOwner->IsValidChar(wParam)) ||
         (m_pOwner->IsRegExpFilter() && !m_pOwner->IsRegExpMatch(sTxt.GetData())))
     {
@@ -451,7 +453,7 @@ LRESULT CEditWnd::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled
 // bHandled 必须为TRUE
 LRESULT CEditWnd::OnPaste(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
-    if (!m_pOwner->IsCharFilter() && !m_pOwner->IsRegExpFilter()) { return 0L; }
+    if (m_pOwner->IsReadOnly() || (!m_pOwner->IsCharFilter() && !m_pOwner->IsRegExpFilter())) { return 0L; }
 
     CDuiString strValidTxt;
     TCHAR buf[MAX_PATH] = { 0 };
