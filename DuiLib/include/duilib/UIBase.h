@@ -79,6 +79,11 @@ public:
     void CenterWindow();    // 居中，支持扩展屏幕
     void SetIcon(UINT nRes);
 
+    void SetParent(HWND hParent);
+    HWND GetParent();
+    void SetOwner(HWND hOwner);
+    HWND GetOwner();
+
     LRESULT SendMessage(UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0L);
     LRESULT PostMessage(UINT uMsg, WPARAM wParam = 0, LPARAM lParam = 0L);
     void ResizeClient(int cx = -1, int cy = -1);
@@ -101,6 +106,8 @@ protected:
     bool RegisterSuperclass();
 protected:
     HWND m_hWnd;
+    HWND m_hParent;             // 当前窗口的父窗口
+    HWND m_hOwner;              // 当前窗口的拥有者
     WNDPROC m_OldWndProc;
     bool m_bSubclassed;
     CDuiString  m_sTitle;       // 窗口标题

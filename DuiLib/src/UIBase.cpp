@@ -228,7 +228,12 @@ void CNotifyPump::NotifyPump(TNotifyUI &msg)
 
 //////////////////////////////////////////////////////////////////////////
 ///
-CWindowWnd::CWindowWnd() : m_hWnd(NULL), m_OldWndProc(::DefWindowProc), m_bSubclassed(false)
+CWindowWnd::CWindowWnd()
+    : m_hWnd(NULL)
+    , m_hParent(NULL)
+    , m_hOwner(NULL)
+    , m_OldWndProc(::DefWindowProc)
+    , m_bSubclassed(false)
 {
 }
 
@@ -326,7 +331,8 @@ UINT CWindowWnd::ShowModal()
 {
     ASSERT(::IsWindow(m_hWnd));
     UINT nRet = 0;
-    HWND hWndParent = GetWindowOwner(m_hWnd);
+    //HWND hWndParent = GetWindowOwner(m_hWnd);
+    HWND hWndParent = GetOwner();
     ::ShowWindow(m_hWnd, SW_SHOWNORMAL);
     ::EnableWindow(hWndParent, FALSE);
     MSG msg = { 0 };
@@ -430,6 +436,31 @@ void CWindowWnd::SetIcon(UINT nRes)
                                (::GetSystemMetrics(SM_CYSMICON) + 15) & ~15, LR_DEFAULTCOLOR);
     ASSERT(hIcon);
     ::SendMessage(m_hWnd, WM_SETICON, (WPARAM) FALSE, (LPARAM) hIcon);
+}
+
+void CWindowWnd::SetParent(HWND hParent)
+{
+    if (::IsWindow(m_hWnd)) { ::SetParent(m_hWnd, hParent); }
+}
+
+// GetParent的返回值比较复杂：
+// 1. 对于overlapped类型的窗口，它返回0；
+// 2. 对于WS_CHILD类型，它返回其父窗口；
+// 3. 对于WS_POPUP类型，它返回其所有者窗口
+//    如果想得到创建它时所传递进去的那个hwndParent参数，应该用GetWindowWord(GWW_HWNDPARENT)函数。？？？
+HWND CWindowWnd::GetParent()
+{
+    return ::IsWindow(m_hWnd) ? ::GetParent(m_hWnd) : NULL;
+}
+
+void CWindowWnd::SetOwner(HWND hOwner)
+{
+    m_hOwner = ::IsWindow(hOwner) ? hOwner : NULL;
+}
+
+HWND CWindowWnd::GetOwner()
+{
+    return m_hOwner ? m_hOwner : GetWindowOwner(m_hWnd);
 }
 
 bool CWindowWnd::RegisterWindowClass()
