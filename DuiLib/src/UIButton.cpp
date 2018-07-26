@@ -111,6 +111,11 @@ void CButtonUI::DoEvent(TEventUI &event)
             Invalidate();
         }
 
+        if ((event.wParam & MK_LBUTTON) && m_bDragEnable)
+        {
+            OnDoDragDrop(event);
+        }
+
         return;
     }
 
@@ -640,9 +645,6 @@ void CButtonUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     {
         SetDisabledSeconds((BYTE)_ttoi(pstrValue));
     }
-    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
-    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
-    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("不支持属性:dropenable")); }
     else { CLabelUI::SetAttribute(pstrName, pstrValue); }
 }
 

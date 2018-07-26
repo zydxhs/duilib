@@ -1209,7 +1209,8 @@ void CControlUI::OnDragOver(COleDataHelper *pDataHelper)
 
 void CControlUI::OnDragLeave(void)
 {
-    if (!m_bDropEnable && m_pParent != NULL) { m_pParent->OnDragLeave(); }
+    if (m_bDropEnable) { m_pManager->SendNotify(this, DUI_MSGTYPE_DRAGLEAVE); }
+    else if (m_pParent != NULL) { m_pParent->OnDragLeave(); }
 }
 
 void CControlUI::OnDragDrop(COleDataHelper *pDataHelper)
