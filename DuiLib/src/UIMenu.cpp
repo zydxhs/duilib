@@ -886,6 +886,12 @@ void CMenuElementUI::DoEvent(TEventUI &event)
 
     case UIEVENT_KEYDOWN:           OnKeyDown(event);                           break;
 
+    case UIEVENT_BUTTONDOWN:
+    case UIEVENT_RBUTTONDOWN:
+        if (IsEnabled()) { Select();    Invalidate(); }
+
+        break;
+
     default:                        CListContainerElementUI::DoEvent(event);    break;
     }
 }

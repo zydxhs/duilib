@@ -1767,36 +1767,33 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
             event.dwTimestamp = ::GetTickCount();
             event.wKeyState = MapKeyState();
 
-            if (m_pEventCapture == NULL)
+            if (pNewHover != m_pEventHover && m_pEventHover != NULL)
             {
-                if (pNewHover != m_pEventHover && m_pEventHover != NULL)
+                event.Type = UIEVENT_MOUSELEAVE;
+                event.pSender = m_pEventHover;
+
+                CDuiPtrArray aNeedMouseLeaveNeeded(m_aNeedMouseLeaveNeeded.GetSize());
+                aNeedMouseLeaveNeeded.Resize(m_aNeedMouseLeaveNeeded.GetSize());
+                ::CopyMemory(aNeedMouseLeaveNeeded.GetData(), m_aNeedMouseLeaveNeeded.GetData(),
+                             m_aNeedMouseLeaveNeeded.GetSize() * sizeof(LPVOID));
+
+                for (int i = 0; i < aNeedMouseLeaveNeeded.GetSize(); i++)
                 {
-                    event.Type = UIEVENT_MOUSELEAVE;
-                    event.pSender = m_pEventHover;
-
-                    CDuiPtrArray aNeedMouseLeaveNeeded(m_aNeedMouseLeaveNeeded.GetSize());
-                    aNeedMouseLeaveNeeded.Resize(m_aNeedMouseLeaveNeeded.GetSize());
-                    ::CopyMemory(aNeedMouseLeaveNeeded.GetData(), m_aNeedMouseLeaveNeeded.GetData(),
-                                 m_aNeedMouseLeaveNeeded.GetSize() * sizeof(LPVOID));
-
-                    for (int i = 0; i < aNeedMouseLeaveNeeded.GetSize(); i++)
-                    {
-                        static_cast<CControlUI *>(aNeedMouseLeaveNeeded[i])->Event(event);
-                    }
-
-                    m_pEventHover->Event(event);
-                    m_pEventHover = NULL;
-
-                    if (m_hwndTooltip != NULL) { ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, FALSE, (LPARAM) &m_ToolTip); }
+                    static_cast<CControlUI *>(aNeedMouseLeaveNeeded[i])->Event(event);
                 }
 
-                if (pNewHover != m_pEventHover && pNewHover != NULL)
-                {
-                    event.Type = UIEVENT_MOUSEENTER;
-                    event.pSender = pNewHover;
-                    pNewHover->Event(event);
-                    m_pEventHover = pNewHover;
-                }
+                m_pEventHover->Event(event);
+                m_pEventHover = NULL;
+
+                if (m_hwndTooltip != NULL) { ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, FALSE, (LPARAM) &m_ToolTip); }
+            }
+
+            if (pNewHover != m_pEventHover && pNewHover != NULL)
+            {
+                event.Type = UIEVENT_MOUSEENTER;
+                event.pSender = pNewHover;
+                pNewHover->Event(event);
+                m_pEventHover = pNewHover;
             }
 
             if (m_pEventCapture != NULL)
