@@ -80,7 +80,7 @@ public:
     void SetIcon(UINT nRes);
 
     void SetParent(HWND hParent);
-    HWND GetParent();
+    HWND GetParent(HWND hWnd = NULL);
     void SetOwner(HWND hOwner);
     HWND GetOwner();
 
@@ -106,7 +106,6 @@ protected:
     bool RegisterSuperclass();
 protected:
     HWND m_hWnd;
-    HWND m_hParent;             // 当前窗口的父窗口
     HWND m_hOwner;              // 当前窗口的拥有者
     WNDPROC m_OldWndProc;
     bool m_bSubclassed;

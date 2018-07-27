@@ -230,7 +230,6 @@ void CNotifyPump::NotifyPump(TNotifyUI &msg)
 ///
 CWindowWnd::CWindowWnd()
     : m_hWnd(NULL)
-    , m_hParent(NULL)
     , m_hOwner(NULL)
     , m_OldWndProc(::DefWindowProc)
     , m_bSubclassed(false)
@@ -448,9 +447,10 @@ void CWindowWnd::SetParent(HWND hParent)
 // 2. 对于WS_CHILD类型，它返回其父窗口；
 // 3. 对于WS_POPUP类型，它返回其所有者窗口
 //    如果想得到创建它时所传递进去的那个hwndParent参数，应该用GetWindowWord(GWW_HWNDPARENT)函数。？？？
-HWND CWindowWnd::GetParent()
+HWND CWindowWnd::GetParent(HWND hWnd)
 {
-    return ::IsWindow(m_hWnd) ? ::GetParent(m_hWnd) : NULL;
+    if (::IsWindow(hWnd)) { return ::GetParent(hWnd); }
+    else { ::IsWindow(m_hWnd) ? ::GetParent(m_hWnd) : NULL; }
 }
 
 void CWindowWnd::SetOwner(HWND hOwner)
