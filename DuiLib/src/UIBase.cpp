@@ -450,7 +450,7 @@ void CWindowWnd::SetParent(HWND hParent)
 HWND CWindowWnd::GetParent(HWND hWnd)
 {
     if (::IsWindow(hWnd)) { return ::GetParent(hWnd); }
-    else { ::IsWindow(m_hWnd) ? ::GetParent(m_hWnd) : NULL; }
+    else { return ::IsWindow(m_hWnd) ? ::GetParent(m_hWnd) : NULL; }
 }
 
 void CWindowWnd::SetOwner(HWND hOwner)
