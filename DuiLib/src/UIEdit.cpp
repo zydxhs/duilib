@@ -320,6 +320,13 @@ LRESULT CEditWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     // 2018-06-02 修复编辑框获取焦点后不显示Tooltip的问题
     else if (uMsg == WM_MOUSEMOVE)
     {
+        // 父窗口的UIManager 会处理两个 WM_MOUSEMOVE 消息，后面一条消息导致找不到鼠标下的编辑框控件，也就不会显示tooltip
+        // POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+        // ::ClientToScreen(m_hWnd, &pt);
+        // ::ScreenToClient(m_pOwner->GetManager()->GetPaintWindow(), &pt);
+        // LPARAM lp = MAKELPARAM(pt.x, pt.y);
+        // ::PostMessage(m_pOwner->GetManager()->GetPaintWindow(), uMsg, wParam, lp);
+
         if (!bTrack && !(wParam & MK_LBUTTON))
         {
             int iHoverTime = m_pOwner->GetManager()->GetHoverTime();
@@ -340,7 +347,14 @@ LRESULT CEditWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     else if (uMsg == WM_MOUSEHOVER)
     {
         bTrack = false;
-        m_pOwner->GetManager()->MessageHandler(WM_MOUSEHOVER, wParam, lParam, lRes);
+        lRes = 1;   // 表示程序没有处理该消息
+
+        POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+        ::ClientToScreen(m_hWnd, &pt);
+        ::ScreenToClient(m_pOwner->GetManager()->GetPaintWindow(), &pt);
+        LPARAM lp = MAKELPARAM(pt.x, pt.y);
+        LRESULT pCtrl = (LRESULT)m_pOwner;   // 借用来传递控件指针，其它情况下，第4参数总是为0
+        m_pOwner->GetManager()->MessageHandler(WM_MOUSEHOVER, wParam, lp, pCtrl);
     }
 
 #ifndef UNICODE

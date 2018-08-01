@@ -1625,6 +1625,10 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
             m_bMouseTracking = false;
             POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
 
+            // 2018-08-01
+            CControlUI *pHoverBak = m_pEventHover;
+            m_pEventHover = (0 != lRes) ? (CControlUI *)lRes : m_pEventHover;
+
             // 2018-06-02 修复编辑框获取焦点后不显示Tooltip的问题
             if (m_pEventHover == NULL) { break; }
 
@@ -1698,6 +1702,8 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 
             //修改在CListElementUI 有提示 子项无提示下无法跟随移动！（按理说不应该移动的）
             ::SendMessage(m_hwndTooltip, TTM_TRACKPOSITION, 0, (LPARAM)(DWORD)MAKELONG(pt.x, pt.y));
+            // 2018-08-01
+            m_pEventHover = (0 != lRes) ? pHoverBak : m_pEventHover;
         }
 
         return true;
@@ -1785,7 +1791,8 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
                 m_pEventHover->Event(event);
                 // 2018-08-01 编辑框焦点状态，会主动调用 MessageHandle(WM_MOUSEHOVER,...)
                 // 以解决编辑框焦点时的 tooltip 显示问题。所以此处不能置NULL
-                // m_pEventHover = NULL;
+                // 2018-08-01 不置NULL，会导致鼠标移动到控件上时，有时不会触发 MouseEnter 事件
+                m_pEventHover = NULL;
 
                 if (m_hwndTooltip != NULL) { ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, FALSE, (LPARAM) &m_ToolTip); }
             }
