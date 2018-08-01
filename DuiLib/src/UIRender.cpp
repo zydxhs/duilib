@@ -1739,6 +1739,7 @@ void CRenderEngine::DrawColor(HDC hDC, const RECT &rc, DWORD color)
         lpAlphaBlend(hDC, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, hCloneDC, 0, 0, 1, 1, bf);
         ::SelectObject(hCloneDC, hOldBitmap);
         ::DeleteDC(hCloneDC);
+        ::DeleteObject(hBitmap);
         //////////////////////////////////////////////////////////////////////////
         // RECT rcBmpPart = {0, 0, 1, 1};
         // RECT rcCorners = {0};
