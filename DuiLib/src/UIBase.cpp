@@ -362,13 +362,14 @@ UINT CWindowWnd::ShowModal()
     return nRet;
 }
 
-void CWindowWnd::Close(UINT nRet)
+void CWindowWnd::Close(UINT nRet, bool bSync)
 {
     ASSERT(::IsWindow(m_hWnd));
 
     if (!::IsWindow(m_hWnd)) { return; }
 
-    PostMessage(WM_CLOSE, (WPARAM)nRet, 0L);
+    if (bSync) { SendMessage(WM_CLOSE, (WPARAM)nRet, 0L); }
+    else       { PostMessage(WM_CLOSE, (WPARAM)nRet, 0L); }
 
     //2017-02-25 zhuyadong 完善多语言切换
     CPaintManagerUI::DelLanguageNotifier(m_hWnd);

@@ -75,7 +75,7 @@ public:
     void Unsubclass();
     void ShowWindow(bool bShow = true, bool bTakeFocus = true);
     UINT ShowModal();
-    void Close(UINT nRet = IDOK);
+    void Close(UINT nRet = IDOK, bool bSync = false);   // bSync=true 表示同步，否则异步
     void CenterWindow();    // 居中，支持扩展屏幕
     void SetIcon(UINT nRes);
 

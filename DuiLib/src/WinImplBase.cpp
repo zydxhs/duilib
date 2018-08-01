@@ -593,7 +593,7 @@ void CWndImplBase::DestroyChildDlg(CDuiString strType)
 {
     CWndImplBase *pWnd = (CWndImplBase *)m_mapChild.Find(strType);
 
-    if (NULL != pWnd && ::IsWindow(pWnd->GetHWND())) { pWnd->Close(); }
+    if (NULL != pWnd && ::IsWindow(pWnd->GetHWND())) { pWnd->Close(IDOK, true); }
 
     m_mapChild.Remove(strType);
 }
