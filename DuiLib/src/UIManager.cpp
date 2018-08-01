@@ -1783,7 +1783,9 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
                 }
 
                 m_pEventHover->Event(event);
-                m_pEventHover = NULL;
+                // 2018-08-01 编辑框焦点状态，会主动调用 MessageHandle(WM_MOUSEHOVER,...)
+                // 以解决编辑框焦点时的 tooltip 显示问题。所以此处不能置NULL
+                // m_pEventHover = NULL;
 
                 if (m_hwndTooltip != NULL) { ::SendMessage(m_hwndTooltip, TTM_TRACKACTIVATE, FALSE, (LPARAM) &m_ToolTip); }
             }
