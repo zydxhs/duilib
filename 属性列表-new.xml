@@ -112,7 +112,7 @@
             <Attribute name="text" default="" type="STRING" comment="显示文本,如(测试文本)"/>
             <Attribute name="tooltip" default="" type="STRING" comment="鼠标悬浮提示,如(请在这里输入你的密码)"/>
             <Attribute name="userdata" default="" type="STRING" comment="自定义标识"/>
-            <Attribute name="tag" default="0" type="UINT_PTR" comment="自定义数据"/>
+            <Attribute name="tag" default="0" type="UINT_PTR" comment="自定义数据。支持16进制写法(如0xF0)"/>
             <Attribute name="enabled" default="true" type="BOOL" comment="是否可以响应用户操作,如(true)"/>
             <Attribute name="mouse" default="true" type="BOOL" comment="本控件是否可以响应鼠标操作,如(true)"/>
             <Attribute name="visible" default="true" type="BOOL" comment="是否可见,如(true)"/>

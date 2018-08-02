@@ -1457,7 +1457,24 @@ void CControlUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if (_tcscmp(pstrName, _T("text")) == 0) { SetText(pstrValue); }
     else if (_tcscmp(pstrName, _T("tooltip")) == 0) { SetToolTip(pstrValue); }
     else if (_tcscmp(pstrName, _T("userdata")) == 0) { SetUserData(pstrValue); }
-    else if (_tcscmp(pstrName, _T("tag")) == 0) { SetTag(_ttoi(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("tag")) == 0)
+    {
+        if (*pstrValue == _T('0'))
+        {
+            pstrValue = ::CharNext(pstrValue);
+
+            if (*pstrValue == _T('x') || *pstrValue == _T('X'))
+            {
+                pstrValue = ::CharNext(pstrValue);
+                SetTag(_tcstol(pstrValue, NULL, 16));
+            }
+            else
+            {
+                SetTag(_ttoi(pstrValue));
+            }
+        }
+        else { SetTag(_ttoi(pstrValue)); }
+    }
     else if (_tcscmp(pstrName, _T("enabled")) == 0) { SetEnabled(_tcscmp(pstrValue, _T("true")) == 0); }
     else if (_tcscmp(pstrName, _T("mouse")) == 0) { SetMouseEnabled(_tcscmp(pstrValue, _T("true")) == 0); }
     else if (_tcscmp(pstrName, _T("keyboard")) == 0) { SetKeyboardEnabled(_tcscmp(pstrValue, _T("true")) == 0); }
