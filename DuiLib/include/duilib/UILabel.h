@@ -38,8 +38,6 @@ public:
 
     void PaintText(HDC hDC);
 
-    void        SetAutoWidth(bool bAutoWidth);
-    bool        GetAutoWidth(void);
     void        SetEnabledEffect(bool _EnabledEffect);
     bool        GetEnabledEffect();
 #ifdef USE_GDIPLUS
@@ -85,7 +83,6 @@ protected:
     SIZE    m_szAvailableLast;
     SIZE    m_cxyFixedLast;
     bool    m_bNeedEstimateSize;
-    bool    m_bAutoWidth;
     bool    m_bEnableEffect;
 
 #ifdef USE_GDIPLUS

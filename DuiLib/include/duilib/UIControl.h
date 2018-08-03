@@ -201,6 +201,12 @@ public:
 
     void SetCapture(void);
     void ReleaseCapture(void);
+
+    void SetAutoWidth(bool bAutoWidth);
+    bool GetAutoWidth(void);
+    void SetAutoHeight(bool bAutoHeight);
+    bool GetAutoHeight(void);
+
 protected:
     void OnDoDragDrop(TEventUI &evt);
 
@@ -267,10 +273,12 @@ protected:
     RECT m_rcBorderSize;
     CDuiStringPtrMap m_mCustomAttrHash;
     int m_nWeight;                      // 权重，默认100。值越小，权重越小，空间不足时优先裁减其大小直到隐藏
-    bool m_bCapture;                    // true 表示捕获鼠标
+    TDrawInfo m_diDrag;                 // 拖拽时显示的图片
     bool m_bDropEnable;                 // 是否接受拖放(拖放目标）
     bool m_bDragEnable;                 // 是否允许拖动（拖放源）
-    TDrawInfo m_diDrag;                 // 拖拽时显示的图片
+    bool m_bCapture;                    // true 表示捕获鼠标
+    bool m_bAutoWidth;                  // 自动计算宽度
+    bool m_bAutoHeight;                 // 自动计算高度
 };
 
 } // namespace DuiLib

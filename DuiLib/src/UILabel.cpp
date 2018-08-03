@@ -17,7 +17,6 @@ CLabelUI::CLabelUI()
     , m_iFont(-1)
     , m_bShowHtml(false)
     , m_bNeedEstimateSize(true)
-    , m_bAutoWidth(false)
     , m_bEnableEffect(false)
 #ifdef USE_GDIPLUS
     , m_bEnableLuminous(false)
@@ -244,19 +243,19 @@ SIZE CLabelUI::EstimateSize(SIZE szAvailable)
 
                 m_cxyFixedLast.cx = rcText.right - rcText.left + m_rcTextPadding.left + m_rcTextPadding.right;
 
-                if (m_bAutoWidth)
+                if (m_bAutoWidth) { m_cxyFixed.cx = m_cxyFixedLast.cx; }
+
+                if (m_bAutoHeight)
                 {
-                    //m_cxyFixed.cx = rcText.right - rcText.left + m_rcTextPadding.left + m_rcTextPadding.right;
-                    m_cxyFixed.cx = m_cxyFixedLast.cx;
+                    m_cxyFixedLast.cy = rcText.bottom - rcText.top + m_rcTextPadding.top + m_rcTextPadding.bottom;
+                    m_cxyFixed.cy = m_cxyFixedLast.cy;
                 }
             }
         }
         else
         {
-            if (m_cxyFixedLast.cx == 0)
-            {
-                m_cxyFixedLast.cx = szAvailable.cx;
-            }
+            m_cxyFixedLast.cx = (m_cxyFixedLast.cx == 0) ? szAvailable.cx : m_cxyFixedLast.cx;
+            m_cxyFixedLast.cy = (m_cxyFixedLast.cy == 0) ? szAvailable.cy : m_cxyFixedLast.cy;
 
             RECT rcText = { 0, 0, m_cxyFixedLast.cx, MAX_CTRL_WIDTH };
             rcText.left += m_rcTextPadding.left;
@@ -273,14 +272,12 @@ SIZE CLabelUI::EstimateSize(SIZE szAvailable)
                                         DT_CALCRECT | m_uTextStyle & ~DT_RIGHT & ~DT_CENTER);
             }
 
+            m_cxyFixedLast.cx = rcText.right - rcText.left + m_rcTextPadding.left + m_rcTextPadding.right;
             m_cxyFixedLast.cy = rcText.bottom - rcText.top + m_rcTextPadding.top + m_rcTextPadding.bottom;
 
-            if (m_bAutoWidth)
-            {
-                m_cxyFixedLast.cx = rcText.right - rcText.left + m_rcTextPadding.left + m_rcTextPadding.right;
-                //m_cxyFixed.cx = rcText.right - rcText.left + m_rcTextPadding.left + m_rcTextPadding.right;
-                m_cxyFixed.cx = m_cxyFixedLast.cx;
-            }
+            if (m_bAutoWidth) { m_cxyFixed.cx = m_cxyFixedLast.cx; }
+
+            if (m_bAutoHeight) { m_cxyFixed.cy = m_cxyFixedLast.cy; }
         }
     }
 
@@ -380,7 +377,6 @@ void CLabelUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     }
     else if (_tcscmp(pstrName, _T("multiline")) == 0) { SetMultiLine(_tcscmp(pstrValue, _T("true")) == 0); }
     else if (_tcscmp(pstrName, _T("showhtml")) == 0) { SetShowHtml(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { SetAutoWidth(_tcscmp(pstrValue, _T("true")) == 0); }
     else if (_tcscmp(pstrName, _T("enabledeffect")) == 0) { SetEnabledEffect(_tcscmp(pstrValue, _T("true")) == 0); }
 
 #ifdef USE_GDIPLUS
@@ -491,16 +487,6 @@ void CLabelUI::PaintText(HDC hDC)
                                         m_iFont, m_uTextStyle);
         }
     }
-}
-
-void CLabelUI::SetAutoWidth(bool bAutoWidth)
-{
-    m_bAutoWidth = bAutoWidth;
-}
-
-bool CLabelUI::GetAutoWidth(void)
-{
-    return m_bAutoWidth;
 }
 
 void CLabelUI::SetEnabledEffect(bool _EnabledEffect)

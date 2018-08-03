@@ -6,40 +6,42 @@
 
 namespace DuiLib {
 
-CControlUI::CControlUI() :
-    m_pManager(NULL),
-    m_pParent(NULL),
-    m_pCover(NULL),
-    m_bUpdateNeeded(true),
-    m_bMenuUsed(false),
-    m_bAsyncNotify(false),
-    m_bVisible(true),
-    m_bInternVisible(true),
-    m_bHot(false),
-    m_bFocused(false),
-    m_bEnabled(true),
-    m_bMouseEnabled(true),
-    m_bKeyboardEnabled(true),
-    m_bFloat(false),
-    m_bSetPos(false),
-    m_chShortcut('\0'),
-    m_bNeedCtrl(false),
-    m_bNeedShift(false),
-    m_bNeedAlt(false),
-    m_pTag(NULL),
-    m_dwBackColor(0),
-    m_dwBackColor2(0),
-    m_dwBackColor3(0),
-    m_dwBorderColor(0),
-    m_dwHotBorderColor(0),
-    m_dwFocusBorderColor(0),
-    m_bColorHSL(false),
-    m_nBorderStyle(PS_SOLID),
-    m_nTooltipWidth(300),
-    m_nWeight(100),
-    m_bDropEnable(false),
-    m_bDragEnable(false),
-    m_bCapture(false)
+CControlUI::CControlUI()
+    : m_pManager(NULL)
+    , m_pParent(NULL)
+    , m_pCover(NULL)
+    , m_bUpdateNeeded(true)
+    , m_bMenuUsed(false)
+    , m_bAsyncNotify(false)
+    , m_bVisible(true)
+    , m_bInternVisible(true)
+    , m_bHot(false)
+    , m_bFocused(false)
+    , m_bEnabled(true)
+    , m_bMouseEnabled(true)
+    , m_bKeyboardEnabled(true)
+    , m_bFloat(false)
+    , m_bSetPos(false)
+    , m_chShortcut('\0')
+    , m_bNeedCtrl(false)
+    , m_bNeedShift(false)
+    , m_bNeedAlt(false)
+    , m_pTag(NULL)
+    , m_dwBackColor(0)
+    , m_dwBackColor2(0)
+    , m_dwBackColor3(0)
+    , m_dwBorderColor(0)
+    , m_dwHotBorderColor(0)
+    , m_dwFocusBorderColor(0)
+    , m_bColorHSL(false)
+    , m_nBorderStyle(PS_SOLID)
+    , m_nTooltipWidth(300)
+    , m_nWeight(100)
+    , m_bDropEnable(false)
+    , m_bDragEnable(false)
+    , m_bCapture(false)
+    , m_bAutoWidth(false)
+    , m_bAutoHeight(false)
 {
     m_cXY.cx = m_cXY.cy = 0;
     m_cxyFixed.cx = m_cxyFixed.cy = 0;
@@ -1485,10 +1487,9 @@ void CControlUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if (_tcscmp(pstrName, _T("dropenable")) == 0) { m_bDropEnable = _tcscmp(pstrValue, _T("true")) == 0; }
     else if (_tcscmp(pstrName, _T("dragenable")) == 0) { m_bDragEnable = _tcscmp(pstrValue, _T("true")) == 0; }
     else if (_tcscmp(pstrName, _T("dragimage")) == 0) { m_diDrag = pstrValue; }
-    else
-    {
-        AddCustomAttribute(pstrName, pstrValue);
-    }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { SetAutoWidth(_tcscmp(pstrValue, _T("true")) == 0); }
+    else if (_tcscmp(pstrName, _T("autoheight")) == 0) { SetAutoHeight(_tcscmp(pstrValue, _T("true")) == 0); }
+    else { AddCustomAttribute(pstrName, pstrValue); }
 }
 
 CDuiString CControlUI::GetAttributeList(bool bIgnoreDefault)
@@ -1894,6 +1895,26 @@ void CControlUI::SetMargin(RECT rcMargin)
 {
     m_rcMargin = rcMargin;
     NeedParentUpdate();
+}
+
+void CControlUI::SetAutoWidth(bool bAutoWidth)
+{
+    m_bAutoWidth = bAutoWidth;
+}
+
+bool CControlUI::GetAutoWidth(void)
+{
+    return m_bAutoWidth;
+}
+
+void CControlUI::SetAutoHeight(bool bAutoHeight)
+{
+    m_bAutoHeight = bAutoHeight;
+}
+
+bool CControlUI::GetAutoHeight(void)
+{
+    return m_bAutoHeight;
 }
 
 } // namespace DuiLib

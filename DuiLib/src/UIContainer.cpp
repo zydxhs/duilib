@@ -16,8 +16,6 @@ CContainerUI::CContainerUI()
     , m_pVerticalScrollBar(NULL)
     , m_pHorizontalScrollBar(NULL)
     , m_bScrollProcess(false)
-    , m_bAutoWidth(false)
-    , m_bAutoHeight(false)
 {
     ::ZeroMemory(&m_rcInset, sizeof(m_rcInset));
 }
@@ -868,8 +866,6 @@ void CContainerUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         else if (_tcscmp(pstrValue, _T("center")) == 0) { m_iChildVAlign = DT_VCENTER; }
         else if (_tcscmp(pstrValue, _T("bottom")) == 0) { m_iChildVAlign = DT_BOTTOM; }
     }
-    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { SetAutoWidth(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("autoheight")) == 0) { SetAutoHeight(_tcscmp(pstrValue, _T("true")) == 0); }
     else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
     else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
     else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("不支持属性:dropenable")); }
@@ -1092,28 +1088,20 @@ SIZE CContainerUI::EstimateSize(SIZE szAvailable)
 {
     SIZE sz = CControlUI::EstimateSize(szAvailable);
 
-    if (m_bAutoWidth)
+    if (m_bAutoWidth || m_bAutoHeight)
     {
         for (int i = 0; i < GetCount(); ++i)
         {
             SIZE sz2 = GetItemAt(i)->EstimateSize(szAvailable);
 
             if (sz2.cx > m_cxyFixed.cx) { m_cxyFixed.cx = sz2.cx; }
-        }
-
-        sz.cx = m_cxyFixed.cx;
-    }
-
-    if (m_bAutoHeight)
-    {
-        for (int i = 0; i < GetCount(); ++i)
-        {
-            SIZE sz2 = GetItemAt(i)->EstimateSize(szAvailable);
 
             if (sz2.cy > m_cxyFixed.cy) { m_cxyFixed.cy = sz2.cy; }
         }
 
-        sz.cy = m_cxyFixed.cy;
+        if (m_bAutoWidth) { sz.cx = m_cxyFixed.cx; }
+
+        if (m_bAutoHeight) { sz.cy = m_cxyFixed.cy; }
     }
 
     return sz;
@@ -1514,26 +1502,6 @@ int CContainerUI::FindItemByUserData(LPCTSTR pstrText)
     }
 
     return i;
-}
-
-void CContainerUI::SetAutoWidth(bool bAutoWidth)
-{
-    m_bAutoWidth = bAutoWidth;
-}
-
-bool CContainerUI::GetAutoWidth(void)
-{
-    return m_bAutoWidth;
-}
-
-void CContainerUI::SetAutoHeight(bool bAutoHeight)
-{
-    m_bAutoHeight = bAutoHeight;
-}
-
-bool CContainerUI::GetAutoHeight(void)
-{
-    return m_bAutoHeight;
 }
 
 } // namespace DuiLib
