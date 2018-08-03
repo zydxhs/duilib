@@ -1118,6 +1118,19 @@ void CContainerUI::SetFloatPos(int iIndex)
 
     if (!pControl->IsFloat()) { return; }
 
+    // 2018-08-03 解决绝对布局不支持 autowidth/autoheight 属性问题
+    if (pControl->GetAutoWidth() || pControl->GetAutoHeight())
+    {
+        SIZE szAvailable = { m_rcItem.right - m_rcItem.left + m_rcMargin.left + m_rcMargin.right,
+                             m_rcItem.bottom - m_rcItem.top + m_rcMargin.top + m_rcMargin.bottom
+                           };
+        SIZE sz = pControl->EstimateSize(szAvailable);
+
+        if (sz.cx != pControl->GetFixedWidth()) { pControl->SetFixedWidth(sz.cx); }
+
+        if (sz.cy != pControl->GetFixedHeight()) { pControl->SetFixedHeight(sz.cy); }
+    }
+
     SIZE szXY = pControl->GetFixedXY();
     SIZE sz = {pControl->GetFixedWidth(), pControl->GetFixedHeight()};
     TPercentInfo rcPercent = pControl->GetFloatPercent();
