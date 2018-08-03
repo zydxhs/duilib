@@ -663,7 +663,7 @@ LRESULT CWndImplBase::OnWndDataUpdate(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 bool CWndImplBase::Relayout(void *pParam)
 {
-    if (NULL == m_pm.GetRoot()) { return false; }
+    if (NULL == m_pm.GetRoot() || NULL == m_pCtrlPlaceHolder) { return false; }
 
     CWndImplBase *pWndChild = (CWndImplBase *)m_mapChild.Find(m_strChildDlgType);
 

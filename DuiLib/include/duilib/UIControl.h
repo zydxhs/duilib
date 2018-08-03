@@ -71,6 +71,10 @@ public:
     void SetBorderStyle(int nStyle);
 
     // 位置相关
+    virtual RECT GetMargin() const;
+    virtual void SetMargin(RECT rcMargin);      // 设置外边距，由上层窗口绘制
+#define GetPadding GetMargin
+#define SetPadding SetMargin
     virtual const RECT &GetPos() const;
     virtual RECT GetRelativePos() const; // 相对(父控件)位置
     virtual RECT GetClientPos() const;   // 返回控件矩形区域
@@ -81,8 +85,6 @@ public:
     virtual int GetHeight() const;
     virtual int GetX() const;
     virtual int GetY() const;
-    virtual RECT GetMargin() const;
-    virtual void SetMargin(RECT rcMargin);      // 设置外边距，由上层窗口绘制
     virtual SIZE GetFixedXY() const;            // 实际大小位置使用GetPos获取，这里得到的是预设的参考值
     virtual void SetFixedXY(SIZE szXY);         // 仅float为true时有效
     virtual TPercentInfo GetFloatPercent() const;
@@ -220,8 +222,8 @@ protected:
     bool m_bUpdateNeeded;
     bool m_bMenuUsed;
     bool m_bAsyncNotify;
-    RECT m_rcItem;
-    RECT m_rcMargin;
+    RECT m_rcItem;          // 控件包含边框的矩形
+    RECT m_rcMargin;        // 外边距
     SIZE m_cXY;
     SIZE m_cxyFixed;
     SIZE m_cxyMin;

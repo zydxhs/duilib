@@ -2044,6 +2044,7 @@ void CRenderEngine::DrawText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, LPCTS
             ::DrawText(dcHelper, pstrText, -1, &rc, uStyle | DT_NOPREFIX);
             ::SelectObject(dcHelper, hOldFont);
         }
+
 #ifdef USE_GDIPLUS
     }
 

@@ -814,7 +814,17 @@ void CContainerUI::Move(SIZE szOffset, bool bNeedInvalidate)
 
 void CContainerUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("inset")) == 0 || _tcscmp(pstrName, _T("padding")) == 0)
+    if (_tcscmp(pstrName, _T("margin")) == 0 || _tcscmp(pstrName, _T("padding")) == 0)
+    {
+        RECT rcMargin = { 0 };
+        LPTSTR pstr = NULL;
+        rcMargin.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
+        rcMargin.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
+        rcMargin.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
+        rcMargin.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
+        SetMargin(rcMargin);
+    }
+    else if (_tcscmp(pstrName, _T("inset")) == 0)
     {
         RECT rcInset = { 0 };
         LPTSTR pstr = NULL;
@@ -972,8 +982,11 @@ CControlUI *CContainerUI::FindControl(FINDCONTROLPROC Proc, LPVOID pData, UINT u
 bool CContainerUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl)
 {
     RECT rcTemp = { 0 };
+    RECT rcBox = m_rcItem;
+    rcBox.left -= m_rcMargin.left;       rcBox.top -= m_rcMargin.top;
+    rcBox.right += m_rcMargin.right;     rcBox.bottom += m_rcMargin.bottom;
 
-    if (!::IntersectRect(&rcTemp, &rcPaint, &m_rcItem)) { return true; }
+    if (!::IntersectRect(&rcTemp, &rcPaint, &rcBox)) { return true; }
 
     CRenderClip clip;
     CRenderClip::GenerateClip(hDC, rcTemp, clip);

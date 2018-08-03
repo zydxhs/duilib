@@ -47,8 +47,8 @@ CControlUI::CControlUI() :
     m_cxyMax.cx = m_cxyMax.cy = MAX_CTRL_WIDTH;
     m_cxyBorderRound.cx = m_cxyBorderRound.cy = 0;
 
-    ::ZeroMemory(&m_rcMargin, sizeof(RECT));
     ::ZeroMemory(&m_rcItem, sizeof(RECT));
+    ::ZeroMemory(&m_rcMargin, sizeof(RECT));
     ::ZeroMemory(&m_rcPaint, sizeof(RECT));
     ::ZeroMemory(&m_rcBorderSize, sizeof(RECT));
     m_piFloatPercent.left = m_piFloatPercent.top = m_piFloatPercent.right = m_piFloatPercent.bottom = 0.0f;
@@ -524,17 +524,6 @@ int CControlUI::GetX() const
 int CControlUI::GetY() const
 {
     return m_rcItem.top;
-}
-
-RECT CControlUI::GetMargin() const
-{
-    return m_rcMargin;
-}
-
-void CControlUI::SetMargin(RECT rcMargin)
-{
-    m_rcMargin = rcMargin;
-    NeedParentUpdate();
 }
 
 SIZE CControlUI::GetFixedXY() const
@@ -1352,16 +1341,6 @@ void CControlUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         SetFixedWidth(rcPos.right - rcPos.left);
         SetFixedHeight(rcPos.bottom - rcPos.top);
     }
-    else if (_tcscmp(pstrName, _T("margin")) == 0)
-    {
-        RECT rcMargin = { 0 };
-        LPTSTR pstr = NULL;
-        rcMargin.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
-        rcMargin.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-        rcMargin.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
-        rcMargin.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
-        SetMargin(rcMargin);
-    }
     else if (_tcscmp(pstrName, _T("bkcolor")) == 0 || _tcscmp(pstrName, _T("bkcolor1")) == 0)
     {
         while (*pstrValue > _T('\0') && *pstrValue <= _T(' ')) { pstrValue = ::CharNext(pstrValue); }
@@ -1904,6 +1883,17 @@ void CControlUI::SetBorderStyle(int nStyle)
 {
     m_nBorderStyle = nStyle;
     Invalidate();
+}
+
+RECT CControlUI::GetMargin() const
+{
+    return m_rcMargin;
+}
+
+void CControlUI::SetMargin(RECT rcMargin)
+{
+    m_rcMargin = rcMargin;
+    NeedParentUpdate();
 }
 
 } // namespace DuiLib
