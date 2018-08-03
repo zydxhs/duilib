@@ -598,15 +598,15 @@ void CWndImplBase::DestroyChildDlg(CDuiString strType)
     m_mapChild.Remove(strType);
 }
 
-void CWndImplBase::MakeCtrlSizeNty(CContainerUI *pCtrl)
+bool CWndImplBase::MakeCtrlSizeNty(CContainerUI *pCtrl)
 {
     ASSERT(NULL != pCtrl);
 
-    if (NULL != pCtrl)
-    {
-        m_pCtrlPlaceHolder = pCtrl;
-        pCtrl->OnSize += MakeDelegate(this, &CWndImplBase::Relayout);
-    }
+    if (NULL == pCtrl) { return false; }
+
+    m_pCtrlPlaceHolder = pCtrl;
+    pCtrl->OnSize += MakeDelegate(this, &CWndImplBase::Relayout);
+    return true;
 }
 
 void CWndImplBase::AddBtnDlgItem(CDuiString strBtnName, CDuiString strDlgType, CControlUI *pCtrl)

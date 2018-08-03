@@ -120,7 +120,7 @@ protected:
     void DestroyChildDlg(CDuiString strType);
 
     // pCtrl指向的容器大小改变时，触发Relayout调用，自动调整子窗体的大小/位置
-    void MakeCtrlSizeNty(CContainerUI *pCtrl);
+    bool MakeCtrlSizeNty(CContainerUI *pCtrl);
 
     // 功能选项按钮
     void AddBtnDlgItem(CDuiString strBtnName, CDuiString strDlgType, CControlUI *pCtrl = NULL);
