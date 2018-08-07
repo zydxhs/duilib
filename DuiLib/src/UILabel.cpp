@@ -272,10 +272,14 @@ SIZE CLabelUI::EstimateSize(SIZE szAvailable)
                                         DT_CALCRECT | m_uTextStyle & ~DT_RIGHT & ~DT_CENTER);
             }
 
-            m_cxyFixedLast.cx = rcText.right - rcText.left + m_rcTextPadding.left + m_rcTextPadding.right;
+            //m_cxyFixedLast.cx = rcText.right - rcText.left + m_rcTextPadding.left + m_rcTextPadding.right;
             m_cxyFixedLast.cy = rcText.bottom - rcText.top + m_rcTextPadding.top + m_rcTextPadding.bottom;
 
-            if (m_bAutoWidth) { m_cxyFixed.cx = m_cxyFixedLast.cx; }
+            if (m_bAutoWidth)
+            {
+                m_cxyFixedLast.cx = rcText.right - rcText.left + m_rcTextPadding.left + m_rcTextPadding.right;
+                m_cxyFixed.cx = m_cxyFixedLast.cx;
+            }
 
             if (m_bAutoHeight) { m_cxyFixed.cy = m_cxyFixedLast.cy; }
         }

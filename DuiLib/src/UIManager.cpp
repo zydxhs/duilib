@@ -896,12 +896,24 @@ bool CPaintManagerUI::PreMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam,
         if (m_pRoot == NULL) { return false; }
 
         // Handle [CTRL|ALT|SHIFT]-shortcut key-combinations
+        // 2018-08-06 当焦点处于 Edit、RichEdit、IPAdddresss 时，用户必须按下 ALT，才视为快捷键，否则当作正常输入
+        UINT dwKeyState = MapKeyState();
+
+        if (m_pFocus && (_tcscmp(m_pFocus->GetClass(), DUI_CTR_EDIT) == 0 ||
+                         _tcscmp(m_pFocus->GetClass(), DUI_CTR_RICHEDIT) == 0 ||
+                         _tcscmp(m_pFocus->GetClass(), DUI_CTR_IPADDRESS) == 0))
+        {
+            if ((dwKeyState & MK_ALT))  { dwKeyState &= ~MK_ALT; }
+            else                        { return false; }
+
+        }
+
         FINDSHORTCUT fs = { 0, false, false, false, false };
         fs.ch = toupper((int)wParam);
-        UINT dwKeyState = MapKeyState();
         fs.bCtrl = (dwKeyState & MK_CONTROL) ? true : false;
         fs.bShift = (dwKeyState & MK_SHIFT) ? true : false;
         fs.bAlt = (dwKeyState & MK_ALT) ? true : false;
+        DUITRACE(_T("Ctrl=%d Shift=%d Alt=%d ch=%C"), fs.bCtrl, fs.bShift, fs.bAlt, fs.ch);
         CControlUI *pControl = m_pRoot->FindControl(__FindControlFromShortcut, &fs,
                                                     UIFIND_ENABLED | UIFIND_ME_FIRST | UIFIND_TOP_FIRST);
 
