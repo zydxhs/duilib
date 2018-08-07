@@ -1,10 +1,6 @@
 ﻿#include "StdAfx.h"
 
 namespace DuiLib {
-enum
-{
-    TIMERID_WEB_REFRESH = 1,        // 网页内容刷新定时器ID
-};
 
 void PaintUpdatedCallback(wkeWebView webView, void *param, const HDC hdc, int x, int y, int cx, int cy)
 {

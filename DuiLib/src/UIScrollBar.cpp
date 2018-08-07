@@ -1,10 +1,9 @@
 ﻿#include "stdafx.h"
 
 namespace DuiLib {
+
 enum
 {
-    TIMERID_REPEAT = 1,             // 滚动条定时器ID
-
     DEFAULT_SCROLLBAR_SIZE = 16,    // 滚动条默认宽度/高度
 };
 

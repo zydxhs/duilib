@@ -12,11 +12,6 @@ const TCHAR *const LINUX_NOTSUPPORT =
     _T("@#$&()*/，。！……——￥（）、？:：；“”＆～％×＠＃＋－＝＜＞，．~·《》\\|\"'[]{}<>!?; \t");
 const TCHAR *const SPECIAL_SYMBOL = _T("`~!@#$%^&*()-_=+[]{};:,.<>/?'\"\\|");
 
-enum
-{
-    TIMERID_CARET = 1,      // 光标定时器ID
-    TIMERID_CHECK = 2,      // 延时通知编辑框内容变化
-};
 
 class CEditWnd : public CWindowWnd
 {
@@ -298,7 +293,7 @@ LRESULT CEditWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
 
         // 通知用户，编辑框内容变化
-        if (TIMERID_CHECK == wParam)
+        if (TIMERID_DELAY_NTY == wParam)
         {
             KillTimer(m_hWnd, wParam);
             m_pOwner->GetManager()->SendNotify(m_pOwner, DUI_MSGTYPE_TEXTCHANGED);
@@ -413,7 +408,7 @@ LRESULT CEditWnd::OnEditChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPara
     {
         m_pOwner->GetManager()->SendNotify(m_pOwner, DUI_MSGTYPE_TEXTCHANGED);
     }
-    else { SetTimer(m_hWnd, TIMERID_CHECK, m_pOwner->GetDelayTxtChange(), NULL); }
+    else { SetTimer(m_hWnd, TIMERID_DELAY_NTY, m_pOwner->GetDelayTxtChange(), NULL); }
 
     if (m_pOwner->GetManager()->IsLayered()) { m_pOwner->Invalidate(); }
 

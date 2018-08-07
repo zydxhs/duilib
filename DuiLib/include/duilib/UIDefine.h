@@ -40,6 +40,24 @@ enum EMCUSTOM_EVENT
 //
 #define TIMERID_USER_BEGIN      1024    // 用户定时器ID的最小值。小于该值的定时器为duilib内部保留
 
+// DuiLib 使用的定时器ID
+enum EMInnerTimerId
+{
+    // DuiLib 内部通用定时器ID
+    TIMERID_CARET = 1,              // 光标闪烁定时器ID
+    TIMERID_EFFECT,                 // 特效用
+    // DuiLib 各控件使用
+    TIMERID_LAYEREDUPDATE = 100,    // Manager  分层窗口更新定时器
+    TIMERID_DBLCLICK,               // Manager  判断单击、双击的定时器
+    TIMERID_DELAY_NTY,              // Edit     延时通知编辑框内容变化
+    TIMERID_REPEAT,                 // ScrollBar滚动条定时器ID
+    TIMERID_WEB_REFRESH,            // Browser  网页内容刷新定时器ID
+    TIMERID_MOUSEENTER,             // Menu     鼠标进入菜单项定时器
+    TIMERID_MOUSELEAVE,             // Menu     鼠标离开菜单项定时器
+    TIMERID_DISABLE,                // Button   按钮响应频率控制定时器
+    TIMERID_FADE,                   // Button   按钮图片透明度变化
+};
+
 // 用户不需要的常量
 #define _USEIMM                 1
 #define MAX_FONT_ID             30000

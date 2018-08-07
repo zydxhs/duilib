@@ -13,13 +13,6 @@ enum EMIPField
     EM_FIELD4,
 };
 
-enum
-{
-    TIMERID_CARET = 1,      // 光标定时器ID
-    // 2017-07-21 zhuyadong 添加 minmaxnumber 属性
-    TIMERID_CHECK = 2,      // 用于检测用户输入的值是否越界
-};
-
 
 class CIPAddressWnd : public CWindowWnd
 {

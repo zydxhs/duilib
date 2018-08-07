@@ -7,10 +7,6 @@
 // sizes used for initialization and reset in RichEdit 1.0
 
 namespace DuiLib {
-enum
-{
-    TIMERID_CARET = 1,         // 光标闪烁定时器ID
-};
 
 const LONG cInitTextMax = (32 * 1024) - 1;
 

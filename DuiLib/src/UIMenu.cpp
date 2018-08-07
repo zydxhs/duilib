@@ -3,11 +3,6 @@
 #include "UIShadow.h"
 
 namespace DuiLib {
-enum
-{
-    TIMERID_MOUSEENTER = 1,     // 鼠标进入菜单项定时器
-    TIMERID_MOUSELEAVE = 2,     // 鼠标离开菜单项定时器
-};
 
 enum
 {
