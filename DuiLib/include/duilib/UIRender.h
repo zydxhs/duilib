@@ -34,6 +34,8 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
+typedef BOOL(WINAPI *PFunAlphaBlend)(HDC, int, int, int, int, HDC, int, int, int, int, BLENDFUNCTION);
+PFunAlphaBlend GetAlphaBlend(void);
 
 class DUILIB_API CRenderEngine
 {

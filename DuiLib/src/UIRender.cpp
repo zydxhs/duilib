@@ -178,16 +178,14 @@ static BOOL WINAPI AlphaBitBlt(HDC hDC, int nDestX, int nDestY, int dwWidth, int
     return TRUE;
 }
 
-typedef BOOL(WINAPI *LPALPHABLEND)(HDC, int, int, int, int, HDC, int, int, int, int, BLENDFUNCTION);
-
-static LPALPHABLEND GetAlphaBlend(void)
+PFunAlphaBlend GetAlphaBlend(void)
 {
-    LPALPHABLEND lpAlphaBlend = (LPALPHABLEND)::GetProcAddress(::GetModuleHandle(_T("msimg32.dll")),
-                                                               "AlphaBlend");
+    static PFunAlphaBlend lpAB = (PFunAlphaBlend)::GetProcAddress(
+                                     ::GetModuleHandle(_T("msimg32.dll")), "AlphaBlend");
 
-    if (NULL == lpAlphaBlend) { lpAlphaBlend = AlphaBitBlt; }
+    if (NULL == lpAB) { lpAB = AlphaBitBlt; }
 
-    return lpAlphaBlend;
+    return lpAB;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -243,11 +241,12 @@ public:
         //将alpha为0xFF的改为0,为0的改为0xFF
         BYTE *p = m_pBits + 3;
 
-        for (int i = 0; i < m_nHeight; i++)for (int j = 0; j < m_nWidth; j++, p += 4) { *p = ~(*p); }
+        for (int i = 0; i < m_nHeight; i++) { for (int j = 0; j < m_nWidth; j++, p += 4) { *p = ~(*p); } }
 
         BLENDFUNCTION bf = { AC_SRC_OVER, 0, m_byAlpha, AC_SRC_ALPHA };
-        BOOL bRet = GetAlphaBlend()(m_hdc, m_pRc->left, m_pRc->top, m_nWidth, m_nHeight, m_hMemDC,
-                                    m_pRc->left, m_pRc->top, m_nWidth, m_nHeight, bf);
+        static PFunAlphaBlend spfAlphaBlend = GetAlphaBlend();
+        BOOL bRet = spfAlphaBlend(m_hdc, m_pRc->left, m_pRc->top, m_nWidth, m_nHeight,
+                                  m_hMemDC, m_pRc->left, m_pRc->top, m_nWidth, m_nHeight, bf);
         ::DeleteDC(m_hMemDC);
         ::DeleteObject(m_hBmp);
 
@@ -506,25 +505,22 @@ DWORD CRenderEngine::AdjustColor(DWORD dwColor, short H, short S, short L)
 
 HBITMAP CRenderEngine::CreateARGB32Bitmap(HDC hDC, int cx, int cy, COLORREF **pBits)
 {
-    LPBITMAPINFO lpbiSrc = NULL;
-    lpbiSrc = (LPBITMAPINFO) new BYTE[sizeof(BITMAPINFOHEADER)];
+    BITMAPINFO bmi;
+    ::ZeroMemory(&bmi, sizeof(BITMAPINFO));
 
-    if (lpbiSrc == NULL) { return NULL; }
+    bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    bmi.bmiHeader.biWidth = cx;
+    bmi.bmiHeader.biHeight = -cy;
+    bmi.bmiHeader.biPlanes = 1;
+    bmi.bmiHeader.biBitCount = 32;
+    bmi.bmiHeader.biCompression = BI_RGB;
+    bmi.bmiHeader.biSizeImage = cx * cy * 4;
+    bmi.bmiHeader.biXPelsPerMeter = 0;
+    bmi.bmiHeader.biYPelsPerMeter = 0;
+    bmi.bmiHeader.biClrUsed = 0;
+    bmi.bmiHeader.biClrImportant = 0;
 
-    lpbiSrc->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-    lpbiSrc->bmiHeader.biWidth = cx;
-    lpbiSrc->bmiHeader.biHeight = -cy;
-    lpbiSrc->bmiHeader.biPlanes = 1;
-    lpbiSrc->bmiHeader.biBitCount = 32;
-    lpbiSrc->bmiHeader.biCompression = BI_RGB;
-    lpbiSrc->bmiHeader.biSizeImage = cx * cy;
-    lpbiSrc->bmiHeader.biXPelsPerMeter = 0;
-    lpbiSrc->bmiHeader.biYPelsPerMeter = 0;
-    lpbiSrc->bmiHeader.biClrUsed = 0;
-    lpbiSrc->bmiHeader.biClrImportant = 0;
-
-    HBITMAP hBitmap = CreateDIBSection(hDC, lpbiSrc, DIB_RGB_COLORS, (void **)pBits, NULL, NULL);
-    delete [] lpbiSrc;
+    HBITMAP hBitmap = CreateDIBSection(hDC, &bmi, DIB_RGB_COLORS, (void **)pBits, NULL, NULL);
     return hBitmap;
 }
 
@@ -1035,7 +1031,7 @@ void CRenderEngine::DrawImage(HDC hDC, HBITMAP hBitmap, const RECT &rc, const RE
                               BYTE uFade, bool bHole, bool bTiledX, bool bTiledY)
 {
     ASSERT(::GetObjectType(hDC) == OBJ_DC || ::GetObjectType(hDC) == OBJ_MEMDC);
-    static LPALPHABLEND lpAlphaBlend = GetAlphaBlend();
+    static PFunAlphaBlend spfAlphaBlend = GetAlphaBlend();
 
     if (hDC == NULL || hBitmap == NULL) { return; }
 
@@ -1046,7 +1042,7 @@ void CRenderEngine::DrawImage(HDC hDC, HBITMAP hBitmap, const RECT &rc, const RE
     RECT rcTemp = {0};
     RECT rcDest = {0};
 
-    if (lpAlphaBlend && (bAlpha || uFade < 255))
+    if (spfAlphaBlend && (bAlpha || uFade < 255))
     {
         BLENDFUNCTION bf = { AC_SRC_OVER, 0, uFade, AC_SRC_ALPHA };
 
@@ -1064,10 +1060,10 @@ void CRenderEngine::DrawImage(HDC hDC, HBITMAP hBitmap, const RECT &rc, const RE
                 {
                     rcDest.right -= rcDest.left;
                     rcDest.bottom -= rcDest.top;
-                    lpAlphaBlend(hDC, rcDest.left, rcDest.top, rcDest.right, rcDest.bottom, hCloneDC,
-                                 rcBmpPart.left + rcScale9.left, rcBmpPart.top + rcScale9.top,
-                                 rcBmpPart.right - rcBmpPart.left - rcScale9.left - rcScale9.right,
-                                 rcBmpPart.bottom - rcBmpPart.top - rcScale9.top - rcScale9.bottom, bf);
+                    spfAlphaBlend(hDC, rcDest.left, rcDest.top, rcDest.right, rcDest.bottom, hCloneDC,
+                                  rcBmpPart.left + rcScale9.left, rcBmpPart.top + rcScale9.top,
+                                  rcBmpPart.right - rcBmpPart.left - rcScale9.left - rcScale9.right,
+                                  rcBmpPart.bottom - rcBmpPart.top - rcScale9.top - rcScale9.bottom, bf);
                 }
                 else if (bTiledX && bTiledY)
                 {
@@ -1100,9 +1096,9 @@ void CRenderEngine::DrawImage(HDC hDC, HBITMAP hBitmap, const RECT &rc, const RE
                                 lDestRight = rcDest.right;
                             }
 
-                            lpAlphaBlend(hDC, rcDest.left + lWidth * i, rcDest.top + lHeight * j,
-                                         lDestRight - lDestLeft, lDestBottom - lDestTop, hCloneDC,
-                                         rcBmpPart.left + rcScale9.left, rcBmpPart.top + rcScale9.top, lDrawWidth, lDrawHeight, bf);
+                            spfAlphaBlend(hDC, rcDest.left + lWidth * i, rcDest.top + lHeight * j,
+                                          lDestRight - lDestLeft, lDestBottom - lDestTop, hCloneDC,
+                                          rcBmpPart.left + rcScale9.left, rcBmpPart.top + rcScale9.top, lDrawWidth, lDrawHeight, bf);
                         }
                     }
                 }
@@ -1124,9 +1120,9 @@ void CRenderEngine::DrawImage(HDC hDC, HBITMAP hBitmap, const RECT &rc, const RE
                             lDestRight = rcDest.right;
                         }
 
-                        lpAlphaBlend(hDC, lDestLeft, rcDest.top, lDestRight - lDestLeft, rcDest.bottom,
-                                     hCloneDC, rcBmpPart.left + rcScale9.left, rcBmpPart.top + rcScale9.top,
-                                     lDrawWidth, rcBmpPart.bottom - rcBmpPart.top - rcScale9.top - rcScale9.bottom, bf);
+                        spfAlphaBlend(hDC, lDestLeft, rcDest.top, lDestRight - lDestLeft, rcDest.bottom,
+                                      hCloneDC, rcBmpPart.left + rcScale9.left, rcBmpPart.top + rcScale9.top,
+                                      lDrawWidth, rcBmpPart.bottom - rcBmpPart.top - rcScale9.top - rcScale9.bottom, bf);
                     }
                 }
                 else   // bTiledY
@@ -1147,9 +1143,9 @@ void CRenderEngine::DrawImage(HDC hDC, HBITMAP hBitmap, const RECT &rc, const RE
                             lDestBottom = rcDest.bottom;
                         }
 
-                        lpAlphaBlend(hDC, rcDest.left, rcDest.top + lHeight * i, rcDest.right, lDestBottom - lDestTop,
-                                     hCloneDC, rcBmpPart.left + rcScale9.left, rcBmpPart.top + rcScale9.top,
-                                     rcBmpPart.right - rcBmpPart.left - rcScale9.left - rcScale9.right, lDrawHeight, bf);
+                        spfAlphaBlend(hDC, rcDest.left, rcDest.top + lHeight * i, rcDest.right, lDestBottom - lDestTop,
+                                      hCloneDC, rcBmpPart.left + rcScale9.left, rcBmpPart.top + rcScale9.top,
+                                      rcBmpPart.right - rcBmpPart.left - rcScale9.left - rcScale9.right, lDrawHeight, bf);
                     }
                 }
             }
@@ -1169,8 +1165,8 @@ void CRenderEngine::DrawImage(HDC hDC, HBITMAP hBitmap, const RECT &rc, const RE
             {
                 rcDest.right -= rcDest.left;
                 rcDest.bottom -= rcDest.top;
-                lpAlphaBlend(hDC, rcDest.left, rcDest.top, rcDest.right, rcDest.bottom, hCloneDC, \
-                             rcBmpPart.left, rcBmpPart.top, rcScale9.left, rcScale9.top, bf);
+                spfAlphaBlend(hDC, rcDest.left, rcDest.top, rcDest.right, rcDest.bottom, hCloneDC, \
+                              rcBmpPart.left, rcBmpPart.top, rcScale9.left, rcScale9.top, bf);
             }
         }
 
@@ -1188,9 +1184,9 @@ void CRenderEngine::DrawImage(HDC hDC, HBITMAP hBitmap, const RECT &rc, const RE
             {
                 rcDest.right -= rcDest.left;
                 rcDest.bottom -= rcDest.top;
-                lpAlphaBlend(hDC, rcDest.left, rcDest.top, rcDest.right, rcDest.bottom, hCloneDC, \
-                             rcBmpPart.left + rcScale9.left, rcBmpPart.top, rcBmpPart.right - rcBmpPart.left - \
-                             rcScale9.left - rcScale9.right, rcScale9.top, bf);
+                spfAlphaBlend(hDC, rcDest.left, rcDest.top, rcDest.right, rcDest.bottom, hCloneDC, \
+                              rcBmpPart.left + rcScale9.left, rcBmpPart.top, rcBmpPart.right - rcBmpPart.left - \
+                              rcScale9.left - rcScale9.right, rcScale9.top, bf);
             }
         }
 
@@ -1208,8 +1204,8 @@ void CRenderEngine::DrawImage(HDC hDC, HBITMAP hBitmap, const RECT &rc, const RE
             {
                 rcDest.right -= rcDest.left;
                 rcDest.bottom -= rcDest.top;
-                lpAlphaBlend(hDC, rcDest.left, rcDest.top, rcDest.right, rcDest.bottom, hCloneDC, \
-                             rcBmpPart.right - rcScale9.right, rcBmpPart.top, rcScale9.right, rcScale9.top, bf);
+                spfAlphaBlend(hDC, rcDest.left, rcDest.top, rcDest.right, rcDest.bottom, hCloneDC, \
+                              rcBmpPart.right - rcScale9.right, rcBmpPart.top, rcScale9.right, rcScale9.top, bf);
             }
         }
 
@@ -1227,9 +1223,9 @@ void CRenderEngine::DrawImage(HDC hDC, HBITMAP hBitmap, const RECT &rc, const RE
             {
                 rcDest.right -= rcDest.left;
                 rcDest.bottom -= rcDest.top;
-                lpAlphaBlend(hDC, rcDest.left, rcDest.top, rcDest.right, rcDest.bottom, hCloneDC,
-                             rcBmpPart.left, rcBmpPart.top + rcScale9.top, rcScale9.left, rcBmpPart.bottom -
-                             rcBmpPart.top - rcScale9.top - rcScale9.bottom, bf);
+                spfAlphaBlend(hDC, rcDest.left, rcDest.top, rcDest.right, rcDest.bottom, hCloneDC,
+                              rcBmpPart.left, rcBmpPart.top + rcScale9.top, rcScale9.left, rcBmpPart.bottom -
+                              rcBmpPart.top - rcScale9.top - rcScale9.bottom, bf);
             }
         }
 
@@ -1247,9 +1243,9 @@ void CRenderEngine::DrawImage(HDC hDC, HBITMAP hBitmap, const RECT &rc, const RE
             {
                 rcDest.right -= rcDest.left;
                 rcDest.bottom -= rcDest.top;
-                lpAlphaBlend(hDC, rcDest.left, rcDest.top, rcDest.right, rcDest.bottom, hCloneDC,
-                             rcBmpPart.right - rcScale9.right, rcBmpPart.top + rcScale9.top, rcScale9.right,
-                             rcBmpPart.bottom - rcBmpPart.top - rcScale9.top - rcScale9.bottom, bf);
+                spfAlphaBlend(hDC, rcDest.left, rcDest.top, rcDest.right, rcDest.bottom, hCloneDC,
+                              rcBmpPart.right - rcScale9.right, rcBmpPart.top + rcScale9.top, rcScale9.right,
+                              rcBmpPart.bottom - rcBmpPart.top - rcScale9.top - rcScale9.bottom, bf);
             }
         }
 
@@ -1267,8 +1263,8 @@ void CRenderEngine::DrawImage(HDC hDC, HBITMAP hBitmap, const RECT &rc, const RE
             {
                 rcDest.right -= rcDest.left;
                 rcDest.bottom -= rcDest.top;
-                lpAlphaBlend(hDC, rcDest.left, rcDest.top, rcDest.right, rcDest.bottom, hCloneDC,
-                             rcBmpPart.left, rcBmpPart.bottom - rcScale9.bottom, rcScale9.left, rcScale9.bottom, bf);
+                spfAlphaBlend(hDC, rcDest.left, rcDest.top, rcDest.right, rcDest.bottom, hCloneDC,
+                              rcBmpPart.left, rcBmpPart.bottom - rcScale9.bottom, rcScale9.left, rcScale9.bottom, bf);
             }
         }
 
@@ -1286,9 +1282,9 @@ void CRenderEngine::DrawImage(HDC hDC, HBITMAP hBitmap, const RECT &rc, const RE
             {
                 rcDest.right -= rcDest.left;
                 rcDest.bottom -= rcDest.top;
-                lpAlphaBlend(hDC, rcDest.left, rcDest.top, rcDest.right, rcDest.bottom, hCloneDC,
-                             rcBmpPart.left + rcScale9.left, rcBmpPart.bottom - rcScale9.bottom,
-                             rcBmpPart.right - rcBmpPart.left - rcScale9.left - rcScale9.right, rcScale9.bottom, bf);
+                spfAlphaBlend(hDC, rcDest.left, rcDest.top, rcDest.right, rcDest.bottom, hCloneDC,
+                              rcBmpPart.left + rcScale9.left, rcBmpPart.bottom - rcScale9.bottom,
+                              rcBmpPart.right - rcBmpPart.left - rcScale9.left - rcScale9.right, rcScale9.bottom, bf);
             }
         }
 
@@ -1306,9 +1302,9 @@ void CRenderEngine::DrawImage(HDC hDC, HBITMAP hBitmap, const RECT &rc, const RE
             {
                 rcDest.right -= rcDest.left;
                 rcDest.bottom -= rcDest.top;
-                lpAlphaBlend(hDC, rcDest.left, rcDest.top, rcDest.right, rcDest.bottom, hCloneDC,
-                             rcBmpPart.right - rcScale9.right, rcBmpPart.bottom - rcScale9.bottom, rcScale9.right, \
-                             rcScale9.bottom, bf);
+                spfAlphaBlend(hDC, rcDest.left, rcDest.top, rcDest.right, rcDest.bottom, hCloneDC,
+                              rcBmpPart.right - rcScale9.right, rcBmpPart.bottom - rcScale9.bottom, rcScale9.right, \
+                              rcScale9.bottom, bf);
             }
         }
     }
@@ -1732,11 +1728,11 @@ void CRenderEngine::DrawColor(HDC hDC, const RECT &rc, DWORD color)
         // 2018-03-29 zyd 颜色透明显示
         *pDest = color | 0xff000000;
 
-        static LPALPHABLEND lpAlphaBlend = GetAlphaBlend();
         BLENDFUNCTION bf = { AC_SRC_OVER, 0, (color & 0xff000000) >> 24, AC_SRC_ALPHA };
         HDC hCloneDC = ::CreateCompatibleDC(hDC);
         HBITMAP hOldBitmap = (HBITMAP) ::SelectObject(hCloneDC, hBitmap);
-        lpAlphaBlend(hDC, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, hCloneDC, 0, 0, 1, 1, bf);
+        static PFunAlphaBlend spfAlphaBlend = GetAlphaBlend();
+        spfAlphaBlend(hDC, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, hCloneDC, 0, 0, 1, 1, bf);
         ::SelectObject(hCloneDC, hOldBitmap);
         ::DeleteDC(hCloneDC);
         ::DeleteObject(hBitmap);
@@ -1751,11 +1747,9 @@ void CRenderEngine::DrawColor(HDC hDC, const RECT &rc, DWORD color)
 void CRenderEngine::DrawGradient(HDC hDC, const RECT &rc, DWORD dwFirst, DWORD dwSecond, bool bVertical,
                                  int nSteps)
 {
-    static LPALPHABLEND lpAlphaBlend = GetAlphaBlend();
-
-    typedef BOOL (WINAPI * PGradientFill)(HDC, PTRIVERTEX, ULONG, PVOID, ULONG, ULONG);
-    static PGradientFill lpGradientFill =
-        (PGradientFill)::GetProcAddress(::GetModuleHandle(_T("msimg32.dll")), "GradientFill");
+    typedef BOOL (WINAPI * PFunGradientFill)(HDC, PTRIVERTEX, ULONG, PVOID, ULONG, ULONG);
+    static PFunGradientFill spfGradientFill =
+        (PFunGradientFill)::GetProcAddress(::GetModuleHandle(_T("msimg32.dll")), "GradientFill");
 
     BYTE bAlpha = (BYTE)(((dwFirst >> 24) + (dwSecond >> 24)) >> 1);
 
@@ -1780,7 +1774,7 @@ void CRenderEngine::DrawGradient(HDC hDC, const RECT &rc, DWORD dwFirst, DWORD d
         hOldPaintBitmap = (HBITMAP) ::SelectObject(hPaintDC, hPaintBitmap);
     }
 
-    if (lpGradientFill != NULL)
+    if (spfGradientFill != NULL)
     {
         TRIVERTEX triv[2] =
         {
@@ -1788,7 +1782,7 @@ void CRenderEngine::DrawGradient(HDC hDC, const RECT &rc, DWORD dwFirst, DWORD d
             { rcPaint.right, rcPaint.bottom, GetBValue(dwSecond) << 8, GetGValue(dwSecond) << 8, GetRValue(dwSecond) << 8, 0xFF00 }
         };
         GRADIENT_RECT grc = { 0, 1 };
-        lpGradientFill(hPaintDC, triv, 2, &grc, 1, bVertical ? GRADIENT_FILL_RECT_V : GRADIENT_FILL_RECT_H);
+        spfGradientFill(hPaintDC, triv, 2, &grc, 1, bVertical ? GRADIENT_FILL_RECT_V : GRADIENT_FILL_RECT_H);
     }
     else
     {
@@ -1835,7 +1829,8 @@ void CRenderEngine::DrawGradient(HDC hDC, const RECT &rc, DWORD dwFirst, DWORD d
     if (bAlpha < 255)
     {
         BLENDFUNCTION bf = { AC_SRC_OVER, 0, bAlpha, AC_SRC_ALPHA };
-        lpAlphaBlend(hDC, rc.left, rc.top, cx, cy, hPaintDC, 0, 0, cx, cy, bf);
+        static PFunAlphaBlend spfAlphaBlend = GetAlphaBlend();
+        spfAlphaBlend(hDC, rc.left, rc.top, cx, cy, hPaintDC, 0, 0, cx, cy, bf);
         ::SelectObject(hPaintDC, hOldPaintBitmap);
         ::DeleteObject(hPaintBitmap);
         ::DeleteDC(hPaintDC);
@@ -3332,18 +3327,9 @@ HBITMAP CRenderEngine::GenerateBitmap(CPaintManagerUI *pManager, CControlUI *pCo
     HBITMAP hOldPaintBitmap = (HBITMAP) ::SelectObject(hPaintDC, hPaintBitmap);
     pControl->Paint(hPaintDC, rc, NULL);
 
-    BITMAPINFO bmi = { 0 };
-    bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-    bmi.bmiHeader.biWidth = cx;
-    bmi.bmiHeader.biHeight = cy;
-    bmi.bmiHeader.biPlanes = 1;
-    bmi.bmiHeader.biBitCount = 32;
-    bmi.bmiHeader.biCompression = BI_RGB;
-    bmi.bmiHeader.biSizeImage = cx * cy * sizeof(DWORD);
     LPDWORD pDest = NULL;
     HDC hCloneDC = ::CreateCompatibleDC(pManager->GetPaintDC());
-    HBITMAP hBitmap = ::CreateDIBSection(pManager->GetPaintDC(), &bmi, DIB_RGB_COLORS,
-                                         (LPVOID *) &pDest, NULL, 0);
+    HBITMAP hBitmap = CRenderEngine::CreateARGB32Bitmap(pManager->GetPaintDC(), cx, cy, (COLORREF **)&pDest);
     ASSERT(hCloneDC);
     ASSERT(hBitmap);
 

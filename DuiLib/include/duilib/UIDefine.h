@@ -44,10 +44,11 @@ enum EMCUSTOM_EVENT
 enum EMInnerTimerId
 {
     // DuiLib 内部通用定时器ID
-    TIMERID_CARET = 1,              // 光标闪烁定时器ID
-    TIMERID_EFFECT,                 // 特效用
+    TIMERID_TRIGGER_MAX = 49,       // 特效用定时器ID 最大值
+    TIMERID_CARET = 50,             // 光标闪烁定时器ID
+
     // DuiLib 各控件使用
-    TIMERID_LAYEREDUPDATE = 100,    // Manager  分层窗口更新定时器
+    TIMERID_LAYEREDUPDATE = 200,    // Manager  分层窗口更新定时器
     TIMERID_DBLCLICK,               // Manager  判断单击、双击的定时器
     TIMERID_DELAY_NTY,              // Edit     延时通知编辑框内容变化
     TIMERID_REPEAT,                 // ScrollBar滚动条定时器ID

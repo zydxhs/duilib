@@ -417,10 +417,31 @@ bool CDuiValArray::Remove(int iIndex, int iCount)
 {
     if (iIndex < 0 || iCount <= 0 || iIndex + iCount > m_nCount) { return false; }
 
-    if (iIndex + iCount < m_nCount) { ::CopyMemory(m_pVoid + (iIndex * m_iElementSize), m_pVoid + (iIndex + iCount) * m_iElementSize, (m_nCount - iIndex - iCount) * m_iElementSize); }
+    if (iIndex + iCount < m_nCount)
+    {
+        ::CopyMemory(m_pVoid + (iIndex * m_iElementSize), m_pVoid + (iIndex + iCount) * m_iElementSize,
+                     (m_nCount - iIndex - iCount) * m_iElementSize);
+    }
 
     m_nCount -= iCount;
     return true;
+}
+
+bool CDuiValArray::Remove(LPCVOID pData)
+{
+    LPBYTE pNow = m_pVoid;
+
+    for (int i = 0; i < m_nCount; ++i, pNow += m_iElementSize)
+    {
+        if (pNow == pData)
+        {
+            ::CopyMemory(pNow, pNow + m_iElementSize, (m_nCount - i) * m_iElementSize);
+            m_nCount -= 1;
+            return true;
+        }
+    }
+
+    return false;
 }
 
 int CDuiValArray::GetSize() const

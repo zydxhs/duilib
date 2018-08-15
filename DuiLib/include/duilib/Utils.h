@@ -227,6 +227,7 @@ public:
     bool IsEmpty() const;
     bool Add(LPCVOID pData);
     bool Remove(int iIndex,  int iCount = 1);
+    bool Remove(LPCVOID pData);
     int GetSize() const;
     LPVOID GetData();
 
