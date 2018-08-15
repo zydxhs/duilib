@@ -3983,15 +3983,31 @@ void CPaintManagerUI::AddDefaultAttributeList(LPCTSTR pStrControlName, LPCTSTR p
     }
 }
 
-LPCTSTR CPaintManagerUI::GetDefaultAttributeList(LPCTSTR pStrControlName) const
+// LPCTSTR CPaintManagerUI::GetDefaultAttributeList(LPCTSTR pStrControlName) const
+// {
+//     CDuiString *pDefaultAttr = static_cast<CDuiString *>(m_ResInfo.m_AttrHash.Find(pStrControlName));
+//
+//     if (!pDefaultAttr) { pDefaultAttr = static_cast<CDuiString *>(m_SharedResInfo.m_AttrHash.Find(pStrControlName)); }
+//
+//     if (pDefaultAttr) { return pDefaultAttr->GetData(); }
+//
+//     return NULL;
+// }
+
+LPCTSTR CPaintManagerUI::GetDefaultAttributeList(LPCTSTR pStrControlName, bool bShared) const
 {
-    CDuiString *pDefaultAttr = static_cast<CDuiString *>(m_ResInfo.m_AttrHash.Find(pStrControlName));
+    CDuiString *pDefAttr = NULL;
 
-    if (!pDefaultAttr) { pDefaultAttr = static_cast<CDuiString *>(m_SharedResInfo.m_AttrHash.Find(pStrControlName)); }
+    if (bShared)
+    {
+        pDefAttr = static_cast<CDuiString *>(m_SharedResInfo.m_AttrHash.Find(pStrControlName));
+    }
+    else
+    {
+        pDefAttr = static_cast<CDuiString *>(m_ResInfo.m_AttrHash.Find(pStrControlName));
+    }
 
-    if (pDefaultAttr) { return pDefaultAttr->GetData(); }
-
-    return NULL;
+    return pDefAttr ? pDefAttr->GetData() : NULL;
 }
 
 bool CPaintManagerUI::RemoveDefaultAttributeList(LPCTSTR pStrControlName, bool bShared)

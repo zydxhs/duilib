@@ -634,12 +634,15 @@ void CContainerUI::EnableScrollBar(bool bEnableVertical, bool bEnableHorizontal)
 
         if (m_pManager)
         {
-            LPCTSTR pDefaultAttributes = m_pManager->GetDefaultAttributeList(_T("VScrollBar"));
-
-            if (pDefaultAttributes)
-            {
-                m_pVerticalScrollBar->SetAttributeList(pDefaultAttributes);
-            }
+            LPCTSTR pDefAttr = m_pManager->GetDefaultAttributeList(DUI_CTR_SCROLLBAR, false);
+            m_pVerticalScrollBar->SetAttributeList(pDefAttr);
+            pDefAttr = m_pManager->GetDefaultAttributeList(DUI_CTR_SCROLLBAR, true);
+            m_pVerticalScrollBar->SetAttributeList(pDefAttr);
+            // LPCTSTR pDefaultAttributes = m_pManager->GetDefaultAttributeList(_T("VScrollBar"));
+            // if (pDefaultAttributes)
+            // {
+            //     m_pVerticalScrollBar->SetAttributeList(pDefaultAttributes);
+            // }
         }
     }
     else if (!bEnableVertical && m_pVerticalScrollBar)
@@ -658,12 +661,15 @@ void CContainerUI::EnableScrollBar(bool bEnableVertical, bool bEnableHorizontal)
 
         if (m_pManager)
         {
-            LPCTSTR pDefaultAttributes = m_pManager->GetDefaultAttributeList(_T("HScrollBar"));
-
-            if (pDefaultAttributes)
-            {
-                m_pHorizontalScrollBar->SetAttributeList(pDefaultAttributes);
-            }
+            LPCTSTR pDefAttr = m_pManager->GetDefaultAttributeList(DUI_CTR_SCROLLBAR, false);
+            m_pVerticalScrollBar->SetAttributeList(pDefAttr);
+            pDefAttr = m_pManager->GetDefaultAttributeList(DUI_CTR_SCROLLBAR, true);
+            m_pVerticalScrollBar->SetAttributeList(pDefAttr);
+            // LPCTSTR pDefaultAttributes = m_pManager->GetDefaultAttributeList(_T("HScrollBar"));
+            // if (pDefaultAttributes)
+            // {
+            //     m_pHorizontalScrollBar->SetAttributeList(pDefaultAttributes);
+            // }
         }
     }
     else if (!bEnableHorizontal && m_pHorizontalScrollBar)

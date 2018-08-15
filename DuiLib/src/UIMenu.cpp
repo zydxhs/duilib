@@ -397,11 +397,14 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandl
         pLayout->SetAutoDestroy(false);
         pLayout->EnableScrollBar();
         {
-            LPCTSTR pDefAttrMenu = m_pOwner->GetManager()->GetDefaultAttributeList(DUI_CTR_MENU);
-            LPCTSTR pDefAttrItem = m_pOwner->GetManager()->GetDefaultAttributeList(DUI_CTR_MENUELEMENT);
-            CMenuElementUI *pItem = NULL;
+            LPCTSTR pDefAttr = m_pm.GetDefaultAttributeList(DUI_CTR_MENU, false);
+            pLayout->SetAttributeList(pDefAttr);
+            pDefAttr = m_pm.GetDefaultAttributeList(DUI_CTR_MENU, true);
+            pLayout->SetAttributeList(pDefAttr);
 
-            if (pDefAttrMenu) { pLayout->SetAttributeList(pDefAttrMenu); }
+            pDefAttr = m_pm.GetDefaultAttributeList(DUI_CTR_MENUELEMENT, false);
+            LPCTSTR pDefAttr2 = m_pm.GetDefaultAttributeList(DUI_CTR_MENUELEMENT, true);
+            CMenuElementUI *pItem = NULL;
 
             for (int i = 0; i < m_pOwner->GetCount(); i++)
             {
@@ -409,12 +412,29 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandl
 
                 if (NULL != pItem)
                 {
-                    if (pDefAttrItem) { pItem->SetAttributeList(pDefAttrItem); }
+                    pItem->SetAttributeList(pDefAttr);
+                    pItem->SetAttributeList(pDefAttr);
 
                     pItem->SetOwner(pLayout);
                     pLayout->Add(static_cast<CControlUI *>(pItem));
                 }
             }
+            // LPCTSTR pDefAttrMenu = m_pOwner->GetManager()->GetDefaultAttributeList(DUI_CTR_MENU);
+            // LPCTSTR pDefAttrItem = m_pOwner->GetManager()->GetDefaultAttributeList(DUI_CTR_MENUELEMENT);
+            // CMenuElementUI *pItem = NULL;
+            // if (pDefAttrMenu) { pLayout->SetAttributeList(pDefAttrMenu); }
+            // for (int i = 0; i < m_pOwner->GetCount(); i++)
+            // {
+            //     pItem = static_cast<CMenuElementUI *>(m_pOwner->GetItemAt(i)->GetInterface(DUI_CTR_MENUELEMENT));
+            //
+            //     if (NULL != pItem)
+            //     {
+            //         if (pDefAttrItem) { pItem->SetAttributeList(pDefAttrItem); }
+            //
+            //         pItem->SetOwner(pLayout);
+            //         pLayout->Add(static_cast<CControlUI *>(pItem));
+            //     }
+            // }
         }
 
         CShadowUI *pShadow = m_pm.GetShadow();
@@ -535,7 +555,11 @@ CMenuUI::~CMenuUI(void)
 CMenuElementUI *CMenuUI::NewMenuItem(void)
 {
     CMenuElementUI *pItem = new CMenuElementUI();
-    pItem->SetAttributeList(m_pManager->GetDefaultAttributeList(DUI_CTR_MENUELEMENT));
+    LPCTSTR pDefAttr = m_pManager->GetDefaultAttributeList(DUI_CTR_MENUELEMENT, false);
+    pItem->SetAttributeList(pDefAttr);
+    pDefAttr = m_pManager->GetDefaultAttributeList(DUI_CTR_MENUELEMENT, true);
+    pItem->SetAttributeList(pDefAttr);
+    // pItem->SetAttributeList(m_pManager->GetDefaultAttributeList(DUI_CTR_MENUELEMENT));
     return pItem;
 }
 
@@ -946,6 +970,8 @@ void CMenuElementUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 
 void CMenuElementUI::SetAttributeList(LPCTSTR pstrList)
 {
+    if (NULL == pstrList) { return; }
+
     CDuiString sItem;
     CDuiString sValue;
 

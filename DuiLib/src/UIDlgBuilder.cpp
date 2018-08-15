@@ -330,12 +330,15 @@ CControlUI *CDialogBuilder::_Parse(CMarkupNode *pRoot, CControlUI *pParent, CPai
             if (pManager)
             {
                 pNode->SetManager(pManager, NULL, false);
-                LPCTSTR pDefaultAttributes = pManager->GetDefaultAttributeList(pstrClass);
-
-                if (pDefaultAttributes)
-                {
-                    pNode->SetAttributeList(pDefaultAttributes);
-                }
+                LPCTSTR pDefAttr = pManager->GetDefaultAttributeList(pstrClass, false);
+                pNode->SetAttributeList(pDefAttr);
+                pDefAttr = pManager->GetDefaultAttributeList(pstrClass, true);
+                pNode->SetAttributeList(pDefAttr);
+                // LPCTSTR pDefaultAttributes = pManager->GetDefaultAttributeList(pstrClass);
+                // if (pDefaultAttributes)
+                // {
+                //     pNode->SetAttributeList(pDefaultAttributes);
+                // }
             }
 
             // 解析所有属性并覆盖默认属性
@@ -574,12 +577,15 @@ CControlUI *CDialogBuilder::_Parse(CMarkupNode *pRoot, CControlUI *pParent, CPai
         if (pManager)
         {
             pControl->SetManager(pManager, NULL, false);
-            LPCTSTR pDefaultAttributes = pManager->GetDefaultAttributeList(pstrClass);
-
-            if (pDefaultAttributes)
-            {
-                pControl->SetAttributeList(pDefaultAttributes);
-            }
+            LPCTSTR pDefAttr = pManager->GetDefaultAttributeList(pstrClass, false);
+            pControl->SetAttributeList(pDefAttr);
+            pDefAttr = pManager->GetDefaultAttributeList(pstrClass, true);
+            pControl->SetAttributeList(pDefAttr);
+            // LPCTSTR pDefaultAttributes = pManager->GetDefaultAttributeList(pstrClass);
+            // if (pDefaultAttributes)
+            // {
+            //     pControl->SetAttributeList(pDefaultAttributes);
+            // }
         }
 
         // Process attributes

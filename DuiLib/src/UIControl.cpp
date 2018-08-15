@@ -1502,6 +1502,8 @@ CDuiString CControlUI::GetAttributeList(bool bIgnoreDefault)
 // 示例：   <Default name="TreeNode" value="text=&quot;abc&quot; folderattr=?width=&quot;16&quot; height=&quot;16&quot; ? " />
 void CControlUI::SetAttributeList(LPCTSTR pstrList)
 {
+    if (NULL == pstrList) { return; }
+
     CDuiString sItem;
     CDuiString sValue;
 

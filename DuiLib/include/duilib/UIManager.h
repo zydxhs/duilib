@@ -344,7 +344,8 @@ public:
     void ReloadImages();
 
     void AddDefaultAttributeList(LPCTSTR pStrControlName, LPCTSTR pStrControlAttrList, bool bShared = false);
-    LPCTSTR GetDefaultAttributeList(LPCTSTR pStrControlName) const;
+    // LPCTSTR GetDefaultAttributeList(LPCTSTR pStrControlName) const;
+    LPCTSTR GetDefaultAttributeList(LPCTSTR pStrControlName, bool bShared) const;
     bool RemoveDefaultAttributeList(LPCTSTR pStrControlName, bool bShared = false);
     void RemoveAllDefaultAttributeList(bool bShared = false);
 
