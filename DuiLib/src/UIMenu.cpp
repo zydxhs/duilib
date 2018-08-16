@@ -397,13 +397,13 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandl
         pLayout->SetAutoDestroy(false);
         pLayout->EnableScrollBar();
         {
-            LPCTSTR pDefAttr = m_pm.GetDefaultAttributeList(DUI_CTR_MENU, false);
+            LPCTSTR pDefAttr = m_pm.GetDefaultAttributeList(DUI_CTR_MENU, true);
             pLayout->SetAttributeList(pDefAttr);
-            pDefAttr = m_pm.GetDefaultAttributeList(DUI_CTR_MENU, true);
+            pDefAttr = m_pm.GetDefaultAttributeList(DUI_CTR_MENU, false);
             pLayout->SetAttributeList(pDefAttr);
 
-            pDefAttr = m_pm.GetDefaultAttributeList(DUI_CTR_MENUELEMENT, false);
-            LPCTSTR pDefAttr2 = m_pm.GetDefaultAttributeList(DUI_CTR_MENUELEMENT, true);
+            pDefAttr = m_pm.GetDefaultAttributeList(DUI_CTR_MENUELEMENT, true);
+            LPCTSTR pDefAttr2 = m_pm.GetDefaultAttributeList(DUI_CTR_MENUELEMENT, false);
             CMenuElementUI *pItem = NULL;
 
             for (int i = 0; i < m_pOwner->GetCount(); i++)
@@ -555,9 +555,9 @@ CMenuUI::~CMenuUI(void)
 CMenuElementUI *CMenuUI::NewMenuItem(void)
 {
     CMenuElementUI *pItem = new CMenuElementUI();
-    LPCTSTR pDefAttr = m_pManager->GetDefaultAttributeList(DUI_CTR_MENUELEMENT, false);
+    LPCTSTR pDefAttr = m_pManager->GetDefaultAttributeList(DUI_CTR_MENUELEMENT, true);
     pItem->SetAttributeList(pDefAttr);
-    pDefAttr = m_pManager->GetDefaultAttributeList(DUI_CTR_MENUELEMENT, true);
+    pDefAttr = m_pManager->GetDefaultAttributeList(DUI_CTR_MENUELEMENT, false);
     pItem->SetAttributeList(pDefAttr);
     // pItem->SetAttributeList(m_pManager->GetDefaultAttributeList(DUI_CTR_MENUELEMENT));
     return pItem;

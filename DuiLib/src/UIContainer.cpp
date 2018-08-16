@@ -634,9 +634,9 @@ void CContainerUI::EnableScrollBar(bool bEnableVertical, bool bEnableHorizontal)
 
         if (m_pManager)
         {
-            LPCTSTR pDefAttr = m_pManager->GetDefaultAttributeList(DUI_CTR_SCROLLBAR, false);
+            LPCTSTR pDefAttr = m_pManager->GetDefaultAttributeList(DUI_CTR_SCROLLBAR, true);
             m_pVerticalScrollBar->SetAttributeList(pDefAttr);
-            pDefAttr = m_pManager->GetDefaultAttributeList(DUI_CTR_SCROLLBAR, true);
+            pDefAttr = m_pManager->GetDefaultAttributeList(DUI_CTR_SCROLLBAR, false);
             m_pVerticalScrollBar->SetAttributeList(pDefAttr);
             // LPCTSTR pDefaultAttributes = m_pManager->GetDefaultAttributeList(_T("VScrollBar"));
             // if (pDefaultAttributes)
@@ -661,9 +661,9 @@ void CContainerUI::EnableScrollBar(bool bEnableVertical, bool bEnableHorizontal)
 
         if (m_pManager)
         {
-            LPCTSTR pDefAttr = m_pManager->GetDefaultAttributeList(DUI_CTR_SCROLLBAR, false);
+            LPCTSTR pDefAttr = m_pManager->GetDefaultAttributeList(DUI_CTR_SCROLLBAR, true);
             m_pVerticalScrollBar->SetAttributeList(pDefAttr);
-            pDefAttr = m_pManager->GetDefaultAttributeList(DUI_CTR_SCROLLBAR, true);
+            pDefAttr = m_pManager->GetDefaultAttributeList(DUI_CTR_SCROLLBAR, false);
             m_pVerticalScrollBar->SetAttributeList(pDefAttr);
             // LPCTSTR pDefaultAttributes = m_pManager->GetDefaultAttributeList(_T("HScrollBar"));
             // if (pDefaultAttributes)

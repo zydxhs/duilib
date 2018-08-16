@@ -272,9 +272,9 @@ LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         // the items back to the righfull owner/manager when the window closes.
         m_pLayout = new CComboBodyUI(m_pOwner);
         m_pLayout->SetManager(&m_pm, NULL, true);
-        LPCTSTR pDefAttr = m_pOwner->m_pManager->GetDefaultAttributeList(DUI_CTR_VERTICALLAYOUT, false);
+        LPCTSTR pDefAttr = m_pOwner->m_pManager->GetDefaultAttributeList(DUI_CTR_VERTICALLAYOUT, true);
         m_pLayout->SetAttributeList(pDefAttr);
-        pDefAttr = m_pOwner->m_pManager->GetDefaultAttributeList(DUI_CTR_VERTICALLAYOUT, true);
+        pDefAttr = m_pOwner->m_pManager->GetDefaultAttributeList(DUI_CTR_VERTICALLAYOUT, false);
         m_pLayout->SetAttributeList(pDefAttr);
         // LPCTSTR pDefaultAttributes = m_pOwner->GetManager()->GetDefaultAttributeList(_T("VerticalLayout"));
         // if (pDefaultAttributes)

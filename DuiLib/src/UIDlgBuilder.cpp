@@ -330,9 +330,9 @@ CControlUI *CDialogBuilder::_Parse(CMarkupNode *pRoot, CControlUI *pParent, CPai
             if (pManager)
             {
                 pNode->SetManager(pManager, NULL, false);
-                LPCTSTR pDefAttr = pManager->GetDefaultAttributeList(pstrClass, false);
+                LPCTSTR pDefAttr = pManager->GetDefaultAttributeList(pstrClass, true);
                 pNode->SetAttributeList(pDefAttr);
-                pDefAttr = pManager->GetDefaultAttributeList(pstrClass, true);
+                pDefAttr = pManager->GetDefaultAttributeList(pstrClass, false);
                 pNode->SetAttributeList(pDefAttr);
                 // LPCTSTR pDefaultAttributes = pManager->GetDefaultAttributeList(pstrClass);
                 // if (pDefaultAttributes)
@@ -577,9 +577,9 @@ CControlUI *CDialogBuilder::_Parse(CMarkupNode *pRoot, CControlUI *pParent, CPai
         if (pManager)
         {
             pControl->SetManager(pManager, NULL, false);
-            LPCTSTR pDefAttr = pManager->GetDefaultAttributeList(pstrClass, false);
+            LPCTSTR pDefAttr = pManager->GetDefaultAttributeList(pstrClass, true);
             pControl->SetAttributeList(pDefAttr);
-            pDefAttr = pManager->GetDefaultAttributeList(pstrClass, true);
+            pDefAttr = pManager->GetDefaultAttributeList(pstrClass, false);
             pControl->SetAttributeList(pDefAttr);
             // LPCTSTR pDefaultAttributes = pManager->GetDefaultAttributeList(pstrClass);
             // if (pDefaultAttributes)
