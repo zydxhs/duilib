@@ -210,8 +210,8 @@ public:
     virtual CScrollBarUI *GetHorizontalScrollBar() const;
     bool SortItems(PULVCompareFunc pfnCompare, UINT_PTR dwData);
 
-    TDrawInfo &GetUnSelImg(void);
-    TDrawInfo &GetSelImg(void);
+    TDrawInfo &GetUnSelImage(void);
+    TDrawInfo &GetSelImage(void);
     void GetAllSelectedItem(CDuiValArray &arySelIdx);
     void SetAllItemSelected(bool bSelect);
     virtual void DoInit();

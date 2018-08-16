@@ -67,7 +67,7 @@ public:
     virtual void PaintText(HDC hDC);
 
 protected:
-    void DrawNormalBkImg(HDC hDC, TDrawInfo &diNormal, TDrawInfo *pdiHot = NULL, bool bHot = false);
+    void DrawNormalBkImage(HDC hDC, TDrawInfo &diNormal, TDrawInfo *pdiHot = NULL, bool bHot = false);
 
 protected:
     UINT m_uButtonState;

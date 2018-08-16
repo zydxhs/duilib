@@ -726,31 +726,31 @@ void CButtonUI::PaintStatusImage(HDC hDC)
     // 绘制顺序：5态 背景图->前景图
     if ((m_uButtonState & UISTATE_DISABLED) != 0)
     {
-        if (!DrawImage(hDC, m_diDisabled)) { DrawNormalBkImg(hDC, m_diNormal); }
+        if (!DrawImage(hDC, m_diDisabled)) { DrawNormalBkImage(hDC, m_diNormal); }
 
         DrawImage(hDC, m_diFore);
     }
     else if ((m_uButtonState & UISTATE_PUSHED) != 0)
     {
-        if (!DrawImage(hDC, m_diPushed)) { DrawNormalBkImg(hDC, m_diNormal); }
+        if (!DrawImage(hDC, m_diPushed)) { DrawNormalBkImage(hDC, m_diNormal); }
 
         DrawImage(hDC, m_diFore);
     }
     else if ((m_uButtonState & UISTATE_HOT) != 0)
     {
-        DrawNormalBkImg(hDC, m_diNormal, &m_diHot, true);
+        DrawNormalBkImage(hDC, m_diNormal, &m_diHot, true);
 
         if (!DrawImage(hDC, m_diHotFore)) { DrawImage(hDC, m_diFore); }
     }
     else if ((m_uButtonState & UISTATE_FOCUSED) != 0)
     {
-        if (!DrawImage(hDC, m_diFocused)) { DrawNormalBkImg(hDC, m_diNormal); }
+        if (!DrawImage(hDC, m_diFocused)) { DrawNormalBkImage(hDC, m_diNormal); }
 
         DrawImage(hDC, m_diFore);
     }
     else
     {
-        DrawNormalBkImg(hDC, m_diNormal);
+        DrawNormalBkImage(hDC, m_diNormal);
         DrawImage(hDC, m_diFore);
     }
 
@@ -825,7 +825,7 @@ void CButtonUI::PaintStatusImage(HDC hDC)
     //DrawImage(hDC, m_diFore);
 }
 
-void CButtonUI::DrawNormalBkImg(HDC hDC, TDrawInfo &diNormal, TDrawInfo *pdiHot, bool bHot)
+void CButtonUI::DrawNormalBkImage(HDC hDC, TDrawInfo &diNormal, TDrawInfo *pdiHot, bool bHot)
 {
     // bHot 为 false 时，pdiHot 可以为NULL
     // bHot 为 true  时，pdiHot 不能为NULL

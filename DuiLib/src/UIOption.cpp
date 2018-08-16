@@ -139,12 +139,12 @@ void COptionUI::SetEnabled(bool bEnable)
     }
 }
 
-INLINE LPCTSTR COptionUI::GetSelNormalImg()
+INLINE LPCTSTR COptionUI::GetSelNormalImage()
 {
     return m_diSelNormal.sDrawString;
 }
 
-void COptionUI::SetSelNormalImg(LPCTSTR pStrImage)
+void COptionUI::SetSelNormalImage(LPCTSTR pStrImage)
 {
     if (m_diSelNormal.sDrawString == pStrImage && m_diSelNormal.pImageInfo != NULL) { return; }
 
@@ -153,12 +153,12 @@ void COptionUI::SetSelNormalImg(LPCTSTR pStrImage)
     Invalidate();
 }
 
-INLINE LPCTSTR COptionUI::GetSelHotImg()
+INLINE LPCTSTR COptionUI::GetSelHotImage()
 {
     return m_diSelHot.sDrawString;
 }
 
-void COptionUI::SetSelHotImg(LPCTSTR pStrImage)
+void COptionUI::SetSelHotImage(LPCTSTR pStrImage)
 {
     if (m_diSelHot.sDrawString == pStrImage && m_diSelHot.pImageInfo != NULL) { return; }
 
@@ -167,12 +167,12 @@ void COptionUI::SetSelHotImg(LPCTSTR pStrImage)
     Invalidate();
 }
 
-INLINE LPCTSTR COptionUI::GetSelFocusedImg()
+INLINE LPCTSTR COptionUI::GetSelFocusedImage()
 {
     return m_diSelFocused.sDrawString;
 }
 
-void COptionUI::SetSelFocusedImg(LPCTSTR pStrImage)
+void COptionUI::SetSelFocusedImage(LPCTSTR pStrImage)
 {
     if (m_diSelFocused.sDrawString == pStrImage && m_diSelFocused.pImageInfo != NULL) { return; }
 
@@ -181,12 +181,12 @@ void COptionUI::SetSelFocusedImg(LPCTSTR pStrImage)
     Invalidate();
 }
 
-INLINE LPCTSTR COptionUI::GetSelPushedImg()
+INLINE LPCTSTR COptionUI::GetSelPushedImage()
 {
     return m_diSelPushed.sDrawString;
 }
 
-void COptionUI::SetSelPushedImg(LPCTSTR pStrImage)
+void COptionUI::SetSelPushedImage(LPCTSTR pStrImage)
 {
     if (m_diSelPushed.sDrawString == pStrImage && m_diSelPushed.pImageInfo != NULL) { return; }
 
@@ -195,12 +195,12 @@ void COptionUI::SetSelPushedImg(LPCTSTR pStrImage)
     Invalidate();
 }
 
-INLINE LPCTSTR COptionUI::GetSelDisabledImg()
+INLINE LPCTSTR COptionUI::GetSelDisabledImage()
 {
     return m_diSelDisabled.sDrawString;
 }
 
-void COptionUI::SetSelDisabledImg(LPCTSTR pStrImage)
+void COptionUI::SetSelDisabledImage(LPCTSTR pStrImage)
 {
     if (m_diSelDisabled.sDrawString == pStrImage && m_diSelDisabled.pImageInfo != NULL) { return; }
 
@@ -209,52 +209,52 @@ void COptionUI::SetSelDisabledImg(LPCTSTR pStrImage)
     Invalidate();
 }
 
-INLINE LPCTSTR COptionUI::GetUnselNormalImg()
+INLINE LPCTSTR COptionUI::GetUnselNormalImage()
 {
     return m_diNormal.sDrawString;
 }
 
-INLINE void COptionUI::SetUnselNormalImg(LPCTSTR pStrImage)
+INLINE void COptionUI::SetUnselNormalImage(LPCTSTR pStrImage)
 {
     SetNormalImage(pStrImage);
 }
 
-INLINE LPCTSTR COptionUI::GetUnselHotImg()
+INLINE LPCTSTR COptionUI::GetUnselHotImage()
 {
     return m_diHot.sDrawString;
 }
 
-INLINE void COptionUI::SetUnselHotImg(LPCTSTR pStrImage)
+INLINE void COptionUI::SetUnselHotImage(LPCTSTR pStrImage)
 {
     SetHotImage(pStrImage);
 }
 
-INLINE LPCTSTR COptionUI::GetUnselFocusedImg()
+INLINE LPCTSTR COptionUI::GetUnselFocusedImage()
 {
     return m_diFocused.sDrawString;
 }
 
-INLINE void COptionUI::SetUnselFocusedImg(LPCTSTR pStrImage)
+INLINE void COptionUI::SetUnselFocusedImage(LPCTSTR pStrImage)
 {
     SetFocusedImage(pStrImage);
 }
 
-INLINE LPCTSTR COptionUI::GetUnselPushedImg()
+INLINE LPCTSTR COptionUI::GetUnselPushedImage()
 {
     return m_diPushed.sDrawString;
 }
 
-INLINE void COptionUI::SetUnselPushedImg(LPCTSTR pStrImage)
+INLINE void COptionUI::SetUnselPushedImage(LPCTSTR pStrImage)
 {
     SetPushedImage(pStrImage);
 }
 
-INLINE LPCTSTR COptionUI::GetUnselDisabledImg()
+INLINE LPCTSTR COptionUI::GetUnselDisabledImage()
 {
     return m_diDisabled.sDrawString;
 }
 
-INLINE void COptionUI::SetUnselDisabledImg(LPCTSTR pStrImage)
+INLINE void COptionUI::SetUnselDisabledImage(LPCTSTR pStrImage)
 {
     SetDisabledImage(pStrImage);
 }
@@ -363,23 +363,23 @@ void COptionUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     if (_tcscmp(pstrName, _T("group")) == 0) { SetGroup(pstrValue); }
     else if (_tcscmp(pstrName, _T("selected")) == 0) { Selected(_tcscmp(pstrValue, _T("true")) == 0); }
     else if (_tcscmp(pstrName, _T("foreimage")) == 0) { SetForeImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("selnormalimg")) == 0 || _tcscmp(pstrName, _T("selectedimage")) == 0)
-    { SetSelNormalImg(pstrValue); }
-    else if (_tcscmp(pstrName, _T("selhotimg")) == 0 || _tcscmp(pstrName, _T("selectedhotimage")) == 0)
-    { SetSelHotImg(pstrValue); }
-    else if (_tcscmp(pstrName, _T("selfocusedimg")) == 0) { SetSelFocusedImg(pstrValue); }
-    else if (_tcscmp(pstrName, _T("selpushedimg")) == 0) { SetSelPushedImg(pstrValue); }
-    else if (_tcscmp(pstrName, _T("seldisabledimg")) == 0) { SetSelDisabledImg(pstrValue); }
-    else if (_tcscmp(pstrName, _T("unselnormalimg")) == 0 || _tcscmp(pstrName, _T("normalimage")) == 0)
-    { SetUnselNormalImg(pstrValue); }
-    else if (_tcscmp(pstrName, _T("unselhotimg")) == 0 || _tcscmp(pstrName, _T("hotimage")) == 0)
-    { SetUnselHotImg(pstrValue); }
-    else if (_tcscmp(pstrName, _T("unselfocusedimg")) == 0 || _tcscmp(pstrName, _T("focusedimage")) == 0)
-    { SetUnselFocusedImg(pstrValue); }
-    else if (_tcscmp(pstrName, _T("unselpushedimg")) == 0 || _tcscmp(pstrName, _T("pushedimage")) == 0)
-    { SetUnselPushedImg(pstrValue); }
-    else if (_tcscmp(pstrName, _T("unseldisabledimg")) == 0 || _tcscmp(pstrName, _T("disabledimage")) == 0)
-    { SetUnselDisabledImg(pstrValue); }
+    else if (_tcscmp(pstrName, _T("selnormalimage")) == 0 || _tcscmp(pstrName, _T("selectedimage")) == 0)
+    { SetSelNormalImage(pstrValue); }
+    else if (_tcscmp(pstrName, _T("selhotimage")) == 0 || _tcscmp(pstrName, _T("selectedhotimage")) == 0)
+    { SetSelHotImage(pstrValue); }
+    else if (_tcscmp(pstrName, _T("selfocusedimage")) == 0) { SetSelFocusedImage(pstrValue); }
+    else if (_tcscmp(pstrName, _T("selpushedimage")) == 0) { SetSelPushedImage(pstrValue); }
+    else if (_tcscmp(pstrName, _T("seldisabledimage")) == 0) { SetSelDisabledImage(pstrValue); }
+    else if (_tcscmp(pstrName, _T("unselnormalimage")) == 0 || _tcscmp(pstrName, _T("normalimage")) == 0)
+    { SetUnselNormalImage(pstrValue); }
+    else if (_tcscmp(pstrName, _T("unselhotimage")) == 0 || _tcscmp(pstrName, _T("hotimage")) == 0)
+    { SetUnselHotImage(pstrValue); }
+    else if (_tcscmp(pstrName, _T("unselfocusedimage")) == 0 || _tcscmp(pstrName, _T("focusedimage")) == 0)
+    { SetUnselFocusedImage(pstrValue); }
+    else if (_tcscmp(pstrName, _T("unselpushedimage")) == 0 || _tcscmp(pstrName, _T("pushedimage")) == 0)
+    { SetUnselPushedImage(pstrValue); }
+    else if (_tcscmp(pstrName, _T("unseldisabledimage")) == 0 || _tcscmp(pstrName, _T("disabledimage")) == 0)
+    { SetUnselDisabledImage(pstrValue); }
     else if (_tcscmp(pstrName, _T("selnormalbkcolor")) == 0)
     {
         if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
@@ -490,31 +490,31 @@ void COptionUI::PaintStatusImage(HDC hDC)
         // 选中状态
         if ((m_uButtonState & UISTATE_DISABLED) != 0)
         {
-            if (!DrawImage(hDC, m_diSelDisabled)) { DrawNormalBkImg(hDC, m_diSelNormal); }
+            if (!DrawImage(hDC, m_diSelDisabled)) { DrawNormalBkImage(hDC, m_diSelNormal); }
 
             DrawImage(hDC, m_diFore);
         }
         else if ((m_uButtonState & UISTATE_PUSHED) != 0)
         {
-            if (!DrawImage(hDC, m_diSelPushed)) { DrawNormalBkImg(hDC, m_diSelNormal); }
+            if (!DrawImage(hDC, m_diSelPushed)) { DrawNormalBkImage(hDC, m_diSelNormal); }
 
             DrawImage(hDC, m_diFore);
         }
         else if ((m_uButtonState & UISTATE_HOT) != 0)
         {
-            DrawNormalBkImg(hDC, m_diSelNormal, &m_diSelHot, true);
+            DrawNormalBkImage(hDC, m_diSelNormal, &m_diSelHot, true);
 
             if (!DrawImage(hDC, m_diHotFore)) { DrawImage(hDC, m_diFore); }
         }
         else if ((m_uButtonState & UISTATE_FOCUSED) != 0)
         {
-            if (!DrawImage(hDC, m_diSelFocused)) { DrawNormalBkImg(hDC, m_diSelNormal); }
+            if (!DrawImage(hDC, m_diSelFocused)) { DrawNormalBkImage(hDC, m_diSelNormal); }
 
             DrawImage(hDC, m_diFore);
         }
         else
         {
-            DrawNormalBkImg(hDC, m_diSelNormal);
+            DrawNormalBkImage(hDC, m_diSelNormal);
             DrawImage(hDC, m_diFore);
         }
     }

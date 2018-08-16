@@ -275,23 +275,23 @@
         </Button>
         <Option parent="Button" notifies="setfocus killfocus timer menu click selectchanged windowinit(root) dblclick">
             <!-- 弃用的属性 -->
-            <Attribute name="selectedimage" default="" type="STRING" comment="选中的状态图片,弃用,由selnormalimg代替"/>
-            <Attribute name="selectedhotimage" default="" type="STRING" comment="选中+鼠标悬浮的状态图片,弃用,由selhotimg代替"/>
+            <Attribute name="selectedimage" default="" type="STRING" comment="选中的状态图片,弃用,由selnormalimage代替"/>
+            <Attribute name="selectedhotimage" default="" type="STRING" comment="选中+鼠标悬浮的状态图片,弃用,由selhotimage代替"/>
             <!-- 以上为弃用的属性 -->
             <Attribute name="group" default="" type="STRING" comment="所属组的名称，可不设"/>
             <Attribute name="selected" default="false" type="BOOL" comment="是否选中"/>
             <Attribute name="foreimage" default="" type="STRING" comment="前景图片"/>
             <!-- 优化与扩展属性 -->
-            <Attribute name="selnormalimg" default="" type="STRING" comment="选中正常状态图片,同selectedimage" />
-            <Attribute name="selhotimg" default="" type="STRING" comment="选中鼠标悬浮图片,同selectedhotimage" />
-            <Attribute name="selfocusedimg" default="" type="STRING" comment="选中焦点状态图片" />
-            <Attribute name="selpushedimg" default="" type="STRING" comment="选中鼠标按下图片" />
-            <Attribute name="seldisabledimg" default="" type="STRING" comment="选中禁用状态图片" />
-            <Attribute name="unselnormalimg" default="" type="STRING" comment="未选中正常状态图片,等同Button相同状态的属性" />
-            <Attribute name="unselhotimg" default="" type="STRING" comment="未选中鼠标悬浮图片,等同Button相同状态的属性" />
-            <Attribute name="unselfocusedimg" default="" type="STRING" comment="未选中焦点状态图片,等同Button相同状态的属性" />
-            <Attribute name="unselpushedimg" default="" type="STRING" comment="未选中鼠标按下图片,等同Button相同状态的属性" />
-            <Attribute name="unseldisabledimg" default="" type="STRING" comment="未选中禁用状态图片,等同Button相同状态的属性" />
+            <Attribute name="selnormalimage" default="" type="STRING" comment="选中正常状态图片,同selectedimage" />
+            <Attribute name="selhotimage" default="" type="STRING" comment="选中鼠标悬浮图片,同selectedhotimage" />
+            <Attribute name="selfocusedimage" default="" type="STRING" comment="选中焦点状态图片" />
+            <Attribute name="selpushedimage" default="" type="STRING" comment="选中鼠标按下图片" />
+            <Attribute name="seldisabledimage" default="" type="STRING" comment="选中禁用状态图片" />
+            <Attribute name="unselnormalimage" default="" type="STRING" comment="未选中正常状态图片,等同Button相同状态的属性" />
+            <Attribute name="unselhotimage" default="" type="STRING" comment="未选中鼠标悬浮图片,等同Button相同状态的属性" />
+            <Attribute name="unselfocusedimage" default="" type="STRING" comment="未选中焦点状态图片,等同Button相同状态的属性" />
+            <Attribute name="unselpushedimage" default="" type="STRING" comment="未选中鼠标按下图片,等同Button相同状态的属性" />
+            <Attribute name="unseldisabledimage" default="" type="STRING" comment="未选中禁用状态图片,等同Button相同状态的属性" />
             <Attribute name="seltextcolor" default="#00000000" type="DWORD" comment="选中/按下状态背景颜色，0表示不使用此颜色,如(#FFFF0000)"/>
             <Attribute name="selnormalbkcolor" default="#00000000" type="DWORD" comment="选中正常状态背景颜色，0表示不使用此颜色,如(#FFFF0000)"/>
             <Attribute name="selhotbkcolor" default="#00000000" type="DWORD" comment="选中+鼠标悬浮背景颜色，0表示不使用此颜色,如(#FFFF0000)"/>
@@ -419,8 +419,8 @@
             <Attribute name="itemhlinecolor" default="#FF3C3C3C" type="DWORD" comment="item水平分割线颜色"/>
             <Attribute name="itemshowhtml" default="false" type="BOOL" comment="item是否使用类html富文本绘制,如(false)"/>
             <Attribute name="ischeckbox" default="false" type="BOOL" comment="是否支持第一列显示复选框"/>
-            <Attribute name="unselimg" default="" type="STRING" comment="未选中状态图片，支持 Image 中的 file,res,restype 属性"/>
-            <Attribute name="selimg" default="" type="STRING" comment="选中状态图片，支持 Image 中的 file,res,restype 属性"/>
+            <Attribute name="unselimage" default="" type="STRING" comment="未选中状态图片，支持 Image 中的 file,res,restype 属性"/>
+            <Attribute name="selimage" default="" type="STRING" comment="选中状态图片，支持 Image 中的 file,res,restype 属性"/>
         </List>
         <ListHeader parent="HorizontalLayout" notifies="setfocus killfocus timer windowinit(root) dblclick">
         </ListHeader>

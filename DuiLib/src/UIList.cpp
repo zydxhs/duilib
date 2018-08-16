@@ -1140,8 +1140,8 @@ void CListUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         m_bCheckBox = _tcscmp(pstrValue, _T("true")) == 0 ? true : false;
         m_ListInfo.bCheckBox = m_bCheckBox;
     }
-    else if (_tcscmp(pstrName, _T("unselimg")) == 0) { m_diUnSel.sDrawString = pstrValue; }
-    else if (_tcscmp(pstrName, _T("selimg")) == 0) { m_diSel.sDrawString = pstrValue; }
+    else if (_tcscmp(pstrName, _T("unselimage")) == 0) { m_diUnSel.sDrawString = pstrValue; }
+    else if (_tcscmp(pstrName, _T("selimage")) == 0) { m_diSel.sDrawString = pstrValue; }
     else { CVerticalLayoutUI::SetAttribute(pstrName, pstrValue); }
 }
 
@@ -1262,12 +1262,12 @@ bool CListUI::SortItems(PULVCompareFunc pfnCompare, UINT_PTR dwData)
     return bResult;
 }
 
-TDrawInfo &CListUI::GetUnSelImg(void)
+TDrawInfo &CListUI::GetUnSelImage(void)
 {
     return m_diUnSel;
 }
 
-TDrawInfo &CListUI::GetSelImg(void)
+TDrawInfo &CListUI::GetSelImage(void)
 {
     return m_diSel;
 }
@@ -3387,12 +3387,12 @@ void CListTextElementUI::DrawItemText(HDC hDC, const RECT &rcItem)
 
                 if (m_bCheckBoxSelect == false)
                 {
-                    TDrawInfo &di = pListUI->GetUnSelImg();
+                    TDrawInfo &di = pListUI->GetUnSelImage();
                     str.Format(_T("{x %d}{i %s}{x 1}%s "), rt.left, di.sDrawString.GetData(), strText.GetData());
                 }
                 else
                 {
-                    TDrawInfo &di = pListUI->GetSelImg();
+                    TDrawInfo &di = pListUI->GetSelImage();
                     str.Format(_T("{x %d}{i %s}{x 1}%s "), rt.left, di.sDrawString.GetData(), strText.GetData());
                 }
 

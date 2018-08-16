@@ -34,27 +34,27 @@ public:
     DWORD GetSelDisabledBkColor();
 
     // 选中
-    LPCTSTR GetSelNormalImg();
-    void SetSelNormalImg(LPCTSTR pStrImage);
-    LPCTSTR GetSelHotImg();
-    void SetSelHotImg(LPCTSTR pStrImage);
-    LPCTSTR GetSelFocusedImg();
-    void SetSelFocusedImg(LPCTSTR pStrImage);
-    LPCTSTR GetSelPushedImg();
-    void SetSelPushedImg(LPCTSTR pStrImage);
-    LPCTSTR GetSelDisabledImg();
-    void SetSelDisabledImg(LPCTSTR pStrImage);
+    LPCTSTR GetSelNormalImage();
+    void SetSelNormalImage(LPCTSTR pStrImage);
+    LPCTSTR GetSelHotImage();
+    void SetSelHotImage(LPCTSTR pStrImage);
+    LPCTSTR GetSelFocusedImage();
+    void SetSelFocusedImage(LPCTSTR pStrImage);
+    LPCTSTR GetSelPushedImage();
+    void SetSelPushedImage(LPCTSTR pStrImage);
+    LPCTSTR GetSelDisabledImage();
+    void SetSelDisabledImage(LPCTSTR pStrImage);
     // 未选中
-    LPCTSTR GetUnselNormalImg();
-    void SetUnselNormalImg(LPCTSTR pStrImage);
-    LPCTSTR GetUnselHotImg();
-    void SetUnselHotImg(LPCTSTR pStrImage);
-    LPCTSTR GetUnselFocusedImg();
-    void SetUnselFocusedImg(LPCTSTR pStrImage);
-    LPCTSTR GetUnselPushedImg();
-    void SetUnselPushedImg(LPCTSTR pStrImage);
-    LPCTSTR GetUnselDisabledImg();
-    void SetUnselDisabledImg(LPCTSTR pStrImage);
+    LPCTSTR GetUnselNormalImage();
+    void SetUnselNormalImage(LPCTSTR pStrImage);
+    LPCTSTR GetUnselHotImage();
+    void SetUnselHotImage(LPCTSTR pStrImage);
+    LPCTSTR GetUnselFocusedImage();
+    void SetUnselFocusedImage(LPCTSTR pStrImage);
+    LPCTSTR GetUnselPushedImage();
+    void SetUnselPushedImage(LPCTSTR pStrImage);
+    LPCTSTR GetUnselDisabledImage();
+    void SetUnselDisabledImage(LPCTSTR pStrImage);
 
     LPCTSTR GetForeImage();
     void SetForeImage(LPCTSTR pStrImage);
