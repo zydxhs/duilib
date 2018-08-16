@@ -968,56 +968,6 @@ void CMenuElementUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     }
 }
 
-void CMenuElementUI::SetAttributeList(LPCTSTR pstrList)
-{
-    if (NULL == pstrList) { return; }
-
-    CDuiString sItem;
-    CDuiString sValue;
-
-    while (*pstrList != _T('\0'))
-    {
-        sItem.Empty();
-        sValue.Empty();
-
-        while (*pstrList != _T('\0') && *pstrList != _T('='))
-        {
-            LPTSTR pstrTemp = ::CharNext(pstrList);
-
-            while (pstrList < pstrTemp)
-            {
-                sItem += *pstrList++;
-            }
-        }
-
-        ASSERT(*pstrList == _T('='));
-
-        if (*pstrList++ != _T('=')) { return; }
-
-        ASSERT(*pstrList == _T('\"'));
-
-        if (*pstrList++ != _T('\"')) { return; }
-
-        while (*pstrList != _T('\0') && *pstrList != _T('\"'))
-        {
-            LPTSTR pstrTemp = ::CharNext(pstrList);
-
-            while (pstrList < pstrTemp)
-            {
-                sValue += *pstrList++;
-            }
-        }
-
-        ASSERT(*pstrList == _T('\"'));
-
-        if (*pstrList++ != _T('\"')) { return; }
-
-        SetAttribute(sItem, sValue);
-
-        if (*pstrList++ != _T(' ')) { return; }
-    }
-}
-
 void CMenuElementUI::DrawItemIcon(HDC hDC, const RECT &rcItem)
 {
     RECT rtIcon;

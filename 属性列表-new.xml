@@ -99,6 +99,7 @@
             <Attribute name="bordercolor" default="#00000000" type="DWORD" comment="边框颜色,如(#FF000000)"/>
             <Attribute name="hotbordercolor" default="#00000000" type="DWORD" comment="鼠标悬停时边框颜色,如(#FF00F000)"/>
             <Attribute name="focusbordercolor" default="#00000000" type="DWORD" comment="获得焦点时边框的颜色,如(#FFFF0000)"/>
+            <Attribute name="selectedbordercolor" default="#00000000" type="DWORD" comment="选中状态时边框的颜色,如(#FFFF0000)"/>
             <Attribute name="bordersize" default="0" type="INT | RECT" comment="可以设置INT或RECT类型的值。当值为INT时则左、上、右、下都用该值作为宽。值为RECT类型时则分别设置左、上、右、下的边框"/>
             <Attribute name="borderstyle" default="0" type="INT" comment="边框样式的设置，可以组合多种样式，详见 PS_SOLID"/>
             <Attribute name="borderround" default="0,0" type="SIZE" comment="边框圆角半径,如(2,2)"/>
@@ -414,7 +415,7 @@
             <Attribute name="itemdisabledimage" default="" type="STRING" comment="item禁用时的背景图片"/>
             <Attribute name="itemvlinesize" default="" type="INT" comment=""/>
             <Attribute name="itemvlinecolor" default="#FF3C3C3C" type="DWORD" comment="item垂直分割线颜色"/>
-            <Attribute name="itemhlinesize" default="" type="INT" comment=""/>
+            <Attribute name="itemhlinesize" default="" type="INT" comment="item水平分割线宽度"/>
             <Attribute name="itemhlinecolor" default="#FF3C3C3C" type="DWORD" comment="item水平分割线颜色"/>
             <Attribute name="itemshowhtml" default="false" type="BOOL" comment="item是否使用类html富文本绘制,如(false)"/>
             <Attribute name="ischeckbox" default="false" type="BOOL" comment="是否支持第一列显示复选框"/>
@@ -449,7 +450,7 @@
             <!-- 支持单列 -->
         </ListLabelElement>
         <ListTextElement parent="ListLabelElement" notifies="setfocus killfocus timer itemactivate itemclick link windowinit(root)">
-            <!-- 支持多列；不支持 XML 中添加列表项，不支持复选框 -->
+            <!-- 支持多列；不支持 XML 中添加列表项 -->
         </ListTextElement>
         <ListContainerElement parent="Container" notifies="setfocus killfocus timer itemactivate itemclick itemexpanded itemcollapsed windowinit(root)">
             <!-- 尽量不要用这个控件，可以用它的派生类 -->

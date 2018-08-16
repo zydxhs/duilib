@@ -368,11 +368,12 @@ void CWindowWnd::Close(UINT nRet, bool bSync)
 
     if (!::IsWindow(m_hWnd)) { return; }
 
+    // 2018-08-15 zhuyadong 由于同步 WM_CLOSE 消息的存在，此句必须放在前面执行，否则可能导致崩溃
+    // 2017-02-25 zhuyadong 完善多语言切换。
+    CPaintManagerUI::DelLanguageNotifier(m_hWnd);
+
     if (bSync) { SendMessage(WM_CLOSE, (WPARAM)nRet, 0L); }
     else       { PostMessage(WM_CLOSE, (WPARAM)nRet, 0L); }
-
-    //2017-02-25 zhuyadong 完善多语言切换
-    CPaintManagerUI::DelLanguageNotifier(m_hWnd);
 }
 
 void CWindowWnd::CenterWindow()

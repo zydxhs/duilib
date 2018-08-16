@@ -70,6 +70,7 @@ public:
     virtual void PaintBkColor(HDC hDC);
     virtual void PaintStatusImage(HDC hDC);
     void PaintText(HDC hDC);
+    virtual void PaintBorder(HDC hDC);
 
 protected:
     void SwitchTabLayoutPage(void);

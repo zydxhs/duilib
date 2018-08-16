@@ -152,7 +152,6 @@ public:
     virtual SIZE EstimateSize(SIZE szAvailable);
     virtual void DoEvent(TEventUI &event);
     virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-    virtual void SetAttributeList(LPCTSTR pstrList);
 
 private:
     void DrawItemIcon(HDC hDC, const RECT &rcItem);

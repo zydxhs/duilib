@@ -596,6 +596,92 @@ void COptionUI::PaintText(HDC hDC)
     //}
 }
 
+void COptionUI::PaintBorder(HDC hDC)
+{
+    if ((0 == m_dwBorderColor && 0 == m_dwHotBorderColor && 0 == m_dwFocusBorderColor) ||
+        (0 == m_rcBorderSize.left && 0 == m_rcBorderSize.right &&
+         0 == m_rcBorderSize.top && 0 == m_rcBorderSize.bottom))
+    {
+        return;
+    }
+
+    DWORD clrBorder = GetAdjustColor(m_dwBorderColor);
+
+    if (IsFocused() && m_dwFocusBorderColor != 0)
+    {
+        clrBorder = GetAdjustColor(m_dwFocusBorderColor);
+    }
+    else if (m_bHot && m_dwHotBorderColor != 0)
+    {
+        clrBorder = GetAdjustColor(m_dwHotBorderColor);
+    }
+    else if (IsSelected() && m_dwSelectedBorderColor)
+    {
+        clrBorder = GetAdjustColor(m_dwSelectedBorderColor);
+    }
+
+    if (0 == clrBorder) { return; }
+
+    if (m_rcBorderSize.left > 0 && (m_cxyBorderRound.cx > 0 || m_cxyBorderRound.cy > 0))
+    {
+        //画圆角边框
+        CRenderEngine::DrawRoundRect(hDC, m_rcItem, m_rcBorderSize.left,
+                                     m_cxyBorderRound.cx, m_cxyBorderRound.cy, clrBorder, m_nBorderStyle);
+        return;
+    }
+
+    if (m_rcBorderSize.left == m_rcBorderSize.right && m_rcBorderSize.top == m_rcBorderSize.bottom &&
+        m_rcBorderSize.left == m_rcBorderSize.top)
+    {
+        //画直角边框
+        CRenderEngine::DrawRect(hDC, m_rcItem, m_rcBorderSize.left, clrBorder, m_nBorderStyle);
+        return;
+    }
+
+    RECT rcBorder;
+    int nBorderStyle = PS_INSIDEFRAME | PS_ENDCAP_SQUARE | PS_JOIN_BEVEL | PS_GEOMETRIC;
+
+    if (m_rcBorderSize.left > 0)
+    {
+        rcBorder = m_rcItem;
+        rcBorder.left += m_rcBorderSize.left / 2;
+        rcBorder.right = rcBorder.left;
+
+        CRenderEngine::DrawRect(hDC, rcBorder, m_rcBorderSize.left, clrBorder, m_nBorderStyle);
+    }
+
+    if (m_rcBorderSize.top > 0)
+    {
+        rcBorder = m_rcItem;
+        rcBorder.top += m_rcBorderSize.top / 2;
+        rcBorder.bottom = rcBorder.top;
+        rcBorder.left += m_rcBorderSize.top / 2;
+        rcBorder.right -= m_rcBorderSize.right;
+
+        CRenderEngine::DrawRect(hDC, rcBorder, m_rcBorderSize.top, clrBorder, m_nBorderStyle);
+    }
+
+    if (m_rcBorderSize.right > 0)
+    {
+        rcBorder = m_rcItem;
+        rcBorder.left = m_rcItem.right - m_rcBorderSize.right / 2 - m_rcBorderSize.right % 2;
+        rcBorder.right = rcBorder.left;
+
+        CRenderEngine::DrawRect(hDC, rcBorder, m_rcBorderSize.right, clrBorder, m_nBorderStyle);
+    }
+
+    if (m_rcBorderSize.bottom > 0)
+    {
+        rcBorder = m_rcItem;
+        rcBorder.top = m_rcItem.bottom - m_rcBorderSize.bottom / 2 - m_rcBorderSize.bottom % 2;
+        rcBorder.bottom = rcBorder.top;
+        rcBorder.left += m_rcBorderSize.bottom / 2;
+        rcBorder.right -= m_rcBorderSize.right;
+
+        CRenderEngine::DrawRect(hDC, rcBorder, m_rcBorderSize.bottom, clrBorder, m_nBorderStyle);
+    }
+}
+
 void COptionUI::SwitchTabLayoutPage(void)
 {
     if (m_sBindTabLayout.IsEmpty() || m_nBindTabIndex < 0) { return; }

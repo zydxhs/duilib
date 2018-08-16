@@ -2640,16 +2640,18 @@ void CListElementUI::DrawItemBk(HDC hDC, const RECT &rcItem)
 
     if (iBackColor != 0)
     {
+        // 背景色
         CRenderEngine::DrawColor(hDC, rcItem, GetAdjustColor(iBackColor));
 
-        if (IsSelected())
+        // 边框
+        if (IsSelected() && 0 != m_rcBorderSize.left)
         {
-            CRenderEngine::DrawRect(hDC, m_rcItem, 1, pInfo->dwSelectedTextColor);
+            CRenderEngine::DrawRect(hDC, m_rcItem, m_rcBorderSize.left, m_dwSelectedBorderColor);
         }
 
-        if ((m_uButtonState & UISTATE_HOT) != 0)
+        if ((m_uButtonState & UISTATE_HOT) != 0 && 0 != m_rcBorderSize.left)
         {
-            CRenderEngine::DrawRect(hDC, m_rcItem, 1, pInfo->dwHotTextColor);
+            CRenderEngine::DrawRect(hDC, m_rcItem, m_rcBorderSize.left, m_dwHotBorderColor);
         }
 
         return;

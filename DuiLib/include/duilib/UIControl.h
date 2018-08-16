@@ -64,6 +64,8 @@ public:
     void SetHotBorderColor(DWORD dwBorderColor);
     DWORD GetFocusBorderColor() const;
     void SetFocusBorderColor(DWORD dwBorderColor);
+    DWORD GetSelectedBorderColor() const;
+    void SetSelectedBorderColor(DWORD dwSelectedColor);
     RECT GetBorderSize() const;
     void SetBorderSize(RECT rc);
     void SetBorderSize(int iSize);
@@ -266,6 +268,7 @@ protected:
     DWORD m_dwBorderColor;      // 边框颜色
     DWORD m_dwHotBorderColor;   // 鼠标悬停状态边框颜色
     DWORD m_dwFocusBorderColor; // 焦点状态边框颜色
+    DWORD m_dwSelectedBorderColor;  // 选中状态边框颜色
     int m_nBorderStyle;
     int m_nTooltipWidth;
     SIZE m_cxyBorderRound;
