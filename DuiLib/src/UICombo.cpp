@@ -162,7 +162,7 @@ bool CComboBodyUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopContro
 //
 //
 
-class CComboWnd : public CWindowWnd
+class CComboWnd : public CWindowWnd, public INotifyUI
 {
 public:
     void Init(CComboUI *pOwner);
@@ -170,6 +170,7 @@ public:
     void OnFinalMessage(HWND hWnd);
 
     LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+    void Notify(TNotifyUI &msg);
 
     void EnsureVisible(int iIndex);
     void Scroll(int dx, int dy);
@@ -186,6 +187,13 @@ public:
     bool m_bScrollbarClicked;
 };
 
+void CComboWnd::Notify(TNotifyUI &msg)
+{
+    if (msg.sType == DUI_MSGTYPE_WINDOWINIT)
+    {
+        EnsureVisible(m_iOldSel);
+    }
+}
 
 void CComboWnd::Init(CComboUI *pOwner)
 {
@@ -296,7 +304,7 @@ LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
 
         m_pm.AttachDialog(m_pLayout);
-
+        m_pm.AddNotifier(this);
         return 0;
     }
     else if (uMsg == WM_CLOSE)
