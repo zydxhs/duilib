@@ -50,7 +50,7 @@ enum EMInnerTimerId
     // DuiLib 各控件使用
     TIMERID_LAYEREDUPDATE = 200,    // Manager  分层窗口更新定时器
     TIMERID_DBLCLICK,               // Manager  判断单击、双击的定时器
-    TIMERID_DELAY_NTY,              // Edit     延时通知编辑框内容变化
+    TIMERID_DELAY_NTY,              // Edit     延时通知编辑框内容变化 Slider 滚轮事件延时通知值改变
     TIMERID_REPEAT,                 // ScrollBar滚动条定时器ID
     TIMERID_WEB_REFRESH,            // Browser  网页内容刷新定时器ID
     TIMERID_MOUSEENTER,             // Menu     鼠标进入菜单项定时器

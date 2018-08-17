@@ -207,12 +207,18 @@ void CSliderUI::DoEvent(TEventUI &event)
         {
         case SB_LINEUP:
             SetValue(GetValue() + GetChangeStep());
-            m_pManager->SendNotify(this, DUI_MSGTYPE_VALUECHANGED);
+            // 2018-08-17 zhuyadong 滚轮事件，立即发送 CHANGING 消息，延时发送 CHANGED 消息
+            //m_pManager->SendNotify(this, DUI_MSGTYPE_VALUECHANGED);
+            m_pManager->SetTimer(this, TIMERID_DELAY_NTY, 300);
+            m_pManager->SendNotify(this, DUI_MSGTYPE_VALUECHANGING);
             return;
 
         case SB_LINEDOWN:
             SetValue(GetValue() - GetChangeStep());
-            m_pManager->SendNotify(this, DUI_MSGTYPE_VALUECHANGED);
+            // 2018-08-17 zhuyadong 滚轮事件，立即发送 CHANGING 消息，延时发送 CHANGED 消息
+            //m_pManager->SendNotify(this, DUI_MSGTYPE_VALUECHANGED);
+            m_pManager->SetTimer(this, TIMERID_DELAY_NTY, 300);
+            m_pManager->SendNotify(this, DUI_MSGTYPE_VALUECHANGING);
             return;
         }
     }
@@ -287,6 +293,17 @@ void CSliderUI::DoEvent(TEventUI &event)
         {
             if (m_pManager) { m_pManager->AddMouseLeaveNeeded(this); }
 
+            return;
+        }
+    }
+
+    if (event.Type == UIEVENT_TIMER)
+    {
+        if (event.wParam == TIMERID_DELAY_NTY)
+        {
+            // 2018-08-17 zhuyadong 滚轮事件，延时发送 CHANGED 消息
+            m_pManager->KillTimer(this, TIMERID_DELAY_NTY);
+            m_pManager->SendNotify(this, DUI_MSGTYPE_VALUECHANGED);
             return;
         }
     }
