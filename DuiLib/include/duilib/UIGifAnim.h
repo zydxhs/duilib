@@ -62,7 +62,7 @@ public:
     void    DoInit();
     bool    DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl);
     void    DoEvent(TEventUI &event);
-    void    SetVisible(bool bVisible = true);
+    bool SetVisible(bool bVisible = true);
     void    SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
     void    SetBkImage(LPCTSTR pStrImage);
     LPCTSTR GetBkImage();

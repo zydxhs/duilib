@@ -24,7 +24,7 @@ public:
     virtual void SetEnabled(bool bEnable = true);
     virtual void SetText(LPCTSTR pstrText);
 
-    virtual void SetVisible(bool bVisible = true);
+    virtual bool SetVisible(bool bVisible = true);
     virtual void SetInternVisible(bool bVisible = true);
     virtual SIZE EstimateSize(SIZE szAvailable);
     virtual void DoEvent(TEventUI &event);

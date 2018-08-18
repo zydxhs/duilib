@@ -335,7 +335,7 @@ public:
 
     IListOwnerUI *GetOwner();
     void SetOwner(CControlUI *pOwner);
-    void SetVisible(bool bVisible = true);
+    bool SetVisible(bool bVisible = true);
 
     bool IsSelected() const;
     bool Select(bool bSelect = true, bool bTriggerEvent = true);
@@ -455,7 +455,7 @@ public:
 
     IListOwnerUI *GetOwner();
     void SetOwner(CControlUI *pOwner);
-    void SetVisible(bool bVisible = true);
+    bool SetVisible(bool bVisible = true);
     void SetEnabled(bool bEnable = true);
 
     bool IsSelected() const;

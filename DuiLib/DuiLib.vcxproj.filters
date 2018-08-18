@@ -40,6 +40,12 @@
     <Filter Include="Source Files\Utils\Include">
       <UniqueIdentifier>{b2436450-c93e-4da9-a791-1b1c080fdbd2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Effect">
+      <UniqueIdentifier>{fe7369ab-c616-422d-b983-d84d535bff65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Effect">
+      <UniqueIdentifier>{14e4cef5-746e-4659-ab7a-a9df8b32edb0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="StdAfx.cpp">
@@ -191,6 +197,18 @@
     </ClCompile>
     <ClCompile Include="src\wke_dll.cpp">
       <Filter>Source Files\Control</Filter>
+    </ClCompile>
+    <ClCompile Include="src\effect\color_helper.cpp">
+      <Filter>Source Files\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="src\effect\image_process.cpp">
+      <Filter>Source Files\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="src\effect\Effect.cpp">
+      <Filter>Source Files\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="src\effect\UIEffect.cpp">
+      <Filter>Source Files\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -352,6 +370,51 @@
     </ClInclude>
     <ClInclude Include="include\duilib\wke_dll.h">
       <Filter>Header Files\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="src\effect\color_helper.h">
+      <Filter>Source Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\effect\cpuid.h">
+      <Filter>Source Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\effect\graph_def.h">
+      <Filter>Source Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\effect\graph_line.h">
+      <Filter>Source Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\effect\graph_math.h">
+      <Filter>Source Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\effect\graph_matrix.h">
+      <Filter>Source Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\effect\graph_projection.h">
+      <Filter>Source Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\effect\graph_rect.h">
+      <Filter>Source Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\effect\graph_vector.h">
+      <Filter>Source Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\effect\graph_view.h">
+      <Filter>Source Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\effect\graph_warpmatrix.h">
+      <Filter>Source Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\effect\image_process.h">
+      <Filter>Source Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\effect\motion.h">
+      <Filter>Source Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="src\effect\Effect.h">
+      <Filter>Source Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="include\duilib\UIEffect.h">
+      <Filter>Header Files\Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

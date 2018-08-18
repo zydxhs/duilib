@@ -11,7 +11,7 @@ namespace DuiLib {
 typedef CControlUI *(CALLBACK *FINDCONTROLPROC)(CControlUI *, LPVOID);
 class COleDataHelper;
 
-class DUILIB_API CControlUI
+class DUILIB_API CControlUI : public IEffectCallBackUI
 {
 public:
     CControlUI();
@@ -130,7 +130,7 @@ public:
 
     // 一些重要的属性
     virtual bool IsVisible() const;
-    virtual void SetVisible(bool bVisible = true);
+    virtual bool SetVisible(bool bVisible = true);
     // .仅供内部调用，有些UI拥有窗口句柄，需要重写此函数
     virtual void SetInternVisible(bool bVisible = true);
     virtual bool IsEnabled() const;
@@ -209,8 +209,20 @@ public:
     void SetAutoHeight(bool bAutoHeight);
     bool GetAutoHeight(void);
 
+    // 2018-08-18 zhuyadong 添加特效
+    bool AddEffect(BYTE byTrigger, BYTE byEffect, WORD wElapse = 150, bool bDirection = true, bool bLoop = false);
+    void DelEffect(BYTE byTrigger);                 // 删除动画触发器
+    bool StartEffect(BYTE byTrigger);               // 开始播放动画
+    void StopEffect(void);                          // 停止播放动画
+    BYTE GetEffectTrigger(void);                    // 获取当前特效触发器ID
+
+    virtual void OnEffectBegin(TAniParam &data);    // 每一个特效开始时回调
+    virtual void OnEffectEnd(TAniParam &data);      // 每一个特效结束时回调
+    virtual void OnEffectDraw(TAniParam &data);     // 每一个特效帧绘制时回调
+
 protected:
     void OnDoDragDrop(TEventUI &evt);
+    void ParseEffectInfo(LPCTSTR pstrValue, BYTE &byEffect, WORD &wElapse, bool &bDirection, bool &bLoop);
 
 public:
     CEventSource OnInit;
@@ -225,11 +237,13 @@ protected:
     CPaintManagerUI *m_pManager;
     CControlUI *m_pParent;
     CControlUI *m_pCover;
+    CEffectUI *m_pEffect;     // 动画特效对象
     CDuiString m_sVirtualWnd;
     CDuiString m_sName;
     bool m_bUpdateNeeded;
     bool m_bMenuUsed;
     bool m_bAsyncNotify;
+    BYTE m_byEffectTrigger; // 正在播放的动画的触发器ID
     RECT m_rcItem;          // 控件包含边框的矩形
     RECT m_rcMargin;        // 外边距
     SIZE m_cXY;

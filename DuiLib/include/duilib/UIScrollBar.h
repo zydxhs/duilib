@@ -15,7 +15,7 @@ public:
     CContainerUI *GetOwner() const;
     void SetOwner(CContainerUI *pOwner);
 
-    void SetVisible(bool bVisible = true);
+    bool SetVisible(bool bVisible = true);
     void SetEnabled(bool bEnable = true);
     void SetFocus();
 

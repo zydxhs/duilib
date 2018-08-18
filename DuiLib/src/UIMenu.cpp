@@ -419,6 +419,7 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandl
                     pLayout->Add(static_cast<CControlUI *>(pItem));
                 }
             }
+
             // LPCTSTR pDefAttrMenu = m_pOwner->GetManager()->GetDefaultAttributeList(DUI_CTR_MENU);
             // LPCTSTR pDefAttrItem = m_pOwner->GetManager()->GetDefaultAttributeList(DUI_CTR_MENUELEMENT);
             // CMenuElementUI *pItem = NULL;
@@ -895,15 +896,15 @@ void CMenuElementUI::DoEvent(TEventUI &event)
 {
     switch (event.Type)
     {
-    case UIEVENT_TIMER:             OnTimer(event);                             break;
+    case UIEVENT_TIMER:             OnTimer(event);             break;
 
-    case UIEVENT_MOUSEENTER:        OnMouseEnter(event);                        break;
+    case UIEVENT_MOUSEENTER:        OnMouseEnter(event);        break;
 
-    case UIEVENT_MOUSELEAVE:        OnMouseLeave(event);                        break;
+    case UIEVENT_MOUSELEAVE:        OnMouseLeave(event);        break;
 
-    case UIEVENT_BUTTONUP:          OnLButtonUp(event);                         break;
+    case UIEVENT_BUTTONUP:          OnLButtonUp(event);         break;
 
-    case UIEVENT_KEYDOWN:           OnKeyDown(event);                           break;
+    case UIEVENT_KEYDOWN:           OnKeyDown(event);           break;
 
     case UIEVENT_BUTTONDOWN:
     case UIEVENT_RBUTTONDOWN:
@@ -911,8 +912,10 @@ void CMenuElementUI::DoEvent(TEventUI &event)
 
         break;
 
-    default:                        CListContainerElementUI::DoEvent(event);    break;
+    default:                                                    break;
     }
+
+    CListContainerElementUI::DoEvent(event);
 }
 
 void CMenuElementUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)

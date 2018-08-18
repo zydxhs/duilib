@@ -2404,9 +2404,10 @@ void CListElementUI::SetOwner(CControlUI *pOwner)
     if (pOwner != NULL) { m_pOwner = static_cast<IListOwnerUI *>(pOwner->GetInterface(DUI_CTR_ILISTOWNER)); }
 }
 
-void CListElementUI::SetVisible(bool bVisible)
+bool CListElementUI::SetVisible(bool bVisible /*= true*/)
 {
-    CControlUI::SetVisible(bVisible);
+    // 2018-08-18 zhuyadong 添加特效
+    if (!CControlUI::SetVisible(bVisible)) { return false; }
 
     if (!IsVisible() && m_bSelected)
     {
@@ -2414,6 +2415,8 @@ void CListElementUI::SetVisible(bool bVisible)
 
         if (m_pOwner != NULL) { m_pOwner->SelectItem(-1); }
     }
+
+    return true;
 }
 
 void CListElementUI::SetEnabled(bool bEnable)
@@ -3512,9 +3515,10 @@ void CListContainerElementUI::SetOwner(CControlUI *pOwner)
     if (pOwner != NULL) { m_pOwner = static_cast<IListOwnerUI *>(pOwner->GetInterface(DUI_CTR_ILISTOWNER)); }
 }
 
-void CListContainerElementUI::SetVisible(bool bVisible)
+bool CListContainerElementUI::SetVisible(bool bVisible /*= true*/)
 {
-    CContainerUI::SetVisible(bVisible);
+    // 2018-08-18 zhuyadong 添加特效
+    if (!CContainerUI::SetVisible(bVisible)) { return false; }
 
     if (!IsVisible() && m_bSelected)
     {
@@ -3522,6 +3526,8 @@ void CListContainerElementUI::SetVisible(bool bVisible)
 
         if (m_pOwner != NULL) { m_pOwner->SelectItem(-1); }
     }
+
+    return true;
 }
 
 void CListContainerElementUI::SetEnabled(bool bEnable)

@@ -96,9 +96,19 @@ LRESULT CWndImplBase::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bo
 
 LRESULT CWndImplBase::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
-    if (ESTATE_SHOW == m_nWndState) { OnDataSave(); }
+    // 2018-08-18 zhuyadong 添加特效
+    if (lParam == TRIGGER_NONE)
+    {
+        if (ESTATE_SHOW == m_nWndState) { OnDataSave(); }
 
-    bHandled = FALSE;
+        // 阻止窗体关闭，等待特效播放完毕
+        m_pm.GetRoot()->StartEffect(TRIGGER_HIDE);
+    }
+    else
+    {
+        bHandled = FALSE;
+    }
+
     return 0;
 }
 
@@ -755,6 +765,8 @@ INLINE void CWndImplBase::Notify(TNotifyUI &msg)
 {
     if (msg.sType == DUI_MSGTYPE_WINDOWINIT)
     {
+        // 2018-08-18 zhuyadong 添加特效
+        m_pm.GetRoot()->StartEffect(TRIGGER_SHOW);
         OnPrepare();
         return;
     }

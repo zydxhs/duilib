@@ -859,11 +859,14 @@ void CIPAddressUI::Move(SIZE szOffset, bool bNeedInvalidate)
     }
 }
 
-void CIPAddressUI::SetVisible(bool bVisible)
+bool CIPAddressUI::SetVisible(bool bVisible /*= true*/)
 {
-    CControlUI::SetVisible(bVisible);
+    // 2018-08-18 zhuyadong 添加特效
+    if (!CControlUI::SetVisible(bVisible)) {return false; }
 
     if (!IsVisible() && m_pWindow != NULL) { m_pManager->SetFocus(NULL); }
+
+    return true;
 }
 
 void CIPAddressUI::SetInternVisible(bool bVisible)

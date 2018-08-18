@@ -65,7 +65,7 @@ public:
 
     void SetPos(RECT rc, bool bNeedInvalidate = true);
     void Move(SIZE szOffset, bool bNeedInvalidate = true);
-    void SetVisible(bool bVisible = true);
+    bool SetVisible(bool bVisible = true);
     void SetInternVisible(bool bVisible = true);
     SIZE EstimateSize(SIZE szAvailable);
     void DoEvent(TEventUI &event);

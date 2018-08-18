@@ -132,10 +132,11 @@ void CButtonUI::DoEvent(TEventUI &event)
     {
         if (::PtInRect(&m_rcItem, event.ptMouse))
         {
-            if (event.Type == UIEVENT_CLICK)         { Activate(); }
+            // // 2018-08-18 zhuyadong 添加特效。单击特效
+            if (event.Type == UIEVENT_CLICK)         { StartEffect(TRIGGER_CLICK); Activate(); }
             else if (event.Type == UIEVENT_DBLCLICK) { m_pManager->SendNotify(this, DUI_MSGTYPE_DBLCLICK); }
 
-            // 2018-07-15 如果启用了响应频率控制，并且处理于可用状态
+            // 2018-07-15 如果启用了响应频率控制，并且处于可用状态
             // 有可能用户响应事件后，设置按钮为禁用，此时就不能启动该特性，避免超时后置按钮为可用状态
             if (0 != m_byDisableSeconds && IsEnabled())
             {

@@ -508,11 +508,14 @@ void CHotKeyUI::SetPos(RECT rc)
     }
 }
 
-void CHotKeyUI::SetVisible(bool bVisible)
+bool CHotKeyUI::SetVisible(bool bVisible /*= true*/)
 {
-    CControlUI::SetVisible(bVisible);
+    // 2018-08-18 zhuyadong 添加特效
+    if (!CControlUI::SetVisible(bVisible)) { return false; }
 
     if (!IsVisible() && m_pWindow != NULL) { m_pManager->SetFocus(NULL); }
+
+    return true;
 }
 
 void CHotKeyUI::SetInternVisible(bool bVisible)

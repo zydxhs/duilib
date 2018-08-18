@@ -88,6 +88,7 @@
 #include "duilib/Utils.h"
 #include "duilib/UIDelegate.h"
 #include "duilib/UIDefine.h"
+#include "duilib/UIEffect.h"
 #include "duilib/UIManager.h"
 #include "duilib/UIBase.h"
 #include "duilib/UIControl.h"

@@ -409,12 +409,15 @@ void CGifAnimUI::DoEvent(TEventUI &event)
     if (event.Type == UIEVENT_TIMER) { OnTimer((UINT_PTR)event.wParam); }
 }
 
-void CGifAnimUI::SetVisible(bool bVisible)
+bool CGifAnimUI::SetVisible(bool bVisible /*= true*/)
 {
-    CControlUI::SetVisible(bVisible);
+    // 2018-08-18 zhuyadong 添加特效
+    if (!CControlUI::SetVisible(bVisible)) { return false; }
 
     if (bVisible) { PlayGif(); }
     else { StopGif(); }
+
+    return true;
 }
 
 void CGifAnimUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)

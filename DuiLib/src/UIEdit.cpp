@@ -946,11 +946,14 @@ void CEditUI::Move(SIZE szOffset, bool bNeedInvalidate)
     }
 }
 
-void CEditUI::SetVisible(bool bVisible)
+bool CEditUI::SetVisible(bool bVisible /*= true*/)
 {
-    CControlUI::SetVisible(bVisible);
+    // 2018-08-18 zhuyadong 添加特效
+    if (!CControlUI::SetVisible(bVisible)) { return false; }
 
     if (!IsVisible() && m_pWindow != NULL) { m_pManager->SetFocus(NULL); }
+
+    return true;
 }
 
 void CEditUI::SetInternVisible(bool bVisible)

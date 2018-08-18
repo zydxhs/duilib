@@ -393,20 +393,43 @@ void CWkeBrowserUI::DoEvent(TEventUI &event)
 
 bool CWkeBrowserUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl)
 {
+    // 2018-08-18 zhuyadong 添加特效
+    if (NULL != m_pEffect && m_pEffect->IsRunning(m_byEffectTrigger))
+    {
+        // 窗体显示特效：第一次走到这里，并非是特效，而是系统触发的绘制。应该过滤掉
+        if (TRIGGER_SHOW == m_byEffectTrigger && 0 == m_pEffect->GetCurFrame(m_byEffectTrigger)) { return true; }
+
+        BLENDFUNCTION bf = { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
+        static PFunAlphaBlend spfAlphaBlend = GetAlphaBlend();
+        spfAlphaBlend(hDC, m_rcItem.left, m_rcItem.top, m_rcItem.right - m_rcItem.left,
+                      m_rcItem.bottom - m_rcItem.top, m_pEffect->GetMemHDC(m_byEffectTrigger),
+                      0, 0, m_rcItem.right - m_rcItem.left, m_rcItem.bottom - m_rcItem.top, bf);
+        return true;
+    }
+
     // 绘制循序：背景颜色->背景图->状态图->文本->边框
     if (m_cxyBorderRound.cx > 0 || m_cxyBorderRound.cy > 0)
     {
         CRenderClip roundClip;
-        CRenderClip::GenerateRoundClip(hDC, m_rcPaint, m_rcItem, m_cxyBorderRound.cx, m_cxyBorderRound.cy,
-                                       roundClip);
+        CRenderClip::GenerateRoundClip(hDC, m_rcPaint, m_rcItem,
+                                       m_cxyBorderRound.cx, m_cxyBorderRound.cy, roundClip);
+        PaintBkColor(hDC);
+        PaintBkImage(hDC);
+        PaintStatusImage(hDC);
+        PaintWebContent(hDC, rcPaint);
+        PaintText(hDC);
+        PaintBorder(hDC);
+    }
+    else
+    {
+        PaintBkColor(hDC);
+        PaintBkImage(hDC);
+        PaintStatusImage(hDC);
+        PaintWebContent(hDC, rcPaint);
+        PaintText(hDC);
+        PaintBorder(hDC);
     }
 
-    PaintBkColor(hDC);
-    PaintBkImage(hDC);
-    PaintStatusImage(hDC);
-    PaintWebContent(hDC, rcPaint);
-    PaintText(hDC);
-    PaintBorder(hDC);
     return true;
 }
 

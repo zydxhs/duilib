@@ -211,7 +211,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>include;src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;src\include;src\effect;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <ResourceCompile>
@@ -253,7 +253,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>include;src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;src\include;src\effect;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
@@ -305,7 +305,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>include;src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;src\include;src\effect;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
@@ -352,7 +352,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>include;src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;src\include;src\effect;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
@@ -406,7 +406,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>include;src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;src\include;src\effect;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <ResourceCompile>
@@ -452,7 +452,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>include;src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;src\include;src\effect;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <ResourceCompile>
@@ -504,7 +504,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
-      <AdditionalIncludeDirectories>include;src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;src\include;src\effect;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <ResourceCompile>
@@ -548,7 +548,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>include;src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;src\include;src\effect;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <ResourceCompile>
@@ -579,6 +579,10 @@
   <ItemGroup>
     <ClCompile Include="src\DataObject.cpp" />
     <ClCompile Include="src\DropSource.cpp" />
+    <ClCompile Include="src\effect\color_helper.cpp" />
+    <ClCompile Include="src\effect\Effect.cpp" />
+    <ClCompile Include="src\effect\image_process.cpp" />
+    <ClCompile Include="src\effect\UIEffect.cpp" />
     <ClCompile Include="src\GifInfo.cpp" />
     <ClCompile Include="src\OleDataHelper.cpp" />
     <ClCompile Include="src\DropTarget.cpp" />
@@ -651,6 +655,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\duilib\UIEffect.h" />
     <ClInclude Include="include\duilib\OleDataHelper.h" />
     <ClInclude Include="include\duilib\Subject.h" />
     <ClInclude Include="include\duilib\UIActiveX.h" />
@@ -695,6 +700,20 @@
     <ClInclude Include="include\duilib\WinImplBase.h" />
     <ClInclude Include="include\duilib\wke_dll.h" />
     <ClInclude Include="include\UIlib.h" />
+    <ClInclude Include="src\effect\color_helper.h" />
+    <ClInclude Include="src\effect\cpuid.h" />
+    <ClInclude Include="src\effect\Effect.h" />
+    <ClInclude Include="src\effect\graph_def.h" />
+    <ClInclude Include="src\effect\graph_line.h" />
+    <ClInclude Include="src\effect\graph_math.h" />
+    <ClInclude Include="src\effect\graph_matrix.h" />
+    <ClInclude Include="src\effect\graph_projection.h" />
+    <ClInclude Include="src\effect\graph_rect.h" />
+    <ClInclude Include="src\effect\graph_vector.h" />
+    <ClInclude Include="src\effect\graph_view.h" />
+    <ClInclude Include="src\effect\graph_warpmatrix.h" />
+    <ClInclude Include="src\effect\image_process.h" />
+    <ClInclude Include="src\effect\motion.h" />
     <ClInclude Include="src\include\DataObject.h" />
     <ClInclude Include="src\include\deelx.h" />
     <ClInclude Include="src\include\DropSource.h" />

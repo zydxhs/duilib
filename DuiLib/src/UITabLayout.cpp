@@ -133,10 +133,8 @@ bool CTabLayoutUI::SelectItem(CControlUI *pControl, bool bTriggerEvent)
 {
     int iIndex = GetItemIndex(pControl);
 
-    if (iIndex == -1)
-    { return false; }
-    else
-    { return SelectItem(iIndex, bTriggerEvent); }
+    if (iIndex == -1) { return false; }
+    else              { return SelectItem(iIndex, bTriggerEvent); }
 }
 
 void CTabLayoutUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)

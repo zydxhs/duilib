@@ -47,7 +47,7 @@ public:
     CDuiString GetModuleName() const;
     void SetModuleName(LPCTSTR pstrText);
 
-    void SetVisible(bool bVisible = true);
+    bool SetVisible(bool bVisible = true);
     void SetInternVisible(bool bVisible = true);
     void SetPos(RECT rc, bool bNeedInvalidate = true);
     void Move(SIZE szOffset, bool bNeedInvalidate = true);

@@ -10,9 +10,11 @@ CControlUI::CControlUI()
     : m_pManager(NULL)
     , m_pParent(NULL)
     , m_pCover(NULL)
+    , m_pEffect(NULL)
     , m_bUpdateNeeded(true)
     , m_bMenuUsed(false)
     , m_bAsyncNotify(false)
+    , m_byEffectTrigger(TRIGGER_NONE)
     , m_bVisible(true)
     , m_bInternVisible(true)
     , m_bHot(false)
@@ -59,6 +61,13 @@ CControlUI::CControlUI()
 
 CControlUI::~CControlUI()
 {
+    // 2018-08-18 zhuyadong 添加特效
+    if (m_pEffect != NULL)
+    {
+        delete m_pEffect;
+        m_pEffect = NULL;
+    }
+
     if (m_pCover != NULL)
     {
         m_pCover->Delete();
@@ -788,9 +797,16 @@ bool CControlUI::IsVisible() const
     return m_bVisible && m_bInternVisible;
 }
 
-void CControlUI::SetVisible(bool bVisible)
+bool CControlUI::SetVisible(bool bVisible /*= true*/)
 {
-    if (m_bVisible == bVisible) { return; }
+    if (m_bVisible == bVisible) { return true; }
+
+    // 2018-08-18 zhuyadong 添加特效。显示/隐藏特效
+    if (TRIGGER_NONE == m_byEffectTrigger)
+    {
+        if (!bVisible && StartEffect(TRIGGER_HIDE)) { return false; }
+        else if (bVisible) { StartEffect(TRIGGER_SHOW); }
+    }
 
     bool v = IsVisible();
     m_bVisible = bVisible;
@@ -808,6 +824,8 @@ void CControlUI::SetVisible(bool bVisible)
     }
 
     if (m_pCover != NULL) { m_pCover->SetInternVisible(IsVisible()); }
+
+    return true;
 }
 
 void CControlUI::SetInternVisible(bool bVisible)
@@ -1083,6 +1101,13 @@ void CControlUI::DoEvent(TEventUI &event)
     if (event.Type == UIEVENT_TIMER)
     {
         m_pManager->SendNotify(this, DUI_MSGTYPE_TIMER, event.wParam, event.lParam);
+
+        // 2018-08-18 zhuyadong 添加特效
+        if (event.wParam <= TIMERID_TRIGGER_MAX && m_pEffect)
+        {
+            m_pEffect->OnElapse(event.wParam);
+        }
+
         return;
     }
 
@@ -1117,6 +1142,9 @@ void CControlUI::DoEvent(TEventUI &event)
         {
             m_bHot = true;
         }
+
+        // 2018-08-18 zhuyadong 添加特效。鼠标移入特效
+        StartEffect(TRIGGER_ENTER);
     }
 
     if (event.Type == UIEVENT_MOUSELEAVE)
@@ -1125,6 +1153,9 @@ void CControlUI::DoEvent(TEventUI &event)
         {
             m_bHot = false;
         }
+
+        // 2018-08-18 zhuyadong 添加特效。鼠标移出特效
+        StartEffect(TRIGGER_LEAVE);
     }
 
     if (m_pParent != NULL) { m_pParent->DoEvent(event); }
@@ -1335,6 +1366,19 @@ void CControlUI::OnDoDragDrop(TEventUI &evt)
     ReleaseCapture();
 }
 
+// 2018-08-18 zhuyadong 添加特效
+void CControlUI::ParseEffectInfo(LPCTSTR pstrValue, BYTE &byEffect, WORD &wElapse, bool &bDirection,
+                                 bool &bLoop)
+{
+    LPTSTR pstr = NULL;
+    byEffect = (BYTE)_tcstol(pstrValue, &pstr, 10); ASSERT(pstr);
+    wElapse = (WORD)_tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
+    pstrValue = pstr + 1;
+    LPCTSTR pstr2 = _tcschr(pstrValue, _T(',')); ASSERT(pstr2);
+    bDirection = (_tcsncmp(pstrValue, _T("true"), 4) == 0) ? true : false;
+    bLoop = (_tcsncmp(pstr2 + 1, _T("true"), 4) == 0) ? true : false;
+}
+
 CDuiString CControlUI::GetAttribute(LPCTSTR pstrName)
 {
     return _T("");
@@ -1511,6 +1555,47 @@ void CControlUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if (_tcscmp(pstrName, _T("dragimage")) == 0) { m_diDrag = pstrValue; }
     else if (_tcscmp(pstrName, _T("autowidth")) == 0) { SetAutoWidth(_tcscmp(pstrValue, _T("true")) == 0); }
     else if (_tcscmp(pstrName, _T("autoheight")) == 0) { SetAutoHeight(_tcscmp(pstrValue, _T("true")) == 0); }
+    // 2018-08-18 zhuyadong 添加特效
+    else if (_tcscmp(pstrName, _T("triggerenter")) == 0)
+    {
+        BYTE byEffect = EFFECT_FLIPLEFT;
+        WORD wFrequency = 150;
+        bool bDirection = true, bLoop = false;
+        ParseEffectInfo(pstrValue, byEffect, wFrequency, bDirection, bLoop);
+        AddEffect(TRIGGER_ENTER, byEffect, wFrequency, bDirection, bLoop);
+    }
+    else if (_tcscmp(pstrName, _T("triggerleave")) == 0)
+    {
+        BYTE byEffect = EFFECT_FLIPLEFT;
+        WORD wFrequency = 150;
+        bool bDirection = true, bLoop = false;
+        ParseEffectInfo(pstrValue, byEffect, wFrequency, bDirection, bLoop);
+        AddEffect(TRIGGER_LEAVE, byEffect, wFrequency, bDirection, bLoop);
+    }
+    else if (_tcscmp(pstrName, _T("triggerclick")) == 0)
+    {
+        BYTE byEffect = EFFECT_FLIPLEFT;
+        WORD wFrequency = 150;
+        bool bDirection = true, bLoop = false;
+        ParseEffectInfo(pstrValue, byEffect, wFrequency, bDirection, bLoop);
+        AddEffect(TRIGGER_CLICK, byEffect, wFrequency, bDirection, bLoop);
+    }
+    else if (_tcscmp(pstrName, _T("triggershow")) == 0)
+    {
+        BYTE byEffect = EFFECT_FLIPLEFT;
+        WORD wFrequency = 150;
+        bool bDirection = true, bLoop = false;
+        ParseEffectInfo(pstrValue, byEffect, wFrequency, bDirection, bLoop);
+        AddEffect(TRIGGER_SHOW, byEffect, wFrequency, bDirection, bLoop);
+    }
+    else if (_tcscmp(pstrName, _T("triggerhide")) == 0)
+    {
+        BYTE byEffect = EFFECT_FLIPLEFT;
+        WORD wFrequency = 150;
+        bool bDirection = true, bLoop = false;
+        ParseEffectInfo(pstrValue, byEffect, wFrequency, bDirection, bLoop);
+        AddEffect(TRIGGER_HIDE, byEffect, wFrequency, bDirection, bLoop);
+    }
     else { AddCustomAttribute(pstrName, pstrValue); }
 }
 
@@ -1600,19 +1685,41 @@ bool CControlUI::Paint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl)
 
 bool CControlUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl)
 {
+    // 2018-08-18 zhuyadong 添加特效
+    if (NULL != m_pEffect && m_pEffect->IsRunning(m_byEffectTrigger))
+    {
+        // 窗体显示特效：第一次走到这里，并非是特效，而是系统触发的绘制。应该过滤掉
+        if (TRIGGER_SHOW == m_byEffectTrigger && 0 == m_pEffect->GetCurFrame(m_byEffectTrigger)) { return true; }
+
+        BLENDFUNCTION bf = { AC_SRC_OVER, 0, 255, AC_SRC_ALPHA };
+        static PFunAlphaBlend spfAlphaBlend = GetAlphaBlend();
+        spfAlphaBlend(hDC, m_rcItem.left, m_rcItem.top, m_rcItem.right - m_rcItem.left,
+                      m_rcItem.bottom - m_rcItem.top, m_pEffect->GetMemHDC(m_byEffectTrigger),
+                      0, 0, m_rcItem.right - m_rcItem.left, m_rcItem.bottom - m_rcItem.top, bf);
+        return true;
+    }
+
     // 绘制循序：背景颜色->背景图->状态图->文本->边框
     if (m_cxyBorderRound.cx > 0 || m_cxyBorderRound.cy > 0)
     {
         CRenderClip roundClip;
-        CRenderClip::GenerateRoundClip(hDC, m_rcPaint,  m_rcItem, m_cxyBorderRound.cx, m_cxyBorderRound.cy,
-                                       roundClip);
+        CRenderClip::GenerateRoundClip(hDC, m_rcPaint, m_rcItem,
+                                       m_cxyBorderRound.cx, m_cxyBorderRound.cy, roundClip);
+        PaintBkColor(hDC);
+        PaintBkImage(hDC);
+        PaintStatusImage(hDC);
+        PaintText(hDC);
+        PaintBorder(hDC);
+    }
+    else
+    {
+        PaintBkColor(hDC);
+        PaintBkImage(hDC);
+        PaintStatusImage(hDC);
+        PaintText(hDC);
+        PaintBorder(hDC);
     }
 
-    PaintBkColor(hDC);
-    PaintBkImage(hDC);
-    PaintStatusImage(hDC);
-    PaintText(hDC);
-    PaintBorder(hDC);
     return true;
 }
 
@@ -1886,6 +1993,82 @@ void CControlUI::SetAutoHeight(bool bAutoHeight)
 bool CControlUI::GetAutoHeight(void)
 {
     return m_bAutoHeight;
+}
+
+// 2018-08-18 zhuyadong 添加特效
+bool CControlUI::AddEffect(BYTE byTrigger, BYTE byEffect, WORD wElapse, bool bDirection, bool bLoop)
+{
+    if (NULL == m_pEffect) { m_pEffect = new CEffectUI(this); }
+
+    if (NULL == m_pEffect) { return false; }
+
+    return m_pEffect->Add(byTrigger, byEffect, wElapse, bDirection, bLoop);
+}
+
+void CControlUI::DelEffect(BYTE byTrigger)
+{
+    if (NULL != m_pEffect)
+    {
+        m_pEffect->Del(byTrigger);
+    }
+}
+
+bool CControlUI::StartEffect(BYTE byTrigger)
+{
+    if (NULL == m_pEffect || !m_pEffect->HasEffectTrigger(byTrigger)) { return false; }
+
+    if (TRIGGER_NONE != m_byEffectTrigger) { StopEffect(); }
+
+    bool bRet = m_pEffect->Start(byTrigger);
+
+    if (bRet) { m_byEffectTrigger = byTrigger; }
+
+    return bRet;
+}
+
+void CControlUI::StopEffect(void)
+{
+    if (NULL != m_pEffect)
+    {
+        m_pEffect->Stop(m_byEffectTrigger);
+        m_byEffectTrigger = TRIGGER_NONE;
+    }
+}
+
+INLINE BYTE CControlUI::GetEffectTrigger(void)
+{
+    return m_byEffectTrigger;
+}
+
+void CControlUI::OnEffectBegin(TAniParam &data)
+{
+    if (m_pParent) { m_pParent->Invalidate(); }
+    else
+    {
+        HWND hParent = ::GetParent(GetManager()->GetPaintWindow());
+        ::RedrawWindow(hParent, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+    }
+}
+
+void CControlUI::OnEffectEnd(TAniParam &data)
+{
+    // 触发控件隐藏
+    if (TRIGGER_HIDE == m_byEffectTrigger)
+    {
+        if (m_pParent) { SetVisible(false);}
+        else
+        {
+            // 窗体关闭特效，重新发送 WM_CLOSE 消息，带参数特效触发器
+            ::PostMessage(m_pManager->GetPaintWindow(), WM_CLOSE, 0, m_byEffectTrigger);
+        }
+    }
+
+    m_byEffectTrigger = TRIGGER_NONE;
+}
+
+void CControlUI::OnEffectDraw(TAniParam &data)
+{
+    ::RedrawWindow(GetManager()->GetPaintWindow(), &m_rcItem, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 }
 
 } // namespace DuiLib

@@ -49,7 +49,7 @@ public:
     void RemoveAll();
 
     void DoEvent(TEventUI &event);
-    void SetVisible(bool bVisible = true);
+    bool SetVisible(bool bVisible = true);
     void SetInternVisible(bool bVisible = true);
     void SetMouseEnabled(bool bEnable = true);
 
