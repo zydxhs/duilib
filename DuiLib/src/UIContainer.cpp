@@ -292,7 +292,7 @@ bool CContainerUI::SetVisible(bool bVisible /*= true*/)
     // 2018-08-18 zhuyadong 添加特效。显示特效
     if (TRIGGER_NONE == m_byEffectTrigger && bVisible)
     {
-        if (m_rcItem.left == m_rcItem.right && m_rcItem.top == m_rcItem.bottom && m_pParent)
+        if (m_rcItem.left == m_rcItem.right || m_rcItem.top == m_rcItem.bottom && m_pParent)
         {
             RECT rc = m_pParent->GetPos();
             m_pParent->SetPos(rc, true);

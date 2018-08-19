@@ -801,11 +801,10 @@ bool CControlUI::SetVisible(bool bVisible /*= true*/)
 {
     if (m_bVisible == bVisible) { return true; }
 
-    // 2018-08-18 zhuyadong 添加特效。显示/隐藏特效
+    // 2018-08-18 zhuyadong 修复控件首次显示特效问题
     if (TRIGGER_NONE == m_byEffectTrigger)
     {
         if (!bVisible && StartEffect(TRIGGER_HIDE)) { return false; }
-        else if (bVisible) { StartEffect(TRIGGER_SHOW); }
     }
 
     bool v = IsVisible();
@@ -824,6 +823,18 @@ bool CControlUI::SetVisible(bool bVisible /*= true*/)
     }
 
     if (m_pCover != NULL) { m_pCover->SetInternVisible(IsVisible()); }
+
+    // 2018-08-18 zhuyadong 修复控件首次显示特效问题
+    if (TRIGGER_NONE == m_byEffectTrigger && bVisible)
+    {
+        if (m_rcItem.left == m_rcItem.right || m_rcItem.top == m_rcItem.bottom && m_pParent)
+        {
+            RECT rc = m_pParent->GetPos();
+            m_pParent->SetPos(rc, true);
+        }
+
+        StartEffect(TRIGGER_SHOW);
+    }
 
     return true;
 }
