@@ -479,6 +479,7 @@ private:
 
 private:
     CDuiString m_sName;
+    CDuiString m_sDefFocusedCtrl;       // 2018-08-19 zhuyadong 用于设置默认焦点控件
     HWND m_hWndPaint;
     HDC m_hDcPaint;
     HDC m_hDcOffscreen;

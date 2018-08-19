@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- <Window size="360,600" sizebox="4,4,6,6" caption="0,0,0,24" roundcorner="4,4" shadowshow="true" shadowimage="file='shadow.png' scale9='23,13,23,33'"> -->
+<Window size="360,260" layered="true" focusedctrl="btn_test" >
+    <Include source="default.xml" />
+    <Default name="Button" value="normalimage=&quot;&quot; bkcolor=&quot;#FFD3D3D3&quot; focusedbkcolor=&quot;#FFF0F000&quot; " />
+
+	<!-- <AniLayout bkcolor="#FFA8C8C8" > -->
+    <VerticalLayout bkcolor="#FFC8C8C8" bordersize="1" bordercolor="#FF808080" inset="1,1,1,1" >
+        <HorizontalLayout height="30" visible="false" >
+            <RadioBox group="rdselect" name="rd_first" text="IPC" />
+            <RadioBox group="rdselect" name="rd_second" text="Radar" />
+        </HorizontalLayout>
+        <HorizontalLayout height="30" childmargin="10" >
+            <Button name="btn_login" text="Login" />
+            <Button name="btn_test" text="test" />
+            <Button name="btn_focus" text="TEST" bkcolor="#FFF0F0F0" hotbkcolor="#FFD0D0D0" focusedbkcolor="#FFB0B0B0" pushedbkcolor="#FF909090" />
+        </HorizontalLayout>
+        <HorizontalLayout height="40" inset="20,4,20,4" visible="true" >
+            <Option name="opt_test" text="颜色按钮" selected="false" />
+            <Option text="禁用的按钮" selected="false" enabled="false" disabledbkcolor="#FF707070" />
+        </HorizontalLayout>
+        <HorizontalLayout height="40" inset="20,4,20,4" visible="true" >
+            <Option text="颜色按钮" selected="true" selnormalbkcolor="" selhotbkcolor="" bkcolor="#FFd0d009" hotbkcolor="#FFd000d0" selfocusedbkcolor="#FFB05050" selpushedbkcolor="#FF905050" />
+            <Option text="禁用的按钮" selected="true" enabled="false" disabledbkcolor="#FF705050" />
+        </HorizontalLayout>
+    </VerticalLayout>
+	<!-- </AniLayout> -->
+</Window>

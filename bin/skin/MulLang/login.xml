@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- <Window size="360,600" sizebox="4,4,6,6" caption="0,0,0,24" roundcorner="4,4" shadowshow="true" shadowimage="file='shadow.png' scale9='23,13,23,33'"> -->
+<Window size="360,260" sizebox="4,4,6,6" caption="0,0,0,24" roundcorner="4,4" layered="false" >
+    <Include source="default.xml" />
+
+	<VerticalLayout name="layani" bkcolor="#FFF8C8C8" >
+        <HorizontalLayout height="24" inset="10,3,0,0" >
+            <Label name="apptitle" text="登录框" minwidth="20" font="1" />
+            <Button name="btnmin" tooltip="min" width="26" minwidth="26" height="18" normalimage="minimize.png" hotimage="minimize_h.png" pushedimage="minimize_p" />
+            <Button name="btnclose" tooltip="close" width="43" minwidth="43" height="18" normalimage="close.png" hotimage="close_h.png" pushedimage="close_p" />
+        </HorizontalLayout>
+        <HorizontalLayout height="30" >
+            <RadioBox group="rdselect" name="rd_first" text="IPC" />
+            <RadioBox group="rdselect" name="rd_second" text="Radar" />
+        </HorizontalLayout>
+        <HorizontalLayout height="30" >
+            <Button name="btn_login" text="Login" />
+        </HorizontalLayout>
+        <VerticalLayout autoheight="true" childmargin="3" inset="5,5,5,5" >
+            <Edit name="edt_1" height="24" text="Name" bordersize="1" bordercolor="#FFA0A0A0" />
+            <Edit name="edt_2" height="24" text="Name" bordersize="1" bordercolor="#FFA0A0A0" />
+            <Edit name="edt_3" height="24" text="Name" bordersize="1" bordercolor="#FFA0A0A0" />
+        </VerticalLayout>
+	</VerticalLayout>
+</Window>

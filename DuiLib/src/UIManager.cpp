@@ -1202,7 +1202,9 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
                     if (m_bFirstLayout)
                     {
                         m_bFirstLayout = false;
-                        SendNotify(m_pRoot, DUI_MSGTYPE_WINDOWINIT,  0, 0, false);
+                        SendNotify(m_pRoot, DUI_MSGTYPE_WINDOWINIT, 0, 0, false);
+                        // 2018-08-19 zhuyadong 设置窗体默认焦点
+                        SetFocusNeeded(FindControl(m_sDefFocusedCtrl));
 
                         if (m_bLayered && m_bLayeredChanged)
                         {
@@ -4262,8 +4264,8 @@ void CPaintManagerUI::SetWindowAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if (_tcsicmp(pstrName, _T("shadowsharpness")) == 0) { m_pWndShadow->SetSharpness(_ttoi(pstrValue)); }
     else if (_tcsicmp(pstrName, _T("shadowdarkness")) == 0) { m_pWndShadow->SetDarkness(_ttoi(pstrValue)); }
     else if (_tcscmp(pstrName, _T("shadowimage")) == 0) { m_pWndShadow->SetImage(pstrValue); }
-    else
-    { AddWindowCustomAttribute(pstrName, pstrValue); }
+    else if (_tcscmp(pstrName, _T("focusedctrl")) == 0) { m_sDefFocusedCtrl = pstrValue; }
+    else { AddWindowCustomAttribute(pstrName, pstrValue); }
 }
 
 INLINE CDuiString CPaintManagerUI::GetWindowAttributeList(bool bIgnoreDefault)

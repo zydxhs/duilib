@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!-- <Window size="360,600" sizebox="4,4,6,6" caption="0,0,0,24" roundcorner="4,4" shadowshow="true" shadowimage="file='shadow.png' scale9='23,13,23,33'"> -->
-<Window size="360,600" sizebox="4,4,6,6" caption="0,0,0,24" roundcorner="4,4" shadowshow="true" shadowsize="8" shadowcolor="#FF4F4F4F" shadowsharpness="8" shadowdarkness="180" shadowpos="0,0" dropenable="true" >
+<Window size="360,600" sizebox="4,4,6,6" caption="0,0,0,34" roundcorner="4,4" shadowshow="true" shadowsize="8" shadowcolor="#FF4F4F4F" shadowsharpness="8" shadowdarkness="180" shadowpos="0,0" dropenable="true" focusedctrl="btnChgLang" >
     <Include source="default.xml" />
 
 	<VerticalLayout inset="10,6,10,6" bkcolor="#FFC8C8C8" colorhsl="true" bkimage="file='voice_rect.png' xtiled='true' ytiled='true' fade='200' dest='0,0,200,400'" >
@@ -8,7 +8,7 @@
             <Label name="apptitle" text="%[title]" width="30" minwidth="20" maxwidth="60" font="1" textcolor="#FFFFFFFF" bkcolor="#FF00F0F0" />
             <Label name="1" text="http://baidu.com" bkcolor="#FF0000F0" weight="-10" />
             <HorizontalLayout width="100" minwidth="90" weight="-5" >
-                <Edit name="2" text="三生三世十里桃花" />
+                <Edit name="2" valign="center" text="三生三世十里桃花" enabled="false" />
             </HorizontalLayout>
             <Control name="3" weight="1001" bkcolor="#FF00F0F0" />
             <Button name="btnmin" tooltip="min" width="26" minwidth="26" height="18" normalimage="minimize.png" hotimage="minimize_h.png" pushedimage="minimize_p" />
@@ -17,7 +17,7 @@
             <Button name="btnclose" tooltip="close" width="43" minwidth="43" height="18" normalimage="close.png" hotimage="close_h.png" pushedimage="close_p" />
         </HWeightLayout>
         <HorizontalLayout height="24">
-            <Combo width="80" height="24" itemendellipsis="true" >
+            <Combo width="80" height="24" itemendellipsis="true" enabled="false" >
                 <ListLabelElement text="%[item1]ab" tooltip="This is Tooltip" tag="0" selected="true" />
                 <ListLabelElement text="%[item2]" tooltip="This is Tooltip"/>
             </Combo>
@@ -31,8 +31,15 @@
             <Label name="b" height="30" text="drag image check" bkcolor="#FFEA679F" dragenable="true" />
             <Label name="c" height="30" text="drag image uncheck" bkcolor="#FFD0D0D0" dragenable="true" dragimage="aaaa.png" />
         </HorizontalLayout>
-        <HorizontalLayout height="30" >
+        <HorizontalLayout height="30" childmargin="3" >
             <Button name="btnDrawImg" text="draw Text" />
+            <Button name="btn_create_child_dlg" text="Create Child Dialog" />
         </HorizontalLayout>
+        <VerticalLayout autoheight="true" childmargin="3" inset="5,5,5,5" >
+            <Edit name="edt_1" height="24" text="Name" bordersize="1" bordercolor="#FFA0A0A0" />
+            <Edit name="edt_2" height="24" text="Sex" bordersize="1" bordercolor="#FFA0A0A0" />
+            <Edit name="edt_3" height="24" text="Address" bordersize="1" bordercolor="#FFA0A0A0" />
+        </VerticalLayout>
+        <Container name="child" height="140" />
 	</VerticalLayout>
 </Window>
