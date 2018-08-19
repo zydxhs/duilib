@@ -898,8 +898,6 @@ bool CPaintManagerUI::PreMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam,
                          _tcscmp(m_pFocus->GetClass(), DUI_CTR_IPADDRESS) == 0))
         {
             if ((dwKeyState & MK_ALT))  { dwKeyState &= ~MK_ALT; }
-            else                        { return false; }
-
         }
 
         FINDSHORTCUT fs = { 0, false, false, false, false };
@@ -4671,7 +4669,7 @@ bool CPaintManagerUI::TranslateMessage(const LPMSG pMsg)
         HWND hWndParent = ::GetParent(pMsg->hwnd);
 
         //code by redrain 2014.12.3,解决edit和webbrowser按tab无法切换焦点的bug
-        //      for( int i = 0; i < m_aPreMessages.GetSize(); i++ )
+        // for (int i = 0; i < m_aPreMessages.GetSize(); i++)
         for (int i = m_aPreMessages.GetSize() - 1; i >= 0 ; --i)
         {
             CPaintManagerUI *pT = static_cast<CPaintManagerUI *>(m_aPreMessages[i]);

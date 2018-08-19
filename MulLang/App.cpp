@@ -544,8 +544,6 @@ private:
         PostQuitMessage(0);
     }
 
-    virtual void InitWindow() { }
-
     bool OnHChanged(void *param)
     {
         TNotifyUI *pMsg = (TNotifyUI *)param;
