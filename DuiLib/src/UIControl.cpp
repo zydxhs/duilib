@@ -34,7 +34,7 @@ CControlUI::CControlUI()
     , m_dwBackColor3(0)
     , m_dwBorderColor(0)
     , m_dwHotBorderColor(0)
-    , m_dwFocusBorderColor(0)
+    , m_dwFocusedBorderColor(0)
     , m_dwSelectedBorderColor(0)
     , m_bColorHSL(false)
     , m_nBorderStyle(PS_SOLID)
@@ -298,14 +298,14 @@ void CControlUI::SetHotBorderColor(DWORD dwBorderColor)
 
 DWORD CControlUI::GetFocusBorderColor() const
 {
-    return m_dwFocusBorderColor;
+    return m_dwFocusedBorderColor;
 }
 
-void CControlUI::SetFocusBorderColor(DWORD dwBorderColor)
+void CControlUI::SetFocusedBorderColor(DWORD dwBorderColor)
 {
-    if (m_dwFocusBorderColor == dwBorderColor) { return; }
+    if (m_dwFocusedBorderColor == dwBorderColor) { return; }
 
-    m_dwFocusBorderColor = (dwBorderColor > 0x00ffffff) ? dwBorderColor : 0;
+    m_dwFocusedBorderColor = (dwBorderColor > 0x00ffffff) ? dwBorderColor : 0;
     Invalidate();
 }
 
@@ -1459,13 +1459,13 @@ void CControlUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
         SetHotBorderColor(clrColor);
     }
-    else if (_tcscmp(pstrName, _T("focusbordercolor")) == 0)
+    else if (_tcscmp(pstrName, _T("focusedbordercolor")) == 0)
     {
         if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
 
         LPTSTR pstr = NULL;
         DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetFocusBorderColor(clrColor);
+        SetFocusedBorderColor(clrColor);
     }
     else if (_tcscmp(pstrName, _T("selectedbordercolor")) == 0)
     {
@@ -1801,7 +1801,7 @@ void CControlUI::PaintText(HDC hDC)
 
 void CControlUI::PaintBorder(HDC hDC)
 {
-    if ((0 == m_dwBorderColor && 0 == m_dwHotBorderColor && 0 == m_dwFocusBorderColor) ||
+    if ((0 == m_dwBorderColor && 0 == m_dwHotBorderColor && 0 == m_dwFocusedBorderColor) ||
         (0 == m_rcBorderSize.left && 0 == m_rcBorderSize.right &&
          0 == m_rcBorderSize.top && 0 == m_rcBorderSize.bottom))
     {
@@ -1810,9 +1810,9 @@ void CControlUI::PaintBorder(HDC hDC)
 
     DWORD clrBorder = GetAdjustColor(m_dwBorderColor);
 
-    if (IsFocused() && m_dwFocusBorderColor != 0)
+    if (IsFocused() && m_dwFocusedBorderColor != 0)
     {
-        clrBorder = GetAdjustColor(m_dwFocusBorderColor);
+        clrBorder = GetAdjustColor(m_dwFocusedBorderColor);
     }
     else if (m_bHot && m_dwHotBorderColor != 0)
     {

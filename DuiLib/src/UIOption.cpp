@@ -598,7 +598,7 @@ void COptionUI::PaintText(HDC hDC)
 
 void COptionUI::PaintBorder(HDC hDC)
 {
-    if ((0 == m_dwBorderColor && 0 == m_dwHotBorderColor && 0 == m_dwFocusBorderColor) ||
+    if ((0 == m_dwBorderColor && 0 == m_dwHotBorderColor && 0 == m_dwFocusedBorderColor) ||
         (0 == m_rcBorderSize.left && 0 == m_rcBorderSize.right &&
          0 == m_rcBorderSize.top && 0 == m_rcBorderSize.bottom))
     {
@@ -607,9 +607,9 @@ void COptionUI::PaintBorder(HDC hDC)
 
     DWORD clrBorder = GetAdjustColor(m_dwBorderColor);
 
-    if (IsFocused() && m_dwFocusBorderColor != 0)
+    if (IsFocused() && m_dwFocusedBorderColor != 0)
     {
-        clrBorder = GetAdjustColor(m_dwFocusBorderColor);
+        clrBorder = GetAdjustColor(m_dwFocusedBorderColor);
     }
     else if (m_bHot && m_dwHotBorderColor != 0)
     {
