@@ -1154,9 +1154,9 @@ SIZE CContainerUI::EstimateSize(SIZE szAvailable)
             if (sz2.cy > m_cxyFixed.cy) { m_cxyFixed.cy = sz2.cy; }
         }
 
-        if (m_bAutoWidth) { sz.cx = m_cxyFixed.cx; }
+        if (m_bAutoWidth) { m_cxyFixed.cx += m_rcInset.left + m_rcInset.right; sz.cx = m_cxyFixed.cx; }
 
-        if (m_bAutoHeight) { sz.cy = m_cxyFixed.cy; }
+        if (m_bAutoHeight) { m_cxyFixed.cy += m_rcInset.top + m_rcInset.bottom; sz.cy = m_cxyFixed.cy; }
     }
 
     return sz;

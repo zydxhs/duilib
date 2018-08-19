@@ -442,6 +442,7 @@ SIZE CVerticalLayoutUI::EstimateSize(SIZE szAvailable)
             sz.cy += sz2.cy;
         }
 
+        sz.cy += m_rcInset.top + m_rcInset.bottom;
         m_cxyFixed.cy = sz.cy;
     }
 

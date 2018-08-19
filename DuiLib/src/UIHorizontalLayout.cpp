@@ -288,6 +288,7 @@ SIZE CHorizontalLayoutUI::EstimateSize(SIZE szAvailable)
             sz.cx += sz2.cx;
         }
 
+        sz.cx += m_rcInset.left + m_rcInset.right;
         m_cxyFixed.cx = sz.cx;
     }
 
