@@ -102,7 +102,10 @@ LRESULT CWndImplBase::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHa
         if (ESTATE_SHOW == m_nWndState) { OnDataSave(); }
 
         // 阻止窗体关闭，等待特效播放完毕
-        m_pm.GetRoot()->StartEffect(TRIGGER_HIDE);
+        if (!m_pm.GetRoot()->StartEffect(TRIGGER_HIDE))
+        {
+            bHandled = m_bModified;
+        }
     }
     else
     {
