@@ -11,7 +11,7 @@ static Color ARGB2Color(DWORD dwColor)
 
 CLabelUI::CLabelUI()
     : m_pWideText(0)
-    , m_uTextStyle(DT_SINGLELINE)
+    , m_uTextStyle(DT_SINGLELINE | DT_VCENTER)
     , m_dwTextColor(0)
     , m_dwDisabledTextColor(0)
     , m_iFont(-1)
