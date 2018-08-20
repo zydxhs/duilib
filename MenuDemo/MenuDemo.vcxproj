@@ -319,7 +319,9 @@
     <ResourceCompile Include="MenuDemo.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\menutest.xml" />
+    <None Include="res\menutest.xml">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="res\skin.xml" />
   </ItemGroup>
   <ItemGroup>

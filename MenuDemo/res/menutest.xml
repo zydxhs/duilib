@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Window >
+<!-- <Window roundcorner="2,2" opacity="200" > -->
+<Window layered="true" >
   <Font id="0" name="微软雅黑" size="12" bold="false" default="true" />
   <Font id="1" name="微软雅黑" size="12" bold="true"/>
   <Default name="Menu" shared="true" value="inset=&quot;2,2,2,2&quot; itemtextpadding=&quot;30,0,20,0&quot; bkimage=&quot;res='121' restype='png' corner='27,2,2,2' hole='false'&quot; itemselectedbkcolor=&quot;#FF338ACA&quot;" />

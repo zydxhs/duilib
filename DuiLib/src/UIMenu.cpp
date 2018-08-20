@@ -413,7 +413,7 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandl
                 if (NULL != pItem)
                 {
                     pItem->SetAttributeList(pDefAttr);
-                    pItem->SetAttributeList(pDefAttr);
+                    pItem->SetAttributeList(pDefAttr2);
 
                     pItem->SetOwner(pLayout);
                     pLayout->Add(static_cast<CControlUI *>(pItem));
@@ -444,7 +444,19 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandl
         pShadow->SetShow(false);
 
         m_pm.AttachDialog(pLayout);
-        m_pm.SetLayered(m_pOwner->GetManager()->IsLayered());
+
+        if (m_pOwner->GetManager()->IsLayered())
+        {
+            m_pm.SetLayered(true);
+            m_pm.SetLayeredImage(m_pOwner->GetManager()->GetLayeredImage());
+        }
+        else
+        {
+            m_pm.SetOpacity(m_pOwner->GetManager()->GetOpacity());
+        }
+
+        SIZE szRC = m_pOwner->GetManager()->GetRoundCorner();
+        m_pm.SetRoundCorner(szRC.cx, szRC.cy);
         m_pm.AddNotifier(this);
         ResizeSubMenu();
     }
