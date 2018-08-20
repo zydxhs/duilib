@@ -4684,7 +4684,10 @@ bool CPaintManagerUI::TranslateMessage(const LPMSG pMsg)
                 {
                     if (pT->TranslateAccelerator(pMsg)) { return true; }
 
-                    pT->PreMessageHandler(pMsg->message, pMsg->wParam, pMsg->lParam, lRes);
+                    // 2018-08-20 zhuyadong 解决子在窗体上按TAB，父窗体切换焦点的问题(redrain 的 bug)
+                    if (pT->PreMessageHandler(pMsg->message, pMsg->wParam, pMsg->lParam, lRes)) { return true; }
+
+                    return false;
                 }
 
                 hTempParent = GetParent(hTempParent);
