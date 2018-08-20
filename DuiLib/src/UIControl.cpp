@@ -2075,6 +2075,7 @@ void CControlUI::OnEffectEnd(TAniParam &data)
     }
 
     m_byEffectTrigger = TRIGGER_NONE;
+    Invalidate();
 }
 
 void CControlUI::OnEffectDraw(TAniParam &data)

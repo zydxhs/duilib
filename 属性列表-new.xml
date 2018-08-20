@@ -130,11 +130,11 @@
             <Attribute name="dragenable" default="false" type="BOOL" comment="是否支持拖拽（拖放源），重写UIEVENT_MOUSEMOVE消息的控件，不支持本属性"/>
             <Attribute name="dragimage" default="" type="STRING" comment="拖拽时显示的图片"/>
             <!-- 特效。特效需要4个参数：特效id、帧持续毫秒数、动画方向、是否循环。-->
-            <Attribute name="effectenter" default="" type="BYTE,WORD,BOOL,BOOL" comment="鼠标移入特效。"/>
-            <Attribute name="effectleave" default="" type="BYTE,WORD,BOOL,BOOL" comment="鼠标移出特效。"/>
-            <Attribute name="effectclick" default="" type="BYTE,WORD,BOOL,BOOL" comment="鼠标单击特效。"/>
-            <Attribute name="effectshow" default="" type="BYTE,WORD,BOOL,BOOL" comment="控件显示特效。"/>
-            <Attribute name="effecthide" default="" type="BYTE,WORD,BOOL,BOOL" comment="控件隐藏特效。"/>
+            <Attribute name="triggerenter" default="" type="BYTE,WORD,BOOL,BOOL" comment="鼠标移入特效。"/>
+            <Attribute name="triggerleave" default="" type="BYTE,WORD,BOOL,BOOL" comment="鼠标移出特效。"/>
+            <Attribute name="triggerclick" default="" type="BYTE,WORD,BOOL,BOOL" comment="鼠标单击特效。"/>
+            <Attribute name="triggershow" default="" type="BYTE,WORD,BOOL,BOOL" comment="控件显示特效。"/>
+            <Attribute name="triggerhide" default="" type="BYTE,WORD,BOOL,BOOL" comment="控件隐藏特效。"/>
         </Control>
         <Container parent="Control" notifies="setfocus killfocus timer menu windowinit(root) dblclick">
             <Attribute name="inset" default="0,0,0,0" type="RECT" comment="内边距,如(2,2,2,2)"/>

@@ -1,7 +1,7 @@
 #pragma once
-#include "Graph_Def.h"
-#include "Graph_Rect.h"
-#include "ImageProcess.h"
+#include "graph_def.h"
+#include "graph_rect.h"
+#include "image_process.h"
 
 namespace DuiLib {
 

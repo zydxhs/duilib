@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graph_Vector.h"
+#include "graph_vector.h"
 using namespace Graph;
 
 namespace Motion {
