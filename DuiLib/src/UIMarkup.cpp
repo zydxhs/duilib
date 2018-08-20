@@ -309,7 +309,7 @@ bool CMarkup::LoadFromMem(BYTE *pByte, DWORD dwSize, int encoding)
             {
                 pByte += 2;
 
-                for (DWORD nSwap = 0 ; nSwap < dwSize ; nSwap ++)
+                for (DWORD nSwap = 0; nSwap < dwSize; nSwap ++)
                 {
                     register CHAR nTemp = pByte[(nSwap << 1) + 0 ];
                     pByte[(nSwap << 1) + 0 ] = pByte[(nSwap << 1) + 1 ];
@@ -362,7 +362,7 @@ bool CMarkup::LoadFromMem(BYTE *pByte, DWORD dwSize, int encoding)
             {
                 pByte += 2;
 
-                for (DWORD nSwap = 0 ; nSwap < dwSize ; nSwap ++)
+                for (DWORD nSwap = 0; nSwap < dwSize; nSwap ++)
                 {
                     register CHAR nTemp = pByte[(nSwap << 1) + 0 ];
                     pByte[(nSwap << 1) + 0 ] = pByte[(nSwap << 1) + 1 ];

@@ -653,7 +653,7 @@ const CDuiString &CDuiString::operator=(LPCSTR lpStr)
         int cchStr = (int) strlen(lpStr) + 1;
         LPWSTR pwstr = (LPWSTR) _alloca(cchStr);
 
-        if (pwstr != NULL) { ::MultiByteToWideChar(CP_ACP, 0, lpStr, -1, pwstr, cchStr) ; }
+        if (pwstr != NULL) { ::MultiByteToWideChar(CP_ACP, 0, lpStr, -1, pwstr, cchStr); }
 
         Assign(pwstr);
     }
@@ -673,7 +673,7 @@ const CDuiString &CDuiString::operator+=(LPCSTR lpStr)
         int cchStr = (int) strlen(lpStr) + 1;
         LPWSTR pwstr = (LPWSTR) _alloca(cchStr);
 
-        if (pwstr != NULL) { ::MultiByteToWideChar(CP_ACP, 0, lpStr, -1, pwstr, cchStr) ; }
+        if (pwstr != NULL) { ::MultiByteToWideChar(CP_ACP, 0, lpStr, -1, pwstr, cchStr); }
 
         Append(pwstr);
     }

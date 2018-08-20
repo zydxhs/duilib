@@ -139,7 +139,7 @@ LRESULT CHotKeyWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         ::DeleteObject(hBrush);
         HFONT hOldFont = (HFONT)SelectObject(hDC, GetWindowFont(m_hWnd));
         ::SIZE size = { 0 };
-        ::GetTextExtentPoint32(hDC, strText.GetData(), strText.GetLength(), &size) ;
+        ::GetTextExtentPoint32(hDC, strText.GetData(), strText.GetLength(), &size);
         ::DrawText(hDC, strText.GetData(), -1, &rect, DT_LEFT | DT_SINGLELINE | DT_END_ELLIPSIS | DT_NOPREFIX);
         ::SelectObject(hDC, hOldFont);
         ::SetCaretPos(size.cx, 0);

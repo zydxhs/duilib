@@ -1023,7 +1023,7 @@ void CRenderEngine::FreeImage(TImageInfo *bitmap, bool bDelete)
         bitmap->pSrcBits = NULL;
     }
 
-    if (bDelete) { delete bitmap ; }
+    if (bDelete) { delete bitmap; }
 }
 
 void CRenderEngine::DrawImage(HDC hDC, HBITMAP hBitmap, const RECT &rc, const RECT &rcPaint,

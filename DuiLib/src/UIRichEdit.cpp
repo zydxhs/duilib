@@ -217,7 +217,7 @@ HRESULT InitDefaultCharFormat(CRichEditUI *re, CHARFORMAT2W *pcf, HFONT hfont)
     _tcscpy(pcf->szFaceName, lf.lfFaceName);
 #else
     //need to thunk pcf->szFaceName to a standard char string.in this case it's easy because our thunk is also our copy
-    MultiByteToWideChar(CP_ACP, 0, lf.lfFaceName, LF_FACESIZE, pcf->szFaceName, LF_FACESIZE) ;
+    MultiByteToWideChar(CP_ACP, 0, lf.lfFaceName, LF_FACESIZE, pcf->szFaceName, LF_FACESIZE);
 #endif
 
     return S_OK;
@@ -348,7 +348,7 @@ BOOL CTxtWinHost::Init(CRichEditUI *re, const CREATESTRUCT *pcs)
         size_t iLen = _tcslen(pcs->lpszName);
         LPWSTR lpText = new WCHAR[iLen + 1];
         ::ZeroMemory(lpText, (iLen + 1) * sizeof(WCHAR));
-        ::MultiByteToWideChar(CP_ACP, 0, pcs->lpszName, -1, (LPWSTR)lpText, iLen) ;
+        ::MultiByteToWideChar(CP_ACP, 0, pcs->lpszName, -1, (LPWSTR)lpText, iLen);
 
         if (FAILED(pserv->TxSetText((LPWSTR)lpText)))
         {
@@ -686,7 +686,7 @@ HRESULT CTxtWinHost::TxGetPasswordChar(TCHAR *pch)
 #ifdef _UNICODE
     *pch = chPasswordChar;
 #else
-    ::WideCharToMultiByte(CP_ACP, 0, &chPasswordChar, 1, pch, 1, NULL, NULL) ;
+    ::WideCharToMultiByte(CP_ACP, 0, &chPasswordChar, 1, pch, 1, NULL, NULL);
 #endif
     return NOERROR;
 }
@@ -806,7 +806,7 @@ void CTxtWinHost::SetFont(HFONT hFont)
     _tcscpy(cf.szFaceName, lf.lfFaceName);
 #else
     //need to thunk pcf->szFaceName to a standard char string.in this case it's easy because our thunk is also our copy
-    MultiByteToWideChar(CP_ACP, 0, lf.lfFaceName, LF_FACESIZE, cf.szFaceName, LF_FACESIZE) ;
+    MultiByteToWideChar(CP_ACP, 0, lf.lfFaceName, LF_FACESIZE, cf.szFaceName, LF_FACESIZE);
 #endif
 
     pserv->OnTxPropertyBitsChange(TXTBIT_CHARFORMATCHANGE, TXTBIT_CHARFORMATCHANGE);
@@ -1272,7 +1272,7 @@ CDuiString CRichEditUI::GetText() const
     GETTEXTEX gt;
     gt.flags = GT_DEFAULT;
 #ifdef _UNICODE
-    gt.cb = sizeof(TCHAR) * (lLen + 1) ;
+    gt.cb = sizeof(TCHAR) * (lLen + 1);
     gt.codepage = 1200;
     lpText = new TCHAR[lLen + 1];
     ::ZeroMemory(lpText, (lLen + 1) * sizeof(TCHAR));
@@ -1352,7 +1352,7 @@ void CRichEditUI::ReplaceSel(LPCTSTR lpszNewText, bool bCanUndo)
     int iLen = _tcslen(lpszNewText);
     LPWSTR lpText = new WCHAR[iLen + 1];
     ::ZeroMemory(lpText, (iLen + 1) * sizeof(WCHAR));
-    ::MultiByteToWideChar(CP_ACP, 0, lpszNewText, -1, (LPWSTR)lpText, iLen) ;
+    ::MultiByteToWideChar(CP_ACP, 0, lpszNewText, -1, (LPWSTR)lpText, iLen);
     TxSendMessage(EM_REPLACESEL, (WPARAM) bCanUndo, (LPARAM)lpText, 0);
     delete[] lpText;
 #endif
@@ -1760,7 +1760,7 @@ DWORD CRichEditUI::GetTipColor()
 
 void CRichEditUI::DoInit()
 {
-    if (m_bInited) { return ; }
+    if (m_bInited) { return; }
 
     CREATESTRUCT cs;
     cs.style = m_lTwhStyle;

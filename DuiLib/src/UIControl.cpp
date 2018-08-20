@@ -814,7 +814,7 @@ bool CControlUI::SetVisible(bool bVisible /*= true*/)
 
     if (!bVisible && m_pManager && m_pManager->GetFocus() == this)
     {
-        m_pManager->SetFocus(NULL) ;
+        m_pManager->SetFocus(NULL);
     }
 
     if (IsVisible() != v)
@@ -845,7 +845,7 @@ void CControlUI::SetInternVisible(bool bVisible)
 
     if (!bVisible && m_pManager && m_pManager->GetFocus() == this)
     {
-        m_pManager->SetFocus(NULL) ;
+        m_pManager->SetFocus(NULL);
     }
 
     if (m_pCover != NULL) { m_pCover->SetInternVisible(IsVisible()); }
@@ -876,11 +876,11 @@ void CControlUI::SetMouseEnabled(bool bEnabled)
 
 bool CControlUI::IsKeyboardEnabled() const
 {
-    return m_bKeyboardEnabled ;
+    return m_bKeyboardEnabled;
 }
 void CControlUI::SetKeyboardEnabled(bool bEnabled)
 {
-    m_bKeyboardEnabled = bEnabled ;
+    m_bKeyboardEnabled = bEnabled;
 }
 
 bool CControlUI::IsHot() const

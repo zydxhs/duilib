@@ -1140,7 +1140,7 @@ void CScale::ThreeOrder(const BYTE *DataSrc, const int srcStride, const real fx,
     real fu = (fx - x0) * 256;
     real fv = (fy - y0) * 256;
 
-    int fu_8, fv_8 ;
+    int fu_8, fv_8;
     REAL2INT(fu, fu_8);
     REAL2INT(fv, fv_8);
     __declspec(align(16)) real afu[4] = {m_sinxDivxTable[fu_8 + 256], m_sinxDivxTable[fu_8], m_sinxDivxTable[256 - fu_8], m_sinxDivxTable[512 - fu_8]};
@@ -1261,7 +1261,7 @@ void CScale::ThreeOrderBorder(const BYTE *DataSrc, const int srcStride, int srcL
     real fu = (fx - x0) * 256;
     real fv = (fy - y0) * 256;
 
-    int fu_8, fv_8 ;
+    int fu_8, fv_8;
     REAL2INT(fu, fu_8);
     REAL2INT(fv, fv_8);
     __declspec(align(16)) real afu[4] = {m_sinxDivxTable[fu_8 + 256], m_sinxDivxTable[fu_8], m_sinxDivxTable[256 - fu_8], m_sinxDivxTable[512 - fu_8]};
@@ -1275,7 +1275,7 @@ void CScale::ThreeOrderBorder(const BYTE *DataSrc, const int srcStride, int srcL
 
 
     int srcRight = srcLeft + srcWidth - 1;
-    int srcBottom = srcTop + srcHeight - 1 ;
+    int srcBottom = srcTop + srcHeight - 1;
 
     for (int i = 0; i < 4; i++)
     {

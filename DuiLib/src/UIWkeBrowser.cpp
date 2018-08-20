@@ -364,7 +364,7 @@ void CWkeBrowserUI::DoEvent(TEventUI &event)
             CANDIDATEFORM form;
             form.dwIndex = 0;
             form.dwStyle = CFS_EXCLUDE;
-            form.ptCurrentPos.x = caret.x ;
+            form.ptCurrentPos.x = caret.x;
             form.ptCurrentPos.y = caret.y + caret.h;
             form.rcArea.top = caret.y + m_rcPaint.top;
             form.rcArea.bottom = caret.y + caret.h + m_rcPaint.top;

@@ -609,7 +609,7 @@ public:
 
 public:
     int m_nCurrentPos;
-    int nsize ;
+    int nsize;
     int ncsize;
 };
 
@@ -1220,20 +1220,20 @@ template <class CHART> CPosixElxT <CHART> :: CPosixElxT(const char *posix, int b
         posix += 1;
     }
 
-    if (!strncmp(posix, "alnum:", 6)) { m_posixfun = ::isalnum ; }
-    else if (!strncmp(posix, "alpha:", 6))  { m_posixfun = ::isalpha ; }
-    else if (!strncmp(posix, "ascii:", 6))  { m_posixfun = ::isascii ; }
-    else if (!strncmp(posix, "cntrl:", 6))  { m_posixfun = ::iscntrl ; }
-    else if (!strncmp(posix, "digit:", 6))  { m_posixfun = ::isdigit ; }
-    else if (!strncmp(posix, "graph:", 6))  { m_posixfun = ::isgraph ; }
-    else if (!strncmp(posix, "lower:", 6))  { m_posixfun = ::islower ; }
-    else if (!strncmp(posix, "print:", 6))  { m_posixfun = ::isprint ; }
-    else if (!strncmp(posix, "punct:", 6))  { m_posixfun = ::ispunct ; }
-    else if (!strncmp(posix, "space:", 6))  { m_posixfun = ::isspace ; }
-    else if (!strncmp(posix, "upper:", 6))  { m_posixfun = ::isupper ; }
+    if (!strncmp(posix, "alnum:", 6)) { m_posixfun = ::isalnum; }
+    else if (!strncmp(posix, "alpha:", 6))  { m_posixfun = ::isalpha; }
+    else if (!strncmp(posix, "ascii:", 6))  { m_posixfun = ::isascii; }
+    else if (!strncmp(posix, "cntrl:", 6))  { m_posixfun = ::iscntrl; }
+    else if (!strncmp(posix, "digit:", 6))  { m_posixfun = ::isdigit; }
+    else if (!strncmp(posix, "graph:", 6))  { m_posixfun = ::isgraph; }
+    else if (!strncmp(posix, "lower:", 6))  { m_posixfun = ::islower; }
+    else if (!strncmp(posix, "print:", 6))  { m_posixfun = ::isprint; }
+    else if (!strncmp(posix, "punct:", 6))  { m_posixfun = ::ispunct; }
+    else if (!strncmp(posix, "space:", 6))  { m_posixfun = ::isspace; }
+    else if (!strncmp(posix, "upper:", 6))  { m_posixfun = ::isupper; }
     else if (!strncmp(posix, "xdigit:", 7)) { m_posixfun = ::isxdigit; }
-    else if (!strncmp(posix, "blank:", 6))  { m_posixfun =   isblank ; }
-    else                                    { m_posixfun = 0         ; }
+    else if (!strncmp(posix, "blank:", 6))  { m_posixfun = isblank; }
+    else                                    { m_posixfun = 0; }
 }
 
 inline int isblank(int c)
@@ -1426,8 +1426,9 @@ public:
 //
 // Implementation
 //
-template <class CHART> CStringElxT <CHART> :: CStringElxT(const CHART *fixed, int nlength, int brightleft,
-        int bignorecase) : m_szPattern(fixed, nlength)
+template <class CHART>
+CStringElxT<CHART>::CStringElxT(const CHART *fixed, int nlength, int brightleft, int bignorecase)
+    : m_szPattern(fixed, nlength)
 {
     m_brightleft  = brightleft;
     m_bignorecase = bignorecase;
@@ -3633,17 +3634,20 @@ template <class CHART> inline int CRegexpT <CHART> :: GetNamedGroupNumber(const 
     return m_builder.GetNamedNumber(group_name);
 }
 
-template <class CHART> CHART *CRegexpT <CHART> :: Replace(const CHART *tstring, const CHART *replaceto,
-        int start, int ntimes, MatchResult *result, CContext *pContext) const
+template <class CHART>
+CHART *CRegexpT<CHART>::Replace(const CHART *tstring, const CHART *replaceto, int start, int ntimes,
+                                MatchResult *result, CContext *pContext) const
 {
     int result_length = 0;
     return Replace(tstring, CBufferRefT<CHART>(tstring).GetSize(), replaceto,
                    CBufferRefT<CHART>(replaceto).GetSize(), result_length, start, ntimes, result, pContext);
 }
 
-template <class CHART> CHART *CRegexpT <CHART> :: Replace(const CHART *tstring, int string_length,
-        const CHART *replaceto, int to_length, int &result_length, int start, int ntimes, MatchResult *remote_result,
-        CContext *oContext) const
+template <class CHART>
+CHART *CRegexpT<CHART>::Replace(const CHART *tstring, int string_length, const CHART *replaceto,
+                                int to_length, int &result_length, int start, int ntimes, MatchResult *remote_result,
+                                CContext *oContext) const
+
 {
     if (m_builder.m_pTopElx == 0) { return 0; }
 
@@ -3652,9 +3656,10 @@ template <class CHART> CHART *CRegexpT <CHART> :: Replace(const CHART *tstring, 
     CBufferT <int> compiledto;
 
     static const CHART rtoptn[] = { RCHART('\\'), RCHART('$'), RCHART('('), RCHART('?'), RCHART(':'),
-        RCHART('['), RCHART('$'), RCHART('&'), RCHART('`'), RCHART('\''), RCHART('+'), RCHART('_'),
-        RCHART('\\'), RCHART('d'), RCHART(']'), RCHART('|'), RCHART('\\'), RCHART('{'), RCHART('.'),
-        RCHART('*'), RCHART('?'), RCHART('\\'), RCHART('}'), RCHART(')'), RCHART('\0') };
+                                    RCHART('['), RCHART('$'), RCHART('&'), RCHART('`'), RCHART('\''), RCHART('+'), RCHART('_'),
+                                    RCHART('\\'), RCHART('d'), RCHART(']'), RCHART('|'), RCHART('\\'), RCHART('{'), RCHART('.'),
+                                    RCHART('*'), RCHART('?'), RCHART('\\'), RCHART('}'), RCHART(')'), RCHART('\0')
+                                  };
     static CRegexpT <CHART> rtoreg(rtoptn);
 
     MatchResult local_result(0), * result = remote_result ? remote_result : & local_result;
@@ -4078,8 +4083,8 @@ template <int x> int CGlobalElxT <x> :: MatchNext(CContext *) const
 
 // greedelx.cpp: implementation of the CGreedyElx class.
 //
-template <int x> CGreedyElxT <x> :: CGreedyElxT(ElxInterface *pelx, int nmin,
-        int nmax) : CRepeatElxT <x> (pelx, nmin)
+template <int x> CGreedyElxT<x>::CGreedyElxT(ElxInterface *pelx, int nmin, int nmax)
+    : CRepeatElxT <x> (pelx, nmin)
 {
     m_nvart = nmax - nmin;
 }
@@ -4366,8 +4371,8 @@ template <int x> MatchResultT <x> &MatchResultT <x> :: operator = (const MatchRe
 
 // posselx.cpp: implementation of the CPossessiveElx class.
 //
-template <int x> CPossessiveElxT <x> :: CPossessiveElxT(ElxInterface *pelx, int nmin,
-        int nmax) : CGreedyElxT <x> (pelx, nmin, nmax)
+template <int x> CPossessiveElxT<x>::CPossessiveElxT(ElxInterface *pelx, int nmin, int nmax)
+    : CGreedyElxT <x> (pelx, nmin, nmax)
 {
 }
 
@@ -4419,8 +4424,8 @@ template <int x> int CPossessiveElxT <x> :: MatchNext(CContext *pContext) const
 
 // reluctx.cpp: implementation of the CReluctantElx class.
 //
-template <int x> CReluctantElxT <x> :: CReluctantElxT(ElxInterface *pelx, int nmin,
-        int nmax) : CRepeatElxT <x> (pelx, nmin)
+template <int x> CReluctantElxT<x>::CReluctantElxT(ElxInterface *pelx, int nmin, int nmax)
+    : CRepeatElxT <x> (pelx, nmin)
 {
     m_nvart = nmax - nmin;
 }

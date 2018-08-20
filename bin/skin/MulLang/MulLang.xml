@@ -11,10 +11,10 @@
                 <Edit name="2" valign="center" text="三生三世十里桃花" enabled="false" />
             </HorizontalLayout>
             <Control name="3" weight="1001" bkcolor="#FF00F0F0" />
-            <Button name="btnmin" tooltip="min" width="26" minwidth="26" height="18" normalimage="minimize.png" hotimage="minimize_h.png" pushedimage="minimize_p" />
-            <Button name="btnmax" tooltip="max" width="25" minwidth="25" height="18" normalimage="maximize.png" hotimage="maximize_h.png" pushedimage="maximize_p" />
-            <Button name="btnrestore" tooltip="restore" visible="false" width="25" minwidth="25" height="18" normalimage="restore.png" hotimage="restore_h.png" pushedimage="restore_p" />
-            <Button name="btnclose" tooltip="close" width="43" minwidth="43" height="18" normalimage="close.png" hotimage="close_h.png" pushedimage="close_p" />
+            <Button name="btnmin" tooltip="min" width="26" minwidth="26" height="18" normalimage="minimize.png" hotimage="minimize_h.png" pushedimage="minimize_p" keyboard="false" />
+            <Button name="btnmax" tooltip="max" width="25" minwidth="25" height="18" normalimage="maximize.png" hotimage="maximize_h.png" pushedimage="maximize_p" keyboard="false" />
+            <Button name="btnrestore" tooltip="restore" visible="false" width="25" minwidth="25" height="18" normalimage="restore.png" hotimage="restore_h.png" pushedimage="restore_p" keyboard="false" />
+            <Button name="btnclose" tooltip="close" width="43" minwidth="43" height="18" normalimage="close.png" hotimage="close_h.png" pushedimage="close_p" keyboard="false" />
         </HWeightLayout>
         <HorizontalLayout height="24">
             <Combo width="80" height="24" itemendellipsis="true" enabled="false" >

@@ -92,7 +92,7 @@ protected:
     {
         return (GetRValue(cl) * (DWORD)nAlpha / 255) |
                (GetGValue(cl) * (DWORD)nAlpha / 255) << 8 |
-               (GetBValue(cl) * (DWORD)nAlpha / 255) << 16 ;
+               (GetBValue(cl) * (DWORD)nAlpha / 255) << 16;
     }
 
 protected:

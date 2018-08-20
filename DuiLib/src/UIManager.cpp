@@ -3735,7 +3735,7 @@ void CPaintManagerUI::RemoveImage(LPCTSTR bitmap, bool bShared)
 
         if (data)
         {
-            CRenderEngine::FreeImage(data) ;
+            CRenderEngine::FreeImage(data);
             m_SharedResInfo.m_ImageHash.Remove(bitmap);
         }
     }
@@ -3745,7 +3745,7 @@ void CPaintManagerUI::RemoveImage(LPCTSTR bitmap, bool bShared)
 
         if (data)
         {
-            CRenderEngine::FreeImage(data) ;
+            CRenderEngine::FreeImage(data);
             m_ResInfo.m_ImageHash.Remove(bitmap);
         }
     }
@@ -4615,7 +4615,7 @@ CControlUI *CALLBACK CPaintManagerUI::__FindControlFromClass(CControlUI *pThis, 
     {
         int iIndex = -1;
 
-        while (pFoundControls->GetAt(++iIndex) != NULL) ;
+        while (pFoundControls->GetAt(++iIndex) != NULL);
 
         if (iIndex < pFoundControls->GetSize()) { pFoundControls->SetAt(iIndex, pThis); }
     }
@@ -4672,7 +4672,7 @@ bool CPaintManagerUI::TranslateMessage(const LPMSG pMsg)
 
         //code by redrain 2014.12.3,解决edit和webbrowser按tab无法切换焦点的bug
         // for (int i = 0; i < m_aPreMessages.GetSize(); i++)
-        for (int i = m_aPreMessages.GetSize() - 1; i >= 0 ; --i)
+        for (int i = m_aPreMessages.GetSize() - 1; i >= 0; --i)
         {
             CPaintManagerUI *pT = static_cast<CPaintManagerUI *>(m_aPreMessages[i]);
             HWND hTempParent = hWndParent;
