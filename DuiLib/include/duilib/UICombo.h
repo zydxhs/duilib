@@ -121,6 +121,9 @@ public:
     bool SelectItemByUserData(LPCTSTR pstrText);
 
 protected:
+    void SendDropUpNty();   // 2018-08-21 zhuyadong 下拉框收起通知
+
+protected:
     CComboWnd *m_pWindow;
 
     int m_iCurSel;

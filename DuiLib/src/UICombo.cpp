@@ -315,6 +315,7 @@ LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         else { m_pOwner->SetPos(m_pOwner->GetRelativePos(), false); }
 
         m_pOwner->SetFocus();
+        m_pOwner->SendDropUpNty();
     }
     else if (uMsg == WM_LBUTTONDOWN || uMsg == WM_LBUTTONDBLCLK)
     {
@@ -1566,6 +1567,11 @@ bool CComboUI::SelectItemByUserData(LPCTSTR pstrText)
     }
 
     return false;
+}
+
+void CComboUI::SendDropUpNty()
+{
+    if (m_pManager != NULL) { m_pManager->SendNotify(this, DUI_MSGTYPE_DROPUP); }
 }
 
 } // namespace DuiLib
