@@ -1572,4 +1572,23 @@ int CContainerUI::FindItemByUserData(LPCTSTR pstrText)
     return i;
 }
 
+bool CContainerUI::IsEnabled() const
+{
+    return m_bEnabled;
+}
+
+void CContainerUI::SetEnabled(bool bEnable /*= true*/)
+{
+    if (m_bEnabled == bEnable) { return; }
+
+    m_bEnabled = bEnable;
+
+    for (int i = 0; i < GetCount(); ++i)
+    {
+        static_cast<CControlUI *>(m_items[i])->SetEnabled(bEnable);
+    }
+
+    Invalidate();
+}
+
 } // namespace DuiLib
