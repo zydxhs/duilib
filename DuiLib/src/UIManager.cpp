@@ -975,8 +975,8 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
     for (int i = 0; i < m_aMessageFilters.GetSize(); i++)
     {
         bool bHandled = false;
-        LRESULT lResult = static_cast<IMessageFilterUI *>(m_aMessageFilters[i])->MessageHandler(uMsg, wParam, lParam,
-                          bHandled);
+        LRESULT lResult = static_cast<IMessageFilterUI *>(m_aMessageFilters[i])->MessageHandler(
+                              uMsg, wParam, lParam, bHandled);
 
         if (bHandled)
         {
@@ -2162,6 +2162,8 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
 
     case WM_KILLFOCUS:
         {
+            if (m_pFocus) { KillFocus(); }
+
             if (wParam != NULL)
             {
                 HWND hWnd = ::GetFocus();
@@ -2525,7 +2527,7 @@ void CPaintManagerUI::SetFocus(CControlUI *pControl, bool bFocusWnd)
     {
         TEventUI event = { 0 };
         event.Type = UIEVENT_KILLFOCUS;
-        event.pSender = pControl;
+        event.pSender = m_pFocus;
         event.dwTimestamp = ::GetTickCount();
         m_pFocus->Event(event);
         SendNotify(m_pFocus, DUI_MSGTYPE_KILLFOCUS);
@@ -2543,10 +2545,24 @@ void CPaintManagerUI::SetFocus(CControlUI *pControl, bool bFocusWnd)
         m_pFocus = pControl;
         TEventUI event = { 0 };
         event.Type = UIEVENT_SETFOCUS;
-        event.pSender = pControl;
+        event.pSender = m_pFocus;
         event.dwTimestamp = ::GetTickCount();
         m_pFocus->Event(event);
         SendNotify(m_pFocus, DUI_MSGTYPE_SETFOCUS);
+    }
+}
+
+void CPaintManagerUI::KillFocus(void)
+{
+    if (m_pFocus != NULL)
+    {
+        TEventUI event = { 0 };
+        event.Type = UIEVENT_KILLFOCUS;
+        event.pSender = m_pFocus;
+        event.dwTimestamp = ::GetTickCount();
+        m_pFocus->Event(event);
+        SendNotify(m_pFocus, DUI_MSGTYPE_KILLFOCUS);
+        m_pFocus = NULL;
     }
 }
 

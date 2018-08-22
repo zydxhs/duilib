@@ -399,8 +399,8 @@ public:
 
     CControlUI *GetFocus() const;
     void SetFocus(CControlUI *pControl, bool bFocusWnd = true);
+    void KillFocus(void);
     void SetFocusNeeded(CControlUI *pControl);
-
     bool SetNextTabControl(bool bForward = true);
 
     bool SetTimer(CControlUI *pControl, UINT nTimerID, UINT uElapse);
