@@ -1551,7 +1551,7 @@ int CContainerUI::FindItemByTag(UINT_PTR pTag)
 {
     int i = 0;
 
-    for (i = 0; i < m_items.GetSize(); ++i)
+    for (i = m_items.GetSize() - 1; i >= 0; --i)
     {
         if (static_cast<CControlUI *>(m_items[i])->GetTag() == pTag) { break; }
     }
@@ -1562,11 +1562,10 @@ int CContainerUI::FindItemByTag(UINT_PTR pTag)
 int CContainerUI::FindItemByUserData(LPCTSTR pstrText)
 {
     int i = 0;
-    CDuiString sUserData(pstrText);
 
-    for (i = 0; i < m_items.GetSize(); ++i)
+    for (i = m_items.GetSize() - 1; i >= 0; --i)
     {
-        if (static_cast<CControlUI *>(m_items[i])->GetUserData() == sUserData) { break; }
+        if (static_cast<CControlUI *>(m_items[i])->GetUserData() == pstrText) { break; }
     }
 
     return i;
