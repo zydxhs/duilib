@@ -911,9 +911,26 @@ bool CPaintManagerUI::PreMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam,
         CControlUI *pControl = m_pRoot->FindControl(__FindControlFromShortcut, &fs,
                                                     UIFIND_ENABLED | UIFIND_ME_FIRST | UIFIND_TOP_FIRST);
 
-        if (pControl != NULL)
+        if (pControl != NULL && !pControl->IsFocused())
         {
-            pControl->SetFocus();
+            // 如果焦点处于编辑框、IP框，需要销毁本机控件
+            if (m_pFocus && (_tcscmp(m_pFocus->GetClass(), DUI_CTR_EDIT) == 0 ||
+                             _tcscmp(m_pFocus->GetClass(), DUI_CTR_IPADDRESS) == 0))
+            {
+                for (int i = 0; i < m_aNativeWindowControl.GetSize(); ++i)
+                {
+                    if (static_cast<CControlUI *>(m_aNativeWindowControl[i]) == m_pFocus)
+                    {
+                        HWND hWnd = static_cast<HWND>(m_aNativeWindow[i]);
+
+                        if (::IsWindow(hWnd)) { ::PostMessage(hWnd, WM_KILLFOCUS, 0, 0); }
+
+                        break;
+                    }
+                }
+            }
+
+            SetFocus(pControl, false);
             pControl->Activate();
             return true;
         }
