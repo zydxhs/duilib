@@ -83,7 +83,7 @@
         <Attribute name="shadowsharpness" default="5" type="BYTE" comment="算法阴影的锐度(0~20)"/>
         <Attribute name="shadowdarkness" default="255" type="BYTE" comment="算法阴影的深度(相当于透明度)"/>
         <Attribute name="shadowimage" default="" type="STRING" comment="阴影图片，使用此属性后自动屏蔽算法阴影。支持 file|res|restype|corner/scale9 属性"/>
-        <Attribute name="dropenable" default="false" type="BOOL" comment="是否接受拖放"/>
+        <Attribute name="dropenable" default="false" type="BOOL" comment="是否接受拖放（拖放目标）"/>
         <Attribute name="delayclick" default="false" type="BOOL" comment="单击事件延迟发送，默认false。false系统默认特性，双击消息前会先发送单击消息；true会判断单击/双击消息，因此双击消息前不会有单击消息，单击消息会有一个双击的最大时间间隔。单击消息在首次弹起后发送；双击消息在第二次弹起后发送。"/>
         <Attribute name="focusedctrl" default="" type="BOOL" comment="窗体默认控件名字，如果不设置，duilib会把焦点设置到第一个支持焦点的控件上。" />
     </Window>

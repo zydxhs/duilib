@@ -64,6 +64,12 @@ tstring GetPathFile(HWND hWnd, int nFlag, tstring strDefFileName = tstring())
     return bRet ? tstring(szFile) : tstring();
 }
 
+// 返回指定的路径、文件是否存在
+bool IsPathFileExist(LPCTSTR lpcstrPathFile)
+{
+    return (_taccess(lpcstrPathFile, 0) == -1) ? false : true;
+}
+
 class CSkinView;
 CSkinView      *s_pSkin = NULL;
 
@@ -133,8 +139,6 @@ private:
 
 void CFrameWnd::Notify(TNotifyUI &msg)
 {
-    bool bHandled = true;
-
     if (msg.sType == DUI_MSGTYPE_CLICK)
     {
         if (msg.pSender->GetName() == _T("btnBrowse1"))
@@ -157,7 +161,6 @@ void CFrameWnd::Notify(TNotifyUI &msg)
         {
             if (NULL != s_pSkin) { s_pSkin->Close(); s_pSkin = NULL; }
         }
-        else { bHandled = false; }
     }
     else if (msg.sType == DUI_MSGTYPE_SELECTCHANGED)
     {
@@ -209,7 +212,37 @@ void CFrameWnd::Notify(TNotifyUI &msg)
             SwitchPage(UILIB_ZIP);
         }
     }
-    else { bHandled = false; }
+    else if (msg.sType == DUI_MSGTYPE_TEXTCHANGED)
+    {
+        CDuiString strName = msg.pSender->GetName();
+
+        if (strName == _T("edtPath"))
+        {
+            if (!IsPathFileExist(msg.pSender->GetText().GetData()))
+            {
+                CControlUI *pCtrl = m_pm.FindControl(_T("edtFile"));
+                ASSERT(pCtrl);
+
+                if (pCtrl) { pCtrl->SetText(_T("")); }
+            }
+        }
+        else if (strName == _T("edtZipFile"))
+        {
+            CDuiString sZipFile = msg.pSender->GetText();
+
+            if (!IsPathFileExist(sZipFile.GetData()))
+            {
+                CComboUI *pCtrl = dynamic_cast<CComboUI *>(m_pm.FindControl(_T("cmbZipName")));
+                ASSERT(pCtrl);
+
+                if (pCtrl) { pCtrl->RemoveAll(); pCtrl->SelectItem(-1); }
+            }
+            else
+            {
+                AddXmlFile(sZipFile);
+            }
+        }
+    }
 
     CWndImplBase::Notify(msg);
 }
@@ -217,6 +250,7 @@ void CFrameWnd::Notify(TNotifyUI &msg)
 
 void CFrameWnd::OnInitWindow(void)
 {
+    CWndImplBase::OnInitWindow();
     m_pBtnBrowse1 = dynamic_cast<CButtonUI *>(m_pm.FindControl(_T("btnBrowse1")));
     m_pBtnBrowse2 = dynamic_cast<CButtonUI *>(m_pm.FindControl(_T("btnBrowse2")));
     m_pBtnView = dynamic_cast<CButtonUI *>(m_pm.FindControl(_T("btnView")));

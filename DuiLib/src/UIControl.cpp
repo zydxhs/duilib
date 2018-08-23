@@ -1240,9 +1240,8 @@ void CControlUI::OnDragEnter(COleDataHelper *pDataHelper)
     }
     else
     {
-        pDataHelper->SetEffect(DROPEFFECT_NONE);
-
         if (m_pParent != NULL) { m_pParent->OnDragEnter(pDataHelper); }
+        else                   { pDataHelper->SetEffect(DROPEFFECT_NONE); }
     }
 }
 

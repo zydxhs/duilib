@@ -7,23 +7,23 @@
             <!-- title -->
             <Control bkimage="res='104' restype='PNG'" width="20" height="20" />
             <Label name="lblTitle" text="DuiLib 皮肤资源查看器" />
-            <Button name="btnclose" width="30" height="30" text="X" hotbkcolor="#FFF00000" />
+            <Button name="btnclose" width="30" height="30" text="X" hotbkcolor="#FFF00000" keyboard="false" />
         </HorizontalLayout>
         <VerticalLayout inset="30,40,30,0" dropenable="true" >
-            <HorizontalLayout height="24" childpadding="5" >
-                <Option name="optFile"    text="文件皮肤"  group="xml" width="60" selbkcolor="#FFE8E8E8" bindtablayout="tbLay" bindtabindex="0" selected="true" />
-                <Option name="optZipFile" text="Zip压缩包" group="xml" width="60" selbkcolor="#FFE8E8E8" bindtablayout="tbLay" bindtabindex="1" />
+            <HorizontalLayout height="24" childmargin="5" >
+                <Option name="optFile"    text="文件皮肤"  group="xml" width="60" selnormalbkcolor="#FFE8E8E8" hotbkcolor="#FFE8E8E8" bindtablayout="tbLay" bindtabindex="0" keyboard="false" selected="true" />
+                <Option name="optZipFile" text="Zip压缩包" group="xml" width="60" selnormalbkcolor="#FFE8E8E8" hotbkcolor="#FFE8E8E8" bindtablayout="tbLay" bindtabindex="1" keyboard="false" />
                 <Control />
             </HorizontalLayout>
             <TabLayout name="tbLay" inset="0,10,0,0" height="70" >
                 <VerticalLayout >
                     <!-- 文件皮肤 -->
-                    <HorizontalLayout height="30" inset="0,5,0,5" childpadding="5" >
+                    <HorizontalLayout height="30" inset="0,5,0,5" childmargin="5" >
                         <Label  name="lblPath" text="皮肤路径(P)" width="80" />
-                        <Edit   name="edtPath" shortcut="P" />
-                        <Button name="btnBrowse1" text="浏览(B)" width="60" shortcut="B" hotbkcolor="#FFE8E8E8" />
+                        <Edit   name="edtPath" shortcut="P" delaytxtchange="500" />
+                        <Button name="btnBrowse1" text="浏览(B)" width="60" shortcut="B" hotbkcolor="#FFE8E8E8" focusedbkcolor="#FFE8E8E8" />
                     </HorizontalLayout>
-                    <HorizontalLayout height="30" inset="0,5,0,5" childpadding="5" >
+                    <HorizontalLayout height="30" inset="0,5,0,5" childmargin="5" >
                         <Label  name="lblFile" text="皮肤文件名(F)" width="80" />
                         <Edit   name="edtFile" shortcut="F" />
                         <Control width="60" />
@@ -31,22 +31,22 @@
                 </VerticalLayout>
                 <VerticalLayout >
                     <!-- Zip压缩包皮肤 -->
-                    <HorizontalLayout height="30" inset="0,5,0,5" childpadding="5" >
+                    <HorizontalLayout height="30" inset="0,5,0,5" childmargin="5" >
                         <Label  name="lblZipFile" text="Zip压缩包(Z)" width="80" />
-                        <Edit   name="edtZipFile" shortcut="Z" />
-                        <Button name="btnBrowse2" text="浏览(B)" width="60" shortcut="B" hotbkcolor="#FFE8E8E8" />
+                        <Edit   name="edtZipFile" shortcut="Z" delaytxtchange="500" />
+                        <Button name="btnBrowse2" text="浏览(B)" width="60" shortcut="B" hotbkcolor="#FFE8E8E8" focusedbkcolor="#FFE8E8E8" />
                     </HorizontalLayout>
-                    <HorizontalLayout height="30" inset="0,5,0,5" childpadding="5"  >
+                    <HorizontalLayout height="30" inset="0,5,0,5" childmargin="5"  >
                         <Label  name="lblZipXml" text="皮肤文件名(N)" width="80" />
                         <Combo  name="cmbZipName" shortcut="N" bkcolor="#FFFFFFFF" dropboxsize="0,150" />
                         <Control width="60" />
                     </HorizontalLayout>
                 </VerticalLayout>
             </TabLayout>
-            <HorizontalLayout inset="0,20,0,0" height="50" childpadding="5" >
+            <HorizontalLayout inset="0,20,0,0" height="50" childmargin="5" >
                 <Control />
-                <Button name="btnView" text="预览(V)" width="80" shortcut="V" hotbkcolor="#FFE8E8E8" />
-                <Button name="btnStop" text="停止(S)" width="80" shortcut="S" hotbkcolor="#FFE8E8E8" />
+                <Button name="btnView" text="预览(V)" width="80" shortcut="V" hotbkcolor="#FFE8E8E8" focusedbkcolor="#FFE8E8E8" />
+                <Button name="btnStop" text="停止(S)" width="80" shortcut="S" hotbkcolor="#FFE8E8E8" focusedbkcolor="#FFE8E8E8" />
                 <Control />
             </HorizontalLayout>
         </VerticalLayout>
