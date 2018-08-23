@@ -740,6 +740,13 @@ void CControlUI::SetShortcut(LPCTSTR pstrText)
     if (tstring::npos != nPos)
     {
         m_chShortcut = sTxt[nPos];
+
+        // 2018-08-23 zhuyadong 快捷键设置：不支持 SHIFT + 字母，只有字母时，自动添加 ALT
+        // 如果快捷键为 SHIFT + 字母，则自动去掉 SHIFT
+        if (!m_bNeedCtrl && !m_bNeedAlt) { m_bNeedShift = false; }
+
+        // 如果快捷键只有一个字母，则自动添加 ALT
+        if (!m_bNeedCtrl && !m_bNeedShift) { m_bNeedAlt = true; }
     }
     else
     {

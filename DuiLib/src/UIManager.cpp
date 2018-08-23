@@ -890,14 +890,16 @@ bool CPaintManagerUI::PreMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam,
         if (m_pRoot == NULL) { return false; }
 
         // Handle [CTRL|ALT|SHIFT]-shortcut key-combinations
-        // 2018-08-06 当焦点处于 Edit、RichEdit、IPAdddresss 时，用户必须按下 ALT，才视为快捷键，否则当作正常输入
+        // 2018-08-23 zhuyadong 修复快捷键问题
+        // 1. 不能return，否则会导致在编辑框中按 TAB 无法切换焦点
+        // 2. 2018-08-06 当焦点处于 Edit、RichEdit、IPAdddresss 时，用户必须按下 ALT，才视为快捷键，否则当作正常输入
         UINT dwKeyState = MapKeyState();
 
-        if (m_pFocus && (_tcscmp(m_pFocus->GetClass(), DUI_CTR_EDIT) == 0 ||
-                         _tcscmp(m_pFocus->GetClass(), DUI_CTR_RICHEDIT) == 0 ||
-                         _tcscmp(m_pFocus->GetClass(), DUI_CTR_IPADDRESS) == 0))
+        if (m_pFocus && _tcscmp(m_pFocus->GetClass(), DUI_CTR_EDIT) != 0 &&
+            _tcscmp(m_pFocus->GetClass(), DUI_CTR_RICHEDIT) != 0 &&
+            _tcscmp(m_pFocus->GetClass(), DUI_CTR_IPADDRESS) != 0)
         {
-            if ((dwKeyState & MK_ALT))  { dwKeyState &= ~MK_ALT; }
+            dwKeyState |= MK_ALT;
         }
 
         FINDSHORTCUT fs = { 0, false, false, false, false };
