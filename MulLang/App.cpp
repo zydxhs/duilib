@@ -510,12 +510,6 @@ private:
         pChild->Create(GetHWND(), _T("%[title]"), UI_WNDSTYLE_CHILD, 0);
         AddChild(_T("child"), pChild);
         Relayout();
-        //CDlgChild *pp = dynamic_cast<CDlgChild *>(pChild);
-        //
-        //if (pp)
-        //{
-        //    pp->SetFocus(_T("btn_focus"));
-        //}
     }
 
     void Notify(TNotifyUI &msg)
