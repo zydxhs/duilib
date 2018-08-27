@@ -122,6 +122,7 @@ public:
     bool Remove(CControlUI *pControl, bool bDoNotDestroy = false);
     bool RemoveAt(int iIndex, bool bDoNotDestroy = false);
     void RemoveAll();
+    bool RemoveCount(int iIndex, int iCount, bool bDoNotDestroy = false);
 
     void EnsureVisible(int iIndex);
     void Scroll(int dx, int dy);

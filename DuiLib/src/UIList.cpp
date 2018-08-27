@@ -329,6 +329,29 @@ void CListUI::RemoveAll()
     m_pList->RemoveAll();
 }
 
+bool CListUI::RemoveCount(int iIndex, int iCount, bool bDoNotDestroy)
+{
+    if (!m_pList->RemoveCount(iIndex, iCount, bDoNotDestroy)) { return false; }
+
+    for (int i = iIndex; i < m_pList->GetCount(); ++i)
+    {
+        CControlUI *p = m_pList->GetItemAt(i);
+        IListItemUI *pListItem = static_cast<IListItemUI *>(p->GetInterface(DUI_CTR_ILISTITEM));
+
+        if (pListItem != NULL) { pListItem->SetIndex(i); }
+    }
+
+    if (iIndex == m_iCurSel && m_iCurSel >= 0)
+    {
+        int iSel = m_iCurSel;
+        m_iCurSel = -1;
+        SelectItem(FindSelectable(iSel, false));
+    }
+    else if (iIndex < m_iCurSel) { m_iCurSel -= 1; }
+
+    return true;
+}
+
 void CListUI::SetPos(RECT rc, bool bNeedInvalidate)
 {
     if (m_pHeader != NULL)    // 设置header各子元素x坐标,因为有些listitem的setpos需要用到(临时修复)

@@ -180,6 +180,27 @@ void CContainerUI::RemoveAll()
     NeedUpdate();
 }
 
+bool CContainerUI::RemoveCount(int iIndex, int iCount, bool bDoNotDestroy)
+{
+    if (iIndex >= m_items.GetSize() || iIndex + iCount > m_items.GetSize()) { return false; }
+
+    for (int i = iIndex + iCount - 1; i >= iIndex; --i)
+    {
+        CControlUI *pControl = static_cast<CControlUI *>(m_items[i]);
+        NeedUpdate();
+
+        if (!bDoNotDestroy && m_bAutoDestroy)
+        {
+            if (m_bDelayedDestroy && m_pManager) { m_pManager->AddDelayedCleanup(pControl); }
+            else { pControl->Delete(); }
+        }
+
+        m_items.Remove(i);
+    }
+
+    return true;
+}
+
 bool CContainerUI::IsAutoDestroy() const
 {
     return m_bAutoDestroy;
