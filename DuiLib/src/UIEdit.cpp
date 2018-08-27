@@ -735,7 +735,12 @@ void CEditUI::SetText(LPCTSTR pstrText)
 {
     m_sText = pstrText;
 
-    if (m_pWindow != NULL) { Edit_SetText(*m_pWindow, m_sText); }
+    if (m_pWindow != NULL)
+    {
+        Edit_SetText(*m_pWindow, m_sText);
+        int nSize = GetWindowTextLength(*m_pWindow);
+        Edit_SetSel(*m_pWindow, nSize, nSize);
+    }
 
     Invalidate();
 }
