@@ -718,9 +718,9 @@ void CContainerUI::EnableScrollBar(bool bEnableVertical, bool bEnableHorizontal)
         if (m_pManager)
         {
             LPCTSTR pDefAttr = m_pManager->GetDefaultAttributeList(_T("HScrollBar"), true);
-            m_pVerticalScrollBar->SetAttributeList(pDefAttr);
+            m_pHorizontalScrollBar->SetAttributeList(pDefAttr);
             pDefAttr = m_pManager->GetDefaultAttributeList(_T("HScrollBar"), false);
-            m_pVerticalScrollBar->SetAttributeList(pDefAttr);
+            m_pHorizontalScrollBar->SetAttributeList(pDefAttr);
             // LPCTSTR pDefaultAttributes = m_pManager->GetDefaultAttributeList(_T("HScrollBar"));
             // if (pDefaultAttributes)
             // {
