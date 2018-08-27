@@ -172,12 +172,13 @@ DWORD CPwdCheckUI::GetClrStrong(void)
 
 void CPwdCheckUI::SetPwd(LPCTSTR pstrPwd)
 {
-    if (NULL != pstrPwd && m_sPwd != pstrPwd)
-    {
-        m_sPwd = pstrPwd;
-        m_byPwdStrongth = CalcPwdStrongth();
-        NeedUpdate();
-    }
+    if (!pstrPwd && m_sPwd.IsEmpty()) { return; }
+
+    if (pstrPwd && m_sPwd == pstrPwd) { return; }
+
+    m_sPwd = pstrPwd;
+    m_byPwdStrongth = CalcPwdStrongth();
+    NeedUpdate();
 }
 
 CDuiString CPwdCheckUI::GetPwd(void)
