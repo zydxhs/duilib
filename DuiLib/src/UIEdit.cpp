@@ -79,6 +79,9 @@ void CEditWnd::Init(CEditUI *pOwner)
     else if (uTextStyle & DT_CENTER) { uStyle |= ES_CENTER; }
     else if (uTextStyle & DT_RIGHT) { uStyle |= ES_RIGHT; }
 
+    // if (!(uTextStyle & DT_SINGLELINE)) { uStyle |= ES_MULTILINE; }
+    // if (uTextStyle & DT_WORDBREAK) { uStyle |= ES_WANTRETURN; }
+
     if (m_pOwner->IsPasswordMode()) { uStyle |= ES_PASSWORD; }
 
     Create(m_pOwner->GetManager()->GetPaintWindow(), NULL, uStyle, 0, rcPos);

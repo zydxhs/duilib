@@ -3099,10 +3099,12 @@ void CListTextElementUI::SetText(int iIndex, LPCTSTR pstrText)
 
     if ((pText == NULL && pstrText == NULL) || (pText && *pText == pstrText)) { return; }
 
-    if (pText)   //by cddjr 2011/10/20
-    { pText->Assign(pstrText); }
-    else
-    { m_aTexts.SetAt(iIndex, new CDuiString(pstrText)); }
+    // 2018-08-27 zhuyadong 修复多语言支持问题
+    CDuiString str(pstrText);
+    CPaintManagerUI::ProcessMultiLanguageTokens(str);
+
+    if (pText) { pText->Assign(str); } //by cddjr 2011/10/20
+    else       { m_aTexts.SetAt(iIndex, new CDuiString(str)); }
 
     Invalidate();
 }
