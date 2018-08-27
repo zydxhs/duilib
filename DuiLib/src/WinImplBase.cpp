@@ -775,13 +775,16 @@ INLINE void CWndImplBase::Notify(TNotifyUI &msg)
     }
     else if (msg.sType == DUI_MSGTYPE_SCROLL)
     {
-        CContainerUI *pScrll = dynamic_cast<CScrollBarUI *>(msg.pSender)->GetOwner();
-        CControlUI *pParent = m_pCtrlPlaceHolder->GetParent();
-
-        while (pParent)
+        if (m_pCtrlPlaceHolder)
         {
-            if (pParent == pScrll) { Relayout(&msg);  break; }
-            else                   { pParent = pParent->GetParent(); }
+            CContainerUI *pScrll = dynamic_cast<CScrollBarUI *>(msg.pSender)->GetOwner();
+            CControlUI *pParent = m_pCtrlPlaceHolder->GetParent();
+
+            while (pParent)
+            {
+                if (pParent == pScrll) { Relayout(&msg);  break; }
+                else { pParent = pParent->GetParent(); }
+            }
         }
     }
 
