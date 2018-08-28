@@ -2604,6 +2604,13 @@ void CListElementUI::DoEvent(TEventUI &event)
         }
     }
 
+    // 2018-08-28 zhuyadong 解决 List 不支持拖拽源、目的的问题
+    if (event.Type == UIEVENT_MOUSEMOVE && (event.wParam & MK_LBUTTON) && m_bDragEnable)
+    {
+        OnDoDragDrop(event);
+        return;
+    }
+
     // An important twist: The list-item will send the event not to its immediate
     // parent but to the "attached" list. A list may actually embed several components
     // in its path to the item, but key-presses etc. needs to go to the actual list.
@@ -2616,16 +2623,16 @@ void CListElementUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     if (_tcscmp(pstrName, _T("selected")) == 0) { Select(); }
     else if (_tcscmp(pstrName, _T("bkcolor")) == 0)
     {
-        if (*pstrValue == _T('#'))
-        { pstrValue = ::CharNext(pstrValue); }
+        // 2018-08-28 zhuyddong 优化属性取值
+        while (*pstrValue > _T('\0') && *pstrValue <= _T(' ')) { pstrValue = ::CharNext(pstrValue); }
+
+        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
 
         LPTSTR pstr = NULL;
         m_dwBackColor = _tcstoul(pstrValue, &pstr, 16);
         m_bCustomBk = true;
     }
-    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
-    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
-    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("不支持属性:dropenable")); }
+    // 2018-08-28 zhuyadong 解决 List 不支持拖拽源、目的的问题，去掉属性拦截
     else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else { CControlUI::SetAttribute(pstrName, pstrValue); }
 }
@@ -2838,10 +2845,8 @@ void CListLabelElementUI::DoEvent(TEventUI &event)
         return;
     }
 
-    if (event.Type == UIEVENT_MOUSEMOVE)
-    {
-        return;
-    }
+    // 2018-08-28 zhuyadong 解决 List 不支持拖拽源、目的的问题
+    // if (event.Type == UIEVENT_MOUSEMOVE) { return; }
 
     if (event.Type == UIEVENT_MOUSEENTER)
     {
@@ -3773,8 +3778,10 @@ void CListContainerElementUI::DoEvent(TEventUI &event)
         return;
     }
 
-    if (event.Type == UIEVENT_MOUSEMOVE)
+    // 2018-08-28 zhuyadong 解决 List 不支持拖拽源、目的的问题
+    if (event.Type == UIEVENT_MOUSEMOVE && (event.wParam & MK_LBUTTON) && m_bDragEnable)
     {
+        OnDoDragDrop(event);
         return;
     }
 
@@ -3827,9 +3834,7 @@ void CListContainerElementUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if (_tcscmp(pstrName, _T("selected")) == 0) { Select(); }
     else if (_tcscmp(pstrName, _T("expandable")) == 0) { SetExpandable(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
-    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
-    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("不支持属性:dropenable")); }
+    // 2018-08-28 zhuyadong 解决 List 不支持 拖拽源、目的的问题，去掉属性拦截
     else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else { CContainerUI::SetAttribute(pstrName, pstrValue); }
 }

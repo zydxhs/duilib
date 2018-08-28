@@ -47,15 +47,17 @@ namespace DuiLib {
     #define ECF_MAX              15
 #endif
 
-#define CF_OWNERDISPLAY     0x0080
-#define CF_DSPTEXT          0x0081
-#define CF_DSPBITMAP        0x0082
-#define CF_DSPMETAFILEPICT  0x0083
-#define CF_DSPENHMETAFILE   0x008E
+#define ECF_OWNERDISPLAY     0x0080
+#define ECF_DSPTEXT          0x0081
+#define ECF_DSPBITMAP        0x0082
+#define ECF_DSPMETAFILEPICT  0x0083
+#define ECF_DSPENHMETAFILE   0x008E
 
 // 2. "Private" formats don't get GlobalFree()'d
 #define ECF_PRIVATEFIRST     0x0200
 #define ECF_STRUCTDATA       0x0201
+#define ECF_INT32            0x0202     // 32位整数
+#define ECF_INT64            0x0203     // 64位整数
 #define ECF_PRIVATELAST      0x02FF
 
 // 3. "GDIOBJ" formats do get DeleteObject()'d
@@ -107,6 +109,8 @@ public:
     bool SetBitmap(HBITMAP hBmp);                           // 设置 HBITMAP 位图
     bool SetCustomData(void *pData, DWORD dwLen, WORD wCF); // 设置 自定义数据
     bool SetCustomGDI(HGDIOBJ hGDI, WORD wCF);              // 设置 HBITMAP 以外的 GDI 对象
+    bool SetInt(int nVal);                                  // 设置 32 位整数
+    bool SetInt64(long long nnVal);                         // 设置 64 位整数
 
     // 读取数据
     CDuiString GetText(void);                       // 返回 文本
@@ -114,6 +118,10 @@ public:
     CDuiPtrArray GetFileList(void);                 // 返回 文件列表(TCHAR*)，需要 free 释放内存。接收资源管理器拖拽的文件列表
     void *GetCustomData(WORD wCF, DWORD &dwLen);    // 返回 自定义数据。需要 free 释放内存
     HGDIOBJ GetCustomGDI(WORD wCF);                 // 返回 HBITMAP 以外的 GDI 对象
+    int GetInt(void);                               // 返回 32 位整数
+    long long GetInt64(void);                       // 返回 64 位整数
+
+    // TODO 删除数据
 
     // bRelease : TRUE 调用完成后，用户不能释放资源；FALSE 表示函数内部会复制一份资源，pData由用户释放
     bool SetData(void *pData, int nTM, WORD wCF, WORD wAspect = EDVASPECT_CONTENT, BOOL bRelease = TRUE);
@@ -126,8 +134,10 @@ public:
     bool HasText(void);                                 // 返回 文本是否可用
     bool HasBitmap(void);                               // 返回 位图是否可用
     bool HasFileList(void);                             // 返回 文件列表是否可用
-    bool HasCustomData(void);                           // 返回 自定义数据是否可用
+    bool HasCustomData(WORD wCF = 0);                   // 返回 自定义数据是否可用
     bool HasCustomGDI(void);                            // 返回 HBITMAP 以外的 GDI 对象是否可用
+    bool HasInt(void);                                  // 返回 32位整数是否可用
+    bool HasInt64(void);                                // 返回 64位整数是否可用
 
     // 拖拽时返回当前的状态：DROPEFFECT_NONE | DROPEFFECT_COPY | DROPEFFECT_MOVE | DROPEFFECT_LINK | DROPEFFECT_SCROLL
     DWORD GetEffect(void) { return m_dwEffect; }

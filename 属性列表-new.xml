@@ -453,8 +453,9 @@
         </ListHeaderItem>
         <ListElement parent="Control" notifies="setfocus killfocus timer headerclick windowinit(root)">
             <Attribute name="selected" default="false" type="BOOL" comment="是否选中"/>
+            <Attribute name="bkcolor" default="false" type="BOOL" comment="是否使用自定义背景色"/>
         </ListElement>
-        <ListLabelElement parent="Control" notifies="setfocus killfocus timer itemactivate itemclick windowinit(root)">
+        <ListLabelElement parent="ListElement" notifies="setfocus killfocus timer itemactivate itemclick windowinit(root)">
             <!-- 支持单列 -->
         </ListLabelElement>
         <ListTextElement parent="ListLabelElement" notifies="setfocus killfocus timer itemactivate itemclick link windowinit(root)">

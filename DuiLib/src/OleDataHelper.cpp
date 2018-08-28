@@ -201,6 +201,16 @@ bool COleDataHelper::SetCustomGDI(HGDIOBJ hGDI, WORD wCF)
     return false;
 }
 
+bool COleDataHelper::SetInt(int nVal)
+{
+    return SetCustomData(&nVal, sizeof(nVal), ECF_INT32);
+}
+
+bool COleDataHelper::SetInt64(long long nnVal)
+{
+    return SetCustomData(&nnVal, sizeof(long long), ECF_INT64);
+}
+
 CDuiString COleDataHelper::GetText(void)
 {
     CDuiString strRet;
@@ -302,6 +312,24 @@ HGDIOBJ COleDataHelper::GetCustomGDI(WORD wCF)
     }
 
     return hGdiObj;
+}
+
+int COleDataHelper::GetInt(void)
+{
+    DWORD dwLen = sizeof(int);
+    int *pData = (int *)GetCustomData(ECF_INT32, dwLen);
+    int nRet = *pData;
+    free(pData);
+    return nRet;
+}
+
+long long COleDataHelper::GetInt64(void)
+{
+    DWORD dwLen = sizeof(int);
+    long long *pData = (long long *)GetCustomData(ECF_INT64, dwLen);
+    long long nRet = *pData;
+    free(pData);
+    return nRet;
 }
 
 bool COleDataHelper::SetData(void *pData, int nTM, WORD wCF, WORD wAspect, BOOL bRelease)
@@ -454,19 +482,25 @@ bool COleDataHelper::HasFileList(void)
     return false;
 }
 
-bool COleDataHelper::HasCustomData(void)
+bool COleDataHelper::HasCustomData(WORD wCF)
 {
     Reset();
-    WORD wCF = 0;
+    WORD wCFTmp = 0;
     WORD wAspect = 0;
     int nTM = 0;
+    bool bRet = false;
 
-    while (GetNext(wCF, wAspect, nTM))
+    while (GetNext(wCFTmp, wAspect, nTM))
     {
-        if ((ECF_PRIVATEFIRST <= wCF && ECF_PRIVATELAST >= wCF) && ETYMED_HGLOBAL == nTM) { return true; }
+        if ((ECF_PRIVATEFIRST <= wCFTmp && ECF_PRIVATELAST >= wCFTmp) && ETYMED_HGLOBAL == nTM)
+        {
+            // 1. 只要有自定义数据，就返回 true
+            // 2. 有自定义数据，并且与 wCF 指定的类型一致，才返回 true
+            if (0 == wCF || (0 != wCF && wCFTmp == wCF)) { bRet = true; break; }
+        }
     }
 
-    return false;
+    return bRet;
 }
 
 bool COleDataHelper::HasCustomGDI(void)
@@ -482,6 +516,16 @@ bool COleDataHelper::HasCustomGDI(void)
     }
 
     return false;
+}
+
+bool COleDataHelper::HasInt(void)
+{
+    return HasCustomData(ECF_INT32);
+}
+
+bool COleDataHelper::HasInt64(void)
+{
+    return HasCustomData(ECF_INT64);
 }
 
 }

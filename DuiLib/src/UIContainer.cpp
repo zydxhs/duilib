@@ -928,8 +928,7 @@ void CContainerUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         else if (_tcscmp(pstrValue, _T("center")) == 0) { m_iChildVAlign = DT_VCENTER; }
         else if (_tcscmp(pstrValue, _T("bottom")) == 0) { m_iChildVAlign = DT_BOTTOM; }
     }
-    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
-    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
+    // 2018-08-28 zhuyadong 解决List不支持拖拽源、目的的问题，去掉属性拦截
     else { CControlUI::SetAttribute(pstrName, pstrValue); }
 }
 

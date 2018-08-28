@@ -1726,7 +1726,7 @@ void CRenderEngine::DrawColor(HDC hDC, const RECT &rc, DWORD color)
         if (!hBitmap) { return; }
 
         // 2018-03-29 zyd 颜色透明显示
-        *pDest = color | 0xff000000;
+        *pDest = color;
 
         BLENDFUNCTION bf = { AC_SRC_OVER, 0, (color & 0xff000000) >> 24, AC_SRC_ALPHA };
         HDC hCloneDC = ::CreateCompatibleDC(hDC);
