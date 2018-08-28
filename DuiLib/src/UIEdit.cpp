@@ -79,8 +79,9 @@ void CEditWnd::Init(CEditUI *pOwner)
     else if (uTextStyle & DT_CENTER) { uStyle |= ES_CENTER; }
     else if (uTextStyle & DT_RIGHT) { uStyle |= ES_RIGHT; }
 
-    // if (!(uTextStyle & DT_SINGLELINE)) { uStyle |= ES_MULTILINE; }
-    // if (uTextStyle & DT_WORDBREAK) { uStyle |= ES_WANTRETURN; }
+    if (!(uTextStyle & DT_SINGLELINE)) { uStyle |= ES_MULTILINE; }
+
+    if (uTextStyle & DT_WORDBREAK) { uStyle |= ES_WANTRETURN; }
 
     if (m_pOwner->IsPasswordMode()) { uStyle |= ES_PASSWORD; }
 
@@ -89,11 +90,9 @@ void CEditWnd::Init(CEditUI *pOwner)
     HFONT hFont = NULL;
     int iFontIndex = m_pOwner->GetFont();
 
-    if (iFontIndex != -1)
-    { hFont = m_pOwner->GetManager()->GetFont(iFontIndex); }
+    if (iFontIndex != -1) { hFont = m_pOwner->GetManager()->GetFont(iFontIndex); }
 
-    if (hFont == NULL)
-    { hFont = m_pOwner->GetManager()->GetDefaultFontInfo()->hFont; }
+    if (hFont == NULL) { hFont = m_pOwner->GetManager()->GetDefaultFontInfo()->hFont; }
 
     SetWindowFont(m_hWnd, hFont, TRUE);
     Edit_LimitText(m_hWnd, m_pOwner->GetMaxChar());
@@ -136,8 +135,9 @@ RECT CEditWnd::CalPos()
     rcPos.right -= rcInset.right;
     rcPos.bottom -= rcInset.bottom;
     LONG lEditHeight = m_pOwner->GetManager()->GetFontInfo(m_pOwner->GetFont())->tm.tmHeight;
+    UINT uText = m_pOwner->GetTextStyle();
 
-    if (lEditHeight < rcPos.GetHeight())
+    if ((uText & DT_SINGLELINE) && lEditHeight < rcPos.GetHeight())
     {
         rcPos.top += (rcPos.GetHeight() - lEditHeight) / 2;
         rcPos.bottom = rcPos.top + lEditHeight;
@@ -736,7 +736,7 @@ void CEditUI::SetEnabled(bool bEnable)
 
 void CEditUI::SetText(LPCTSTR pstrText)
 {
-    m_sText = pstrText;
+    CLabelUI::SetText(pstrText);
 
     if (m_pWindow != NULL)
     {
@@ -744,8 +744,6 @@ void CEditUI::SetText(LPCTSTR pstrText)
         int nSize = GetWindowTextLength(*m_pWindow);
         Edit_SetSel(*m_pWindow, nSize, nSize);
     }
-
-    Invalidate();
 }
 
 void CEditUI::SetMaxChar(UINT uMax)
@@ -971,7 +969,10 @@ void CEditUI::SetInternVisible(bool bVisible)
 
 SIZE CEditUI::EstimateSize(SIZE szAvailable)
 {
-    if (m_cxyFixed.cy == 0) { return CDuiSize(m_cxyFixed.cx, m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 8); }
+    if (!IsMultiLine())
+    {
+        if (m_cxyFixed.cy == 0) { return CDuiSize(m_cxyFixed.cx, m_pManager->GetFontInfo(GetFont())->tm.tmHeight + 8); }
+    }
 
     return CLabelUI::EstimateSize(szAvailable);
 }
@@ -1107,14 +1108,11 @@ void CEditUI::PaintText(HDC hDC)
 
     if (IsEnabled())
     {
-        CRenderEngine::DrawText(hDC, m_pManager, rc, sText, mCurTextColor, \
-                                m_iFont, DT_SINGLELINE | m_uTextStyle);
+        CRenderEngine::DrawText(hDC, m_pManager, rc, sText, mCurTextColor, m_iFont, m_uTextStyle);
     }
     else
     {
-        CRenderEngine::DrawText(hDC, m_pManager, rc, sText, m_dwDisabledTextColor, \
-                                m_iFont, DT_SINGLELINE | m_uTextStyle);
-
+        CRenderEngine::DrawText(hDC, m_pManager, rc, sText, m_dwDisabledTextColor, m_iFont, m_uTextStyle);
     }
 }
 
