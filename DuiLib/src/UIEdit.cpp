@@ -79,7 +79,8 @@ void CEditWnd::Init(CEditUI *pOwner)
     else if (uTextStyle & DT_CENTER) { uStyle |= ES_CENTER; }
     else if (uTextStyle & DT_RIGHT) { uStyle |= ES_RIGHT; }
 
-    if (!(uTextStyle & DT_SINGLELINE)) { uStyle |= ES_MULTILINE; }
+    // 2018-08-29 zhuyadong 解决多行编辑框，输入的行数不能超过高度的问题
+    if (!(uTextStyle & DT_SINGLELINE)) { uStyle |= ES_MULTILINE | ES_AUTOVSCROLL; }
 
     if (uTextStyle & DT_WORDBREAK) { uStyle |= ES_WANTRETURN; }
 
@@ -229,7 +230,9 @@ LRESULT CEditWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         DWORD clrColor = m_pOwner->GetNativeEditBkColor();
 
-        if (clrColor == 0xFFFFFFFF) { return 0; }
+        // 2018-08-29 zhuyadong 解决刷新问题。问题描述：
+        // 多行模式，每一行的长度大于宽度而折行；鼠标单击编辑框，此时有部分区域仍然显示CEditUI的内容。
+        // if (clrColor == 0xFFFFFFFF) { return 0; }
 
         ::SetBkMode((HDC)wParam, TRANSPARENT);
         DWORD dwTextColor = m_pOwner->GetTextColor();
@@ -384,6 +387,13 @@ LRESULT CEditWnd::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHa
         ::SendMessage(m_pOwner->GetManager()->GetPaintWindow(), WM_KILLFOCUS, wParam, lParam);
     }
 
+    // 2018-08-29 zhuyadong 解决多行编辑框，用户添加新行后，显示不全的问题
+    if (!(m_pOwner->GetTextStyle() & DT_SINGLELINE))
+    {
+        m_pOwner->m_bNeedEstimateSize = true;
+        m_pOwner->NeedParentUpdate();
+    }
+
     SendMessage(WM_CLOSE);
     return lRes;
 }
@@ -455,7 +465,9 @@ LRESULT CEditWnd::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled
         sTxt = m_pOwner->m_sText.Left(wIdx);
         sTxt += m_pOwner->m_sText.Mid(wIdx + 1);
 #endif // UNICODE
-        m_pOwner->SetText(sTxt);
+        // 2018-08-29 zhuyadong 修复输入非法字符时，编辑框上还可以看到该字符的bug
+        m_pOwner->m_sText = sTxt;
+        ::SetWindowText(m_hWnd, sTxt.GetData());
         ::SendMessage(m_hWnd, EM_SETSEL, wIdx, wIdx);
     }
 
@@ -736,7 +748,26 @@ void CEditUI::SetEnabled(bool bEnable)
 
 void CEditUI::SetText(LPCTSTR pstrText)
 {
-    CLabelUI::SetText(pstrText);
+    // 2018-08-29 zhuyadong 把 \r 或 \n 统一替换为 \r\n ，以解决该控件与本地编辑框多行模式显示不一致的问题
+    CDuiString sTmp;
+
+    while (pstrText && *pstrText != _T('\0'))
+    {
+        if (*pstrText == _T('\r') || *pstrText == _T('\n'))
+        {
+            sTmp += _T("\r\n");
+            pstrText += 1;
+
+            if (*pstrText == _T('\r') || *pstrText == _T('\n')) { pstrText += 1; }
+        }
+        else
+        {
+            sTmp += *pstrText;
+            pstrText += 1;
+        }
+    }
+
+    CLabelUI::SetText(sTmp);
 
     if (m_pWindow != NULL)
     {
@@ -744,6 +775,9 @@ void CEditUI::SetText(LPCTSTR pstrText)
         int nSize = GetWindowTextLength(*m_pWindow);
         Edit_SetSel(*m_pWindow, nSize, nSize);
     }
+
+    // 2018-08-29 zhuyadong 多行编辑框，更新文本后，自动重新计算宽高
+    if (!(m_uTextStyle & DT_SINGLELINE)) { NeedParentUpdate(); }
 }
 
 void CEditUI::SetMaxChar(UINT uMax)
