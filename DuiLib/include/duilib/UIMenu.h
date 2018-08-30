@@ -36,6 +36,7 @@ public:
     */
     static CMenuWnd *CreateMenu(CMenuElementUI *pOwner, STRINGorID xml, LPCTSTR pSkinType, POINT pt,
                                 CPaintManagerUI *pParent, DWORD dwAlign = EMENU_ALIGN_LEFT | EMENU_ALIGN_TOP);
+    static CMenuWnd *GetInstance(void);
 
     static CDuiString       s_strName;      // 被单击菜单项的的 名字
     static CDuiString       s_strUserData;  // 被单击菜单项的的 用户数据

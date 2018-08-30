@@ -40,6 +40,7 @@ CSubjectMenu &GetGlobalMenuSubject()
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
+CMenuWnd   *s_pMenWnd = NULL;
 CDuiString CMenuWnd::s_strName;
 CDuiString CMenuWnd::s_strUserData;
 UINT_PTR   CMenuWnd::s_ptrTag;
@@ -50,7 +51,13 @@ CMenuWnd *CMenuWnd::CreateMenu(CMenuElementUI *pOwner, STRINGorID xml, LPCTSTR p
     ASSERT(NULL != pOwner || NULL != pParent);
     CMenuWnd *pMenu = new CMenuWnd;
     pMenu->Init(pOwner, xml, pSkinType, pt, pParent, dwAlign);
+    s_pMenWnd = pMenu;
     return pMenu;
+}
+
+DuiLib::CMenuWnd *CMenuWnd::GetInstance(void)
+{
+    return s_pMenWnd;
 }
 
 CMenuWnd::CMenuWnd(void): m_pOwner(NULL), m_xml(_T(""))
@@ -281,6 +288,7 @@ LPCTSTR CMenuWnd::GetWindowClassName(void) const
 
 void CMenuWnd::OnFinalMessage(HWND hWnd)
 {
+    s_pMenWnd = NULL;
     GetGlobalMenuSubject().RemoveObserver(this);
 
     if (m_pOwner != NULL)
