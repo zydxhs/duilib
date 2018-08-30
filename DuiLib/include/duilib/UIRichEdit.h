@@ -74,11 +74,14 @@ public:
     bool SetWordCharFormat(CHARFORMAT2 &cf);
     DWORD GetParaFormat(PARAFORMAT2 &pf) const;
     bool SetParaFormat(PARAFORMAT2 &pf);
+    bool CanUndo();
+    bool CanRedo();
     bool Redo();
     bool Undo();
     void Clear();
     void Copy();
     void Cut();
+    bool CanPaste();
     void Paste();
     int GetLineCount() const;
     CDuiString GetLine(int nIndex, int nMaxLength) const;

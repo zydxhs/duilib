@@ -1571,6 +1571,24 @@ bool CRichEditUI::SetParaFormat(PARAFORMAT2 &pf)
     return false;
 }
 
+bool CRichEditUI::CanUndo()
+{
+    if (!m_pTwh) { return false; }
+
+    LRESULT lResult;
+    TxSendMessage(EM_CANUNDO, 0, 0, &lResult);
+    return (BOOL)lResult == TRUE;
+}
+
+bool CRichEditUI::CanRedo()
+{
+    if (!m_pTwh) { return false; }
+
+    LRESULT lResult;
+    TxSendMessage(EM_CANREDO, 0, 0, &lResult);
+    return (BOOL)lResult == TRUE;
+}
+
 bool CRichEditUI::Redo()
 {
     if (!m_pTwh) { return false; }
@@ -1602,6 +1620,15 @@ void CRichEditUI::Copy()
 void CRichEditUI::Cut()
 {
     TxSendMessage(WM_CUT, 0, 0, 0);
+}
+
+bool CRichEditUI::CanPaste()
+{
+    if (!m_pTwh) { return false; }
+
+    LRESULT lResult;
+    TxSendMessage(EM_CANPASTE, 0, 0, &lResult);
+    return (BOOL)lResult != FALSE;
 }
 
 void CRichEditUI::Paste()
@@ -2667,6 +2694,66 @@ LRESULT CRichEditUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, boo
             bWasHandled = false;
             return 0;
         }
+
+        // 弹出默认上下文菜单
+        POINT ptMouse = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+        STRINGorID xml(_T("<?xml version=\"1.0\" encoding=\"utf-8\" ?>")
+                       _T("<Window layered=\"true\"><Menu>")
+                       _T("<MenuElement name=\"me_undo\" text=\"%[undo](U)\" shortcut=\"U\" />")
+                       _T("<MenuElement name=\"me_undo\" text=\"%[redo](R)\" shortcut=\"R\" />")
+                       _T("<MenuElement name=\"\" line=\"true\" />")
+                       _T("<MenuElement name=\"me_cut\" text=\"%[cut](T)\" shortcut=\"T\" />")
+                       _T("<MenuElement name=\"me_copy\" text=\"%[copy](C)\" shortcut=\"C\" />")
+                       _T("<MenuElement name=\"me_paste\" text=\"%[paste](P)\" shortcut=\"P\" />")
+                       _T("<MenuElement name=\"me_delete\" text=\"%[delete](D)\" shortcut=\"D\" />")
+                       _T("<MenuElement name=\"\" line=\"true\" />")
+                       _T("<MenuElement name=\"me_selall\" text=\"%[selall](A)\" shortcut=\"A\" />")
+                       _T("</Menu></Window>")
+                      );
+        CMenuWnd *pWnd = CMenuWnd::CreateMenu(NULL, xml, _T("xml"), ptMouse, m_pManager);
+        CMenuUI *pRoot = pWnd->GetMenuUI();
+        // 设置菜单项状态
+        // 是否可撤销/重做
+        CMenuElementUI *pItem = pRoot->FindMenuItem(_T("me_undo"));
+
+        if (pItem) { pItem->SetEnabled(CanUndo()); }
+
+        pItem = pRoot->FindMenuItem(_T("me_redo"));
+
+        if (pItem) { pItem->SetEnabled(CanUndo()); }
+
+        // 是否有选择的内容
+        long nStart = 0, nEnd = 0;
+        GetSel(nStart, nEnd);
+        bool bSel = (nEnd > nStart || (nStart == 0 && nEnd == -1)) ? true : false;
+        pItem = pRoot->FindMenuItem(_T("me_cut"));
+
+        if (pItem) { pItem->SetEnabled(bSel); }
+
+        pItem = pRoot->FindMenuItem(_T("me_copy"));
+
+        if (pItem) { pItem->SetEnabled(bSel); }
+
+        pItem = pRoot->FindMenuItem(_T("me_delete"));
+
+        if (pItem) { pItem->SetEnabled(bSel); }
+
+        // 剪切板是否有内容
+        pItem = pRoot->FindMenuItem(_T("me_paste"));
+
+        if (pItem) { pItem->SetEnabled(CanPaste()); }
+
+        return 0;
+    }
+    else if (uMsg == WM_MENUITEM_CLICK)
+    {
+        if (CMenuWnd::s_strName == _T("me_undo"))       { Undo(); }         // 撤消
+        else if (CMenuWnd::s_strName == _T("me_redo"))  { Redo(); }         // 重做
+        else if (CMenuWnd::s_strName == _T("me_cut"))   { Cut(); }          // 剪切
+        else if (CMenuWnd::s_strName == _T("me_copy"))  { Copy(); }         // 复制
+        else if (CMenuWnd::s_strName == _T("me_paste")) { Paste(); }        // 粘贴
+        else if (CMenuWnd::s_strName == _T("me_delete")) { ReplaceSel(NULL, true); }    // 删除
+        else if (CMenuWnd::s_strName == _T("me_selall")) { SetSelAll(); }   // 全选
     }
     else
     {

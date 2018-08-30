@@ -4869,6 +4869,30 @@ bool CPaintManagerUI::LoadLanguage(int nLangType, const STRINGorID &xml, LPCTSTR
         }
     }
 
+    // 2018-08-30 zhuyadong 添加 duilib 内部 多语言
+    switch (m_SharedResInfo.m_nCurCodePage)
+    {
+    case 936:   // 简体中文
+        AddMultiLanguageString(_T("undo"), _T("撤销(U)"));
+        AddMultiLanguageString(_T("redo"), _T("重做(R)"));
+        AddMultiLanguageString(_T("cut"), _T("剪切(T)"));
+        AddMultiLanguageString(_T("copy"), _T("复制(C)"));
+        AddMultiLanguageString(_T("paste"), _T("粘贴(P)"));
+        AddMultiLanguageString(_T("delete"), _T("删除(D)"));
+        AddMultiLanguageString(_T("selall"), _T("全选(A)"));
+        break;
+
+    case 1033:  // 英文
+        AddMultiLanguageString(_T("undo"), _T("Undo(U)"));
+        AddMultiLanguageString(_T("redo"), _T("Redo(R)"));
+        AddMultiLanguageString(_T("cut"), _T("Cut(T)"));
+        AddMultiLanguageString(_T("copy"), _T("Copy(C)"));
+        AddMultiLanguageString(_T("paste"), _T("Paste(P)"));
+        AddMultiLanguageString(_T("delete"), _T("Delete(D)"));
+        AddMultiLanguageString(_T("selall"), _T("Select All(A)"));
+        break;
+    }
+
     return true;
 }
 
