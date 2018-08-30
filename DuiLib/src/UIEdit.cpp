@@ -70,7 +70,7 @@ void CEditWnd::Init(CEditUI *pOwner)
     }
     else
     {
-        uStyle = WS_CHILD | ES_AUTOHSCROLL | pOwner->GetWindowStyls();
+        uStyle = WS_CHILD | pOwner->GetWindowStyls();
     }
 
     UINT uTextStyle = m_pOwner->GetTextStyle();
@@ -81,6 +81,7 @@ void CEditWnd::Init(CEditUI *pOwner)
 
     // 2018-08-29 zhuyadong 解决多行编辑框，输入的行数不能超过高度的问题
     if (!(uTextStyle & DT_SINGLELINE)) { uStyle |= ES_MULTILINE | ES_AUTOVSCROLL; }
+    else { uStyle |= ES_AUTOHSCROLL; }
 
     if (uTextStyle & DT_WORDBREAK) { uStyle |= ES_WANTRETURN; }
 
