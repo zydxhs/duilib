@@ -2728,7 +2728,7 @@ LRESULT CRichEditUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, boo
         bool bSel = (nEnd > nStart || (nStart == 0 && nEnd == -1)) ? true : false;
         pItem = pRoot->FindMenuItem(_T("me_cut"));
 
-        if (pItem) { pItem->SetEnabled(bSel); }
+        if (pItem) { pItem->SetEnabled(bSel && !IsReadOnly()); }
 
         pItem = pRoot->FindMenuItem(_T("me_copy"));
 
@@ -2736,7 +2736,7 @@ LRESULT CRichEditUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, boo
 
         pItem = pRoot->FindMenuItem(_T("me_delete"));
 
-        if (pItem) { pItem->SetEnabled(bSel); }
+        if (pItem) { pItem->SetEnabled(bSel && !IsReadOnly()); }
 
         // 剪切板是否有内容
         pItem = pRoot->FindMenuItem(_T("me_paste"));
