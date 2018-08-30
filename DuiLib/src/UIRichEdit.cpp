@@ -1806,6 +1806,7 @@ void CRichEditUI::DoInit()
         m_pTwh->GetTextServices()->TxSendMessage(EM_SETLANGOPTIONS, 0, 0, &lResult);
         m_pTwh->OnTxInPlaceActivate(NULL);
         m_pManager->AddMessageFilter(this);
+        HideSelection(false);
 
         if (m_pManager->IsLayered()) { m_pManager->SetTimer(this, TIMERID_CARET, ::GetCaretBlinkTime()); }
     }
