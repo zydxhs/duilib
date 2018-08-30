@@ -94,7 +94,7 @@ BOOL SaveBitmapToFile(HBITMAP hBitmap, LPCTSTR lpFileName)
     return TRUE;
 }
 
-BOOL Save(Image *pImage, LPCTSTR lpszFileName, LPCTSTR format)
+BOOL Save(Image *pImage, LPCWSTR lpszFileName, LPCWSTR format)
 {
     CLSID encoderClsid;
     ImageCodecInfo *pCodecInfo = NULL;
