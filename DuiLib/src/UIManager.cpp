@@ -465,7 +465,8 @@ void CPaintManagerUI::SetResourcePath(LPCTSTR pStrPath)
 
 void CPaintManagerUI::SetResourceZip(LPVOID pVoid, unsigned int len)
 {
-    if (m_pStrResourceZip == _T("membuffer")) { return; }
+    // 2018-09-01 zhuyadong 解决使用资源中的zip文件,不能换肤的问题
+    // if (m_pStrResourceZip == _T("membuffer")) { return; }
 
     if (m_bCachedResourceZip && m_hResourceZip != NULL)
     {
