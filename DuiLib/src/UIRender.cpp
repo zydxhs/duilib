@@ -42,7 +42,7 @@ static void RGBtoHSL(DWORD ARGB, float *H, float *S, float *L)
     }
 }
 
-INLINE static void HSLtoRGB(DWORD *ARGB, float H, float S, float L)
+DUI_INLINE static void HSLtoRGB(DWORD *ARGB, float H, float S, float L)
 {
     const float q = 2 * L < 1 ? L * (1 + S) : (L + S - L * S);
     const float p = 2 * L - q;
@@ -64,7 +64,8 @@ INLINE static void HSLtoRGB(DWORD *ARGB, float H, float S, float L)
                  (BYTE)(B < 0 ? 0 : (B > 255 ? 255 : B)));
 }
 
-INLINE static COLORREF PixelAlpha(COLORREF clrSrc, double src_darken, COLORREF clrDest, double dest_darken)
+DUI_INLINE static COLORREF PixelAlpha(COLORREF clrSrc, double src_darken, COLORREF clrDest,
+                                      double dest_darken)
 {
     return RGB(GetRValue(clrSrc) * src_darken + GetRValue(clrDest) * dest_darken,
                GetGValue(clrSrc) * src_darken + GetGValue(clrDest) * dest_darken,
@@ -319,12 +320,12 @@ void CRenderClip::GenerateRoundClip(HDC hDC, RECT rc, RECT rcItem, int width, in
     ::DeleteObject(hRgnItem);
 }
 
-INLINE void CRenderClip::UseOldClipBegin(HDC hDC, CRenderClip &clip)
+DUI_INLINE void CRenderClip::UseOldClipBegin(HDC hDC, CRenderClip &clip)
 {
     ::SelectClipRgn(hDC, clip.hOldRgn);
 }
 
-INLINE void CRenderClip::UseOldClipEnd(HDC hDC, CRenderClip &clip)
+DUI_INLINE void CRenderClip::UseOldClipEnd(HDC hDC, CRenderClip &clip)
 {
     ::SelectClipRgn(hDC, clip.hRgn);
 }

@@ -40,7 +40,7 @@ void COptionUI::SetManager(CPaintManagerUI *pManager, CControlUI *pParent, bool 
     }
 }
 
-INLINE LPCTSTR COptionUI::GetGroup() const
+DUI_INLINE LPCTSTR COptionUI::GetGroup() const
 {
     return m_sGroupName;
 }
@@ -74,7 +74,7 @@ void COptionUI::SetGroup(LPCTSTR pStrGroupName)
     Selected(m_bSelected);
 }
 
-INLINE bool COptionUI::IsSelected() const
+DUI_INLINE bool COptionUI::IsSelected() const
 {
     return m_bSelected;
 }
@@ -139,7 +139,7 @@ void COptionUI::SetEnabled(bool bEnable)
     }
 }
 
-INLINE LPCTSTR COptionUI::GetSelNormalImage()
+DUI_INLINE LPCTSTR COptionUI::GetSelNormalImage()
 {
     return m_diSelNormal.sDrawString;
 }
@@ -153,7 +153,7 @@ void COptionUI::SetSelNormalImage(LPCTSTR pStrImage)
     Invalidate();
 }
 
-INLINE LPCTSTR COptionUI::GetSelHotImage()
+DUI_INLINE LPCTSTR COptionUI::GetSelHotImage()
 {
     return m_diSelHot.sDrawString;
 }
@@ -167,7 +167,7 @@ void COptionUI::SetSelHotImage(LPCTSTR pStrImage)
     Invalidate();
 }
 
-INLINE LPCTSTR COptionUI::GetSelFocusedImage()
+DUI_INLINE LPCTSTR COptionUI::GetSelFocusedImage()
 {
     return m_diSelFocused.sDrawString;
 }
@@ -181,7 +181,7 @@ void COptionUI::SetSelFocusedImage(LPCTSTR pStrImage)
     Invalidate();
 }
 
-INLINE LPCTSTR COptionUI::GetSelPushedImage()
+DUI_INLINE LPCTSTR COptionUI::GetSelPushedImage()
 {
     return m_diSelPushed.sDrawString;
 }
@@ -195,7 +195,7 @@ void COptionUI::SetSelPushedImage(LPCTSTR pStrImage)
     Invalidate();
 }
 
-INLINE LPCTSTR COptionUI::GetSelDisabledImage()
+DUI_INLINE LPCTSTR COptionUI::GetSelDisabledImage()
 {
     return m_diSelDisabled.sDrawString;
 }
@@ -209,57 +209,57 @@ void COptionUI::SetSelDisabledImage(LPCTSTR pStrImage)
     Invalidate();
 }
 
-INLINE LPCTSTR COptionUI::GetUnselNormalImage()
+DUI_INLINE LPCTSTR COptionUI::GetUnselNormalImage()
 {
     return m_diNormal.sDrawString;
 }
 
-INLINE void COptionUI::SetUnselNormalImage(LPCTSTR pStrImage)
+DUI_INLINE void COptionUI::SetUnselNormalImage(LPCTSTR pStrImage)
 {
     SetNormalImage(pStrImage);
 }
 
-INLINE LPCTSTR COptionUI::GetUnselHotImage()
+DUI_INLINE LPCTSTR COptionUI::GetUnselHotImage()
 {
     return m_diHot.sDrawString;
 }
 
-INLINE void COptionUI::SetUnselHotImage(LPCTSTR pStrImage)
+DUI_INLINE void COptionUI::SetUnselHotImage(LPCTSTR pStrImage)
 {
     SetHotImage(pStrImage);
 }
 
-INLINE LPCTSTR COptionUI::GetUnselFocusedImage()
+DUI_INLINE LPCTSTR COptionUI::GetUnselFocusedImage()
 {
     return m_diFocused.sDrawString;
 }
 
-INLINE void COptionUI::SetUnselFocusedImage(LPCTSTR pStrImage)
+DUI_INLINE void COptionUI::SetUnselFocusedImage(LPCTSTR pStrImage)
 {
     SetFocusedImage(pStrImage);
 }
 
-INLINE LPCTSTR COptionUI::GetUnselPushedImage()
+DUI_INLINE LPCTSTR COptionUI::GetUnselPushedImage()
 {
     return m_diPushed.sDrawString;
 }
 
-INLINE void COptionUI::SetUnselPushedImage(LPCTSTR pStrImage)
+DUI_INLINE void COptionUI::SetUnselPushedImage(LPCTSTR pStrImage)
 {
     SetPushedImage(pStrImage);
 }
 
-INLINE LPCTSTR COptionUI::GetUnselDisabledImage()
+DUI_INLINE LPCTSTR COptionUI::GetUnselDisabledImage()
 {
     return m_diDisabled.sDrawString;
 }
 
-INLINE void COptionUI::SetUnselDisabledImage(LPCTSTR pStrImage)
+DUI_INLINE void COptionUI::SetUnselDisabledImage(LPCTSTR pStrImage)
 {
     SetDisabledImage(pStrImage);
 }
 
-INLINE void COptionUI::SetSelTextColor(DWORD dwTextColor)
+DUI_INLINE void COptionUI::SetSelTextColor(DWORD dwTextColor)
 {
     if (m_dwPushedTextColor == dwTextColor) { return; }
 
@@ -267,12 +267,12 @@ INLINE void COptionUI::SetSelTextColor(DWORD dwTextColor)
     Invalidate();
 }
 
-INLINE DWORD COptionUI::GetSelTextColor()
+DUI_INLINE DWORD COptionUI::GetSelTextColor()
 {
     return m_dwPushedTextColor;
 }
 
-INLINE void COptionUI::SetSelNormalBkColor(DWORD dwColor)
+DUI_INLINE void COptionUI::SetSelNormalBkColor(DWORD dwColor)
 {
     if (m_dwSelNormalBkColor == dwColor) { return; }
 
@@ -280,12 +280,12 @@ INLINE void COptionUI::SetSelNormalBkColor(DWORD dwColor)
     Invalidate();
 }
 
-INLINE DWORD COptionUI::GetSelNormalBkColor()
+DUI_INLINE DWORD COptionUI::GetSelNormalBkColor()
 {
     return m_dwSelNormalBkColor;
 }
 
-INLINE void COptionUI::SetSelHotBkColor(DWORD dwkColor)
+DUI_INLINE void COptionUI::SetSelHotBkColor(DWORD dwkColor)
 {
     if (m_dwSelHotBkColor == dwkColor) { return; }
 
@@ -293,7 +293,7 @@ INLINE void COptionUI::SetSelHotBkColor(DWORD dwkColor)
     Invalidate();
 }
 
-INLINE DWORD COptionUI::GetSelHotBkColor()
+DUI_INLINE DWORD COptionUI::GetSelHotBkColor()
 {
     return m_dwSelHotBkColor;
 }
@@ -306,7 +306,7 @@ void COptionUI::SetSelFocusedBkColor(DWORD dwColor)
     Invalidate();
 }
 
-INLINE DWORD COptionUI::GetSelFocusedBkColor()
+DUI_INLINE DWORD COptionUI::GetSelFocusedBkColor()
 {
     return m_dwSelFocusedBkColor;
 }
@@ -319,7 +319,7 @@ void COptionUI::SetSelPushedBkColor(DWORD dwColor)
     Invalidate();
 }
 
-INLINE DWORD COptionUI::GetSelPushedBkColor()
+DUI_INLINE DWORD COptionUI::GetSelPushedBkColor()
 {
     return m_dwSelPushedBkColor;
 }
@@ -332,12 +332,12 @@ void COptionUI::SetSelDisabledBkColor(DWORD dwColor)
     Invalidate();
 }
 
-INLINE DWORD COptionUI::GetSelDisabledBkColor()
+DUI_INLINE DWORD COptionUI::GetSelDisabledBkColor()
 {
     return m_dwSelDisabledBkColor;
 }
 
-INLINE LPCTSTR COptionUI::GetForeImage()
+DUI_INLINE LPCTSTR COptionUI::GetForeImage()
 {
     return m_diFore.sDrawString;
 }

@@ -54,7 +54,7 @@ void CWndImplBase::OnInitWindow(void)
     m_pbtnClose = static_cast<CButtonUI *>(m_pm.FindControl(_T("btnclose")));
 }
 
-INLINE void CWndImplBase::OnFinalMessage(HWND hWnd)
+DUI_INLINE void CWndImplBase::OnFinalMessage(HWND hWnd)
 {
     m_pm.RemovePreMessageFilter(this);
     m_pm.RemoveNotifier(this);
@@ -115,14 +115,14 @@ LRESULT CWndImplBase::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHa
     return 0;
 }
 
-INLINE LRESULT CWndImplBase::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
+DUI_INLINE LRESULT CWndImplBase::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
     bHandled = FALSE;
     return 0;
 }
 
 #if defined(WIN32) && !defined(UNDER_CE)
-INLINE LRESULT CWndImplBase::OnNcActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
+DUI_INLINE LRESULT CWndImplBase::OnNcActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
     bHandled = (::GetWindowLong(*this, GWL_STYLE) & WS_CAPTION) ? FALSE : bHandled;
     bHandled = (::IsIconic(*this)) ? FALSE : bHandled;
@@ -167,7 +167,7 @@ LRESULT CWndImplBase::OnNcCalcSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
     return 0;
 }
 
-INLINE LRESULT CWndImplBase::OnNcPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
+DUI_INLINE LRESULT CWndImplBase::OnNcPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
     bHandled = (::GetWindowLong(*this, GWL_STYLE) & WS_CAPTION) ? FALSE : bHandled;
     return 0;
@@ -258,7 +258,7 @@ LRESULT CWndImplBase::OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam, B
     return 0;
 }
 
-INLINE LRESULT CWndImplBase::OnMouseWheel(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
+DUI_INLINE LRESULT CWndImplBase::OnMouseWheel(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
     bHandled = FALSE;
     return 0;
@@ -274,7 +274,7 @@ LRESULT CWndImplBase::OnNcLButtonDblClk(UINT uMsg, WPARAM wParam, LPARAM lParam,
     return 0;
 }
 
-INLINE LRESULT CWndImplBase::OnMouseHover(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
+DUI_INLINE LRESULT CWndImplBase::OnMouseHover(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
     bHandled = FALSE;
     return 0;
@@ -303,7 +303,7 @@ LRESULT CWndImplBase::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHan
     return 0;
 }
 
-INLINE LRESULT CWndImplBase::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
+DUI_INLINE LRESULT CWndImplBase::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
     bHandled = FALSE;
     return 0;
@@ -467,37 +467,37 @@ LRESULT CWndImplBase::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bH
     return 0;
 }
 
-INLINE LRESULT CWndImplBase::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
+DUI_INLINE LRESULT CWndImplBase::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
     bHandled = FALSE;
     return 0;
 }
 
-INLINE LRESULT CWndImplBase::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
+DUI_INLINE LRESULT CWndImplBase::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
     bHandled = FALSE;
     return 0;
 }
 
-INLINE LRESULT CWndImplBase::OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
+DUI_INLINE LRESULT CWndImplBase::OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
     bHandled = FALSE;
     return 0;
 }
 
-INLINE LRESULT CWndImplBase::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
+DUI_INLINE LRESULT CWndImplBase::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
     bHandled = FALSE;
     return 0;
 }
 
-INLINE LRESULT CWndImplBase::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
+DUI_INLINE LRESULT CWndImplBase::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
     bHandled = FALSE;
     return 0;
 }
 
-INLINE LRESULT CWndImplBase::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
+DUI_INLINE LRESULT CWndImplBase::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
     bHandled = FALSE;
     return 0;
@@ -700,7 +700,7 @@ bool CWndImplBase::IsModified(void)
     return m_bModified;
 }
 
-INLINE LRESULT CWndImplBase::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
+DUI_INLINE LRESULT CWndImplBase::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
     LRESULT lRes = 0;
 
@@ -764,7 +764,7 @@ void CWndImplBase::ShowWindow(bool bShow /*= true*/, bool bTakeFocus /*= true*/)
     CWindowWnd::ShowWindow(bShow, bTakeFocus);
 }
 
-INLINE void CWndImplBase::Notify(TNotifyUI &msg)
+DUI_INLINE void CWndImplBase::Notify(TNotifyUI &msg)
 {
     if (msg.sType == DUI_MSGTYPE_WINDOWINIT)
     {

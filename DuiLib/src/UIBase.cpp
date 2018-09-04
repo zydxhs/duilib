@@ -236,34 +236,34 @@ CWindowWnd::CWindowWnd()
 {
 }
 
-INLINE HWND CWindowWnd::GetHWND() const
+DUI_INLINE HWND CWindowWnd::GetHWND() const
 {
     return m_hWnd;
 }
 
-INLINE UINT CWindowWnd::GetClassStyle() const
+DUI_INLINE UINT CWindowWnd::GetClassStyle() const
 {
     return 0;
 }
 
-INLINE LPCTSTR CWindowWnd::GetSuperClassName() const
+DUI_INLINE LPCTSTR CWindowWnd::GetSuperClassName() const
 {
     return NULL;
 }
 
-INLINE CWindowWnd::operator HWND() const
+DUI_INLINE CWindowWnd::operator HWND() const
 {
     return m_hWnd;
 }
 
-INLINE HWND CWindowWnd::CreateDuiWindow(HWND hwndParent, LPCTSTR pstrWindowName, DWORD dwStyle,
-                                        DWORD dwExStyle)
+DUI_INLINE HWND CWindowWnd::CreateDuiWindow(HWND hwndParent, LPCTSTR pstrWindowName, DWORD dwStyle,
+                                            DWORD dwExStyle)
 {
     return Create(hwndParent, pstrWindowName, dwStyle, dwExStyle, 0, 0, 0, 0, NULL);
 }
 
-INLINE HWND CWindowWnd::Create(HWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle,
-                               const RECT rc, HMENU hMenu)
+DUI_INLINE HWND CWindowWnd::Create(HWND hwndParent, LPCTSTR pstrName, DWORD dwStyle, DWORD dwExStyle,
+                                   const RECT rc, HMENU hMenu)
 {
     return Create(hwndParent, pstrName, dwStyle, dwExStyle, rc.left, rc.top, rc.right - rc.left,
                   rc.bottom - rc.top, hMenu);
@@ -317,7 +317,7 @@ void CWindowWnd::Unsubclass()
     m_bSubclassed = false;
 }
 
-INLINE void CWindowWnd::ShowWindow(bool bShow /*= true*/, bool bTakeFocus /*= false*/)
+DUI_INLINE void CWindowWnd::ShowWindow(bool bShow /*= true*/, bool bTakeFocus /*= false*/)
 {
     ASSERT(::IsWindow(m_hWnd));
 
@@ -584,20 +584,20 @@ LRESULT CALLBACK CWindowWnd::__ControlProc(HWND hWnd, UINT uMsg, WPARAM wParam, 
     }
 }
 
-INLINE void CWindowWnd::ReloadTitle(void)
+DUI_INLINE void CWindowWnd::ReloadTitle(void)
 {
     m_sTitle = m_sTitleOrig;
     CPaintManagerUI::ProcessMultiLanguageTokens(m_sTitle);
     ::SetWindowText(m_hWnd, m_sTitle.GetData());
 }
 
-INLINE LRESULT CWindowWnd::SendMessage(UINT uMsg, WPARAM wParam /*= 0*/, LPARAM lParam /*= 0*/)
+DUI_INLINE LRESULT CWindowWnd::SendMessage(UINT uMsg, WPARAM wParam /*= 0*/, LPARAM lParam /*= 0*/)
 {
     ASSERT(::IsWindow(m_hWnd));
     return ::SendMessage(m_hWnd, uMsg, wParam, lParam);
 }
 
-INLINE LRESULT CWindowWnd::PostMessage(UINT uMsg, WPARAM wParam /*= 0*/, LPARAM lParam /*= 0*/)
+DUI_INLINE LRESULT CWindowWnd::PostMessage(UINT uMsg, WPARAM wParam /*= 0*/, LPARAM lParam /*= 0*/)
 {
     ASSERT(::IsWindow(m_hWnd));
     return ::PostMessage(m_hWnd, uMsg, wParam, lParam);
@@ -623,12 +623,12 @@ void CWindowWnd::ResizeClient(int cx /*= -1*/, int cy /*= -1*/)
                    SWP_NOZORDER | SWP_NOMOVE | SWP_NOACTIVATE);
 }
 
-INLINE LRESULT CWindowWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+DUI_INLINE LRESULT CWindowWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     return ::CallWindowProc(m_OldWndProc, m_hWnd, uMsg, wParam, lParam);
 }
 
-INLINE void CWindowWnd::OnFinalMessage(HWND /*hWnd*/)
+DUI_INLINE void CWindowWnd::OnFinalMessage(HWND /*hWnd*/)
 {
 }
 

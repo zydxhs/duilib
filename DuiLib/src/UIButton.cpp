@@ -294,7 +294,7 @@ void CButtonUI::SetHotBkColor(DWORD dwColor)
     Invalidate();
 }
 
-INLINE DWORD CButtonUI::GetHotBkColor() const
+DUI_INLINE DWORD CButtonUI::GetHotBkColor() const
 {
     return m_dwHotBkColor;
 }
@@ -307,7 +307,7 @@ void CButtonUI::SetFocusedBkColor(DWORD dwColor)
     Invalidate();
 }
 
-INLINE DWORD CButtonUI::GetFocusedBkColor() const
+DUI_INLINE DWORD CButtonUI::GetFocusedBkColor() const
 {
     return m_dwFocusedBkColor;
 }
@@ -320,7 +320,7 @@ void CButtonUI::SetPushedBkColor(DWORD dwColor)
     Invalidate();
 }
 
-INLINE DWORD CButtonUI::GetPushedBkColor() const
+DUI_INLINE DWORD CButtonUI::GetPushedBkColor() const
 {
     return m_dwPushedBkColor;
 }
@@ -333,7 +333,7 @@ void CButtonUI::SetDisabledBkColor(DWORD dwColor)
     Invalidate();
 }
 
-INLINE DWORD CButtonUI::GetDisabledBkColor() const
+DUI_INLINE DWORD CButtonUI::GetDisabledBkColor() const
 {
     return m_dwDisabledBkColor;
 }
@@ -346,7 +346,7 @@ void CButtonUI::SetHotTextColor(DWORD dwColor)
     Invalidate();
 }
 
-INLINE DWORD CButtonUI::GetHotTextColor() const
+DUI_INLINE DWORD CButtonUI::GetHotTextColor() const
 {
     return m_dwHotTextColor;
 }
@@ -359,7 +359,7 @@ void CButtonUI::SetFocusedTextColor(DWORD dwColor)
     Invalidate();
 }
 
-INLINE DWORD CButtonUI::GetFocusedTextColor() const
+DUI_INLINE DWORD CButtonUI::GetFocusedTextColor() const
 {
     return m_dwFocusedTextColor;
 }
@@ -372,12 +372,12 @@ void CButtonUI::SetPushedTextColor(DWORD dwColor)
     Invalidate();
 }
 
-INLINE DWORD CButtonUI::GetPushedTextColor() const
+DUI_INLINE DWORD CButtonUI::GetPushedTextColor() const
 {
     return m_dwPushedTextColor;
 }
 
-INLINE LPCTSTR CButtonUI::GetNormalImage()
+DUI_INLINE LPCTSTR CButtonUI::GetNormalImage()
 {
     return m_diNormal.sDrawString;
 }
@@ -391,7 +391,7 @@ void CButtonUI::SetNormalImage(LPCTSTR pStrImage)
     Invalidate();
 }
 
-INLINE LPCTSTR CButtonUI::GetHotImage()
+DUI_INLINE LPCTSTR CButtonUI::GetHotImage()
 {
     return m_diHot.sDrawString;
 }
@@ -405,7 +405,7 @@ void CButtonUI::SetHotImage(LPCTSTR pStrImage)
     Invalidate();
 }
 
-INLINE LPCTSTR CButtonUI::GetPushedImage()
+DUI_INLINE LPCTSTR CButtonUI::GetPushedImage()
 {
     return m_diPushed.sDrawString;
 }
@@ -419,7 +419,7 @@ void CButtonUI::SetPushedImage(LPCTSTR pStrImage)
     Invalidate();
 }
 
-INLINE LPCTSTR CButtonUI::GetFocusedImage()
+DUI_INLINE LPCTSTR CButtonUI::GetFocusedImage()
 {
     return m_diFocused.sDrawString;
 }
@@ -433,7 +433,7 @@ void CButtonUI::SetFocusedImage(LPCTSTR pStrImage)
     Invalidate();
 }
 
-INLINE LPCTSTR CButtonUI::GetDisabledImage()
+DUI_INLINE LPCTSTR CButtonUI::GetDisabledImage()
 {
     return m_diDisabled.sDrawString;
 }
@@ -447,7 +447,7 @@ void CButtonUI::SetDisabledImage(LPCTSTR pStrImage)
     Invalidate();
 }
 
-INLINE LPCTSTR CButtonUI::GetForeImage()
+DUI_INLINE LPCTSTR CButtonUI::GetForeImage()
 {
     return m_diFore.sDrawString;
 }
@@ -461,7 +461,7 @@ void CButtonUI::SetForeImage(LPCTSTR pStrImage)
     Invalidate();
 }
 
-INLINE LPCTSTR CButtonUI::GetHotForeImage()
+DUI_INLINE LPCTSTR CButtonUI::GetHotForeImage()
 {
     return m_diHotFore.sDrawString;
 }
@@ -544,22 +544,22 @@ void CButtonUI::SetFiveStatusImage(LPCTSTR pStrImage)
     Invalidate();
 }
 
-INLINE void CButtonUI::SetFadeAlphaDelta(BYTE uDelta)
+DUI_INLINE void CButtonUI::SetFadeAlphaDelta(BYTE uDelta)
 {
     m_byFadeAlphaDelta = uDelta;
 }
 
-INLINE BYTE CButtonUI::GetFadeAlphaDelta()
+DUI_INLINE BYTE CButtonUI::GetFadeAlphaDelta()
 {
     return m_byFadeAlphaDelta;
 }
 
-INLINE void CButtonUI::SetDisabledSeconds(BYTE bySecs)
+DUI_INLINE void CButtonUI::SetDisabledSeconds(BYTE bySecs)
 {
     m_byDisableSeconds = (bySecs <= 100) ? bySecs : 100;
 }
 
-INLINE BYTE CButtonUI::GetDisabledSeconds()
+DUI_INLINE BYTE CButtonUI::GetDisabledSeconds()
 {
     return m_byDisableSeconds;
 }

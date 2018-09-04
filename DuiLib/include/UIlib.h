@@ -49,9 +49,9 @@
 
 
 #ifdef UILIB_STATIC
-    #define INLINE
+    #define DUI_INLINE
 #else
-    #define INLINE inline
+    #define DUI_INLINE inline
 #endif // UILIB_STATIC
 
 #define UILIB_COMDAT __declspec(selectany)

@@ -1213,22 +1213,22 @@ CDuiString CControlUI::GetVirtualWnd() const
     return str;
 }
 
-INLINE void CControlUI::SetDropEnable(bool bDropEnable)
+DUI_INLINE void CControlUI::SetDropEnable(bool bDropEnable)
 {
     m_bDropEnable = bDropEnable;
 }
 
-INLINE bool CControlUI::GetDropEnable(void)
+DUI_INLINE bool CControlUI::GetDropEnable(void)
 {
     return m_bDropEnable;
 }
 
-INLINE void CControlUI::SetDragEnable(bool bDragEnable)
+DUI_INLINE void CControlUI::SetDragEnable(bool bDragEnable)
 {
     m_bDragEnable = bDragEnable;
 }
 
-INLINE bool CControlUI::GetDragEnable(void)
+DUI_INLINE bool CControlUI::GetDragEnable(void)
 {
     return m_bDragEnable;
 }
@@ -2054,7 +2054,7 @@ void CControlUI::StopEffect(void)
     }
 }
 
-INLINE BYTE CControlUI::GetEffectTrigger(void)
+DUI_INLINE BYTE CControlUI::GetEffectTrigger(void)
 {
     return m_byEffectTrigger;
 }

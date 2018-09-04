@@ -380,7 +380,7 @@ void CPaintManagerUI::Init(HWND hWnd, LPCTSTR pstrName)
     if (NULL != m_pDropTarget) { m_pDropTarget->DragDropRegister(this, GetPaintWindow()); }
 }
 
-INLINE HINSTANCE CPaintManagerUI::GetInstance()
+DUI_INLINE HINSTANCE CPaintManagerUI::GetInstance()
 {
     return m_hInstance;
 }
@@ -406,32 +406,32 @@ CDuiString CPaintManagerUI::GetCurrentPath()
     return tszModule;
 }
 
-INLINE HINSTANCE CPaintManagerUI::GetResourceDll()
+DUI_INLINE HINSTANCE CPaintManagerUI::GetResourceDll()
 {
     return (m_hResourceInstance == NULL) ? m_hInstance : m_hResourceInstance;
 }
 
-INLINE const CDuiString &CPaintManagerUI::GetResourcePath()
+DUI_INLINE const CDuiString &CPaintManagerUI::GetResourcePath()
 {
     return m_pStrResourcePath;
 }
 
-INLINE const CDuiString &CPaintManagerUI::GetResourceZip()
+DUI_INLINE const CDuiString &CPaintManagerUI::GetResourceZip()
 {
     return m_pStrResourceZip;
 }
 
-INLINE bool CPaintManagerUI::IsCachedResourceZip()
+DUI_INLINE bool CPaintManagerUI::IsCachedResourceZip()
 {
     return m_bCachedResourceZip;
 }
 
-INLINE HANDLE CPaintManagerUI::GetResourceZipHandle()
+DUI_INLINE HANDLE CPaintManagerUI::GetResourceZipHandle()
 {
     return m_hResourceZip;
 }
 
-INLINE void CPaintManagerUI::SetInstance(HINSTANCE hInst)
+DUI_INLINE void CPaintManagerUI::SetInstance(HINSTANCE hInst)
 {
     OleInitialize(NULL);
     m_hInstance = hInst;
@@ -442,12 +442,12 @@ INLINE void CPaintManagerUI::SetInstance(HINSTANCE hInst)
     CShadowUI::Initialize(hInst);
 }
 
-INLINE void CPaintManagerUI::SetCurrentPath(LPCTSTR pStrPath)
+DUI_INLINE void CPaintManagerUI::SetCurrentPath(LPCTSTR pStrPath)
 {
     ::SetCurrentDirectory(pStrPath);
 }
 
-INLINE void CPaintManagerUI::SetResourceDll(HINSTANCE hInst)
+DUI_INLINE void CPaintManagerUI::SetResourceDll(HINSTANCE hInst)
 {
     m_hResourceInstance = hInst;
 }
@@ -500,7 +500,7 @@ void CPaintManagerUI::SetResourceZip(LPCTSTR pStrPath, bool bCachedResourceZip)
     }
 }
 
-INLINE bool CPaintManagerUI::GetHSL(short *H, short *S, short *L)
+DUI_INLINE bool CPaintManagerUI::GetHSL(short *H, short *S, short *L)
 {
     *H = m_H;
     *S = m_S;
@@ -559,7 +559,7 @@ CPaintManagerUI *CPaintManagerUI::GetPaintManager(LPCTSTR pstrName)
     return NULL;
 }
 
-INLINE CDuiPtrArray *CPaintManagerUI::GetPaintManagers()
+DUI_INLINE CDuiPtrArray *CPaintManagerUI::GetPaintManagers()
 {
     return &m_aPreMessages;
 }
@@ -588,22 +588,22 @@ bool CPaintManagerUI::LoadPlugin(LPCTSTR pstrModuleName)
     return false;
 }
 
-INLINE CDuiPtrArray *CPaintManagerUI::GetPlugins()
+DUI_INLINE CDuiPtrArray *CPaintManagerUI::GetPlugins()
 {
     return &m_aPlugins;
 }
 
-INLINE HWND CPaintManagerUI::GetPaintWindow() const
+DUI_INLINE HWND CPaintManagerUI::GetPaintWindow() const
 {
     return m_hWndPaint;
 }
 
-INLINE HWND CPaintManagerUI::GetTooltipWindow() const
+DUI_INLINE HWND CPaintManagerUI::GetTooltipWindow() const
 {
     return m_hwndTooltip;
 }
 
-INLINE int CPaintManagerUI::GetTooltipWindowWidth() const
+DUI_INLINE int CPaintManagerUI::GetTooltipWindowWidth() const
 {
     return m_iTooltipWidth;
 }
@@ -621,44 +621,44 @@ void CPaintManagerUI::SetTooltipWindowWidth(int iWidth)
     }
 }
 
-INLINE int CPaintManagerUI::GetHoverTime() const
+DUI_INLINE int CPaintManagerUI::GetHoverTime() const
 {
     return m_iHoverTime;
 }
 
-INLINE void CPaintManagerUI::SetHoverTime(int iTime)
+DUI_INLINE void CPaintManagerUI::SetHoverTime(int iTime)
 {
     m_iHoverTime = iTime;
 }
 
-INLINE LPCTSTR CPaintManagerUI::GetName() const
+DUI_INLINE LPCTSTR CPaintManagerUI::GetName() const
 {
     return m_sName;
 }
 
-INLINE HDC CPaintManagerUI::GetPaintDC() const
+DUI_INLINE HDC CPaintManagerUI::GetPaintDC() const
 {
     return m_hDcPaint;
 }
 
-INLINE HBITMAP CPaintManagerUI::GetPaintOffscreenBitmap()
+DUI_INLINE HBITMAP CPaintManagerUI::GetPaintOffscreenBitmap()
 {
     return m_hbmpOffscreen;
 }
 
-INLINE POINT CPaintManagerUI::GetMousePos() const
+DUI_INLINE POINT CPaintManagerUI::GetMousePos() const
 {
     return m_ptLastMousePos;
 }
 
-INLINE SIZE CPaintManagerUI::GetClientSize() const
+DUI_INLINE SIZE CPaintManagerUI::GetClientSize() const
 {
     RECT rcClient = { 0 };
     ::GetClientRect(m_hWndPaint, &rcClient);
     return CDuiSize(rcClient.right - rcClient.left, rcClient.bottom - rcClient.top);
 }
 
-INLINE SIZE CPaintManagerUI::GetInitSize()
+DUI_INLINE SIZE CPaintManagerUI::GetInitSize()
 {
     return m_szInitWindowSize;
 }
@@ -674,82 +674,82 @@ void CPaintManagerUI::SetInitSize(int cx, int cy)
     }
 }
 
-INLINE RECT &CPaintManagerUI::GetSizeBox()
+DUI_INLINE RECT &CPaintManagerUI::GetSizeBox()
 {
     return m_rcSizeBox;
 }
 
-INLINE void CPaintManagerUI::SetSizeBox(RECT &rcSizeBox)
+DUI_INLINE void CPaintManagerUI::SetSizeBox(RECT &rcSizeBox)
 {
     m_rcSizeBox = rcSizeBox;
 }
 
-INLINE RECT &CPaintManagerUI::GetCaptionRect()
+DUI_INLINE RECT &CPaintManagerUI::GetCaptionRect()
 {
     return m_rcCaption;
 }
 
-INLINE void CPaintManagerUI::SetCaptionRect(RECT &rcCaption)
+DUI_INLINE void CPaintManagerUI::SetCaptionRect(RECT &rcCaption)
 {
     m_rcCaption = rcCaption;
 }
 
-INLINE SIZE CPaintManagerUI::GetRoundCorner() const
+DUI_INLINE SIZE CPaintManagerUI::GetRoundCorner() const
 {
     return m_szRoundCorner;
 }
 
-INLINE void CPaintManagerUI::SetRoundCorner(int cx, int cy)
+DUI_INLINE void CPaintManagerUI::SetRoundCorner(int cx, int cy)
 {
     m_szRoundCorner.cx = cx;
     m_szRoundCorner.cy = cy;
 }
 
-INLINE SIZE CPaintManagerUI::GetMinInfo() const
+DUI_INLINE SIZE CPaintManagerUI::GetMinInfo() const
 {
     return m_szMinWindow;
 }
 
-INLINE void CPaintManagerUI::SetMinInfo(int cx, int cy)
+DUI_INLINE void CPaintManagerUI::SetMinInfo(int cx, int cy)
 {
     ASSERT(cx >= 0 && cy >= 0);
     m_szMinWindow.cx = cx;
     m_szMinWindow.cy = cy;
 }
 
-INLINE SIZE CPaintManagerUI::GetMaxInfo() const
+DUI_INLINE SIZE CPaintManagerUI::GetMaxInfo() const
 {
     return m_szMaxWindow;
 }
 
-INLINE void CPaintManagerUI::SetMaxInfo(int cx, int cy)
+DUI_INLINE void CPaintManagerUI::SetMaxInfo(int cx, int cy)
 {
     ASSERT(cx >= 0 && cy >= 0);
     m_szMaxWindow.cx = cx;
     m_szMaxWindow.cy = cy;
 }
 
-INLINE bool CPaintManagerUI::IsShowUpdateRect() const
+DUI_INLINE bool CPaintManagerUI::IsShowUpdateRect() const
 {
     return m_bShowUpdateRect;
 }
 
-INLINE void CPaintManagerUI::SetShowUpdateRect(bool show)
+DUI_INLINE void CPaintManagerUI::SetShowUpdateRect(bool show)
 {
     m_bShowUpdateRect = show;
 }
 
-INLINE bool CPaintManagerUI::IsNoActivate()
+DUI_INLINE bool CPaintManagerUI::IsNoActivate()
 {
     return m_bNoActivate;
 }
 
-INLINE void CPaintManagerUI::SetNoActivate(bool bNoActivate)
+DUI_INLINE void CPaintManagerUI::SetNoActivate(bool bNoActivate)
 {
     m_bNoActivate = bNoActivate;
 }
 
-INLINE BYTE CPaintManagerUI::GetOpacity() const
+DUI_INLINE BYTE CPaintManagerUI::GetOpacity() const
 {
     return m_nOpacity;
 }
@@ -788,7 +788,7 @@ void CPaintManagerUI::SetOpacity(BYTE nOpacity)
     }
 }
 
-INLINE bool CPaintManagerUI::IsLayered()
+DUI_INLINE bool CPaintManagerUI::IsLayered()
 {
     return m_bLayered;
 }
@@ -838,7 +838,7 @@ void CPaintManagerUI::SetLayered(bool bLayered)
     }
 }
 
-INLINE RECT &CPaintManagerUI::GetLayeredInset()
+DUI_INLINE RECT &CPaintManagerUI::GetLayeredInset()
 {
     return m_rcLayeredInset;
 }
@@ -850,7 +850,7 @@ void CPaintManagerUI::SetLayeredInset(RECT &rcLayeredInset)
     Invalidate();
 }
 
-INLINE BYTE CPaintManagerUI::GetLayeredOpacity()
+DUI_INLINE BYTE CPaintManagerUI::GetLayeredOpacity()
 {
     return m_nOpacity;
 }
@@ -862,7 +862,7 @@ void CPaintManagerUI::SetLayeredOpacity(BYTE nOpacity)
     Invalidate();
 }
 
-INLINE LPCTSTR CPaintManagerUI::GetLayeredImage()
+DUI_INLINE LPCTSTR CPaintManagerUI::GetLayeredImage()
 {
     return m_diLayered.sDrawString;
 }
@@ -2267,12 +2267,12 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
     return false;
 }
 
-INLINE bool CPaintManagerUI::IsUpdateNeeded() const
+DUI_INLINE bool CPaintManagerUI::IsUpdateNeeded() const
 {
     return m_bUpdateNeeded;
 }
 
-INLINE void CPaintManagerUI::NeedUpdate()
+DUI_INLINE void CPaintManagerUI::NeedUpdate()
 {
     m_bUpdateNeeded = true;
 }
@@ -2527,7 +2527,7 @@ void CPaintManagerUI::Term()
     OleUninitialize();
 }
 
-INLINE CControlUI *CPaintManagerUI::GetFocus() const
+DUI_INLINE CControlUI *CPaintManagerUI::GetFocus() const
 {
     return m_pFocus;
 }
@@ -2736,17 +2736,17 @@ void CPaintManagerUI::ReleaseCapture(CControlUI *pControl)
     m_bMouseCapture = false;
 }
 
-INLINE bool CPaintManagerUI::IsCaptured()
+DUI_INLINE bool CPaintManagerUI::IsCaptured()
 {
     return m_bMouseCapture;
 }
 
-INLINE bool CPaintManagerUI::IsPainting()
+DUI_INLINE bool CPaintManagerUI::IsPainting()
 {
     return m_bIsPainting;
 }
 
-INLINE void CPaintManagerUI::SetPainting(bool bIsPainting)
+DUI_INLINE void CPaintManagerUI::SetPainting(bool bIsPainting)
 {
     m_bIsPainting = bIsPainting;
 }
@@ -2855,7 +2855,7 @@ bool CPaintManagerUI::RemoveMessageFilter(IMessageFilterUI *pFilter)
     return false;
 }
 
-INLINE int CPaintManagerUI::GetPostPaintCount() const
+DUI_INLINE int CPaintManagerUI::GetPostPaintCount() const
 {
     return m_aPostPaintControls.GetSize();
 }
@@ -2889,7 +2889,7 @@ bool CPaintManagerUI::SetPostPaintIndex(CControlUI *pControl, int iIndex)
     return m_aPostPaintControls.InsertAt(iIndex, pControl);
 }
 
-INLINE int CPaintManagerUI::GetNativeWindowCount() const
+DUI_INLINE int CPaintManagerUI::GetNativeWindowCount() const
 {
     return m_aNativeWindow.GetSize();
 }
@@ -3050,17 +3050,17 @@ void CPaintManagerUI::SendNotify(TNotifyUI &Msg, bool bAsync /*= false*/, bool b
     }
 }
 
-INLINE bool CPaintManagerUI::IsForceUseSharedRes() const
+DUI_INLINE bool CPaintManagerUI::IsForceUseSharedRes() const
 {
     return m_bForceUseSharedRes;
 }
 
-INLINE void CPaintManagerUI::SetForceUseSharedRes(bool bForce)
+DUI_INLINE void CPaintManagerUI::SetForceUseSharedRes(bool bForce)
 {
     m_bForceUseSharedRes = bForce;
 }
 
-INLINE DWORD CPaintManagerUI::GetDefaultDisabledColor() const
+DUI_INLINE DWORD CPaintManagerUI::GetDefaultDisabledColor() const
 {
     return m_ResInfo.m_dwDefaultDisabledColor;
 }
@@ -3080,7 +3080,7 @@ void CPaintManagerUI::SetDefaultDisabledColor(DWORD dwColor, bool bShared)
     }
 }
 
-INLINE DWORD CPaintManagerUI::GetDefaultFontColor() const
+DUI_INLINE DWORD CPaintManagerUI::GetDefaultFontColor() const
 {
     return m_ResInfo.m_dwDefaultFontColor;
 }
@@ -3100,7 +3100,7 @@ void CPaintManagerUI::SetDefaultFontColor(DWORD dwColor, bool bShared)
     }
 }
 
-INLINE DWORD CPaintManagerUI::GetDefaultLinkFontColor() const
+DUI_INLINE DWORD CPaintManagerUI::GetDefaultLinkFontColor() const
 {
     return m_ResInfo.m_dwDefaultLinkFontColor;
 }
@@ -3120,7 +3120,7 @@ void CPaintManagerUI::SetDefaultLinkFontColor(DWORD dwColor, bool bShared)
     }
 }
 
-INLINE DWORD CPaintManagerUI::GetDefaultLinkHoverFontColor() const
+DUI_INLINE DWORD CPaintManagerUI::GetDefaultLinkHoverFontColor() const
 {
     return m_ResInfo.m_dwDefaultLinkHoverFontColor;
 }
@@ -3140,7 +3140,7 @@ void CPaintManagerUI::SetDefaultLinkHoverFontColor(DWORD dwColor, bool bShared)
     }
 }
 
-INLINE DWORD CPaintManagerUI::GetDefaultSelectedBkColor() const
+DUI_INLINE DWORD CPaintManagerUI::GetDefaultSelectedBkColor() const
 {
     return m_ResInfo.m_dwDefaultSelectedBkColor;
 }
@@ -4158,7 +4158,7 @@ void CPaintManagerUI::RemoveAllWindowCustomAttribute()
     m_mWindowAttrHash.Resize();
 }
 
-INLINE CDuiString CPaintManagerUI::GetWindowAttribute(LPCTSTR pstrName)
+DUI_INLINE CDuiString CPaintManagerUI::GetWindowAttribute(LPCTSTR pstrName)
 {
     return _T("");
 }
@@ -4304,7 +4304,7 @@ void CPaintManagerUI::SetWindowAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else { AddWindowCustomAttribute(pstrName, pstrValue); }
 }
 
-INLINE CDuiString CPaintManagerUI::GetWindowAttributeList(bool bIgnoreDefault)
+DUI_INLINE CDuiString CPaintManagerUI::GetWindowAttributeList(bool bIgnoreDefault)
 {
     return _T("");
 }
@@ -4357,7 +4357,7 @@ void CPaintManagerUI::SetWindowAttributeList(LPCTSTR pstrList)
     }
 }
 
-INLINE bool CPaintManagerUI::RemoveWindowAttribute(LPCTSTR pstrName)
+DUI_INLINE bool CPaintManagerUI::RemoveWindowAttribute(LPCTSTR pstrName)
 {
     return false;
 }
@@ -4509,7 +4509,7 @@ void CPaintManagerUI::ProcessMultiLanguageTokens(CDuiString &pStrMultiLanguage)
     }
 }
 
-INLINE CControlUI *CPaintManagerUI::GetRoot() const
+DUI_INLINE CControlUI *CPaintManagerUI::GetRoot() const
 {
     ASSERT(m_pRoot);
     return m_pRoot;
@@ -4562,7 +4562,7 @@ CDuiPtrArray *CPaintManagerUI::FindSubControlsByClass(CControlUI *pParent, LPCTS
     return &m_aFoundControls;
 }
 
-INLINE CDuiPtrArray *CPaintManagerUI::GetFoundControls()
+DUI_INLINE CDuiPtrArray *CPaintManagerUI::GetFoundControls()
 {
     return &m_aFoundControls;
 }
@@ -4771,7 +4771,7 @@ bool CPaintManagerUI::RemoveTranslateAccelerator(ITranslateAccelerator *pTransla
     return false;
 }
 
-INLINE void CPaintManagerUI::UsedVirtualWnd(bool bUsed)
+DUI_INLINE void CPaintManagerUI::UsedVirtualWnd(bool bUsed)
 {
     m_bUsedVirtualWnd = bUsed;
 }
@@ -4933,7 +4933,7 @@ void CPaintManagerUI::DelLanguageNotifier(HWND hWnd)
     if (-1 != nIdx) { m_SharedResInfo.m_LanguageNotifyers.Remove(nIdx); }
 }
 
-INLINE void CPaintManagerUI::UpdateLanguage()
+DUI_INLINE void CPaintManagerUI::UpdateLanguage()
 {
     if (NULL != m_pRoot) { m_pRoot->ReloadText(); }
 }

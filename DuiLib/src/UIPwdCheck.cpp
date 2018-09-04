@@ -225,7 +225,7 @@ void CPwdCheckUI::SetText(LPCTSTR pstrText)
     NeedUpdate();
 }
 
-INLINE BYTE CPwdCheckUI::GetPwdStrongth()
+DUI_INLINE BYTE CPwdCheckUI::GetPwdStrongth()
 {
     return m_byPwdStrongth;
 }
