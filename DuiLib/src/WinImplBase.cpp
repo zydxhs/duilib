@@ -167,6 +167,37 @@ LRESULT CWndImplBase::OnNcCalcSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
     return 0;
 }
 
+LRESULT CWndImplBase::OnWindowPosChanging(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
+{
+    bHandled = FALSE;
+
+    if (IsZoomed(m_hWnd))
+    {
+        // 2018-09-06 zhuyadong 修复代码来自 redrain
+        LPWINDOWPOS lpPos = (LPWINDOWPOS)lParam;
+
+        if (lpPos->flags & SWP_FRAMECHANGED) // 第一次最大化，而不是最大化之后所触发的WINDOWPOSCHANGE
+        {
+            POINT pt = { 0, 0 };
+            HMONITOR hMontorPrimary = MonitorFromPoint(pt, MONITOR_DEFAULTTOPRIMARY);
+            HMONITOR hMonitorTo = MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTOPRIMARY);
+
+            if (hMonitorTo != hMontorPrimary)
+            {
+                // 解决无边框窗口在双屏下面（副屏分辨率大于主屏）时，最大化不正确的问题
+                MONITORINFO  miTo = { sizeof(miTo), 0 };
+                GetMonitorInfo(hMonitorTo, &miTo);
+                lpPos->x = miTo.rcWork.left;
+                lpPos->y = miTo.rcWork.top;
+                lpPos->cx = miTo.rcWork.right - miTo.rcWork.left;
+                lpPos->cy = miTo.rcWork.bottom - miTo.rcWork.top;
+            }
+        }
+    }
+
+    return 0;
+}
+
 DUI_INLINE LRESULT CWndImplBase::OnNcPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
     bHandled = (::GetWindowLong(*this, GWL_STYLE) & WS_CAPTION) ? FALSE : bHandled;
@@ -526,6 +557,8 @@ LRESULT CWndImplBase::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     case WM_NCACTIVATE:     lRes = OnNcActivate(uMsg, wParam, lParam, bHandled); break;
 
     case WM_NCCALCSIZE:     lRes = OnNcCalcSize(uMsg, wParam, lParam, bHandled); break;
+
+    case WM_WINDOWPOSCHANGING: lRes = OnWindowPosChanging(uMsg, wParam, lParam, bHandled); break;
 
     case WM_NCPAINT:        lRes = OnNcPaint(uMsg, wParam, lParam, bHandled); break;
 
