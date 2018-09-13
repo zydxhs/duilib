@@ -2,6 +2,7 @@
 #include "graph_def.h"
 #include "graph_rect.h"
 #include "image_process.h"
+#include <vector>
 
 namespace DuiLib {
 
@@ -78,8 +79,8 @@ public:
 private:
     void CalculateFrame(int length);
 private:
-    vector<int> m_specialBandSize;      // 百叶的宽或者高
-    int         m_nowSumRowCol;         // 当前计算起始行或者列
+    std::vector<int>    m_specialBandSize;      // 百叶的宽或者高
+    int                 m_nowSumRowCol;         // 当前计算起始行或者列
 };
 
 class CScanEffect : public IEffect
@@ -402,9 +403,9 @@ public:
     void InitEffectParam(TAniParam *internalParam);
     void ReleaseEffectParam();
 private:
-    int                 m_foldNum;                  // 折叠效果的折数
-    vector<CdRect>      m_foldRect;                 // 每个折的RECT
-    vector<WarpRect>    m_warpRect;                 // 扭曲的rect
+    int                     m_foldNum;                  // 折叠效果的折数
+    std::vector<CdRect>     m_foldRect;                 // 每个折的RECT
+    std::vector<WarpRect>   m_warpRect;                 // 扭曲的rect
 };
 
 class CStackEffect : public IEffect
@@ -415,12 +416,12 @@ public:
     void InitEffectParam(TAniParam *internalParam);
     void ReleaseEffectParam();
 private:
-    int             m_bandNum;                  // 带状的条数
-    int             m_bandSize;                 // 带状的宽或者高
-    vector<int>     m_bandFrameNum;             // 每条的帧数
-    int             m_bandAnimating;            // 当前运动的带状序号
-    int             m_bandFrameSum;             // 在当前带状前面的带状累积完成的帧数
-    int             m_bandSubFrame;             // 当前带状的执行帧数
+    int                 m_bandNum;                  // 带状的条数
+    int                 m_bandSize;                 // 带状的宽或者高
+    std::vector<int>    m_bandFrameNum;             // 每条的帧数
+    int                 m_bandAnimating;            // 当前运动的带状序号
+    int                 m_bandFrameSum;             // 在当前带状前面的带状累积完成的帧数
+    int                 m_bandSubFrame;             // 当前带状的执行帧数
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////

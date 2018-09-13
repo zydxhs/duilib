@@ -18,7 +18,7 @@ struct FriendListItemInfo
 class CFriendsUI : public CListUI
 {
 public:
-    enum {SCROLL_TIMERID = TIMERID_USER_MIN + 10};
+    enum { SCROLL_TIMERID = TIMERID_USER_BEGIN + 10 };
 
     CFriendsUI(CPaintManagerUI &paint_manager);
     ~CFriendsUI();

@@ -85,8 +85,8 @@ void CMainDlg::Notify(TNotifyUI &msg)
         }
         else if (msg.pSender->GetName() == _T("btnRefresh"))
         {
-            wstring strRet = m_pWke->RunJS(m_pURLEdit->GetText().GetData());
-            MessageBox(m_hWnd, strRet.c_str(), _T(""), 0);
+            CDuiString strRet = m_pWke->RunJS(m_pURLEdit->GetText().GetData());
+            MessageBox(m_hWnd, strRet.GetData(), _T(""), 0);
         }
     }
     else if (msg.sType == DUI_MSGTYPE_WEBNOTIFY)

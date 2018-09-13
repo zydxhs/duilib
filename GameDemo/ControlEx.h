@@ -10,7 +10,7 @@ inline double CalculateDelay(double state) { return pow(state, 2); }
 class GameListUI : public CListUI
 {
 public:
-    enum { SCROLL_TIMERID = TIMERID_USER_MIN + 10 };
+    enum { SCROLL_TIMERID = TIMERID_USER_BEGIN + 10 };
 
     struct NodeData
     {
@@ -146,11 +146,11 @@ public:
         _root->data()._expand = true;
         _root->data()._pListElement = NULL;
     }
-    void SetVisible(bool bVisible = true)
+    bool SetVisible(bool bVisible = true)
     {
-        if (m_bVisible == bVisible) { return; }
+        if (m_bVisible == bVisible) { return true; }
 
-        CControlUI::SetVisible(bVisible);
+        return CControlUI::SetVisible(bVisible);
     }
 
     void SetInternVisible(bool bVisible = true)

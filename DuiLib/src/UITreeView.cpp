@@ -39,8 +39,7 @@ CTreeNodeUI::CTreeNodeUI(CTreeNodeUI *_ParentNode /*= NULL*/)
 
     if (_ParentNode)
     {
-        if (_tcsicmp(_ParentNode->GetClass(), DUI_CTR_TREENODE) != 0)
-        { return; }
+        if (_tcsicmp(_ParentNode->GetClass(), DUI_CTR_TREENODE) != 0) { return; }
 
         pDottedLine->SetVisible(_ParentNode->IsVisible());
         pDottedLine->SetFixedWidth(_ParentNode->GetDottedLine()->GetFixedWidth() + 16);
@@ -155,8 +154,7 @@ void CTreeNodeUI::DoEvent(TEventUI &event)
 //************************************
 void CTreeNodeUI::Invalidate()
 {
-    if (!IsVisible())
-    { return; }
+    if (!IsVisible()) { return; }
 
     if (GetParent())
     {
@@ -180,8 +178,7 @@ void CTreeNodeUI::Invalidate()
 
             RECT invalidateRc = m_rcItem;
 
-            if (!::IntersectRect(&invalidateRc, &m_rcItem, &rc))
-            { return; }
+            if (!::IntersectRect(&invalidateRc, &m_rcItem, &rc)) { return; }
 
             CControlUI *pParent = GetParent();
             RECT rcTemp;
@@ -192,8 +189,7 @@ void CTreeNodeUI::Invalidate()
                 rcTemp = invalidateRc;
                 rcParent = pParent->GetPos();
 
-                if (!::IntersectRect(&invalidateRc, &rcTemp, &rcParent))
-                { return; }
+                if (!::IntersectRect(&invalidateRc, &rcTemp, &rcParent)) { return; }
             }
 
             if (m_pManager != NULL) { m_pManager->Invalidate(invalidateRc); }
@@ -219,10 +215,8 @@ bool CTreeNodeUI::Select(bool bSelect /*= true*/,  bool bTriggerEvent)
 {
     bool nRet = CListContainerElementUI::Select(bSelect, bTriggerEvent);
 
-    if (m_bSelected)
-    { pItemButton->SetTextColor(GetSelItemTextColor()); }
-    else
-    { pItemButton->SetTextColor(GetItemTextColor()); }
+    if (m_bSelected) { pItemButton->SetTextColor(GetSelItemTextColor()); }
+    else             { pItemButton->SetTextColor(GetItemTextColor()); }
 
     return nRet;
 }
@@ -250,15 +244,13 @@ bool CTreeNodeUI::Add(CControlUI *_pTreeNodeUI)
 //************************************
 bool CTreeNodeUI::AddAt(CControlUI *pControl, int iIndex)
 {
-    if (NULL == static_cast<CTreeNodeUI *>(pControl->GetInterface(DUI_CTR_TREENODE)))
-    { return false; }
+    if (NULL == static_cast<CTreeNodeUI *>(pControl->GetInterface(DUI_CTR_TREENODE))) { return false; }
 
     CTreeNodeUI *pIndexNode = static_cast<CTreeNodeUI *>(mTreeNodes.GetAt(iIndex));
 
     if (!pIndexNode)
     {
-        if (!mTreeNodes.Add(pControl))
-        { return false; }
+        if (!mTreeNodes.Add(pControl)) { return false; }
     }
     else if (pIndexNode && !mTreeNodes.InsertAt(iIndex, pControl))
     { return false; }
@@ -357,11 +349,9 @@ bool CTreeNodeUI::IsHasChild() const
 //************************************
 bool CTreeNodeUI::AddChildNode(CTreeNodeUI *_pTreeNodeUI)
 {
-    if (!_pTreeNodeUI)
-    { return false; }
+    if (!_pTreeNodeUI) { return false; }
 
-    if (_tcsicmp(_pTreeNodeUI->GetClass(), DUI_CTR_TREENODE) != 0)
-    { return false; }
+    if (_tcsicmp(_pTreeNodeUI->GetClass(), DUI_CTR_TREENODE) != 0) { return false; }
 
     _pTreeNodeUI = CalLocation(_pTreeNodeUI);
 
@@ -376,8 +366,7 @@ bool CTreeNodeUI::AddChildNode(CTreeNodeUI *_pTreeNodeUI)
         else { nRet = pTreeView->AddAt(_pTreeNodeUI, pNode->GetLastNode()->GetTreeIndex() + 1) >= 0; }
     }
 
-    if (nRet)
-    { mTreeNodes.Add(_pTreeNodeUI); }
+    if (nRet) { mTreeNodes.Add(_pTreeNodeUI); }
 
     return nRet;
 }
@@ -470,18 +459,12 @@ CTreeViewUI *CTreeNodeUI::GetTreeView()
 //************************************
 void CTreeNodeUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("text")) == 0)
-    { pItemButton->SetText(pstrValue); }
-    else if (_tcscmp(pstrName, _T("horizattr")) == 0)
-    { pHoriz->SetAttributeList(pstrValue); }
-    else if (_tcscmp(pstrName, _T("dotlineattr")) == 0)
-    { pDottedLine->SetAttributeList(pstrValue); }
-    else if (_tcscmp(pstrName, _T("folderattr")) == 0)
-    { pFolderButton->SetAttributeList(pstrValue); }
-    else if (_tcscmp(pstrName, _T("checkboxattr")) == 0)
-    { pCheckBox->SetAttributeList(pstrValue); }
-    else if (_tcscmp(pstrName, _T("itemattr")) == 0)
-    { pItemButton->SetAttributeList(pstrValue); }
+    if (_tcscmp(pstrName, _T("text")) == 0) { pItemButton->SetText(pstrValue); }
+    else if (_tcscmp(pstrName, _T("horizattr")) == 0) { pHoriz->SetAttributeList(pstrValue); }
+    else if (_tcscmp(pstrName, _T("dotlineattr")) == 0) { pDottedLine->SetAttributeList(pstrValue); }
+    else if (_tcscmp(pstrName, _T("folderattr")) == 0) { pFolderButton->SetAttributeList(pstrValue); }
+    else if (_tcscmp(pstrName, _T("checkboxattr")) == 0) { pCheckBox->SetAttributeList(pstrValue); }
+    else if (_tcscmp(pstrName, _T("itemattr")) == 0) { pItemButton->SetAttributeList(pstrValue); }
     else if (_tcscmp(pstrName, _T("itemtextcolor")) == 0)
     {
         if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
@@ -588,13 +571,11 @@ bool CTreeNodeUI::GetVisibleCheckBtn()
 //************************************
 int CTreeNodeUI::GetTreeIndex()
 {
-    if (!pTreeView)
-    { return -1; }
+    if (!pTreeView) { return -1; }
 
     for (int nIndex = 0; nIndex < pTreeView->GetCount(); nIndex++)
     {
-        if (this == pTreeView->GetItemAt(nIndex))
-        { return nIndex; }
+        if (this == pTreeView->GetItemAt(nIndex)) { return nIndex; }
     }
 
     return -1;
@@ -607,11 +588,9 @@ int CTreeNodeUI::GetTreeIndex()
 //************************************
 int CTreeNodeUI::GetNodeIndex()
 {
-    if (!GetParentNode() && !pTreeView)
-    { return -1; }
+    if (!GetParentNode() && !pTreeView) { return -1; }
 
-    if (!GetParentNode() && pTreeView)
-    { return GetTreeIndex(); }
+    if (!GetParentNode() && pTreeView) { return GetTreeIndex(); }
 
     return GetParentNode()->GetTreeNodes().Find(this);
 }
@@ -623,8 +602,7 @@ int CTreeNodeUI::GetNodeIndex()
 //************************************
 CTreeNodeUI *CTreeNodeUI::GetLastNode()
 {
-    if (!IsHasChild())
-    { return this; }
+    if (!IsHasChild()) { return this; }
 
     CTreeNodeUI *nRetNode = NULL;
 
@@ -632,15 +610,12 @@ CTreeNodeUI *CTreeNodeUI::GetLastNode()
     {
         CTreeNodeUI *pNode = static_cast<CTreeNodeUI *>(GetTreeNodes().GetAt(nIndex));
 
-        if (!pNode)
-        { continue; }
+        if (!pNode) { continue; }
 
         CDuiString aa = pNode->GetItemText();
 
-        if (pNode->IsHasChild())
-        { nRetNode = pNode->GetLastNode(); }
-        else
-        { nRetNode = pNode; }
+        if (pNode->IsHasChild()) { nRetNode = pNode->GetLastNode(); }
+        else                     { nRetNode = pNode; }
     }
 
     return nRetNode;
@@ -915,8 +890,7 @@ long CTreeViewUI::AddAt(CTreeNodeUI *pControl, int iIndex)
         {
             CTreeNodeUI *pNode = pTreeNode->GetChildNode(nIndex);
 
-            if (pNode)
-            { return AddAt(pNode, iIndex + 1); }
+            if (pNode) { return AddAt(pNode, iIndex + 1); }
         }
     }
     else
@@ -927,8 +901,7 @@ long CTreeViewUI::AddAt(CTreeNodeUI *pControl, int iIndex)
 
 bool CTreeViewUI::AddAt(CTreeNodeUI *pControl, CTreeNodeUI *_IndexNode)
 {
-    if (!_IndexNode && !pControl)
-    { return false; }
+    if (!_IndexNode && !pControl) { return false; }
 
     int nItemIndex = -1;
 
@@ -941,8 +914,7 @@ bool CTreeViewUI::AddAt(CTreeNodeUI *pControl, CTreeNodeUI *_IndexNode)
         }
     }
 
-    if (nItemIndex == -1)
-    { return false; }
+    if (nItemIndex == -1) { return false; }
 
     return AddAt(pControl, nItemIndex) >= 0;
 }
@@ -1044,8 +1016,7 @@ bool CTreeViewUI::SetItemCheckBox(bool _Selected, CTreeNodeUI *_TreeNode /*= NUL
                 CTreeNodeUI *pItem = _TreeNode->GetChildNode(nIndex);
                 pItem->GetCheckBox()->Selected(_Selected);
 
-                if (pItem->GetCountChild())
-                { SetItemCheckBox(_Selected, pItem); }
+                if (pItem->GetCountChild()) { SetItemCheckBox(_Selected, pItem); }
             }
         }
 
@@ -1061,8 +1032,7 @@ bool CTreeViewUI::SetItemCheckBox(bool _Selected, CTreeNodeUI *_TreeNode /*= NUL
             CTreeNodeUI *pItem = (CTreeNodeUI *)GetItemAt(nIndex);
             pItem->GetCheckBox()->Selected(_Selected);
 
-            if (pItem->GetCountChild())
-            { SetItemCheckBox(_Selected, pItem); }
+            if (pItem->GetCountChild()) { SetItemCheckBox(_Selected, pItem); }
 
             nIndex++;
         }
@@ -1187,8 +1157,7 @@ void CTreeViewUI::SetItemMinWidth(UINT _ItemMinWidth)
     {
         CTreeNodeUI *pTreeNode = static_cast<CTreeNodeUI *>(GetItemAt(nIndex));
 
-        if (pTreeNode)
-        { pTreeNode->SetMinWidth(GetItemMinWidth()); }
+        if (pTreeNode) { pTreeNode->SetMinWidth(GetItemMinWidth()); }
     }
 
     Invalidate();
@@ -1216,8 +1185,7 @@ void CTreeViewUI::SetItemTextColor(DWORD _dwItemTextColor)
     {
         CTreeNodeUI *pTreeNode = static_cast<CTreeNodeUI *>(GetItemAt(nIndex));
 
-        if (pTreeNode)
-        { pTreeNode->SetItemTextColor(_dwItemTextColor); }
+        if (pTreeNode) { pTreeNode->SetItemTextColor(_dwItemTextColor); }
     }
 }
 
@@ -1233,8 +1201,7 @@ void CTreeViewUI::SetItemHotTextColor(DWORD _dwItemHotTextColor)
     {
         CTreeNodeUI *pTreeNode = static_cast<CTreeNodeUI *>(GetItemAt(nIndex));
 
-        if (pTreeNode)
-        { pTreeNode->SetItemHotTextColor(_dwItemHotTextColor); }
+        if (pTreeNode) { pTreeNode->SetItemHotTextColor(_dwItemHotTextColor); }
     }
 }
 
@@ -1250,8 +1217,7 @@ void CTreeViewUI::SetSelItemTextColor(DWORD _dwSelItemTextColor)
     {
         CTreeNodeUI *pTreeNode = static_cast<CTreeNodeUI *>(GetItemAt(nIndex));
 
-        if (pTreeNode)
-        { pTreeNode->SetSelItemTextColor(_dwSelItemTextColor); }
+        if (pTreeNode) { pTreeNode->SetSelItemTextColor(_dwSelItemTextColor); }
     }
 }
 
@@ -1267,8 +1233,7 @@ void CTreeViewUI::SetSelItemHotTextColor(DWORD _dwSelHotItemTextColor)
     {
         CTreeNodeUI *pTreeNode = static_cast<CTreeNodeUI *>(GetItemAt(nIndex));
 
-        if (pTreeNode)
-        { pTreeNode->SetSelItemHotTextColor(_dwSelHotItemTextColor); }
+        if (pTreeNode) { pTreeNode->SetSelItemHotTextColor(_dwSelHotItemTextColor); }
     }
 }
 

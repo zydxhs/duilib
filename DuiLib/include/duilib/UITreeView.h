@@ -1,9 +1,6 @@
 ﻿#ifndef __UITREEVIEW_H__
 #define __UITREEVIEW_H__
 
-#include <vector>
-using namespace std;
-
 #pragma once
 
 namespace DuiLib {

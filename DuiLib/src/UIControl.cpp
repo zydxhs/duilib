@@ -3,6 +3,7 @@
 #include <ShObjIdl.h>
 #include "DropSource.h"
 #include "DataObject.h"
+#include <string>
 
 namespace DuiLib {
 
@@ -704,9 +705,9 @@ TCHAR CControlUI::GetShortcut() const
 void CControlUI::SetShortcut(LPCTSTR pstrText)
 {
 #if defined(UNICODE) || defined(_UNICODE)
-    typedef wstring tstring;
+    typedef std::wstring tstring;
 #else
-    typedef string  tstring;
+    typedef std::string  tstring;
 #endif
     LPTSTR pText = (LPTSTR)pstrText;
     pText = _tcsupr(pText);
@@ -811,7 +812,7 @@ bool CControlUI::SetVisible(bool bVisible /*= true*/)
     if (m_bVisible == bVisible) { return true; }
 
     // 2018-08-18 zhuyadong 修复控件首次显示特效问题
-    if (TRIGGER_NONE == m_byEffectTrigger)
+    if (m_pEffect && TRIGGER_NONE == m_byEffectTrigger)
     {
         if (!bVisible && StartEffect(TRIGGER_HIDE)) { return false; }
     }
@@ -834,7 +835,7 @@ bool CControlUI::SetVisible(bool bVisible /*= true*/)
     if (m_pCover != NULL) { m_pCover->SetInternVisible(IsVisible()); }
 
     // 2018-08-18 zhuyadong 修复控件首次显示特效问题
-    if (TRIGGER_NONE == m_byEffectTrigger && bVisible)
+    if (m_pEffect && TRIGGER_NONE == m_byEffectTrigger && bVisible)
     {
         if (m_rcItem.left == m_rcItem.right || m_rcItem.top == m_rcItem.bottom && m_pParent)
         {

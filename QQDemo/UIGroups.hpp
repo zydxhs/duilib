@@ -17,7 +17,7 @@ struct GroupsListItemInfo
 class CGroupsUI : public CListUI
 {
 public:
-    enum { SCROLL_TIMERID = TIMERID_USER_MIN + 10 };
+    enum { SCROLL_TIMERID = TIMERID_USER_BEGIN + 10 };
 
     CGroupsUI(CPaintManagerUI &paint_manager);
     ~CGroupsUI();
