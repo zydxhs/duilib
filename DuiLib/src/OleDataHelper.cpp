@@ -13,6 +13,7 @@
 #include "objidl.h"
 #include "stdafx.h"
 #include "DataObject.h"
+#include <string>
 
 namespace DuiLib {
 
