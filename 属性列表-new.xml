@@ -15,6 +15,7 @@
     <Include parent="" comment="引用外部xml">
         <Attribute name="source" default="" type="STRING" comment="XML布局文件"/>
         <Attribute name="count" default="" type="INT" comment="嵌入的次数"/>
+        <Attribute name="style" default="" type="BOOL" comment="true表示默认属性文件,false表示一般UI描述文件" />
     </Include>
     <!-- Default/Font/Image 既可以放在单独的 XML 文件中，根节点为 root，用 Include 引入； -->
     <!-- 也可以放在 UI 描述 XML 文件中，作为 Window 属性的子节点 -->

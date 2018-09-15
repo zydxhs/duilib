@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!-- <Window size="360,600" sizebox="4,4,6,6" caption="0,0,0,24" roundcorner="4,4" shadowshow="true" shadowimage="file='shadow.png' scale9='23,13,23,33'"> -->
 <Window size="360,260" layered="true" focusedctrl="btn_test" >
-    <Include source="default.xml" />
+    <Include source="default.xml" style="true" />
     <Default name="Button" value="normalimage=&quot;&quot; bkcolor=&quot;#FFD3D3D3&quot; focusedbkcolor=&quot;#FFF0F000&quot; " />
 
 	<!-- <AniLayout bkcolor="#FFA8C8C8" > -->

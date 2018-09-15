@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!-- <Window size="360,600" sizebox="4,4,6,6" caption="0,0,0,24" roundcorner="4,4" shadowshow="true" shadowimage="file='shadow.png' scale9='23,13,23,33'"> -->
 <Window size="360,260" sizebox="4,4,6,6" caption="0,0,0,24" roundcorner="4,4" layered="false" >
-    <Include source="default.xml" />
+    <Include source="default.xml" style="true" />
 
 	<VerticalLayout name="layani" bkcolor="#FFF8C8C8" >
         <HorizontalLayout height="24" inset="10,3,0,0" >

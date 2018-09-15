@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!-- <Window size="360,600" sizebox="4,4,6,6" caption="0,0,0,24" roundcorner="4,4" shadowshow="true" shadowimage="file='shadow.png' scale9='23,13,23,33'"> -->
 <Window size="360,600" sizebox="4,4,6,6" caption="0,0,0,34" roundcorner="4,4" shadowshow="true" shadowsize="8" shadowcolor="#FF4F4F4F" shadowsharpness="8" shadowdarkness="180" shadowpos="0,0" dropenable="true" focusedctrl="btnChgLang" >
-    <Include source="default.xml" />
+    <Include source="default.xml" style="true" />
 
     <VerticalLayout inset="10,6,10,6" bkcolor="#FFC8C8C8" colorhsl="true" bkimage="file='voice_rect.png' xtiled='true' ytiled='true' fade='200' dest='0,0,200,400'" >
         <HWeightLayout height="24" inset="10,0,0,0" >

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Window size="400,250" sizebox="3,3,3,3," caption="0,0,0,30" dropenable="true" >
-    <Include source="default.xml" />
+    <!-- <Include source="default.xml" style="true" /> -->
 
     <VerticalLayout bkcolor="#FFC8C8C8" bordersize="1" bordercolor="#FF1883D7" inset="1,1,1,1" >
         <HorizontalLayout bkcolor="#FFB8B8B8" childvalign="center" height="30" >

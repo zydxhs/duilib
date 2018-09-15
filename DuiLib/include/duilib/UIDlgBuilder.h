@@ -27,6 +27,7 @@ public:
     void GetLastErrorLocation(LPTSTR pstrSource, SIZE_T cchMax) const;
 private:
     CControlUI *_Parse(CMarkupNode *parent, CControlUI *pParent = NULL, CPaintManagerUI *pManager = NULL);
+    CControlUI *_ParseInclude(CMarkupNode &node, CControlUI *pParent = NULL, CPaintManagerUI *pManager = NULL);
 
     CMarkup m_xml;
     IDialogBuilderCallback *m_pCallback;

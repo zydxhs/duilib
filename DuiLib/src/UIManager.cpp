@@ -4311,6 +4311,8 @@ DUI_INLINE CDuiString CPaintManagerUI::GetWindowAttributeList(bool bIgnoreDefaul
 
 void CPaintManagerUI::SetWindowAttributeList(LPCTSTR pstrList)
 {
+    if (NULL == pstrList) { return; }
+
     CDuiString sItem;
     CDuiString sValue;
 
