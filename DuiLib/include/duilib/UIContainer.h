@@ -118,6 +118,8 @@ public:
 
     int FindItemByTag(UINT_PTR pTag);
     int FindItemByUserData(LPCTSTR pstrText);
+    CControlUI *GetItemByTag(UINT_PTR pTag);
+    CControlUI *GetItemByUserData(LPCTSTR pstrText);
 
 protected:
     virtual void SetFloatPos(int iIndex);

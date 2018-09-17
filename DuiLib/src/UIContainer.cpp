@@ -1590,6 +1590,32 @@ int CContainerUI::FindItemByUserData(LPCTSTR pstrText)
     return i;
 }
 
+DuiLib::CControlUI *CContainerUI::GetItemByTag(UINT_PTR pTag)
+{
+    CControlUI *pItem = NULL;
+
+    for (int i = m_items.GetSize() - 1; i >= 0; --i)
+    {
+        CControlUI *pCtrl = static_cast<CControlUI *>(m_items[i]);
+        pItem = (pCtrl->GetTag() == pTag) ? pCtrl : NULL;
+    }
+
+    return pItem;
+}
+
+DuiLib::CControlUI *CContainerUI::GetItemByUserData(LPCTSTR pstrText)
+{
+    CControlUI *pItem = NULL;
+
+    for (int i = m_items.GetSize() - 1; i >= 0; --i)
+    {
+        CControlUI *pCtrl = static_cast<CControlUI *>(m_items[i]);
+        pItem = (pCtrl->GetUserData() == pstrText) ? pCtrl : NULL;
+    }
+
+    return pItem;
+}
+
 bool CContainerUI::IsEnabled() const
 {
     return m_bEnabled;
