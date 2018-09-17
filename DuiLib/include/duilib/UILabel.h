@@ -35,6 +35,7 @@ public:
     SIZE EstimateSize(SIZE szAvailable);
     void DoEvent(TEventUI &event);
     void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+    virtual void DoInit();
 
     void PaintText(HDC hDC);
 

@@ -46,14 +46,14 @@ CListUI::CListUI() : m_pCallback(NULL), m_bScrollSelect(false), m_iCurSel(-1), m
     m_ListInfo.uTextStyle = DT_VCENTER | DT_SINGLELINE | DT_END_ELLIPSIS;
     m_ListInfo.rcTextPadding.left = m_ListInfo.rcTextPadding.right = 0;
     m_ListInfo.rcTextPadding.top = m_ListInfo.rcTextPadding.bottom = 0;
-    m_ListInfo.dwTextColor = 0xFF000000;
+    m_ListInfo.dwTextColor = 0;
     m_ListInfo.dwBkColor = 0;
     m_ListInfo.bAlternateBk = false;
     m_ListInfo.dwSelectedTextColor = 0xFF000000;
     m_ListInfo.dwSelectedBkColor = 0xFFC1E3FF;
     m_ListInfo.dwHotTextColor = 0xFF000000;
     m_ListInfo.dwHotBkColor = 0xFFE9F5FF;
-    m_ListInfo.dwDisabledTextColor = 0xFFCCCCCC;
+    m_ListInfo.dwDisabledTextColor = 0;
     m_ListInfo.dwDisabledBkColor = 0xFFFFFFFF;
     m_ListInfo.iHLineSize = 0;
     m_ListInfo.dwHLineColor = 0xFF3C3C3C;
@@ -1325,6 +1325,19 @@ void CListUI::SetAllItemSelected(bool bSelect)
 
 void CListUI::DoInit()
 {
+    CVerticalLayoutUI::DoInit();
+
+    // 2018-09-17 zhuyadong 默认字体颜色
+    if (m_ListInfo.dwTextColor == 0)
+    {
+        m_ListInfo.dwTextColor = m_pManager->GetDefaultFontColor();
+    }
+
+    if (m_ListInfo.dwDisabledTextColor == 0)
+    {
+        m_ListInfo.dwDisabledTextColor = m_pManager->GetDefaultDisabledColor();
+    }
+
     if (NULL == m_pHeader || !GetListInfo()->bCheckBox) { return; }
 
     // 绑定表头第一列通知消息

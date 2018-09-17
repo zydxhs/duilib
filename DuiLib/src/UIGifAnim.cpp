@@ -393,6 +393,7 @@ LPVOID CGifAnimUI::GetInterface(LPCTSTR pstrName)
 
 void CGifAnimUI::DoInit()
 {
+    CControlUI::DoInit();
     InitGifImage();
 }
 

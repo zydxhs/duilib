@@ -81,152 +81,149 @@ CControlUI *CDialogBuilder::Create(IDialogBuilderCallback *pCallback, CPaintMana
             }
         }
 
-        node = root.GetChild(_T("Default"));
-
-        if (node.IsValid())
+        for (CMarkupNode node = root.GetChild(); node.IsValid(); node = node.GetSibling())
         {
-            nAttributes = node.GetAttributeCount();
-            LPCTSTR pControlName = NULL;
-            LPCTSTR pControlValue = NULL;
-            bool shared = false;
+            pstrClass = node.GetName();
 
-            for (int i = 0; i < nAttributes; i++)
+            if (_tcsicmp(pstrClass, _T("Image")) == 0)
             {
-                pstrName = node.GetAttributeName(i);
-                pstrValue = node.GetAttributeValue(i);
+                nAttributes = node.GetAttributeCount();
+                LPCTSTR pImageName = NULL;
+                LPCTSTR pImageResType = NULL;
+                DWORD mask = 0;
+                bool bUseHSL = false;
+                bool shared = false;
 
-                if (_tcsicmp(pstrName, _T("name")) == 0)
+                for (int i = 0; i < nAttributes; i++)
                 {
-                    pControlName = pstrValue;
+                    pstrName = node.GetAttributeName(i);
+                    pstrValue = node.GetAttributeValue(i);
+
+                    if (_tcsicmp(pstrName, _T("file")) == 0)
+                    {
+                        pImageName = pstrValue;
+                    }
+                    else if (_tcsicmp(pstrName, _T("res")) == 0)
+                    {
+                        pImageName = pstrValue;
+                    }
+                    else if (_tcsicmp(pstrName, _T("restype")) == 0)
+                    {
+                        pImageResType = pstrValue;
+                    }
+                    else if (_tcsicmp(pstrName, _T("mask")) == 0)
+                    {
+                        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
+
+                        mask = _tcstoul(pstrValue, &pstr, 16);
+                    }
+                    else if (_tcsicmp(pstrName, _T("hsl")) == 0)
+                    {
+                        bUseHSL = (_tcscmp(pstrValue, _T("true")) == 0);
+                    }
+                    else if (_tcsicmp(pstrName, _T("shared")) == 0)
+                    {
+                        shared = (_tcsicmp(pstrValue, _T("true")) == 0);
+                    }
                 }
-                else if (_tcsicmp(pstrName, _T("value")) == 0)
+
+                if (pImageName)
                 {
-                    pControlValue = pstrValue;
-                }
-                else if (_tcsicmp(pstrName, _T("shared")) == 0)
-                {
-                    shared = (_tcsicmp(pstrValue, _T("true")) == 0);
+                    const TImageInfo *data = pManager->GetImage(pImageName);
+
+                    if (!data)
+                    {
+                        pManager->AddImage(pImageName, pImageResType, mask, bUseHSL, shared);
+                    }
                 }
             }
-
-            if (pControlName)
+            else if (_tcsicmp(pstrClass, _T("Font")) == 0)
             {
-                pManager->AddDefaultAttributeList(pControlName, pControlValue, shared);
-            }
-        }
+                nAttributes = node.GetAttributeCount();
+                int id = -1;
+                LPCTSTR pFontName = NULL;
+                int size = 12;
+                bool bold = false;
+                bool underline = false;
+                bool italic = false;
+                bool defaultfont = false;
+                bool shared = false;
 
-        node = root.GetChild(_T("Font"));
+                for (int i = 0; i < nAttributes; i++)
+                {
+                    pstrName = node.GetAttributeName(i);
+                    pstrValue = node.GetAttributeValue(i);
 
-        if (node.IsValid())
-        {
-            nAttributes = node.GetAttributeCount();
-            int id = -1;
-            LPCTSTR pFontName = NULL;
-            int size = 12;
-            bool bold = false;
-            bool underline = false;
-            bool italic = false;
-            bool defaultfont = false;
-            bool shared = false;
+                    if (_tcsicmp(pstrName, _T("id")) == 0)
+                    {
+                        id = _tcstol(pstrValue, &pstr, 10);
+                    }
+                    else if (_tcsicmp(pstrName, _T("name")) == 0)
+                    {
+                        pFontName = pstrValue;
+                    }
+                    else if (_tcsicmp(pstrName, _T("size")) == 0)
+                    {
+                        size = _tcstol(pstrValue, &pstr, 10);
+                    }
+                    else if (_tcsicmp(pstrName, _T("bold")) == 0)
+                    {
+                        bold = (_tcsicmp(pstrValue, _T("true")) == 0);
+                    }
+                    else if (_tcsicmp(pstrName, _T("underline")) == 0)
+                    {
+                        underline = (_tcsicmp(pstrValue, _T("true")) == 0);
+                    }
+                    else if (_tcsicmp(pstrName, _T("italic")) == 0)
+                    {
+                        italic = (_tcsicmp(pstrValue, _T("true")) == 0);
+                    }
+                    else if (_tcsicmp(pstrName, _T("default")) == 0)
+                    {
+                        defaultfont = (_tcsicmp(pstrValue, _T("true")) == 0);
+                    }
+                    else if (_tcsicmp(pstrName, _T("shared")) == 0)
+                    {
+                        shared = (_tcsicmp(pstrValue, _T("true")) == 0);
+                    }
+                }
 
-            for (int i = 0; i < nAttributes; i++)
-            {
-                pstrName = node.GetAttributeName(i);
-                pstrValue = node.GetAttributeValue(i);
+                if (id >= 0 && pFontName)
+                {
+                    pManager->AddFont(id, pFontName, size, bold, underline, italic, shared);
 
-                if (_tcsicmp(pstrName, _T("id")) == 0)
-                {
-                    id = _tcstol(pstrValue, &pstr, 10);
-                }
-                else if (_tcsicmp(pstrName, _T("name")) == 0)
-                {
-                    pFontName = pstrValue;
-                }
-                else if (_tcsicmp(pstrName, _T("size")) == 0)
-                {
-                    size = _tcstol(pstrValue, &pstr, 10);
-                }
-                else if (_tcsicmp(pstrName, _T("bold")) == 0)
-                {
-                    bold = (_tcsicmp(pstrValue, _T("true")) == 0);
-                }
-                else if (_tcsicmp(pstrName, _T("underline")) == 0)
-                {
-                    underline = (_tcsicmp(pstrValue, _T("true")) == 0);
-                }
-                else if (_tcsicmp(pstrName, _T("italic")) == 0)
-                {
-                    italic = (_tcsicmp(pstrValue, _T("true")) == 0);
-                }
-                else if (_tcsicmp(pstrName, _T("default")) == 0)
-                {
-                    defaultfont = (_tcsicmp(pstrValue, _T("true")) == 0);
-                }
-                else if (_tcsicmp(pstrName, _T("shared")) == 0)
-                {
-                    shared = (_tcsicmp(pstrValue, _T("true")) == 0);
-                }
-            }
-
-            if (id >= 0 && pFontName)
-            {
-                pManager->AddFont(id, pFontName, size, bold, underline, italic, shared);
-
-                if (defaultfont) { pManager->SetDefaultFont(pFontName, size, bold, underline, italic, shared); }
-            }
-        }
-
-        node = root.GetChild(_T("Image"));
-
-        if (node.IsValid())
-        {
-            nAttributes = node.GetAttributeCount();
-            LPCTSTR pImageName = NULL;
-            LPCTSTR pImageResType = NULL;
-            DWORD mask = 0;
-            bool bUseHSL = false;
-            bool shared = false;
-
-            for (int i = 0; i < nAttributes; i++)
-            {
-                pstrName = node.GetAttributeName(i);
-                pstrValue = node.GetAttributeValue(i);
-
-                if (_tcsicmp(pstrName, _T("file")) == 0)
-                {
-                    pImageName = pstrValue;
-                }
-                else if (_tcsicmp(pstrName, _T("res")) == 0)
-                {
-                    pImageName = pstrValue;
-                }
-                else if (_tcsicmp(pstrName, _T("restype")) == 0)
-                {
-                    pImageResType = pstrValue;
-                }
-                else if (_tcsicmp(pstrName, _T("mask")) == 0)
-                {
-                    if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-                    mask = _tcstoul(pstrValue, &pstr, 16);
-                }
-                else if (_tcsicmp(pstrName, _T("hsl")) == 0)
-                {
-                    bUseHSL = (_tcscmp(pstrValue, _T("true")) == 0);
-                }
-                else if (_tcsicmp(pstrName, _T("shared")) == 0)
-                {
-                    shared = (_tcsicmp(pstrValue, _T("true")) == 0);
+                    if (defaultfont) { pManager->SetDefaultFont(pFontName, size, bold, underline, italic, shared); }
                 }
             }
-
-            if (pImageName)
+            else if (_tcsicmp(pstrClass, _T("Default")) == 0)
             {
-                const TImageInfo *data = pManager->GetImage(pImageName);
+                nAttributes = node.GetAttributeCount();
+                LPCTSTR pControlName = NULL;
+                LPCTSTR pControlValue = NULL;
+                bool shared = false;
 
-                if (!data)
+                for (int i = 0; i < nAttributes; i++)
                 {
-                    pManager->AddImage(pImageName, pImageResType, mask, bUseHSL, shared);
+                    pstrName = node.GetAttributeName(i);
+                    pstrValue = node.GetAttributeValue(i);
+
+                    if (_tcsicmp(pstrName, _T("name")) == 0)
+                    {
+                        pControlName = pstrValue;
+                    }
+                    else if (_tcsicmp(pstrName, _T("value")) == 0)
+                    {
+                        pControlValue = pstrValue;
+                    }
+                    else if (_tcsicmp(pstrName, _T("shared")) == 0)
+                    {
+                        shared = (_tcsicmp(pstrValue, _T("true")) == 0);
+                    }
+                }
+
+                if (pControlName)
+                {
+                    pManager->AddDefaultAttributeList(pControlName, pControlValue, shared);
                 }
             }
         }

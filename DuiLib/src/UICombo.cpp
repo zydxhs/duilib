@@ -463,14 +463,14 @@ CComboUI::CComboUI() : m_pWindow(NULL), m_iCurSel(-1), m_uButtonState(0)
     m_ListInfo.uFixedHeight = 0;
     m_ListInfo.nFont = -1;
     m_ListInfo.uTextStyle = DT_VCENTER | DT_SINGLELINE;
-    m_ListInfo.dwTextColor = 0xFF000000;
+    m_ListInfo.dwTextColor = 0;
     m_ListInfo.dwBkColor = 0;
     m_ListInfo.bAlternateBk = false;
     m_ListInfo.dwSelectedTextColor = 0xFF000000;
     m_ListInfo.dwSelectedBkColor = 0xFFC1E3FF;
     m_ListInfo.dwHotTextColor = 0xFF000000;
     m_ListInfo.dwHotBkColor = 0xFFE9F5FF;
-    m_ListInfo.dwDisabledTextColor = 0xFFCCCCCC;
+    m_ListInfo.dwDisabledTextColor = 0;
     m_ListInfo.dwDisabledBkColor = 0xFFFFFFFF;
     m_ListInfo.iHLineSize = 0;
     m_ListInfo.dwHLineColor = 0xFF3C3C3C;
@@ -506,6 +506,18 @@ UINT CComboUI::GetControlFlags() const
 
 void CComboUI::DoInit()
 {
+    CContainerUI::DoInit();
+
+    // 2018-09-17 zhuyadong 默认字体颜色
+    if (m_ListInfo.dwTextColor == 0)
+    {
+        m_ListInfo.dwTextColor = m_pManager->GetDefaultFontColor();
+    }
+
+    if (m_ListInfo.dwDisabledTextColor == 0)
+    {
+        m_ListInfo.dwDisabledTextColor = m_pManager->GetDefaultDisabledColor();
+    }
 }
 
 int CComboUI::GetCurSel() const

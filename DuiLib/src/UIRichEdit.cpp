@@ -1787,6 +1787,8 @@ DWORD CRichEditUI::GetTipColor()
 
 void CRichEditUI::DoInit()
 {
+    CContainerUI::DoInit();
+
     if (m_bInited) { return; }
 
     CREATESTRUCT cs;

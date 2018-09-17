@@ -434,6 +434,22 @@ void CLabelUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else { CControlUI::SetAttribute(pstrName, pstrValue); }
 }
 
+void CLabelUI::DoInit()
+{
+    CControlUI::DoInit();
+
+    // 2018-09-17 zhuyadong 默认字体颜色
+    if (m_dwTextColor == 0)
+    {
+        m_dwTextColor = m_pManager->GetDefaultFontColor();
+    }
+
+    if (m_dwDisabledTextColor == 0)
+    {
+        m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor();
+    }
+}
+
 void CLabelUI::PaintText(HDC hDC)
 {
     if (m_dwTextColor == 0) { m_dwTextColor = m_pManager->GetDefaultFontColor(); }

@@ -435,6 +435,7 @@ bool CWkeBrowserUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopContr
 
 void CWkeBrowserUI::DoInit()
 {
+    CControlUI::DoInit();
     InitBrowser();
 }
 

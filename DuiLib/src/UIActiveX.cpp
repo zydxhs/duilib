@@ -1102,6 +1102,7 @@ LPVOID CActiveXUI::GetInterface(LPCTSTR pstrName)
 
 void CActiveXUI::DoInit()
 {
+    CControlUI::DoInit();
     CreateControl();
 
     if (m_pManager != NULL && m_bCreated) { m_pManager->SendNotify(this, DUI_MSGTYPE_SHOWACTIVEX, 0, 0, false); }

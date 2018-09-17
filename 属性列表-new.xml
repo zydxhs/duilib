@@ -213,17 +213,17 @@
             <Attribute name="itemalign" default="center" type="STRING" comment="item对齐方式,取值left、right、center，如(center)"/>
             <Attribute name="itemendellipsis" default="false" type="BOOL" comment="item句末显示不全是否使用...代替,如(true)"/>
             <Attribute name="itemtextpadding" default="0,0,0,0" type="RECT" comment="item文字显示的边距,如(2,2,2,2)"/>
-            <Attribute name="itemtextcolor" default="#FF000000" type="DWORD" comment="item字体颜色"/>
+            <Attribute name="itemtextcolor" default="#00000000" type="DWORD" comment="item字体颜色，0表示使用默认字体颜色"/>
             <Attribute name="itembkcolor" default="#00000000" type="DWORD" comment="item背景颜色"/>
             <Attribute name="itembkimage" default="" type="STRING" comment="item背景图片"/>
             <Attribute name="itemaltbk" default="false" type="BOOL" comment="item是否使用隔行交替背景"/>
-            <Attribute name="itemselectedtextcolor" default="#FF000000" type="DWORD" comment="item被选中时的字体颜色"/>
+            <Attribute name="itemselectedtextcolor" default="#FF000000" type="DWORD" comment="item被选中时的字体颜色，0表示使用默认字体颜色"/>
             <Attribute name="itemselectedbkcolor" default="#FFC1E3FF" type="DWORD" comment="item被选中时的背景颜色"/>
             <Attribute name="itemselectedimage" default="" type="STRING" comment="item被选中时的背景图片"/>
-            <Attribute name="itemhottextcolor" default="#FF000000" type="DWORD" comment="item鼠标悬浮时的字体颜色"/>
+            <Attribute name="itemhottextcolor" default="#FF000000" type="DWORD" comment="item鼠标悬浮时的字体颜色，0表示使用默认字体颜色"/>
             <Attribute name="itemhotbkcolor" default="#FFE9F5FF" type="DWORD" comment="item鼠标悬浮时的背景颜色"/>
             <Attribute name="itemhotimage" default="" type="STRING" comment="item鼠标悬浮时的背景图片"/>
-            <Attribute name="itemdisabledtextcolor" default="#FFCCCCCC" type="DWORD" comment="item禁用时的字体颜色"/>
+            <Attribute name="itemdisabledtextcolor" default="#00000000" type="DWORD" comment="item禁用时的字体颜色，0表示使用默认字体颜色"/>
             <Attribute name="itemdisabledbkcolor" default="#FFFFFFFF" type="DWORD" comment="item禁用时的背景颜色"/>
             <Attribute name="itemdisabledimage" default="" type="STRING" comment="item禁用时的背景图片"/>
             <Attribute name="itemvlinesize" default="0" type="INT" comment=""/>
@@ -409,17 +409,17 @@
             <Attribute name="itemendellipsis" default="false" type="BOOL" comment="item句末显示不全是否使用...代替,如(true)"/>
             <Attribute name="itemmultiline" default="true" type="BOOL" comment="是否支持多行文本,如(true)"/>
             <Attribute name="itemtextpadding" default="0,0,0,0" type="RECT" comment="item文字显示的边距,如(2,2,2,2)"/>
-            <Attribute name="itemtextcolor" default="#FF000000" type="DWORD" comment="item字体颜色"/>
+            <Attribute name="itemtextcolor" default="#00000000" type="DWORD" comment="item字体颜色，0表示使用默认字体颜色"/>
             <Attribute name="itembkcolor" default="#00000000" type="DWORD" comment="item背景颜色"/>
             <Attribute name="itembkimage" default="" type="STRING" comment="item背景图片"/>
             <Attribute name="itemaltbk" default="false" type="BOOL" comment="item是否使用隔行交替背景"/>
-            <Attribute name="itemselectedtextcolor" default="#FF000000" type="DWORD" comment="item被选中时的字体颜色"/>
+            <Attribute name="itemselectedtextcolor" default="#FF000000" type="DWORD" comment="item被选中时的字体颜色，0表示使用默认字体颜色"/>
             <Attribute name="itemselectedbkcolor" default="#FFC1E3FF" type="DWORD" comment="item被选中时的背景颜色"/>
             <Attribute name="itemselectedimage" default="" type="STRING" comment="item被选中时的背景图片"/>
-            <Attribute name="itemhottextcolor" default="#FF000000" type="DWORD" comment="item鼠标悬浮时的字体颜色"/>
+            <Attribute name="itemhottextcolor" default="#FF000000" type="DWORD" comment="item鼠标悬浮时的字体颜色，0表示使用默认字体颜色"/>
             <Attribute name="itemhotbkcolor" default="#FFE9F5FF" type="DWORD" comment="item鼠标悬浮时的背景颜色"/>
             <Attribute name="itemhotimage" default="" type="STRING" comment="item鼠标悬浮时的背景图片"/>
-            <Attribute name="itemdisabledtextcolor" default="#FFCCCCCC" type="DWORD" comment="item禁用时的字体颜色"/>
+            <Attribute name="itemdisabledtextcolor" default="#00000000" type="DWORD" comment="item禁用时的字体颜色，0表示使用默认字体颜色"/>
             <Attribute name="itemdisabledbkcolor" default="#FFFFFFFF" type="DWORD" comment="item禁用时的背景颜色"/>
             <Attribute name="itemdisabledimage" default="" type="STRING" comment="item禁用时的背景图片"/>
             <Attribute name="itemvlinesize" default="" type="INT" comment=""/>
@@ -486,7 +486,7 @@
             <Attribute name="password" default="false" type="BOOL" comment="是否显示密码符,如(true)"/>
             <Attribute name="align" default="left" type="STRING" comment="文字对齐方式,取值left、right、cente，如(center)"/>
             <Attribute name="font" default="-1" type="INT" comment="字体id,如(0)"/>
-            <Attribute name="textcolor" default="#FF000000" type="DWORD" comment="字体颜色，如(#FFFF0000)"/>
+            <Attribute name="textcolor" default="#00000000" type="DWORD" comment="字体颜色，0表示使用默认字体颜色，如(#FFFF0000)"/>
             <Attribute name="textpadding" default="0,0,0,0" type="RECT" comment="文字显示的边距,如(2,2,2,2)"/>
             <!-- 扩展属性 -->
             <Attribute name="tiptext" default="" type="STRING" comment="默认提示信息,内容不空时消失"/>
@@ -496,10 +496,10 @@
             <Attribute name="visiblefolderbtn" default="true" type="BOOL" comment="是否显示展开与收缩按钮对象"/>
             <Attribute name="visiblecheckbtn" default="false" type="BOOL" comment="是否显示复选框对象"/>
             <Attribute name="itemminwidth" default="0" type="UINT" comment="设置Item的最小宽度，当hscrollbar为真且itemminwidth大于TreeView宽度时才会显示横向滚动条"/>
-            <Attribute name="itemtextcolor" default="#00000000" type="DWORD" comment="item文本颜色"/>
-            <Attribute name="itemhottextcolor" default="#00000000" type="DWORD" comment="鼠标进入item时文本颜色"/>
-            <Attribute name="selitemtextcolor" default="#00000000" type="DWORD" comment="item被选中时文本颜色"/>
-            <Attribute name="selitemhottextcolor" default="#00000000" type="DWORD" comment="item被选中时且鼠标进入时的文本颜色"/>
+            <Attribute name="itemtextcolor" default="#00000000" type="DWORD" comment="item文本颜色，0表示使用默认字体颜色"/>
+            <Attribute name="itemhottextcolor" default="#00000000" type="DWORD" comment="鼠标进入item时文本颜色，0表示使用默认字体颜色"/>
+            <Attribute name="selitemtextcolor" default="#00000000" type="DWORD" comment="item被选中时文本颜色，0表示使用默认字体颜色"/>
+            <Attribute name="selitemhottextcolor" default="#00000000" type="DWORD" comment="item被选中时且鼠标进入时的文本颜色，0表示使用默认字体颜色"/>
         </TreeView>
         <TreeNode parent="ListContainerElement" notifies="setfocus killfocus timer itemactivate itemclick itemexpanded itemcollapsed windowinit(root)">
             <Attribute name="text" default="" type="STRING" comment="显示文本,如(测试文本)"/>
@@ -508,10 +508,10 @@
             <Attribute name="folderattr" default="" type="STRING" comment="item展开与收缩按钮对象属性设置，格式参考Default元素的属性设置"/>
             <Attribute name="checkboxattr" default="" type="STRING" comment="item复选框对象属性设置，格式参考Default元素的属性设置"/>
             <Attribute name="itemattr" default="" type="STRING" comment="item按钮对象属性设置，格式参考Default元素的属性设置"/>
-            <Attribute name="itemtextcolor" default="#00000000" type="DWORD" comment="item文本颜色"/>
-            <Attribute name="itemhottextcolor" default="#00000000" type="DWORD" comment="鼠标进入item时文本颜色"/>
-            <Attribute name="selitemtextcolor" default="#00000000" type="DWORD" comment="item被选中时文本颜色"/>
-            <Attribute name="selitemhottextcolor" default="#00000000" type="DWORD" comment="item被选中时且鼠标进入时的文本颜色"/>
+            <Attribute name="itemtextcolor" default="#00000000" type="DWORD" comment="item文本颜色，0表示使用默认字体颜色"/>
+            <Attribute name="itemhottextcolor" default="#00000000" type="DWORD" comment="鼠标进入item时文本颜色，0表示使用默认字体颜色"/>
+            <Attribute name="selitemtextcolor" default="#00000000" type="DWORD" comment="item被选中时文本颜色，0表示使用默认字体颜色"/>
+            <Attribute name="selitemhottextcolor" default="#00000000" type="DWORD" comment="item被选中时且鼠标进入时的文本颜色，0表示使用默认字体颜色"/>
         </TreeNode>
         <GifAnim parent="Control" notifies="setfocus killfocus timer menu windowinit(root)">
             <Attribute name="bkimage" default="" type="STRING" comment="Gif动画图片路径(不支持source等属性设置)"/>

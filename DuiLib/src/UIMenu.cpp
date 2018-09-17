@@ -465,6 +465,7 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandl
 
         SIZE szRC = m_pOwner->GetManager()->GetRoundCorner();
         m_pm.SetRoundCorner(szRC.cx, szRC.cy);
+        pLayout->Init();        // 2018-09-17 zhuyadong 解决默认字体颜色问题
         m_pm.AddNotifier(this);
         ResizeSubMenu();
     }
@@ -481,6 +482,7 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandl
         pShadow->SetShow(false);
 
         m_pm.AttachDialog(pRoot);
+        pRoot->Init();          // 2018-09-17 zhuyadong 解决默认字体颜色问题
         m_pm.AddNotifier(this);
         ResizeMenu();
     }
