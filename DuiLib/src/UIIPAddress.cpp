@@ -573,7 +573,8 @@ void CIPAddressUI::DoEvent(TEventUI &event)
                 }
             }
 
-            if (IsFocused() && m_pWindow == NULL)
+            // 2018-09-17 zhuyadong 修复连续在不同字段单击时，从第3次开始不会出现编辑框的问题
+            if (m_pWindow == NULL)
             {
                 m_pWindow = new CIPAddressWnd();
                 ASSERT(m_pWindow);
