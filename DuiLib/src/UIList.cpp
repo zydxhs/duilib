@@ -352,6 +352,26 @@ bool CListUI::RemoveCount(int iIndex, int iCount, bool bDoNotDestroy)
     return true;
 }
 
+int CListUI::FindItemByTag(UINT_PTR pTag)
+{
+    return m_pList->FindItemByTag(pTag);
+}
+
+int CListUI::FindItemByUserData(LPCTSTR pstrText)
+{
+    return m_pList->FindItemByUserData(pstrText);
+}
+
+DuiLib::CControlUI *CListUI::GetItemByTag(UINT_PTR pTag)
+{
+    return m_pList->GetItemByTag(pTag);
+}
+
+DuiLib::CControlUI *CListUI::GetItemByUserData(LPCTSTR pstrText)
+{
+    return m_pList->GetItemByUserData(pstrText);
+}
+
 void CListUI::SetPos(RECT rc, bool bNeedInvalidate)
 {
     if (m_pHeader != NULL)    // 设置header各子元素x坐标,因为有些listitem的setpos需要用到(临时修复)

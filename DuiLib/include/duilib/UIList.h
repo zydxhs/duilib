@@ -124,6 +124,11 @@ public:
     void RemoveAll();
     bool RemoveCount(int iIndex, int iCount, bool bDoNotDestroy = false);
 
+    int FindItemByTag(UINT_PTR pTag);
+    int FindItemByUserData(LPCTSTR pstrText);
+    CControlUI *GetItemByTag(UINT_PTR pTag);
+    CControlUI *GetItemByUserData(LPCTSTR pstrText);
+
     void EnsureVisible(int iIndex);
     void Scroll(int dx, int dy);
 
