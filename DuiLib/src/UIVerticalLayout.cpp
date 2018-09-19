@@ -438,7 +438,11 @@ SIZE CVerticalLayoutUI::EstimateSize(SIZE szAvailable)
 
         for (int i = 0; i < GetCount(); ++i)
         {
-            SIZE sz2 = GetItemAt(i)->EstimateSize(szAvailable);
+            CControlUI *pCtrl = GetItemAt(i);
+
+            if (!pCtrl->IsVisible()) { continue; }
+
+            SIZE sz2 = pCtrl->EstimateSize(szAvailable);
             sz.cy += sz2.cy;
         }
 
