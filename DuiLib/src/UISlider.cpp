@@ -201,7 +201,7 @@ void CSliderUI::DoEvent(TEventUI &event)
         return;
     }
 
-    if (event.Type == UIEVENT_SCROLLWHEEL)
+    if (event.Type == UIEVENT_SCROLLWHEEL && IsEnabled())
     {
         switch (LOWORD(event.wParam))
         {
