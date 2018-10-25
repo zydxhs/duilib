@@ -4449,7 +4449,7 @@ LPCTSTR CPaintManagerUI::GetMultiLanguageString(LPCTSTR id)
 {
     LPVOID pTmp = m_SharedResInfo.m_MultiLanguageHash.Find(id);
     CDuiString *pMultiLanguage = static_cast<CDuiString *>(pTmp);
-    return (pMultiLanguage) ? pMultiLanguage->GetData() : NULL;
+    return (pMultiLanguage) ? pMultiLanguage->GetData() : _T("");
 }
 
 bool CPaintManagerUI::RemoveMultiLanguageString(LPCTSTR id)
