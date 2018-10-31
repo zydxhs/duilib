@@ -447,7 +447,11 @@ LRESULT CEditWnd::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled
 
 #endif // UNICODE
 
-    if (VK_BACK == wParam) { return 0; }
+    if (VK_BACK == wParam || (VK_HOME <= wParam && VK_DOWN >= wParam) ||
+        ::GetKeyState(VK_CONTROL) < 0 || ::GetKeyState(VK_SHIFT) < 0)
+    {
+        return 0;
+    }
 
     WORD wIdx = LOWORD(::SendMessage(m_hWnd, EM_GETSEL, 0, 0));
     CDuiString sTxt = m_pOwner->m_sText;
