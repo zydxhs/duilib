@@ -97,7 +97,7 @@
             <Attribute name="bkcolor" default="#00000000" type="DWORD" comment="背景颜色,如(#FFFF0000),使用bkcolor1取代"/>
             <Attribute name="bkcolor2" default="#00000000" type="DWORD" comment="背景渐变色2,和bkcolor配合使用,如(#FFFFFF00)"/>
             <Attribute name="bkcolor3" default="#00000000" type="DWORD" comment="背景渐变色3,和bkcolor、bkcolor2配合使用,如(#FFFF00FF)"/>
-            <Attribute name="direction" default="false" type="BOOL" comment="渐变方向。true/false分别表示水平/垂直"/>
+            <Attribute name="direction" default="true" type="BOOL" comment="渐变方向。true/false分别表示水平/垂直"/>
             <Attribute name="colorhsl" default="false" type="BOOL" comment="本控件的颜色是否随窗口的hsl变化而变化,如(false)"/>
             <Attribute name="bordercolor" default="#00000000" type="DWORD" comment="边框颜色,如(#FF000000)"/>
             <Attribute name="hotbordercolor" default="#00000000" type="DWORD" comment="鼠标悬停时边框颜色,如(#FF00F000)"/>
