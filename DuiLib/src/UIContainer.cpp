@@ -874,17 +874,7 @@ void CContainerUI::Move(SIZE szOffset, bool bNeedInvalidate)
 
 void CContainerUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("margin")) == 0 || _tcscmp(pstrName, _T("padding")) == 0)
-    {
-        RECT rcMargin = { 0 };
-        LPTSTR pstr = NULL;
-        rcMargin.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
-        rcMargin.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-        rcMargin.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
-        rcMargin.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
-        SetMargin(rcMargin);
-    }
-    else if (_tcscmp(pstrName, _T("inset")) == 0)
+    if (_tcscmp(pstrName, _T("padding")) == 0 || _tcscmp(pstrName, _T("inset")) == 0)
     {
         RECT rcInset = { 0 };
         LPTSTR pstr = NULL;

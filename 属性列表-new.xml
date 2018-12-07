@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!-- 可能有错漏，欢迎补充。wangchyz(wangchyz@gmail.com) -->
+<!-- 控件采用 IE 的盒子模型，即控件的宽高包含边框(border)和内边距(padding)。外边距用 margin 表示。 -->
 <Root>
     <!-- 扩展属性 -->
     <Language parent="" comment="语言文件，仅支持 utf8 编码的文件">
@@ -44,7 +45,7 @@
     </Image>
     <!-- 图片属性说明：-->
     <!-- file 指明文件; res 和 restype 指明资源 id 和类型; color 指定颜色; 或从文件加载，或从资源加载，或直接指定颜色； -->
-    <!-- dest 指明绘制到控件的目标位置，相对于控件left/top的偏移量; -->
+    <!-- dest 指明绘制到控件的目标位置。前两个参数相对于控件 left/top 的偏移量;后两个参数，正数相对于 left/top 的偏移，非正数相对于 right/bottom 的偏移 -->
     <!-- source 指明图片中的一部分; fade 指明图片绘制的透明度(0~255); -->
     <!-- corner/scale9 指明九宫格缩放属性; hole 配合 scale9 使用，指明中央区域是否绘制，true 不显示; -->
     <!-- xtiled/ytiled 配合 scale9 属性使用, true 时中央区域在 水平/垂直 方向平铺，fasle 时在 水平/垂直 方向拉伸； -->
@@ -92,7 +93,7 @@
         <Control parent="" notifies="setfocus killfocus timer menu windowinit(root) dblclick">
             <Attribute name="name" default="" type="STRING" comment="控件名字，同一窗口内必须唯一，如(testbtn)"/>
             <Attribute name="pos" default="0,0,0,0" type="RECT" comment="位置，如果为float控件则指定位置和大小，否则只指定大小,如(0,0,100,100)"/>
-            <Attribute name="margin" default="0,0,0,0" type="RECT" comment="外边距,如(2,2,2,2)。采用 IE 的盒子模型，控件宽/高包含边框和padding"/>
+            <Attribute name="margin" default="0,0,0,0" type="RECT" comment="外边距,如(2,2,2,2)。采用 IE 的盒子模型，控件宽/高包含边框+padding+content" />
             <Attribute name="bkcolor" default="#00000000" type="DWORD" comment="背景颜色,如(#FFFF0000),使用bkcolor1取代"/>
             <Attribute name="bkcolor2" default="#00000000" type="DWORD" comment="背景渐变色2,和bkcolor配合使用,如(#FFFFFF00)"/>
             <Attribute name="bkcolor3" default="#00000000" type="DWORD" comment="背景渐变色3,和bkcolor、bkcolor2配合使用,如(#FFFF00FF)"/>
@@ -138,8 +139,8 @@
             <Attribute name="triggerhide" default="" type="BYTE,WORD,BOOL,BOOL" comment="控件隐藏特效。"/>
         </Control>
         <Container parent="Control" notifies="setfocus killfocus timer menu windowinit(root) dblclick">
-            <Attribute name="inset" default="0,0,0,0" type="RECT" comment="内边距,如(2,2,2,2)"/>
-            <Attribute name="padding" default="0,0,0,0" type="RECT" comment="外边距,如(2,2,2,2)。等同于margin"/>
+            <Attribute name="inset" default="0,0,0,0" type="RECT" comment="内边距,如(2,2,2,2)，推荐使用padding" />
+            <Attribute name="padding" default="0,0,0,0" type="RECT" comment="内边距,如(2,2,2,2)，用于取代inset" />
             <Attribute name="mousechild" default="true" type="BOOL" comment="本控件的子控件是否可以响应用户操作,如(true)"/>
             <Attribute name="vscrollbar" default="false" type="BOOL" comment="是否使用竖向滚动条,如(true)"/>
             <Attribute name="vscrollbarstyle" default="" type="STRING" comment="垂直滚动条样式"/>

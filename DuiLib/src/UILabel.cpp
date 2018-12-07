@@ -439,12 +439,12 @@ void CLabelUI::DoInit()
     CControlUI::DoInit();
 
     // 2018-09-17 zhuyadong 默认字体颜色
-    if (m_dwTextColor == 0)
+    if (m_dwTextColor == 0 && NULL != m_pManager)
     {
         m_dwTextColor = m_pManager->GetDefaultFontColor();
     }
 
-    if (m_dwDisabledTextColor == 0)
+    if (m_dwDisabledTextColor == 0 && NULL != m_pManager)
     {
         m_dwDisabledTextColor = m_pManager->GetDefaultDisabledColor();
     }

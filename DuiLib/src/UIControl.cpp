@@ -1616,6 +1616,16 @@ void CControlUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         ParseEffectInfo(pstrValue, byEffect, wFrequency, bDirection, bLoop);
         AddEffect(TRIGGER_HIDE, byEffect, wFrequency, bDirection, bLoop);
     }
+    else if (_tcscmp(pstrName, _T("margin")) == 0)
+    {
+        RECT rcMargin = { 0 };
+        LPTSTR pstr = NULL;
+        rcMargin.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
+        rcMargin.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
+        rcMargin.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
+        rcMargin.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
+        SetMargin(rcMargin);
+    }
     else { AddCustomAttribute(pstrName, pstrValue); }
 }
 
