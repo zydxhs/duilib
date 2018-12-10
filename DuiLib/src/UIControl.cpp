@@ -1763,16 +1763,21 @@ void CControlUI::PaintBkColor(HDC hDC)
             if (m_dwBackColor3 != 0)
             {
                 RECT rc = m_rcItem;
+                rc.left += m_rcBorderSize.left;
+                rc.top += m_rcBorderSize.top;
+                rc.right -= m_rcBorderSize.right;
+                rc.bottom -= m_rcBorderSize.bottom;
 
                 if (m_bDirection)
                 {
                     // 水平渐变
+                    LONG tmp = rc.right;
                     rc.right = (rc.right + rc.left) / 2;
                     CRenderEngine::DrawGradient(hDC, rc,
                                                 GetAdjustColor(m_dwBackColor), GetAdjustColor(m_dwBackColor2),
                                                 false, 8);
                     rc.left = rc.right;
-                    rc.right = m_rcItem.right;
+                    rc.right = tmp;
                     CRenderEngine::DrawGradient(hDC, rc,
                                                 GetAdjustColor(m_dwBackColor2), GetAdjustColor(m_dwBackColor3),
                                                 false, 8);
@@ -1780,12 +1785,13 @@ void CControlUI::PaintBkColor(HDC hDC)
                 else
                 {
                     // 垂直渐变
+                    LONG tmp = rc.bottom = rc.bottom;
                     rc.bottom = (rc.bottom + rc.top) / 2;
                     CRenderEngine::DrawGradient(hDC, rc,
                                                 GetAdjustColor(m_dwBackColor), GetAdjustColor(m_dwBackColor2),
                                                 true, 8);
                     rc.top = rc.bottom;
-                    rc.bottom = m_rcItem.bottom;
+                    rc.bottom = tmp;
                     CRenderEngine::DrawGradient(hDC, rc,
                                                 GetAdjustColor(m_dwBackColor2), GetAdjustColor(m_dwBackColor3),
                                                 true, 8);
@@ -1854,6 +1860,7 @@ void CControlUI::PaintBorder(HDC hDC)
     {
         //画直角边框
         CRenderEngine::DrawRect(hDC, m_rcItem, m_rcBorderSize.left, clrBorder, m_nBorderStyle);
+        return;
     }
 
     RECT rcBorder;
