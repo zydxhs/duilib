@@ -74,8 +74,8 @@ void CShadowUI::Create(CPaintManagerUI *pPaintManager)
 
     // Create the shadow window
     LONG styleValue = lParentStyle & WS_CAPTION;
-    m_hWnd = CreateWindowEx(WS_EX_LAYERED | WS_EX_TRANSPARENT, strWndClassName, NULL,
-                            /*WS_VISIBLE | */styleValue | WS_POPUPWINDOW,
+    m_hWnd = CreateWindowEx(WS_EX_LAYERED | WS_EX_TRANSPARENT | WS_EX_NOACTIVATE, strWndClassName, NULL,
+                            styleValue | WS_POPUPWINDOW | WS_DISABLED | WS_VISIBLE,
                             CW_USEDEFAULT, 0, 0, 0, hParentWnd, NULL, CPaintManagerUI::GetInstance(), NULL);
 
     if (!(WS_VISIBLE & lParentStyle))   // Parent invisible
@@ -85,7 +85,7 @@ void CShadowUI::Create(CPaintManagerUI *pPaintManager)
     else    // Show the shadow
     {
         m_Status = SS_ENABLED | SS_VISABLE | SS_PARENTVISIBLE;
-        ::ShowWindow(m_hWnd, SW_SHOWNA);
+        ::ShowWindow(m_hWnd, SW_SHOWNOACTIVATE);
         Update(hParentWnd);
     }
 
@@ -215,6 +215,8 @@ LRESULT CALLBACK CShadowUI::ParentProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
         GetShadowMap().erase(hwnd); // Remove this window and shadow from the map
         break;
 
+    case WM_MOUSEACTIVATE:
+        return MA_NOACTIVATE;
     }
 
 
