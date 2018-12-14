@@ -220,6 +220,13 @@ public:
     virtual void OnEffectEnd(TAniParam &data);      // 每一个特效结束时回调
     virtual void OnEffectDraw(TAniParam &data);     // 每一个特效帧绘制时回调
 
+    // 设置 Cover 的大小
+    // LONG nPersent    : Cover 相对于控件的百分比大小
+    // bool bHorizontal : 方向， true 表示水平，false 表示垂直
+    // bool bTopLeft    : Cover位置，bHorizontal=true  时：true/false 表示靠近上/下
+    //                               bHorizontal=false 时：true/false 表示靠近左/右
+    void SetCoverSize(LONG nPersent, bool bHorizontal, bool bTopLeft);
+
 protected:
     void OnDoDragDrop(TEventUI &evt);
     void ParseEffectInfo(LPCTSTR pstrValue, BYTE &byEffect, WORD &wElapse, bool &bDirection, bool &bLoop);

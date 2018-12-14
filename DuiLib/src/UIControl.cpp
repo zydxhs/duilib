@@ -2110,4 +2110,28 @@ void CControlUI::OnEffectDraw(TAniParam &data)
     ::RedrawWindow(GetManager()->GetPaintWindow(), &m_rcItem, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 }
 
+void CControlUI::SetCoverSize(LONG nPersent, bool bHorizontal, bool bTopLeft)
+{
+    RECT rt = m_rcItem;
+
+    if (bHorizontal)
+    {
+        LONG nLen = m_rcItem.right - m_rcItem.left;
+        nLen = nPersent * nLen / 100;   // Cover 新的大小
+
+        if (bTopLeft) { rt.right = rt.left + nLen; }
+        else          { rt.left = rt.right - nLen; }
+    }
+    else
+    {
+        LONG nLen = m_rcItem.bottom - m_rcItem.top;
+        nLen = nPersent * nLen / 100;   // Cover 新的大小
+
+        if (bTopLeft) { rt.bottom = rt.top + nLen; }
+        else          { rt.top = rt.bottom - nLen; }
+    }
+
+    m_pCover->SetPos(rt);
+}
+
 } // namespace DuiLib
