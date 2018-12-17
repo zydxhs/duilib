@@ -1864,7 +1864,7 @@ void CControlUI::PaintBorder(HDC hDC)
     }
 
     RECT rcBorder;
-    int nBorderStyle = PS_INSIDEFRAME | PS_ENDCAP_SQUARE | PS_JOIN_BEVEL | PS_GEOMETRIC;
+    // int nBorderStyle = PS_INSIDEFRAME | PS_ENDCAP_SQUARE | PS_JOIN_BEVEL | PS_GEOMETRIC | m_nBorderStyle;
 
     if (m_rcBorderSize.left > 0)
     {
@@ -1872,7 +1872,7 @@ void CControlUI::PaintBorder(HDC hDC)
         rcBorder.left += m_rcBorderSize.left / 2;
         rcBorder.right = rcBorder.left;
 
-        CRenderEngine::DrawLine(hDC, rcBorder, m_rcBorderSize.left, clrBorder, nBorderStyle);
+        CRenderEngine::DrawLine(hDC, rcBorder, m_rcBorderSize.left, clrBorder, m_nBorderStyle);
     }
 
     if (m_rcBorderSize.top > 0)
@@ -1883,7 +1883,7 @@ void CControlUI::PaintBorder(HDC hDC)
         rcBorder.left += m_rcBorderSize.top / 2;
         rcBorder.right -= m_rcBorderSize.right;
 
-        CRenderEngine::DrawLine(hDC, rcBorder, m_rcBorderSize.top, clrBorder, nBorderStyle);
+        CRenderEngine::DrawLine(hDC, rcBorder, m_rcBorderSize.top, clrBorder, m_nBorderStyle);
     }
 
     if (m_rcBorderSize.right > 0)
@@ -1892,7 +1892,7 @@ void CControlUI::PaintBorder(HDC hDC)
         rcBorder.left = m_rcItem.right - m_rcBorderSize.right / 2 - m_rcBorderSize.right % 2;
         rcBorder.right = rcBorder.left;
 
-        CRenderEngine::DrawLine(hDC, rcBorder, m_rcBorderSize.right, clrBorder, nBorderStyle);
+        CRenderEngine::DrawLine(hDC, rcBorder, m_rcBorderSize.right, clrBorder, m_nBorderStyle);
     }
 
     if (m_rcBorderSize.bottom > 0)
@@ -1903,7 +1903,7 @@ void CControlUI::PaintBorder(HDC hDC)
         rcBorder.left += m_rcBorderSize.bottom / 2;
         rcBorder.right -= m_rcBorderSize.right;
 
-        CRenderEngine::DrawLine(hDC, rcBorder, m_rcBorderSize.bottom, clrBorder, nBorderStyle);
+        CRenderEngine::DrawLine(hDC, rcBorder, m_rcBorderSize.bottom, clrBorder, m_nBorderStyle);
     }
 
     //
