@@ -4497,13 +4497,10 @@ void CPaintManagerUI::ProcessMultiLanguageTokens(CDuiString &pStrMultiLanguage)
             if (pStrMultiLanguage.GetAt(iEndPos) == ']')
             {
                 CDuiString sID(pStrMultiLanguage.Mid(iPos + 2, iEndPos - iPos - 2));
-                LPCTSTR pStrTemp = CPaintManagerUI::GetMultiLanguageString(sID);
-
-                if (pStrTemp)
-                {
-                    sID = pStrMultiLanguage.Mid(iPos, iEndPos - iPos + 1);
-                    pStrMultiLanguage.Replace(sID, pStrTemp);
-                }
+                CDuiString sVal(CPaintManagerUI::GetMultiLanguageString(sID));
+                sVal = sVal.IsEmpty() ? sID : sVal;
+                sID = pStrMultiLanguage.Mid(iPos, iEndPos - iPos + 1);
+                pStrMultiLanguage.Replace(sID, sVal);
             }
         }
 

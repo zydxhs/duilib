@@ -624,7 +624,8 @@ TCHAR CDuiString::operator[](int nIndex) const
 
 const CDuiString &CDuiString::operator=(const CDuiString &src)
 {
-    Assign(src);
+    if (src.m_pstr != this->m_pstr) { Assign(src); }
+
     return *this;
 }
 
