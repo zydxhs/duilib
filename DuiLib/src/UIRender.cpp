@@ -576,7 +576,7 @@ TImageInfo *CRenderEngine::LoadImage(STRINGorID bitmap, LPCTSTR type, DWORD mask
 
                 dwSize = ::GetFileSize(hFile, NULL);
 
-                if (dwSize == 0) { break; }
+                if (dwSize == 0) { ::CloseHandle(hFile); break; }
 
                 DWORD dwRead = 0;
                 pData = new BYTE[ dwSize ];
@@ -664,7 +664,7 @@ TImageInfo *CRenderEngine::LoadImage(STRINGorID bitmap, LPCTSTR type, DWORD mask
 
         dwSize = ::GetFileSize(hFile, NULL);
 
-        if (dwSize == 0) { break; }
+        if (dwSize == 0) { ::CloseHandle(hFile); break; }
 
         DWORD dwRead = 0;
         pData = new BYTE[ dwSize ];
@@ -824,7 +824,7 @@ CGifInfo *CRenderEngine::LoadGif(STRINGorID bitmap, LPCTSTR type, DWORD mask)
 
                 dwSize = ::GetFileSize(hFile, NULL);
 
-                if (dwSize == 0) { break; }
+                if (dwSize == 0) { ::CloseHandle(hFile); break; }
 
                 DWORD dwRead = 0;
                 pData = new BYTE[dwSize];
@@ -907,7 +907,7 @@ CGifInfo *CRenderEngine::LoadGif(STRINGorID bitmap, LPCTSTR type, DWORD mask)
 
         dwSize = ::GetFileSize(hFile, NULL);
 
-        if (dwSize == 0) { break; }
+        if (dwSize == 0) { ::CloseHandle(hFile); break; }
 
         DWORD dwRead = 0;
         pData = new BYTE[dwSize];
