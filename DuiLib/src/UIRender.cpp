@@ -1636,12 +1636,12 @@ bool CRenderEngine::DrawImage(HDC hDC, CPaintManagerUI *pManager, const RECT &rc
         rcDest.left = rcItem.left + drawInfo.rcDestOffset.left;
         rcDest.top = rcItem.top + drawInfo.rcDestOffset.top;
 
-        if (drawInfo.rcDestOffset.right > 0) { rcDest.right = rcItem.left + drawInfo.rcDestOffset.right; }
+        if (drawInfo.rcDestOffset.right >= 0) { rcDest.right = rcItem.left + drawInfo.rcDestOffset.right; }
         else { rcDest.right = rcItem.right + drawInfo.rcDestOffset.right; }
 
         if (rcDest.right > rcItem.right) { rcDest.right = rcItem.right; }
 
-        if (drawInfo.rcDestOffset.bottom > 0) { rcDest.bottom = rcItem.top + drawInfo.rcDestOffset.bottom; }
+        if (drawInfo.rcDestOffset.bottom >= 0) { rcDest.bottom = rcItem.top + drawInfo.rcDestOffset.bottom; }
         else { rcDest.bottom = rcItem.bottom + drawInfo.rcDestOffset.bottom; }
 
         if (rcDest.bottom > rcItem.bottom) { rcDest.bottom = rcItem.bottom; }

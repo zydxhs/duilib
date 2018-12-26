@@ -45,7 +45,7 @@
     </Image>
     <!-- 图片属性说明：-->
     <!-- file 指明文件; res 和 restype 指明资源 id 和类型; color 指定颜色; 或从文件加载，或从资源加载，或直接指定颜色； -->
-    <!-- dest 指明绘制到控件的目标位置。前两个参数相对于控件 left/top 的偏移量;后两个参数，正数相对于 left/top 的偏移，非正数相对于 right/bottom 的偏移 -->
+    <!-- dest 指明绘制到控件的目标位置。前两个参数相对于控件 left/top 的偏移量;后两个参数，0/正数相对于 left/top 的偏移，负数相对于 right/bottom 向左/上的偏移 -->
     <!-- source 指明图片中的一部分; fade 指明图片绘制的透明度(0~255); -->
     <!-- corner/scale9 指明九宫格缩放属性; hole 配合 scale9 使用，指明中央区域是否绘制，true 不显示; -->
     <!-- xtiled/ytiled 配合 scale9 属性使用, true 时中央区域在 水平/垂直 方向平铺，fasle 时在 水平/垂直 方向拉伸； -->
