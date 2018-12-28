@@ -40,7 +40,7 @@ public:
 
     // 通知发送方向：正向/逆向 遍历观察者
     void SetNotifyDirection(bool bForward = true);
-    // 遍历观察者
+    // 遍历观察者，遍历过程禁止添加/删除观察者，因为可能引起程序崩溃
     IObserver *GetFirst(void);
     IObserver *GetNext(void);
 

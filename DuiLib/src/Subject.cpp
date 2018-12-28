@@ -7,9 +7,13 @@ namespace sub {
 class CSubjectImpl
 {
 public:
-    CSubjectImpl(CSubjectBase *pSub) : m_pSub(pSub) {}
+    CSubjectImpl(CSubjectBase *pSub) : m_pSub(pSub)
+    {
+        ::InitializeCriticalSection(&m_cs);
+    }
     ~CSubjectImpl(void)
     {
+        ::DeleteCriticalSection(&m_cs);
         m_vecObs.clear();
     }
 
@@ -17,26 +21,34 @@ public:
     {
         if (NULL != o)
         {
+            ::EnterCriticalSection(&m_cs);
             CVecObserver::iterator it = std::find(m_vecObs.begin(), m_vecObs.end(), o);
 
             if (it == m_vecObs.end())
             {
                 m_vecObs.push_back(o);
             }
+
+            ::LeaveCriticalSection(&m_cs);
         }
     }
     void RemoveObserver(IObserver *o)
     {
+        ::EnterCriticalSection(&m_cs);
         CVecObserver::iterator it = std::find(m_vecObs.begin(), m_vecObs.end(), o);
 
         if (it != m_vecObs.end())
         {
             m_vecObs.erase(it);
         }
+
+        ::LeaveCriticalSection(&m_cs);
     }
 
     void NotifyObserver(WPARAM p1, WPARAM p2, LPARAM p3, IObserver *o)
     {
+        ::EnterCriticalSection(&m_cs);
+
         if (m_bForward)
         {
             std::vector<IObserver *>::iterator it(m_vecObs.begin());
@@ -83,6 +95,8 @@ public:
                 }
             }
         }
+
+        ::LeaveCriticalSection(&m_cs);
     }
 
     // 通知发送方式：正向/逆向 遍历观察者
@@ -90,32 +104,44 @@ public:
     {
         m_bForward = bForward;
     }
-    // 遍历观察者
+    // 遍历观察者，遍历过程禁止添加/删除观察者，因为可能引起程序崩溃
     IObserver *GetFirst(void)
     {
+        IObserver *pObs = NULL;
+        ::EnterCriticalSection(&m_cs);
+
         if (m_bForward)
         {
             m_itCur = m_vecObs.begin();
-            return (m_itCur != m_vecObs.end()) ? *m_itCur : NULL;
+            pObs = (m_itCur != m_vecObs.end()) ? *m_itCur : NULL;
         }
         else
         {
             m_ritCur = m_vecObs.rbegin();
-            return (m_ritCur != m_vecObs.rend()) ? *m_ritCur : NULL;
+            pObs = (m_ritCur != m_vecObs.rend()) ? *m_ritCur : NULL;
         }
+
+        ::LeaveCriticalSection(&m_cs);
+        return pObs;
     }
     IObserver *GetNext(void)
     {
+        IObserver *pObs = NULL;
+        ::EnterCriticalSection(&m_cs);
+
         if (m_bForward)
         {
             m_itCur = (m_itCur != m_vecObs.end()) ? ++m_itCur : m_itCur;
-            return (m_itCur != m_vecObs.end()) ? *m_itCur : NULL;
+            pObs = (m_itCur != m_vecObs.end()) ? *m_itCur : NULL;
         }
         else
         {
             m_ritCur = (m_ritCur != m_vecObs.rend()) ? ++m_ritCur : m_ritCur;
-            return (m_ritCur != m_vecObs.rend()) ? *m_ritCur : NULL;
+            pObs = (m_ritCur != m_vecObs.rend()) ? *m_ritCur : NULL;
         }
+
+        ::LeaveCriticalSection(&m_cs);
+        return pObs;
     }
 private:
     typedef std::vector<IObserver *>    CVecObserver;
@@ -123,7 +149,8 @@ private:
     CVecObserver                    m_vecObs;
     CVecObserver::iterator          m_itCur;
     CVecObserver::reverse_iterator  m_ritCur;
-    bool                            m_bForward; // 通知发送方向：true 从头到尾；false 相反
+    bool                            m_bForward;     // 通知发送方向：true 从头到尾；false 相反
+    CRITICAL_SECTION                m_cs;           // 保护 m_vecObs
 };
 
 }
