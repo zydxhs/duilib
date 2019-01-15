@@ -328,8 +328,8 @@ bool CHorizontalLayoutUI::IsSepImmMode() const
 
 void CHorizontalLayoutUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("sepwidth")) == 0) { SetSepWidth(_ttoi(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("sepimm")) == 0) { SetSepImmMode(_tcscmp(pstrValue, _T("true")) == 0); }
+    if (_tcscmp(pstrName, _T("sepwidth")) == 0) { SetSepWidth(ParseInt(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("sepimm")) == 0) { SetSepImmMode(ParseBool(pstrValue)); }
     else if (_tcscmp(pstrName, _T("autoheight")) == 0) { DUITRACE(_T("不支持属性:autoheight")); }
     else { CContainerUI::SetAttribute(pstrName, pstrValue); }
 }

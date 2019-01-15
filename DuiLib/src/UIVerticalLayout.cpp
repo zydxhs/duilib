@@ -290,8 +290,8 @@ bool CVerticalLayoutUI::IsSepImmMode() const
 
 void CVerticalLayoutUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("sepheight")) == 0) { SetSepHeight(_ttoi(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("sepimm")) == 0) { SetSepImmMode(_tcscmp(pstrValue, _T("true")) == 0); }
+    if (_tcscmp(pstrName, _T("sepheight")) == 0) { SetSepHeight(ParseInt(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("sepimm")) == 0) { SetSepImmMode(ParseBool(pstrValue)); }
     else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else { CContainerUI::SetAttribute(pstrName, pstrValue); }
 }

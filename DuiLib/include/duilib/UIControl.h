@@ -229,7 +229,6 @@ public:
 
 protected:
     void OnDoDragDrop(TEventUI &evt);
-    void ParseEffectInfo(LPCTSTR pstrValue, BYTE &byEffect, WORD &wElapse, bool &bDirection, bool &bLoop);
 
 public:
     CEventSource OnInit;

@@ -25,7 +25,7 @@ bool  CCheckBoxUI::GetCheck() const
 
 void CCheckBoxUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("seltext")) == 0) { SetSelText(pstrValue); }
+    if (_tcscmp(pstrName, _T("seltext")) == 0) { SetSelText(pstrValue); }   // 2019-01-10 zhuyadong 不做任何处理
     // 复选框，group属性无效
     else if (_tcscmp(pstrName, _T("group")) == 0) { DUITRACE(_T("不支持属性:group")); }
     else { COptionUI::SetAttribute(pstrName, pstrValue); }

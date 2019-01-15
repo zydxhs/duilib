@@ -320,39 +320,20 @@ HRESULT CFlashUI::RegisterEventHandler(BOOL inAdvise)
 void CFlashUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     // Flash 控件不支持这两个属性
-    if (_tcscmp(pstrName, _T("homepage")) == 0) { }
-    else if (_tcscmp(pstrName, _T("autonavi")) == 0) { }
+    if (_tcscmp(pstrName, _T("homepage")) == 0) { DUITRACE(_T("不支持属性:homepage")); }
+    else if (_tcscmp(pstrName, _T("autonavi")) == 0) { DUITRACE(_T("不支持属性:autonavi")); }
     else if (_tcscmp(pstrName, _T("align")) == 0)
     {
-        while (NULL != pstrValue && _T('\0') != *pstrValue)
-        {
-            if (_T('L') == *pstrValue || _T('T') == *pstrValue ||
-                _T('R') == *pstrValue || _T('B') == *pstrValue)
-            {
-                m_sAlign += *pstrValue;
-                pstrValue += 1;
-            }
-            else
-            {
-                break;
-            }
-        }
+        m_sAlign = ParseString(pstrValue);
     }
     else if (_tcscmp(pstrName, _T("bkcolor")) == 0)
     {
-        while (*pstrValue > _T('\0') && *pstrValue <= _T(' ')) { pstrValue = ::CharNext(pstrValue); }
-
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        pstrValue = ::CharNext(pstrValue);
-        pstrValue = ::CharNext(pstrValue);
-        LPTSTR pstr = NULL;
-        m_dwBackColor = _tcstoul(pstrValue, &pstr, 16);
+        m_dwBackColor = ParseColor(pstrValue);
     }
-    else if (_tcscmp(pstrName, _T("wmode")) == 0) { m_sWMode = pstrValue; }
-    else if (_tcscmp(pstrName, _T("movie")) == 0) { m_sMovie = pstrValue; }
-    else if (_tcscmp(pstrName, _T("base")) == 0)  { m_sBase = pstrValue; }
-    else if (_tcscmp(pstrName, _T("scale")) == 0) { m_sScale = pstrValue; }
+    else if (_tcscmp(pstrName, _T("wmode")) == 0) { m_sWMode = ParseString(pstrValue); }
+    else if (_tcscmp(pstrName, _T("movie")) == 0) { m_sMovie = ParseString(pstrValue); }
+    else if (_tcscmp(pstrName, _T("base")) == 0)  { m_sBase = ParseString(pstrValue); }
+    else if (_tcscmp(pstrName, _T("scale")) == 0) { m_sScale = ParseString(pstrValue); }
     else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else { CActiveXUI::SetAttribute(pstrName, pstrValue); }
 }

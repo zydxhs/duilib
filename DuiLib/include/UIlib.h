@@ -89,7 +89,9 @@
 #include "duilib/UIDelegate.h"
 #include "duilib/UIDefine.h"
 #include "duilib/UIEffect.h"
+#include "duilib/Subject.h"
 #include "duilib/UIManager.h"
+#include "duilib/ParseProperty.h"
 #include "duilib/UIBase.h"
 #include "duilib/UIControl.h"
 #include "duilib/UIContainer.h"
@@ -97,7 +99,6 @@
 #include "duilib/UIDlgBuilder.h"
 #include "duilib/UIRender.h"
 #include "duilib/WinImplBase.h"
-#include "duilib/Subject.h"
 
 #include "duilib/UIVerticalLayout.h"
 #include "duilib/UIHorizontalLayout.h"

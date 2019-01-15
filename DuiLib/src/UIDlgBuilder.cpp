@@ -75,8 +75,9 @@ CControlUI *CDialogBuilder::Create(IDialogBuilderCallback *pCallback, CPaintMana
         {
             LPCTSTR pstrStyle = node.GetAttributeValue(_T("style"));
 
-            if (pstrStyle && _tcscmp(pstrStyle, _T("true")) == 0)
+            if (pstrStyle && ParseBool(pstrStyle))
             {
+                // 解析默认属性
                 _ParseInclude(node, pParent, pManager);
             }
         }
@@ -88,8 +89,8 @@ CControlUI *CDialogBuilder::Create(IDialogBuilderCallback *pCallback, CPaintMana
             if (_tcsicmp(pstrClass, _T("Image")) == 0)
             {
                 nAttributes = node.GetAttributeCount();
-                LPCTSTR pImageName = NULL;
-                LPCTSTR pImageResType = NULL;
+                CDuiString sImageName;
+                CDuiString sImageResType;
                 DWORD mask = 0;
                 bool bUseHSL = false;
                 bool shared = false;
@@ -101,39 +102,37 @@ CControlUI *CDialogBuilder::Create(IDialogBuilderCallback *pCallback, CPaintMana
 
                     if (_tcsicmp(pstrName, _T("file")) == 0)
                     {
-                        pImageName = pstrValue;
+                        sImageName = ParseString(pstrValue);
                     }
                     else if (_tcsicmp(pstrName, _T("res")) == 0)
                     {
-                        pImageName = pstrValue;
+                        sImageName = ParseString(pstrValue);
                     }
                     else if (_tcsicmp(pstrName, _T("restype")) == 0)
                     {
-                        pImageResType = pstrValue;
+                        sImageResType = ParseString(pstrValue);
                     }
                     else if (_tcsicmp(pstrName, _T("mask")) == 0)
                     {
-                        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-                        mask = _tcstoul(pstrValue, &pstr, 16);
+                        mask = ParseColor(pstrValue);
                     }
                     else if (_tcsicmp(pstrName, _T("hsl")) == 0)
                     {
-                        bUseHSL = (_tcscmp(pstrValue, _T("true")) == 0);
+                        bUseHSL = ParseBool(pstrValue);
                     }
                     else if (_tcsicmp(pstrName, _T("shared")) == 0)
                     {
-                        shared = (_tcsicmp(pstrValue, _T("true")) == 0);
+                        shared = ParseBool(pstrValue);
                     }
                 }
 
-                if (pImageName)
+                if (!sImageName.IsEmpty())
                 {
-                    const TImageInfo *data = pManager->GetImage(pImageName);
+                    const TImageInfo *data = pManager->GetImage(sImageName);
 
                     if (!data)
                     {
-                        pManager->AddImage(pImageName, pImageResType, mask, bUseHSL, shared);
+                        pManager->AddImage(sImageName, sImageResType, mask, bUseHSL, shared);
                     }
                 }
             }
@@ -141,7 +140,7 @@ CControlUI *CDialogBuilder::Create(IDialogBuilderCallback *pCallback, CPaintMana
             {
                 nAttributes = node.GetAttributeCount();
                 int id = -1;
-                LPCTSTR pFontName = NULL;
+                CDuiString sFontName;
                 int size = 12;
                 bool bold = false;
                 bool underline = false;
@@ -156,50 +155,50 @@ CControlUI *CDialogBuilder::Create(IDialogBuilderCallback *pCallback, CPaintMana
 
                     if (_tcsicmp(pstrName, _T("id")) == 0)
                     {
-                        id = _tcstol(pstrValue, &pstr, 10);
+                        id = ParseInt(pstrValue);
                     }
                     else if (_tcsicmp(pstrName, _T("name")) == 0)
                     {
-                        pFontName = pstrValue;
+                        sFontName = ParseString(pstrValue);
                     }
                     else if (_tcsicmp(pstrName, _T("size")) == 0)
                     {
-                        size = _tcstol(pstrValue, &pstr, 10);
+                        size = ParseInt(pstrValue);
                     }
                     else if (_tcsicmp(pstrName, _T("bold")) == 0)
                     {
-                        bold = (_tcsicmp(pstrValue, _T("true")) == 0);
+                        bold = ParseBool(pstrValue);
                     }
                     else if (_tcsicmp(pstrName, _T("underline")) == 0)
                     {
-                        underline = (_tcsicmp(pstrValue, _T("true")) == 0);
+                        underline = ParseBool(pstrValue);
                     }
                     else if (_tcsicmp(pstrName, _T("italic")) == 0)
                     {
-                        italic = (_tcsicmp(pstrValue, _T("true")) == 0);
+                        italic = ParseBool(pstrValue);
                     }
                     else if (_tcsicmp(pstrName, _T("default")) == 0)
                     {
-                        defaultfont = (_tcsicmp(pstrValue, _T("true")) == 0);
+                        defaultfont = ParseBool(pstrValue);
                     }
                     else if (_tcsicmp(pstrName, _T("shared")) == 0)
                     {
-                        shared = (_tcsicmp(pstrValue, _T("true")) == 0);
+                        shared = ParseBool(pstrValue);
                     }
                 }
 
-                if (id >= 0 && pFontName)
+                if (id >= 0 && !sFontName.IsEmpty())
                 {
-                    pManager->AddFont(id, pFontName, size, bold, underline, italic, shared);
+                    pManager->AddFont(id, sFontName, size, bold, underline, italic, shared);
 
-                    if (defaultfont) { pManager->SetDefaultFont(pFontName, size, bold, underline, italic, shared); }
+                    if (defaultfont) { pManager->SetDefaultFont(sFontName, size, bold, underline, italic, shared); }
                 }
             }
             else if (_tcsicmp(pstrClass, _T("Default")) == 0)
             {
                 nAttributes = node.GetAttributeCount();
-                LPCTSTR pControlName = NULL;
-                LPCTSTR pControlValue = NULL;
+                CDuiString sControlName;
+                CDuiString sControlValue;
                 bool shared = false;
 
                 for (int i = 0; i < nAttributes; i++)
@@ -209,21 +208,21 @@ CControlUI *CDialogBuilder::Create(IDialogBuilderCallback *pCallback, CPaintMana
 
                     if (_tcsicmp(pstrName, _T("name")) == 0)
                     {
-                        pControlName = pstrValue;
+                        sControlName = ParseString(pstrValue);
                     }
                     else if (_tcsicmp(pstrName, _T("value")) == 0)
                     {
-                        pControlValue = pstrValue;
+                        sControlValue = ParseString(pstrValue);
                     }
                     else if (_tcsicmp(pstrName, _T("shared")) == 0)
                     {
-                        shared = (_tcsicmp(pstrValue, _T("true")) == 0);
+                        shared = ParseBool(pstrValue);
                     }
                 }
 
-                if (pControlName)
+                if (!sControlName.IsEmpty())
                 {
-                    pManager->AddDefaultAttributeList(pControlName, pControlValue, shared);
+                    pManager->AddDefaultAttributeList(sControlName, sControlValue, shared);
                 }
             }
         }
@@ -289,8 +288,10 @@ CControlUI *CDialogBuilder::_Parse(CMarkupNode *pRoot, CControlUI *pParent, CPai
 
             LPCTSTR pstrStyle = node.GetAttributeValue(_T("style"));
 
-            if (pstrStyle && _tcscmp(pstrStyle, _T("true")) == 0) { continue; }
+            // 默认属性在前面已经处理完毕
+            if (pstrStyle && ParseBool(pstrStyle)) { continue; }
 
+            // 生成窗体
             pControl = _ParseInclude(node, pParent, pManager);
             continue;
         }

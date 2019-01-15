@@ -35,45 +35,30 @@ void CPwdCheckUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if (_tcscmp(pstrName, _T("clrweak")) == 0)
     {
-        while (*pstrValue > _T('\0') && *pstrValue <= _T(' ')) { pstrValue = ::CharNext(pstrValue); }
-
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetClrWeak(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetClrWeak(clr);
     }
     else if (_tcscmp(pstrName, _T("clrmiddle")) == 0)
     {
-        while (*pstrValue > _T('\0') && *pstrValue <= _T(' ')) { pstrValue = ::CharNext(pstrValue); }
-
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetClrMiddle(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetClrMiddle(clr);
     }
     else if (_tcscmp(pstrName, _T("clrstrong")) == 0)
     {
-        while (*pstrValue > _T('\0') && *pstrValue <= _T(' ')) { pstrValue = ::CharNext(pstrValue); }
-
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetClrStrong(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetClrStrong(clr);
     }
     else if (_tcscmp(pstrName, _T("showtext")) == 0)
     {
-        SetShowTxt(_tcscmp(pstrValue, _T("true")) == 0);
+        SetShowTxt(ParseBool(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("text")) == 0)
     {
-        SetText(pstrValue);
+        SetText(pstrValue); // 2019-01-10 zhuyadong 不做任何处理
     }
     else if (_tcscmp(pstrName, _T("pwd")) == 0)
     {
-        SetPwd(pstrValue);
+        SetPwd(pstrValue);  // 2019-01-10 zhuyadong 不做任何处理
     }
     else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
     else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }

@@ -309,19 +309,19 @@ void CLabelUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if (_tcscmp(pstrName, _T("align")) == 0)
     {
-        if (_tcsstr(pstrValue, _T("left")) != NULL)
+        CDuiString str = ParseString(pstrValue);
+
+        if (str == _T("left"))
         {
             m_uTextStyle &= ~(DT_CENTER | DT_RIGHT);
             m_uTextStyle |= DT_LEFT;
         }
-
-        if (_tcsstr(pstrValue, _T("center")) != NULL)
+        else if (str == _T("center"))
         {
             m_uTextStyle &= ~(DT_LEFT | DT_RIGHT);
             m_uTextStyle |= DT_CENTER;
         }
-
-        if (_tcsstr(pstrValue, _T("right")) != NULL)
+        else if (str == _T("right"))
         {
             m_uTextStyle &= ~(DT_LEFT | DT_CENTER);
             m_uTextStyle |= DT_RIGHT;
@@ -329,19 +329,19 @@ void CLabelUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     }
     else if (_tcscmp(pstrName, _T("valign")) == 0)
     {
-        if (_tcsstr(pstrValue, _T("top")) != NULL)
+        CDuiString str = ParseString(pstrValue);
+
+        if (str == _T("top"))
         {
             m_uTextStyle &= ~(DT_BOTTOM | DT_VCENTER);
             m_uTextStyle |= DT_TOP;
         }
-
-        if (_tcsstr(pstrValue, _T("center")) != NULL)
+        else if (str == _T("center"))
         {
             m_uTextStyle &= ~(DT_TOP | DT_BOTTOM);
             m_uTextStyle |= DT_VCENTER;
         }
-
-        if (_tcsstr(pstrValue, _T("bottom")) != NULL)
+        else  if (str == _T("bottom"))
         {
             m_uTextStyle &= ~(DT_TOP | DT_VCENTER);
             m_uTextStyle |= DT_BOTTOM;
@@ -349,85 +349,60 @@ void CLabelUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     }
     else if (_tcscmp(pstrName, _T("endellipsis")) == 0)
     {
-        if (_tcscmp(pstrValue, _T("true")) == 0) { m_uTextStyle |= DT_END_ELLIPSIS; }
+        if (ParseBool(pstrValue)) { m_uTextStyle |= DT_END_ELLIPSIS; }
         else { m_uTextStyle &= ~DT_END_ELLIPSIS; }
     }
-    else if (_tcscmp(pstrName, _T("font")) == 0) { SetFont(_ttoi(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("font")) == 0) { SetFont(ParseInt(pstrValue)); }
     else if (_tcscmp(pstrName, _T("textcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetTextColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetTextColor(clr);
     }
     else if (_tcscmp(pstrName, _T("disabledtextcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetDisabledTextColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetDisabledTextColor(clr);
     }
     else if (_tcscmp(pstrName, _T("textpadding")) == 0)
     {
-        RECT rcTextPadding = { 0 };
-        LPTSTR pstr = NULL;
-        rcTextPadding.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
-        rcTextPadding.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-        rcTextPadding.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
-        rcTextPadding.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
-        SetTextPadding(rcTextPadding);
+        RECT rt = ParseRect(pstrValue);
+        SetTextPadding(rt);
     }
-    else if (_tcscmp(pstrName, _T("multiline")) == 0) { SetMultiLine(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("showhtml")) == 0) { SetShowHtml(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("enabledeffect")) == 0) { SetEnabledEffect(_tcscmp(pstrValue, _T("true")) == 0); }
+    else if (_tcscmp(pstrName, _T("multiline")) == 0) { SetMultiLine(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("showhtml")) == 0) { SetShowHtml(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("enabledeffect")) == 0) { SetEnabledEffect(ParseBool(pstrValue)); }
 
 #ifdef USE_GDIPLUS
-    else if (_tcscmp(pstrName, _T("enabledluminous")) == 0) { SetEnabledLuminous(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("luminousfuzzy")) == 0) { SetLuminousFuzzy((float)_tstof(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("gradientangle")) == 0) { SetGradientAngle(_ttoi(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("enabledstroke")) == 0) { SetEnabledStroke(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("enabledshadow")) == 0) { SetEnabledShadow(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("gradientlength")) == 0) { SetGradientLength(_ttoi(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("enabledluminous")) == 0) { SetEnabledLuminous(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("luminousfuzzy")) == 0) { SetLuminousFuzzy(ParseFloat(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("gradientangle")) == 0) { SetGradientAngle(ParseInt(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("enabledstroke")) == 0) { SetEnabledStroke(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("enabledshadow")) == 0) { SetEnabledShadow(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("gradientlength")) == 0) { SetGradientLength(ParseInt(pstrValue)); }
     else if (_tcscmp(pstrName, _T("shadowoffset")) == 0)
     {
-        LPTSTR pstr = NULL;
-        int offsetx = _tcstol(pstrValue, &pstr, 10);    ASSERT(pstr);
-        int offsety = _tcstol(pstr + 1, &pstr, 10);     ASSERT(pstr);
-        SetShadowOffset(offsetx, offsety);
+        SIZE sz = ParseSize(pstrValue);
+        SetShadowOffset(sz.cx, sz.cy);
     }
     else if (_tcscmp(pstrName, _T("textcolor1")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetTextColor1(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetTextColor1(clr);
     }
     else if (_tcscmp(pstrName, _T("textshadowcolora")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetTextShadowColorA(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetTextShadowColorA(clr);
     }
     else if (_tcscmp(pstrName, _T("textshadowcolorb")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetTextShadowColorB(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetTextShadowColorB(clr);
     }
     else if (_tcscmp(pstrName, _T("strokecolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetStrokeColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetStrokeColor(clr);
     }
 
 #endif // USE_GDIPLUS

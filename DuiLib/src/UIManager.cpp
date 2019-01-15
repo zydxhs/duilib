@@ -4167,141 +4167,103 @@ void CPaintManagerUI::SetWindowAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if (_tcsicmp(pstrName, _T("size")) == 0)
     {
-        LPTSTR pstr = NULL;
-        int cx = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
-        int cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-        SetInitSize(cx, cy);
+        SIZE sz = ParseSize(pstrValue);
+        SetInitSize(sz.cx, sz.cy);
     }
     else if (_tcsicmp(pstrName, _T("sizebox")) == 0)
     {
-        RECT rcSizeBox = { 0 };
-        LPTSTR pstr = NULL;
-        rcSizeBox.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
-        rcSizeBox.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-        rcSizeBox.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
-        rcSizeBox.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
-        SetSizeBox(rcSizeBox);
+        RECT rt = ParseRect(pstrValue);
+        SetSizeBox(rt);
     }
     else if (_tcsicmp(pstrName, _T("caption")) == 0)
     {
-        RECT rcCaption = { 0 };
-        LPTSTR pstr = NULL;
-        rcCaption.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
-        rcCaption.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-        rcCaption.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
-        rcCaption.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
-        SetCaptionRect(rcCaption);
+        RECT rt = ParseRect(pstrValue);
+        SetCaptionRect(rt);
     }
     else if (_tcsicmp(pstrName, _T("roundcorner")) == 0)
     {
-        LPTSTR pstr = NULL;
-        int cx = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
-        int cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-        SetRoundCorner(cx, cy);
+        SIZE sz = ParseSize(pstrValue);
+        SetRoundCorner(sz.cx, sz.cy);
     }
     else if (_tcsicmp(pstrName, _T("mininfo")) == 0)
     {
-        LPTSTR pstr = NULL;
-        int cx = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
-        int cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-        SetMinInfo(cx, cy);
+        SIZE sz = ParseSize(pstrValue);
+        SetMinInfo(sz.cx, sz.cy);
     }
     else if (_tcsicmp(pstrName, _T("maxinfo")) == 0)
     {
-        LPTSTR pstr = NULL;
-        int cx = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
-        int cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-        SetMaxInfo(cx, cy);
+        SIZE sz = ParseSize(pstrValue);
+        SetMaxInfo(sz.cx, sz.cy);
     }
     else if (_tcsicmp(pstrName, _T("showdirty")) == 0)
     {
-        SetShowUpdateRect(_tcsicmp(pstrValue, _T("true")) == 0);
+        SetShowUpdateRect(ParseBool(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("noactivate")) == 0)
     {
-        SetNoActivate(_tcsicmp(pstrValue, _T("true")) == 0);
+        SetNoActivate(ParseBool(pstrValue));
     }
     else if (_tcsicmp(pstrName, _T("opacity")) == 0)
     {
-        SetOpacity(_ttoi(pstrValue));
+        SetOpacity(ParseByte(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("layeredopacity")) == 0)
     {
-        SetLayeredOpacity(_ttoi(pstrValue));
+        SetLayeredOpacity(ParseByte(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("layered")) == 0)
     {
-        SetLayered(_tcscmp(pstrValue, _T("true")) == 0);
+        SetLayered(ParseBool(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("shape")) == 0)
     {
-        SetLayeredImage(pstrValue);
+        SetLayeredImage(ParseString(pstrValue));
     }
     else if (_tcsicmp(pstrName, _T("disabledfontcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetDefaultDisabledColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetDefaultDisabledColor(clr);
     }
     else if (_tcsicmp(pstrName, _T("defaultfontcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetDefaultFontColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetDefaultFontColor(clr);
     }
     else if (_tcsicmp(pstrName, _T("linkfontcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetDefaultLinkFontColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetDefaultLinkFontColor(clr);
     }
     else if (_tcsicmp(pstrName, _T("linkhoverfontcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetDefaultLinkHoverFontColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetDefaultLinkHoverFontColor(clr);
     }
     else if (_tcsicmp(pstrName, _T("selectedcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetDefaultSelectedBkColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetDefaultSelectedBkColor(clr);
     }
-    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { m_bDropEnable = _tcscmp(pstrValue, _T("true")) == 0; }
-    else if (_tcscmp(pstrName, _T("delayclick")) == 0) { m_bDelayClick = _tcscmp(pstrValue, _T("true")) == 0; }
-    else if (_tcscmp(pstrName, _T("shadowshow")) == 0) { m_pWndShadow->SetShow(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcsicmp(pstrName, _T("shadowsize")) == 0) { m_pWndShadow->SetSize(_ttoi(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { m_bDropEnable = ParseBool(pstrValue); }
+    else if (_tcscmp(pstrName, _T("delayclick")) == 0) { m_bDelayClick = ParseBool(pstrValue); }
+    else if (_tcscmp(pstrName, _T("shadowshow")) == 0) { m_pWndShadow->SetShow(ParseBool(pstrValue)); }
+    else if (_tcsicmp(pstrName, _T("shadowsize")) == 0) { m_pWndShadow->SetSize(ParseByte(pstrValue)); }
     else if (_tcsicmp(pstrName, _T("shadowpos")) == 0)
     {
-        LPTSTR pstr = NULL;
-        int cx = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
-        int cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-        m_pWndShadow->SetPosition(cx, cy);
+        SIZE sz = ParseSize(pstrValue);
+        m_pWndShadow->SetPosition(sz.cx, sz.cy);
     }
     else if (_tcscmp(pstrName, _T("shadowcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clr = _tcstoul(pstrValue, &pstr, 16);
+        DWORD clr = ParseColor(pstrValue);
         COLORREF rgb = RGB(GetBValue(clr), GetGValue(clr), GetRValue(clr));
         m_pWndShadow->SetColor(rgb);
     }
-    else if (_tcsicmp(pstrName, _T("shadowsharpness")) == 0) { m_pWndShadow->SetSharpness(_ttoi(pstrValue)); }
-    else if (_tcsicmp(pstrName, _T("shadowdarkness")) == 0) { m_pWndShadow->SetDarkness(_ttoi(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("shadowimage")) == 0) { m_pWndShadow->SetImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("focusedctrl")) == 0) { m_sDefFocusedCtrl = pstrValue; }
-    else { AddWindowCustomAttribute(pstrName, pstrValue); }
+    else if (_tcsicmp(pstrName, _T("shadowsharpness")) == 0) { m_pWndShadow->SetSharpness(ParseByte(pstrValue)); }
+    else if (_tcsicmp(pstrName, _T("shadowdarkness")) == 0) { m_pWndShadow->SetDarkness(ParseByte(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("shadowimage")) == 0) { m_pWndShadow->SetImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("focusedctrl")) == 0) { m_sDefFocusedCtrl = ParseString(pstrValue); }
+    else { AddWindowCustomAttribute(pstrName, ParseString(pstrValue).GetData()); }
 }
 
 DUI_INLINE CDuiString CPaintManagerUI::GetWindowAttributeList(bool bIgnoreDefault)

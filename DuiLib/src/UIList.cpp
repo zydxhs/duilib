@@ -1014,27 +1014,27 @@ void CListUI::Scroll(int dx, int dy)
 
 void CListUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("header")) == 0) { GetHeader()->SetVisible(_tcscmp(pstrValue, _T("hidden")) != 0); }
-    else if (_tcscmp(pstrName, _T("headerbkimage")) == 0) { GetHeader()->SetBkImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("scrollselect")) == 0) { SetScrollSelect(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("multiexpanding")) == 0) { SetMultiExpanding(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("itemheight")) == 0) { m_ListInfo.uFixedHeight = _ttoi(pstrValue); }
-    else if (_tcscmp(pstrName, _T("itemfont")) == 0) { m_ListInfo.nFont = _ttoi(pstrValue); }
+    if (_tcscmp(pstrName, _T("header")) == 0) { GetHeader()->SetVisible(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("headerbkimage")) == 0) { GetHeader()->SetBkImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("scrollselect")) == 0) { SetScrollSelect(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("multiexpanding")) == 0) { SetMultiExpanding(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("itemheight")) == 0) { m_ListInfo.uFixedHeight = ParseDWord(pstrValue); }
+    else if (_tcscmp(pstrName, _T("itemfont")) == 0) { m_ListInfo.nFont = ParseInt(pstrValue); }
     else if (_tcscmp(pstrName, _T("itemalign")) == 0)
     {
-        if (_tcsstr(pstrValue, _T("left")) != NULL)
+        CDuiString str = ParseString(pstrValue);
+
+        if (str == _T("left"))
         {
             m_ListInfo.uTextStyle &= ~(DT_CENTER | DT_RIGHT);
             m_ListInfo.uTextStyle |= DT_LEFT;
         }
-
-        if (_tcsstr(pstrValue, _T("center")) != NULL)
+        else if (str == _T("center"))
         {
             m_ListInfo.uTextStyle &= ~(DT_LEFT | DT_RIGHT);
             m_ListInfo.uTextStyle |= DT_CENTER;
         }
-
-        if (_tcsstr(pstrValue, _T("right")) != NULL)
+        else if (str == _T("right"))
         {
             m_ListInfo.uTextStyle &= ~(DT_LEFT | DT_CENTER);
             m_ListInfo.uTextStyle |= DT_RIGHT;
@@ -1042,19 +1042,19 @@ void CListUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     }
     else if (_tcscmp(pstrName, _T("itemvalign")) == 0)
     {
-        if (_tcsstr(pstrValue, _T("top")) != NULL)
+        CDuiString str = ParseString(pstrValue);
+
+        if (str == _T("top"))
         {
             m_ListInfo.uTextStyle &= ~(DT_BOTTOM | DT_VCENTER);
             m_ListInfo.uTextStyle |= DT_TOP;
         }
-
-        if (_tcsstr(pstrValue, _T("center")) != NULL)
+        else if (str == _T("center"))
         {
             m_ListInfo.uTextStyle &= ~(DT_TOP | DT_BOTTOM);
             m_ListInfo.uTextStyle |= DT_VCENTER;
         }
-
-        if (_tcsstr(pstrValue, _T("bottom")) != NULL)
+        else if (str == _T("bottom"))
         {
             m_ListInfo.uTextStyle &= ~(DT_TOP | DT_VCENTER);
             m_ListInfo.uTextStyle |= DT_BOTTOM;
@@ -1062,12 +1062,12 @@ void CListUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     }
     else if (_tcscmp(pstrName, _T("itemendellipsis")) == 0)
     {
-        if (_tcscmp(pstrValue, _T("true")) == 0) { m_ListInfo.uTextStyle |= DT_END_ELLIPSIS; }
+        if (ParseBool(pstrValue)) { m_ListInfo.uTextStyle |= DT_END_ELLIPSIS; }
         else { m_ListInfo.uTextStyle &= ~DT_END_ELLIPSIS; }
     }
     else if (_tcscmp(pstrName, _T("itemmultiline")) == 0)
     {
-        if (_tcscmp(pstrValue, _T("true")) == 0)
+        if (ParseBool(pstrValue))
         {
             m_ListInfo.uTextStyle &= ~DT_SINGLELINE;
             m_ListInfo.uTextStyle |= DT_WORDBREAK;
@@ -1076,115 +1076,80 @@ void CListUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     }
     else if (_tcscmp(pstrName, _T("itemtextpadding")) == 0)
     {
-        RECT rcTextPadding = { 0 };
-        LPTSTR pstr = NULL;
-        rcTextPadding.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
-        rcTextPadding.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-        rcTextPadding.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
-        rcTextPadding.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
-        SetItemTextPadding(rcTextPadding);
+        RECT rt = ParseRect(pstrValue);
+        SetItemTextPadding(rt);
     }
     else if (_tcscmp(pstrName, _T("itemtextcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetItemTextColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetItemTextColor(clr);
     }
     else if (_tcscmp(pstrName, _T("itembkcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetItemBkColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetItemBkColor(clr);
     }
-    else if (_tcscmp(pstrName, _T("itembkimage")) == 0) { SetItemBkImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("itemaltbk")) == 0) { SetAlternateBk(_tcscmp(pstrValue, _T("true")) == 0); }
+    else if (_tcscmp(pstrName, _T("itembkimage")) == 0) { SetItemBkImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("itemaltbk")) == 0) { SetAlternateBk(ParseBool(pstrValue)); }
     else if (_tcscmp(pstrName, _T("itemselectedtextcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetSelectedItemTextColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetSelectedItemTextColor(clr);
     }
     else if (_tcscmp(pstrName, _T("itemselectedbkcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetSelectedItemBkColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetSelectedItemBkColor(clr);
     }
-    else if (_tcscmp(pstrName, _T("itemselectedimage")) == 0) { SetSelectedItemImage(pstrValue); }
+    else if (_tcscmp(pstrName, _T("itemselectedimage")) == 0) { SetSelectedItemImage(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("itemhottextcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetHotItemTextColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetHotItemTextColor(clr);
     }
     else if (_tcscmp(pstrName, _T("itemhotbkcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetHotItemBkColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetHotItemBkColor(clr);
     }
-    else if (_tcscmp(pstrName, _T("itemhotimage")) == 0) { SetHotItemImage(pstrValue); }
+    else if (_tcscmp(pstrName, _T("itemhotimage")) == 0) { SetHotItemImage(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("itemdisabledtextcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetDisabledItemTextColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetDisabledItemTextColor(clr);
     }
     else if (_tcscmp(pstrName, _T("itemdisabledbkcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetDisabledItemBkColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetDisabledItemBkColor(clr);
     }
-    else if (_tcscmp(pstrName, _T("itemdisabledimage")) == 0) { SetDisabledItemImage(pstrValue); }
+    else if (_tcscmp(pstrName, _T("itemdisabledimage")) == 0) { SetDisabledItemImage(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("itemvlinesize")) == 0)
     {
-        SetItemVLineSize(_ttoi(pstrValue));
+        SetItemVLineSize(ParseInt(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("itemvlinecolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetItemVLineColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetItemVLineColor(clr);
     }
     else if (_tcscmp(pstrName, _T("itemhlinesize")) == 0)
     {
-        SetItemHLineSize(_ttoi(pstrValue));
+        SetItemHLineSize(ParseInt(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("itemhlinecolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetItemHLineColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetItemHLineColor(clr);
     }
-    else if (_tcscmp(pstrName, _T("itemshowhtml")) == 0) { SetItemShowHtml(_tcscmp(pstrValue, _T("true")) == 0); }
+    else if (_tcscmp(pstrName, _T("itemshowhtml")) == 0) { SetItemShowHtml(ParseBool(pstrValue)); }
     else if (_tcscmp(pstrName, _T("ischeckbox")) == 0)
     {
-        m_bCheckBox = _tcscmp(pstrValue, _T("true")) == 0 ? true : false;
+        m_bCheckBox = ParseBool(pstrValue);
         m_ListInfo.bCheckBox = m_bCheckBox;
     }
-    else if (_tcscmp(pstrName, _T("unselimage")) == 0) { m_diUnSel.sDrawString = pstrValue; }
-    else if (_tcscmp(pstrName, _T("selimage")) == 0) { m_diSel.sDrawString = pstrValue; }
+    else if (_tcscmp(pstrName, _T("unselimage")) == 0) { m_diUnSel.sDrawString = ParseString(pstrValue); }
+    else if (_tcscmp(pstrName, _T("selimage")) == 0) { m_diSel.sDrawString = ParseString(pstrValue); }
     else { CVerticalLayoutUI::SetAttribute(pstrName, pstrValue); }
 }
 
@@ -2097,22 +2062,22 @@ void CListHeaderItemUI::SetSepImage(LPCTSTR pStrImage)
 
 void CListHeaderItemUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("dragable")) == 0) { SetDragable(_tcscmp(pstrValue, _T("true")) == 0); }
+    if (_tcscmp(pstrName, _T("dragable")) == 0) { SetDragable(ParseBool(pstrValue)); }
     else if (_tcscmp(pstrName, _T("align")) == 0)
     {
-        if (_tcsstr(pstrValue, _T("left")) != NULL)
+        CDuiString str = ParseString(pstrValue);
+
+        if (str == _T("left"))
         {
             m_uTextStyle &= ~(DT_CENTER | DT_RIGHT);
             m_uTextStyle |= DT_LEFT;
         }
-
-        if (_tcsstr(pstrValue, _T("center")) != NULL)
+        else if (str == _T("center"))
         {
             m_uTextStyle &= ~(DT_LEFT | DT_RIGHT);
             m_uTextStyle |= DT_CENTER;
         }
-
-        if (_tcsstr(pstrValue, _T("right")) != NULL)
+        else if (str == _T("right"))
         {
             m_uTextStyle &= ~(DT_LEFT | DT_CENTER);
             m_uTextStyle |= DT_RIGHT;
@@ -2120,19 +2085,19 @@ void CListHeaderItemUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     }
     else if (_tcscmp(pstrName, _T("valign")) == 0)
     {
-        if (_tcsstr(pstrValue, _T("top")) != NULL)
+        CDuiString str = ParseString(pstrValue);
+
+        if (str == _T("top"))
         {
             m_uTextStyle &= ~(DT_BOTTOM | DT_VCENTER);
             m_uTextStyle |= DT_TOP;
         }
-
-        if (_tcsstr(pstrValue, _T("center")) != NULL)
+        else if (str == _T("center"))
         {
             m_uTextStyle &= ~(DT_TOP | DT_BOTTOM);
             m_uTextStyle |= DT_VCENTER;
         }
-
-        if (_tcsstr(pstrValue, _T("bottom")) != NULL)
+        else if (str == _T("bottom"))
         {
             m_uTextStyle &= ~(DT_TOP | DT_VCENTER);
             m_uTextStyle |= DT_BOTTOM;
@@ -2140,52 +2105,41 @@ void CListHeaderItemUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     }
     else if (_tcscmp(pstrName, _T("endellipsis")) == 0)
     {
-        if (_tcscmp(pstrValue, _T("true")) == 0) { m_uTextStyle |= DT_END_ELLIPSIS; }
+        if (ParseBool(pstrValue)) { m_uTextStyle |= DT_END_ELLIPSIS; }
         else { m_uTextStyle &= ~DT_END_ELLIPSIS; }
     }
     else if (_tcscmp(pstrName, _T("multiline")) == 0)
     {
-        if (_tcscmp(pstrValue, _T("true")) == 0)
+        if (ParseBool(pstrValue))
         {
             m_uTextStyle  &= ~DT_SINGLELINE;
             m_uTextStyle |= DT_WORDBREAK;
         }
         else { m_uTextStyle |= DT_SINGLELINE; }
     }
-    else if (_tcscmp(pstrName, _T("font")) == 0) { SetFont(_ttoi(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("font")) == 0) { SetFont(ParseInt(pstrValue)); }
     else if (_tcscmp(pstrName, _T("textcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetTextColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetTextColor(clr);
     }
     else if (_tcscmp(pstrName, _T("textpadding")) == 0)
     {
-        RECT rcTextPadding = { 0 };
-        LPTSTR pstr = NULL;
-        rcTextPadding.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
-        rcTextPadding.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-        rcTextPadding.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
-        rcTextPadding.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
-        SetTextPadding(rcTextPadding);
+        RECT rt = ParseRect(pstrValue);
+        SetTextPadding(rt);
     }
-    else if (_tcscmp(pstrName, _T("showhtml")) == 0) { SetShowHtml(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("normalimage")) == 0) { SetNormalImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("hotimage")) == 0) { SetHotImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("pushedimage")) == 0) { SetPushedImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("focusedimage")) == 0) { SetFocusedImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("sepwidth")) == 0) { SetSepWidth(_ttoi(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("showhtml")) == 0) { SetShowHtml(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("normalimage")) == 0) { SetNormalImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("hotimage")) == 0) { SetHotImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("pushedimage")) == 0) { SetPushedImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("focusedimage")) == 0) { SetFocusedImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("sepwidth")) == 0) { SetSepWidth(ParseInt(pstrValue)); }
     else if (_tcscmp(pstrName, _T("sepcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetSepColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetSepColor(clr);
     }
-    else if (_tcscmp(pstrName, _T("sepimage")) == 0) { SetSepImage(pstrValue); }
+    else if (_tcscmp(pstrName, _T("sepimage")) == 0) { SetSepImage(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
     else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
     else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("不支持属性:dropenable")); }
@@ -2654,16 +2608,11 @@ void CListElementUI::DoEvent(TEventUI &event)
 
 void CListElementUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("selected")) == 0) { Select(); }
+    if (_tcscmp(pstrName, _T("selected")) == 0) { Select(ParseBool(pstrValue)); }
     else if (_tcscmp(pstrName, _T("bkcolor")) == 0)
     {
         // 2018-08-28 zhuyddong 优化属性取值
-        while (*pstrValue > _T('\0') && *pstrValue <= _T(' ')) { pstrValue = ::CharNext(pstrValue); }
-
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        m_dwBackColor = _tcstoul(pstrValue, &pstr, 16);
+        m_dwBackColor = ParseColor(pstrValue);
         m_bCustomBk = true;
     }
     // 2018-08-28 zhuyadong 解决 List 不支持拖拽源、目的的问题，去掉属性拦截
@@ -3866,8 +3815,8 @@ void CListContainerElementUI::DoEvent(TEventUI &event)
 
 void CListContainerElementUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("selected")) == 0) { Select(); }
-    else if (_tcscmp(pstrName, _T("expandable")) == 0) { SetExpandable(_tcscmp(pstrValue, _T("true")) == 0); }
+    if (_tcscmp(pstrName, _T("selected")) == 0) { Select(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("expandable")) == 0) { SetExpandable(ParseBool(pstrValue)); }
     // 2018-08-28 zhuyadong 解决 List 不支持 拖拽源、目的的问题，去掉属性拦截
     else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else { CContainerUI::SetAttribute(pstrName, pstrValue); }

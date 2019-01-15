@@ -86,11 +86,11 @@ void CProgressUI::SetForeImage(LPCTSTR pStrImage)
 
 void CProgressUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("foreimage")) == 0) { SetForeImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("hor")) == 0) { SetHorizontal(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("min")) == 0) { SetMinValue(_ttoi(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("max")) == 0) { SetMaxValue(_ttoi(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("value")) == 0) { SetValue(_ttoi(pstrValue)); }
+    if (_tcscmp(pstrName, _T("foreimage")) == 0) { SetForeImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("hor")) == 0) { SetHorizontal(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("min")) == 0) { SetMinValue(ParseInt(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("max")) == 0) { SetMaxValue(ParseInt(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("value")) == 0) { SetValue(ParseInt(pstrValue)); }
     else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
     else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
     else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("不支持属性:dropenable")); }

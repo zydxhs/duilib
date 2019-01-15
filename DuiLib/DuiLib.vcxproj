@@ -586,6 +586,7 @@
     <ClCompile Include="src\GifInfo.cpp" />
     <ClCompile Include="src\OleDataHelper.cpp" />
     <ClCompile Include="src\DropTarget.cpp" />
+    <ClCompile Include="src\ParseProperty.cpp" />
     <ClCompile Include="src\Subject.cpp" />
     <ClCompile Include="src\UIActiveX.cpp" />
     <ClCompile Include="src\UIBase.cpp" />
@@ -655,6 +656,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\duilib\ParseProperty.h" />
     <ClInclude Include="include\duilib\UIEffect.h" />
     <ClInclude Include="include\duilib\OleDataHelper.h" />
     <ClInclude Include="include\duilib\Subject.h" />

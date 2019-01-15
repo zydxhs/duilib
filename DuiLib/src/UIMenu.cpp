@@ -944,46 +944,44 @@ void CMenuElementUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if (_tcscmp(pstrName, _T("iconwidth")) == 0)
     {
-        SetIconWidth(_ttoi(pstrValue));
+        SetIconWidth(ParseWord(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("iconnormal")) == 0)
     {
-        SetIconNormal(pstrValue);
+        SetIconNormal(ParseString(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("iconchecked")) == 0)
     {
-        SetIconChecked(pstrValue);
+        SetIconChecked(ParseString(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("checkitem")) == 0)
     {
-        SetCheckItem(_tcscmp(pstrValue, _T("true")) == 0 ? true : false);
+        SetCheckItem(ParseBool(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("checked")) == 0)
     {
-        SetCheck(_tcscmp(pstrValue, _T("true")) == 0 ? true : false);
+        SetCheck(ParseBool(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("expandwidth")) == 0)
     {
-        SetExpandWidth(_ttoi(pstrValue));
+        SetExpandWidth(ParseWord(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("expandicon")) == 0)
     {
-        SetExpandIcon(pstrValue);
+        SetExpandIcon(ParseString(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("line")) == 0)
     {
-        if (_tcscmp(pstrValue, _T("true")) == 0) { SetLine(); }
+        if (ParseBool(pstrValue)) { SetLine(); }
     }
     else if (_tcscmp(pstrName, _T("linecolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        SetLineColor(_tcstoul(pstrValue, &pstr, 16));
+        DWORD clr = ParseColor(pstrValue);
+        SetLineColor(clr);
     }
     else if (_tcscmp(pstrName, _T("height")) == 0)
     {
-        int nHeight = _ttoi(pstrValue);
+        int nHeight = ParseInt(pstrValue);
         nHeight = (nHeight < EMENU_ITEM_MINHEIGHT) ? EMENU_ITEM_MINHEIGHT : nHeight;
         SetFixedHeight(nHeight);
     }

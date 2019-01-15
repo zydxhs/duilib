@@ -139,7 +139,7 @@ bool CTabLayoutUI::SelectItem(CControlUI *pControl, bool bTriggerEvent)
 
 void CTabLayoutUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("selectedid")) == 0) { SelectItem(_ttoi(pstrValue)); }
+    if (_tcscmp(pstrName, _T("selectedid")) == 0) { SelectItem(ParseInt(pstrValue), false); }
     else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else if (_tcscmp(pstrName, _T("autoheight")) == 0) { DUITRACE(_T("不支持属性:autoheight")); }
     else { CContainerUI::SetAttribute(pstrName, pstrValue); }

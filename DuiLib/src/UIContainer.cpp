@@ -876,18 +876,13 @@ void CContainerUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if (_tcscmp(pstrName, _T("padding")) == 0 || _tcscmp(pstrName, _T("inset")) == 0)
     {
-        RECT rcInset = { 0 };
-        LPTSTR pstr = NULL;
-        rcInset.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
-        rcInset.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-        rcInset.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
-        rcInset.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
-        SetInset(rcInset);
+        RECT rt = ParseRect(pstrValue);
+        SetInset(rt);
     }
-    else if (_tcscmp(pstrName, _T("mousechild")) == 0) { SetMouseChildEnabled(_tcscmp(pstrValue, _T("true")) == 0); }
+    else if (_tcscmp(pstrName, _T("mousechild")) == 0) { SetMouseChildEnabled(ParseBool(pstrValue)); }
     else if (_tcscmp(pstrName, _T("vscrollbar")) == 0)
     {
-        EnableScrollBar(_tcscmp(pstrValue, _T("true")) == 0, GetHorizontalScrollBar() != NULL);
+        EnableScrollBar(ParseBool(pstrValue), GetHorizontalScrollBar() != NULL);
     }
     else if (_tcscmp(pstrName, _T("vscrollbarstyle")) == 0)
     {
@@ -897,7 +892,7 @@ void CContainerUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     }
     else if (_tcscmp(pstrName, _T("hscrollbar")) == 0)
     {
-        EnableScrollBar(GetVerticalScrollBar() != NULL, _tcscmp(pstrValue, _T("true")) == 0);
+        EnableScrollBar(GetVerticalScrollBar() != NULL, ParseBool(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("hscrollbarstyle")) == 0)
     {
@@ -905,18 +900,22 @@ void CContainerUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 
         if (GetHorizontalScrollBar()) { GetHorizontalScrollBar()->SetAttributeList(pstrValue); }
     }
-    else if (_tcscmp(pstrName, _T("childmargin")) == 0) { SetChildMargin(_ttoi(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("childmargin")) == 0) { SetChildMargin(ParseInt(pstrValue)); }
     else if (_tcscmp(pstrName, _T("childalign")) == 0)
     {
-        if (_tcscmp(pstrValue, _T("left")) == 0) { m_iChildAlign = DT_LEFT; }
-        else if (_tcscmp(pstrValue, _T("center")) == 0) { m_iChildAlign = DT_CENTER; }
-        else if (_tcscmp(pstrValue, _T("right")) == 0) { m_iChildAlign = DT_RIGHT; }
+        CDuiString strVal = ParseString(pstrValue);
+
+        if (strVal == _T("left")) { m_iChildAlign = DT_LEFT; }
+        else if (strVal == _T("center")) { m_iChildAlign = DT_CENTER; }
+        else if (strVal == _T("right")) { m_iChildAlign = DT_RIGHT; }
     }
     else if (_tcscmp(pstrName, _T("childvalign")) == 0)
     {
-        if (_tcscmp(pstrValue, _T("top")) == 0) { m_iChildVAlign = DT_TOP; }
-        else if (_tcscmp(pstrValue, _T("center")) == 0) { m_iChildVAlign = DT_VCENTER; }
-        else if (_tcscmp(pstrValue, _T("bottom")) == 0) { m_iChildVAlign = DT_BOTTOM; }
+        CDuiString strVal = ParseString(pstrValue);
+
+        if (strVal == _T("top")) { m_iChildVAlign = DT_TOP; }
+        else if (strVal == _T("center")) { m_iChildVAlign = DT_VCENTER; }
+        else if (strVal == _T("bottom")) { m_iChildVAlign = DT_BOTTOM; }
     }
     // 2018-08-28 zhuyadong 解决List不支持拖拽源、目的的问题，去掉属性拦截
     else { CControlUI::SetAttribute(pstrName, pstrValue); }

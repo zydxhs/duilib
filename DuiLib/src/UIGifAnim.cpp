@@ -423,14 +423,14 @@ bool CGifAnimUI::SetVisible(bool bVisible /*= true*/)
 
 void CGifAnimUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("bkimage")) == 0) { SetBkImage(pstrValue); }
+    if (_tcscmp(pstrName, _T("bkimage")) == 0) { SetBkImage(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("autoplay")) == 0)
     {
-        SetAutoPlay(_tcscmp(pstrValue, _T("true")) == 0);
+        SetAutoPlay(ParseBool(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("autosize")) == 0)
     {
-        SetAutoSize(_tcscmp(pstrValue, _T("true")) == 0);
+        SetAutoSize(ParseBool(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else { CControlUI::SetAttribute(pstrName, pstrValue); }

@@ -1055,7 +1055,6 @@ void CControlUI::NeedUpdate()
 
     if (m_pManager != NULL) { m_pManager->NeedUpdate(); }
 
-    // 2019-01-04 zhuyadong 解决布局控件和子控件都启用自动计算宽/高，更新UI语言时布局控件没有计算宽/高
     if (m_bAutoWidth || m_bAutoHeight)
     {
         NeedParentUpdate();
@@ -1395,19 +1394,6 @@ void CControlUI::OnDoDragDrop(TEventUI &evt)
     ReleaseCapture();
 }
 
-// 2018-08-18 zhuyadong 添加特效
-void CControlUI::ParseEffectInfo(LPCTSTR pstrValue, BYTE &byEffect, WORD &wElapse, bool &bDirection,
-                                 bool &bLoop)
-{
-    LPTSTR pstr = NULL;
-    byEffect = (BYTE)_tcstol(pstrValue, &pstr, 10); ASSERT(pstr);
-    wElapse = (WORD)_tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
-    pstrValue = pstr + 1;
-    LPCTSTR pstr2 = _tcschr(pstrValue, _T(',')); ASSERT(pstr2);
-    bDirection = (_tcsncmp(pstrValue, _T("true"), 4) == 0) ? true : false;
-    bLoop = (_tcsncmp(pstr2 + 1, _T("true"), 4) == 0) ? true : false;
-}
-
 CDuiString CControlUI::GetAttribute(LPCTSTR pstrName)
 {
     return _T("");
@@ -1417,223 +1403,132 @@ void CControlUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if (_tcscmp(pstrName, _T("pos")) == 0)
     {
-        RECT rcPos = { 0 };
-        LPTSTR pstr = NULL;
-        rcPos.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
-        rcPos.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-        rcPos.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
-        rcPos.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
-        SIZE szXY = {rcPos.left, rcPos.top};
-        SetFixedXY(szXY);
-        //ASSERT(rcPos.right - rcPos.left >= 0);
-        //ASSERT(rcPos.bottom - rcPos.top >= 0);
-        SetFixedWidth(rcPos.right - rcPos.left);
-        SetFixedHeight(rcPos.bottom - rcPos.top);
+        RECT rt = ParseRect(pstrValue);
+        SetFixedXY(SIZE { rt.left, rt.top });
+        SetFixedWidth(rt.right - rt.left);
+        SetFixedHeight(rt.bottom - rt.top);
     }
     else if (_tcscmp(pstrName, _T("bkcolor")) == 0 || _tcscmp(pstrName, _T("bkcolor1")) == 0)
     {
-        while (*pstrValue > _T('\0') && *pstrValue <= _T(' ')) { pstrValue = ::CharNext(pstrValue); }
-
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetBkColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetBkColor(clr);
     }
     else if (_tcscmp(pstrName, _T("bkcolor2")) == 0)
     {
-        while (*pstrValue > _T('\0') && *pstrValue <= _T(' ')) { pstrValue = ::CharNext(pstrValue); }
-
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetBkColor2(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetBkColor2(clr);
     }
     else if (_tcscmp(pstrName, _T("bkcolor3")) == 0)
     {
-        while (*pstrValue > _T('\0') && *pstrValue <= _T(' ')) { pstrValue = ::CharNext(pstrValue); }
-
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetBkColor3(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetBkColor3(clr);
     }
-    else if (_tcscmp(pstrName, _T("direction")) == 0) { m_bDirection = _tcscmp(pstrValue, _T("true")) == 0; }
+    else if (_tcscmp(pstrName, _T("direction")) == 0) { m_bDirection = ParseBool(pstrValue); }
     else if (_tcscmp(pstrName, _T("bordercolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetBorderColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetBorderColor(clr);
     }
     else if (_tcscmp(pstrName, _T("hotbordercolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetHotBorderColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetHotBorderColor(clr);
     }
     else if (_tcscmp(pstrName, _T("focusedbordercolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetFocusedBorderColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetFocusedBorderColor(clr);
     }
     else if (_tcscmp(pstrName, _T("selectedbordercolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetSelectedBorderColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetSelectedBorderColor(clr);
     }
-    else if (_tcscmp(pstrName, _T("colorhsl")) == 0) { SetColorHSL(_tcscmp(pstrValue, _T("true")) == 0); }
+    else if (_tcscmp(pstrName, _T("colorhsl")) == 0) { SetColorHSL(ParseBool(pstrValue)); }
     else if (_tcscmp(pstrName, _T("bordersize")) == 0)
     {
-        CDuiString nValue = pstrValue;
-
-        if (nValue.Find(',') < 0)
-        {
-            SetBorderSize(_ttoi(pstrValue));
-        }
-        else
-        {
-            RECT rcBorder = { 0 };
-            LPTSTR pstr = NULL;
-            rcBorder.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
-            rcBorder.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-            rcBorder.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
-            rcBorder.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
-            SetBorderSize(rcBorder);
-        }
+        RECT rt = ParseRect(pstrValue);
+        SetBorderSize(rt);
     }
-    else if (_tcscmp(pstrName, _T("borderstyle")) == 0) { SetBorderStyle(_ttoi(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("borderstyle")) == 0) { SetBorderStyle(ParseInt(pstrValue)); }
     else if (_tcscmp(pstrName, _T("borderround")) == 0)
     {
-        SIZE cxyRound = { 0 };
-        LPTSTR pstr = NULL;
-        cxyRound.cx = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
-        cxyRound.cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-        SetBorderRound(cxyRound);
+        SIZE sz = ParseSize(pstrValue);
+        SetBorderRound(sz);
     }
-    else if (_tcscmp(pstrName, _T("bkimage")) == 0) { SetBkImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("width")) == 0) { SetFixedWidth(_ttoi(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("height")) == 0) { SetFixedHeight(_ttoi(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("minwidth")) == 0) { SetMinWidth(_ttoi(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("minheight")) == 0) { SetMinHeight(_ttoi(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("maxwidth")) == 0) { SetMaxWidth(_ttoi(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("maxheight")) == 0) { SetMaxHeight(_ttoi(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("name")) == 0) { SetName(pstrValue); }
-    else if (_tcscmp(pstrName, _T("text")) == 0) { SetText(pstrValue); }
-    else if (_tcscmp(pstrName, _T("tooltip")) == 0) { SetToolTip(pstrValue); }
-    else if (_tcscmp(pstrName, _T("userdata")) == 0) { SetUserData(pstrValue); }
+    else if (_tcscmp(pstrName, _T("bkimage")) == 0) { SetBkImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("width")) == 0) { SetFixedWidth(ParseInt(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("height")) == 0) { SetFixedHeight(ParseInt(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("minwidth")) == 0) { SetMinWidth(ParseInt(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("minheight")) == 0) { SetMinHeight(ParseInt(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("maxwidth")) == 0) { SetMaxWidth(ParseInt(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("maxheight")) == 0) { SetMaxHeight(ParseInt(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("name")) == 0) { SetName(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("text")) == 0) { SetText(pstrValue); }    // 2019-01-10 zhuyadong 不做任何处理
+    else if (_tcscmp(pstrName, _T("tooltip")) == 0) { SetToolTip(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("userdata")) == 0) { SetUserData(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("tag")) == 0)
     {
-        if (*pstrValue == _T('0'))
-        {
-            pstrValue = ::CharNext(pstrValue);
-
-            if (*pstrValue == _T('x') || *pstrValue == _T('X'))
-            {
-                pstrValue = ::CharNext(pstrValue);
-                SetTag(_tcstoul(pstrValue, NULL, 16));
-            }
-            else
-            {
-                SetTag((UINT_PTR)_ttoi64(pstrValue));
-            }
-        }
-        else { SetTag((UINT_PTR)_ttoi64(pstrValue)); }
+        DWORD_PTR ptr = ParseDWordPtr(pstrValue);
+        SetTag(ptr);
     }
-    else if (_tcscmp(pstrName, _T("enabled")) == 0) { SetEnabled(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("mouse")) == 0) { SetMouseEnabled(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("keyboard")) == 0) { SetKeyboardEnabled(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("visible")) == 0) { SetVisible(_tcscmp(pstrValue, _T("true")) == 0); }
+    else if (_tcscmp(pstrName, _T("enabled")) == 0) { SetEnabled(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("mouse")) == 0) { SetMouseEnabled(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("keyboard")) == 0) { SetKeyboardEnabled(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("visible")) == 0) { SetVisible(ParseBool(pstrValue)); }
     else if (_tcscmp(pstrName, _T("float")) == 0)
     {
-        CDuiString nValue = pstrValue;
-
-        if (nValue.Find(',') < 0)
+        if (_tcschr(pstrValue, _T(',')))
         {
-            SetFloat(_tcscmp(pstrValue, _T("true")) == 0);
+            TPercentInfo rt = ParseRectPercent(pstrValue);
+            SetFloat(true);
+            SetFloatPercent(rt);
         }
         else
         {
-            TPercentInfo piFloatPercent = { 0 };
-            LPTSTR pstr = NULL;
-            piFloatPercent.left = _tcstod(pstrValue, &pstr);  ASSERT(pstr);
-            piFloatPercent.top = _tcstod(pstr + 1, &pstr);    ASSERT(pstr);
-            piFloatPercent.right = _tcstod(pstr + 1, &pstr);  ASSERT(pstr);
-            piFloatPercent.bottom = _tcstod(pstr + 1, &pstr); ASSERT(pstr);
-            SetFloatPercent(piFloatPercent);
-            SetFloat(true);
+            bool bFloat = ParseBool(pstrValue);
+            SetFloat(bFloat);
         }
     }
-    else if (_tcscmp(pstrName, _T("shortcut")) == 0) { SetShortcut(pstrValue); }
-    else if (_tcscmp(pstrName, _T("menu")) == 0) { SetContextMenuUsed(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("virtualwnd")) == 0) { SetVirtualWnd(pstrValue); }
-    else if (_tcscmp(pstrName, _T("weight")) == 0) { SetWeight(_ttoi(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { m_bDropEnable = _tcscmp(pstrValue, _T("true")) == 0; }
-    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { m_bDragEnable = _tcscmp(pstrValue, _T("true")) == 0; }
-    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { m_diDrag = pstrValue; }
-    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { SetAutoWidth(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("autoheight")) == 0) { SetAutoHeight(_tcscmp(pstrValue, _T("true")) == 0); }
+    else if (_tcscmp(pstrName, _T("shortcut")) == 0) { SetShortcut(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("menu")) == 0) { SetContextMenuUsed(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("virtualwnd")) == 0) { SetVirtualWnd(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("weight")) == 0) { SetWeight(ParseInt(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("dropenable")) == 0) { m_bDropEnable = ParseBool(pstrValue); }
+    else if (_tcscmp(pstrName, _T("dragenable")) == 0) { m_bDragEnable = ParseBool(pstrValue); }
+    else if (_tcscmp(pstrName, _T("dragimage")) == 0) { m_diDrag.sDrawString = ParseString(pstrValue); }
+    else if (_tcscmp(pstrName, _T("autowidth")) == 0) { SetAutoWidth(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("autoheight")) == 0) { SetAutoHeight(ParseBool(pstrValue)); }
     // 2018-08-18 zhuyadong 添加特效
     else if (_tcscmp(pstrName, _T("triggerenter")) == 0)
     {
-        BYTE byEffect = EFFECT_FLIPLEFT;
-        WORD wFrequency = 150;
-        bool bDirection = true, bLoop = false;
-        ParseEffectInfo(pstrValue, byEffect, wFrequency, bDirection, bLoop);
-        AddEffect(TRIGGER_ENTER, byEffect, wFrequency, bDirection, bLoop);
+        TEffectProperty tEP = ParseEffect(pstrValue);
+        AddEffect(TRIGGER_ENTER, tEP.m_byId, tEP.m_byFrequency, tEP.m_byDirection, tEP.m_byLoop);
     }
     else if (_tcscmp(pstrName, _T("triggerleave")) == 0)
     {
-        BYTE byEffect = EFFECT_FLIPLEFT;
-        WORD wFrequency = 150;
-        bool bDirection = true, bLoop = false;
-        ParseEffectInfo(pstrValue, byEffect, wFrequency, bDirection, bLoop);
-        AddEffect(TRIGGER_LEAVE, byEffect, wFrequency, bDirection, bLoop);
+        TEffectProperty tEP = ParseEffect(pstrValue);
+        AddEffect(TRIGGER_LEAVE, tEP.m_byId, tEP.m_byFrequency, tEP.m_byDirection, tEP.m_byLoop);
     }
     else if (_tcscmp(pstrName, _T("triggerclick")) == 0)
     {
-        BYTE byEffect = EFFECT_FLIPLEFT;
-        WORD wFrequency = 150;
-        bool bDirection = true, bLoop = false;
-        ParseEffectInfo(pstrValue, byEffect, wFrequency, bDirection, bLoop);
-        AddEffect(TRIGGER_CLICK, byEffect, wFrequency, bDirection, bLoop);
+        TEffectProperty tEP = ParseEffect(pstrValue);
+        AddEffect(TRIGGER_CLICK, tEP.m_byId, tEP.m_byFrequency, tEP.m_byDirection, tEP.m_byLoop);
     }
     else if (_tcscmp(pstrName, _T("triggershow")) == 0)
     {
-        BYTE byEffect = EFFECT_FLIPLEFT;
-        WORD wFrequency = 150;
-        bool bDirection = true, bLoop = false;
-        ParseEffectInfo(pstrValue, byEffect, wFrequency, bDirection, bLoop);
-        AddEffect(TRIGGER_SHOW, byEffect, wFrequency, bDirection, bLoop);
+        TEffectProperty tEP = ParseEffect(pstrValue);
+        AddEffect(TRIGGER_SHOW, tEP.m_byId, tEP.m_byFrequency, tEP.m_byDirection, tEP.m_byLoop);
     }
     else if (_tcscmp(pstrName, _T("triggerhide")) == 0)
     {
-        BYTE byEffect = EFFECT_FLIPLEFT;
-        WORD wFrequency = 150;
-        bool bDirection = true, bLoop = false;
-        ParseEffectInfo(pstrValue, byEffect, wFrequency, bDirection, bLoop);
-        AddEffect(TRIGGER_HIDE, byEffect, wFrequency, bDirection, bLoop);
+        TEffectProperty tEP = ParseEffect(pstrValue);
+        AddEffect(TRIGGER_HIDE, tEP.m_byId, tEP.m_byFrequency, tEP.m_byDirection, tEP.m_byLoop);
     }
     else if (_tcscmp(pstrName, _T("margin")) == 0)
     {
-        RECT rcMargin = { 0 };
-        LPTSTR pstr = NULL;
-        rcMargin.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
-        rcMargin.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-        rcMargin.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
-        rcMargin.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
-        SetMargin(rcMargin);
+        RECT rt = ParseRect(pstrValue);
+        SetMargin(rt);
     }
     else { AddCustomAttribute(pstrName, pstrValue); }
 }

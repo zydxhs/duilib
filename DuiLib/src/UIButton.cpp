@@ -573,74 +573,53 @@ SIZE CButtonUI::EstimateSize(SIZE szAvailable)
 
 void CButtonUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("normalimage")) == 0) { SetNormalImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("hotimage")) == 0) { SetHotImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("pushedimage")) == 0) { SetPushedImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("focusedimage")) == 0) { SetFocusedImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("disabledimage")) == 0) { SetDisabledImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("foreimage")) == 0) { SetForeImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("hotforeimage")) == 0) { SetHotForeImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("fivestatusimage")) == 0) { SetFiveStatusImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("fadedelta")) == 0) { SetFadeAlphaDelta((BYTE)_ttoi(pstrValue)); }
+    if (_tcscmp(pstrName, _T("normalimage")) == 0) { SetNormalImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("hotimage")) == 0) { SetHotImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("pushedimage")) == 0) { SetPushedImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("focusedimage")) == 0) { SetFocusedImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("disabledimage")) == 0) { SetDisabledImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("foreimage")) == 0) { SetForeImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("hotforeimage")) == 0) { SetHotForeImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("fivestatusimage")) == 0) { SetFiveStatusImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("fadedelta")) == 0) { SetFadeAlphaDelta(ParseByte(pstrValue)); }
     else if (_tcscmp(pstrName, _T("hotbkcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetHotBkColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetHotBkColor(clr);
     }
     else if (_tcscmp(pstrName, _T("focusedbkcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetFocusedBkColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetFocusedBkColor(clr);
     }
     else if (_tcscmp(pstrName, _T("pushedbkcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetPushedBkColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetPushedBkColor(clr);
     }
     else if (_tcscmp(pstrName, _T("disabledbkcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetDisabledBkColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetDisabledBkColor(clr);
     }
     else if (_tcscmp(pstrName, _T("hottextcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetHotTextColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetHotTextColor(clr);
     }
     else if (_tcscmp(pstrName, _T("focusedtextcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetFocusedTextColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetFocusedTextColor(clr);
     }
     else if (_tcscmp(pstrName, _T("pushedtextcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetPushedTextColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetPushedTextColor(clr);
     }
     else if (_tcscmp(pstrName, _T("disableseconds")) == 0)
     {
-        SetDisabledSeconds((BYTE)_ttoi(pstrValue));
+        SetDisabledSeconds(ParseByte(pstrValue));
     }
     else { CLabelUI::SetAttribute(pstrName, pstrValue); }
 }

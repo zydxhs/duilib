@@ -1118,52 +1118,40 @@ SIZE CEditUI::EstimateSize(SIZE szAvailable)
 
 void CEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("readonly")) == 0) { SetReadOnly(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("numberonly")) == 0) { SetNumberOnly(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("password")) == 0) { SetPasswordMode(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("autoselall")) == 0) { SetAutoSelAll(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("maxchar")) == 0) { SetMaxChar(_ttoi(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("normalimage")) == 0) { SetNormalImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("hotimage")) == 0) { SetHotImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("focusedimage")) == 0) { SetFocusedImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("disabledimage")) == 0) { SetDisabledImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("tiptext")) == 0) { SetTipText(pstrValue); }
+    if (_tcscmp(pstrName, _T("readonly")) == 0) { SetReadOnly(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("numberonly")) == 0) { SetNumberOnly(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("password")) == 0) { SetPasswordMode(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("autoselall")) == 0) { SetAutoSelAll(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("maxchar")) == 0) { SetMaxChar(ParseInt(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("normalimage")) == 0) { SetNormalImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("hotimage")) == 0) { SetHotImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("focusedimage")) == 0) { SetFocusedImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("disabledimage")) == 0) { SetDisabledImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("tiptext")) == 0) { SetTipText(pstrValue); }  // 2019-01-10 zhuyadong 不做任何处理
     else if (_tcscmp(pstrName, _T("tipcolor")) == 0)
     {
-        while (*pstrValue > _T('\0') && *pstrValue <= _T(' ')) { pstrValue = ::CharNext(pstrValue); }
-
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetTipColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetTipColor(clr);
     }
     // 2017-07-21 zhuyadong 添加 minmaxnumber 属性
     else if (_tcscmp(pstrName, _T("minmaxnumber")) == 0)
     {
-        TCHAR *pDot = _tcschr((LPTSTR)pstrValue, _T(','));
-
-        if (NULL != pDot)
-        {
-            *pDot = _T('\0');
-            UINT dwMin = _ttoi(pstrValue);
-            UINT dwMax = _ttoi(pDot + 1);
-            SetMinMaxNumber(dwMin, dwMax);
-        }
+        SIZE sz = ParseSize(pstrValue);
+        SetMinMaxNumber(sz.cx, sz.cy);
     }
     else if (_tcscmp(pstrName, _T("charfilter")) == 0)
     {
-        SetCharFilter((_tcscmp(pstrValue, _T("true")) == 0) ? true : false);
+        SetCharFilter(ParseBool(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("whitelist")) == 0)
     {
-        m_bWiteList = ((_tcscmp(pstrValue, _T("true")) == 0) ? true : false);
+        m_bWiteList = ParseBool(pstrValue);
     }
     else if (_tcscmp(pstrName, _T("regexp")) == 0)
     {
-        SetRegExpFilter((_tcscmp(pstrValue, _T("true")) == 0) ? true : false);
+        SetRegExpFilter(ParseBool(pstrValue));
     }
-    else if (_tcscmp(pstrName, _T("delaytxtchange")) == 0) { m_dwDelayTime = _ttoi(pstrValue); }
+    else if (_tcscmp(pstrName, _T("delaytxtchange")) == 0) { m_dwDelayTime = ParseDWord(pstrValue); }
     else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
     else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
     else if (_tcscmp(pstrName, _T("enabledeffect")) == 0) { DUITRACE(_T("不支持属性:enabledeffect")); }

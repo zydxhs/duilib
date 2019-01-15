@@ -360,81 +360,63 @@ SIZE COptionUI::EstimateSize(SIZE szAvailable)
 
 void COptionUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("group")) == 0) { SetGroup(pstrValue); }
-    else if (_tcscmp(pstrName, _T("selected")) == 0) { Selected(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("foreimage")) == 0) { SetForeImage(pstrValue); }
+    if (_tcscmp(pstrName, _T("group")) == 0) { SetGroup(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("selected")) == 0) { Selected(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("foreimage")) == 0) { SetForeImage(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("selnormalimage")) == 0 || _tcscmp(pstrName, _T("selectedimage")) == 0)
-    { SetSelNormalImage(pstrValue); }
+    { SetSelNormalImage(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("selhotimage")) == 0 || _tcscmp(pstrName, _T("selectedhotimage")) == 0)
-    { SetSelHotImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("selfocusedimage")) == 0) { SetSelFocusedImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("selpushedimage")) == 0) { SetSelPushedImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("seldisabledimage")) == 0) { SetSelDisabledImage(pstrValue); }
+    { SetSelHotImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("selfocusedimage")) == 0) { SetSelFocusedImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("selpushedimage")) == 0) { SetSelPushedImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("seldisabledimage")) == 0) { SetSelDisabledImage(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("unselnormalimage")) == 0 || _tcscmp(pstrName, _T("normalimage")) == 0)
-    { SetUnselNormalImage(pstrValue); }
+    { SetUnselNormalImage(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("unselhotimage")) == 0 || _tcscmp(pstrName, _T("hotimage")) == 0)
-    { SetUnselHotImage(pstrValue); }
+    { SetUnselHotImage(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("unselfocusedimage")) == 0 || _tcscmp(pstrName, _T("focusedimage")) == 0)
-    { SetUnselFocusedImage(pstrValue); }
+    { SetUnselFocusedImage(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("unselpushedimage")) == 0 || _tcscmp(pstrName, _T("pushedimage")) == 0)
-    { SetUnselPushedImage(pstrValue); }
+    { SetUnselPushedImage(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("unseldisabledimage")) == 0 || _tcscmp(pstrName, _T("disabledimage")) == 0)
-    { SetUnselDisabledImage(pstrValue); }
+    { SetUnselDisabledImage(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("selnormalbkcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetSelNormalBkColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetSelNormalBkColor(clr);
     }
     else if (_tcscmp(pstrName, _T("selhotbkcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetSelHotBkColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetSelHotBkColor(clr);
     }
     else if (_tcscmp(pstrName, _T("selfocusedbkcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetSelFocusedBkColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetSelFocusedBkColor(clr);
     }
     else if (_tcscmp(pstrName, _T("selpushedbkcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetSelPushedBkColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetSelPushedBkColor(clr);
     }
     else if (_tcscmp(pstrName, _T("seldisabledbkcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetSelDisabledBkColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetSelDisabledBkColor(clr);
     }
     else if (_tcscmp(pstrName, _T("seltextcolor")) == 0 || _tcscmp(pstrName, _T("pushedtextcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetSelTextColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetSelTextColor(clr);
     }
     else if (_tcscmp(pstrName, _T("bindtablayout")) == 0)
     {
-        m_sBindTabLayout = pstrValue;
+        m_sBindTabLayout = ParseString(pstrValue);
     }
     else if (_tcscmp(pstrName, _T("bindtabindex")) == 0)
     {
-        m_nBindTabIndex = _ttoi(pstrValue);
+        m_nBindTabIndex = ParseInt(pstrValue);
         m_nBindTabIndex = m_nBindTabIndex >= 0 ? m_nBindTabIndex : 0;
     }
     else if (_tcscmp(pstrName, _T("fivestatusimage")) == 0) { DUITRACE(_T("不支持属性:fivestatusimage")); }

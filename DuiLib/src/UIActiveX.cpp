@@ -1229,9 +1229,9 @@ bool CActiveXUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl)
 
 void CActiveXUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("clsid")) == 0) { SetCLSID(pstrValue); }
-    else if (_tcscmp(pstrName, _T("modulename")) == 0) { SetModuleName(pstrValue); }
-    else if (_tcscmp(pstrName, _T("delaycreate")) == 0) { SetDelayCreate(_tcscmp(pstrValue, _T("true")) == 0); }
+    if (_tcscmp(pstrName, _T("clsid")) == 0) { SetCLSID(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("modulename")) == 0) { SetModuleName(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("delaycreate")) == 0) { SetDelayCreate(ParseBool(pstrValue)); }
     else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else { CControlUI::SetAttribute(pstrName, pstrValue); }
 }

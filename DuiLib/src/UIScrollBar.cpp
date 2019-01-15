@@ -1073,61 +1073,46 @@ void CScrollBarUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if (_tcscmp(pstrName, _T("button1color")) == 0)
     {
-        while (*pstrValue > _T('\0') && *pstrValue <= _T(' ')) { pstrValue = ::CharNext(pstrValue); }
-
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetButton1Color(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetButton1Color(clr);
     }
-    else if (_tcscmp(pstrName, _T("button1normalimage")) == 0) { SetButton1NormalImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("button1hotimage")) == 0) { SetButton1HotImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("button1pushedimage")) == 0) { SetButton1PushedImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("button1disabledimage")) == 0) { SetButton1DisabledImage(pstrValue); }
+    else if (_tcscmp(pstrName, _T("button1normalimage")) == 0) { SetButton1NormalImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("button1hotimage")) == 0) { SetButton1HotImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("button1pushedimage")) == 0) { SetButton1PushedImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("button1disabledimage")) == 0) { SetButton1DisabledImage(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("button2color")) == 0)
     {
-        while (*pstrValue > _T('\0') && *pstrValue <= _T(' ')) { pstrValue = ::CharNext(pstrValue); }
-
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetButton2Color(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetButton2Color(clr);
     }
-    else if (_tcscmp(pstrName, _T("button2normalimage")) == 0) { SetButton2NormalImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("button2hotimage")) == 0) { SetButton2HotImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("button2pushedimage")) == 0) { SetButton2PushedImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("button2disabledimage")) == 0) { SetButton2DisabledImage(pstrValue); }
+    else if (_tcscmp(pstrName, _T("button2normalimage")) == 0) { SetButton2NormalImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("button2hotimage")) == 0) { SetButton2HotImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("button2pushedimage")) == 0) { SetButton2PushedImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("button2disabledimage")) == 0) { SetButton2DisabledImage(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("thumbcolor")) == 0)
     {
-        while (*pstrValue > _T('\0') && *pstrValue <= _T(' ')) { pstrValue = ::CharNext(pstrValue); }
-
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetThumbColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetThumbColor(clr);
     }
-    else if (_tcscmp(pstrName, _T("thumbnormalimage")) == 0) { SetThumbNormalImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("thumbhotimage")) == 0) { SetThumbHotImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("thumbpushedimage")) == 0) { SetThumbPushedImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("thumbdisabledimage")) == 0) { SetThumbDisabledImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("railnormalimage")) == 0) { SetRailNormalImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("railhotimage")) == 0) { SetRailHotImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("railpushedimage")) == 0) { SetRailPushedImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("raildisabledimage")) == 0) { SetRailDisabledImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("bknormalimage")) == 0) { SetBkNormalImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("bkhotimage")) == 0) { SetBkHotImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("bkpushedimage")) == 0) { SetBkPushedImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("bkdisabledimage")) == 0) { SetBkDisabledImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("hor")) == 0) { SetHorizontal(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("linesize")) == 0) { SetLineSize(_ttoi(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("range")) == 0) { SetScrollRange(_ttoi(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("value")) == 0) { SetScrollPos(_ttoi(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("scrollunit")) == 0) { SetScrollUnit(_ttoi(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("showbutton1")) == 0) { SetShowButton1(_tcscmp(pstrValue, _T("true")) == 0); }
-    else if (_tcscmp(pstrName, _T("showbutton2")) == 0) { SetShowButton2(_tcscmp(pstrValue, _T("true")) == 0); }
+    else if (_tcscmp(pstrName, _T("thumbnormalimage")) == 0) { SetThumbNormalImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("thumbhotimage")) == 0) { SetThumbHotImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("thumbpushedimage")) == 0) { SetThumbPushedImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("thumbdisabledimage")) == 0) { SetThumbDisabledImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("railnormalimage")) == 0) { SetRailNormalImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("railhotimage")) == 0) { SetRailHotImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("railpushedimage")) == 0) { SetRailPushedImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("raildisabledimage")) == 0) { SetRailDisabledImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("bknormalimage")) == 0) { SetBkNormalImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("bkhotimage")) == 0) { SetBkHotImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("bkpushedimage")) == 0) { SetBkPushedImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("bkdisabledimage")) == 0) { SetBkDisabledImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("hor")) == 0) { SetHorizontal(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("linesize")) == 0) { SetLineSize(ParseInt(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("range")) == 0) { SetScrollRange(ParseInt(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("value")) == 0) { SetScrollPos(ParseInt(pstrValue), false); }
+    else if (_tcscmp(pstrName, _T("scrollunit")) == 0) { SetScrollUnit(ParseInt(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("showbutton1")) == 0) { SetShowButton1(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("showbutton2")) == 0) { SetShowButton2(ParseBool(pstrValue)); }
     else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
     else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
     else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("不支持属性:dropenable")); }

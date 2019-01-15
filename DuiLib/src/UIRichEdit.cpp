@@ -2479,105 +2479,90 @@ void CRichEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if (_tcscmp(pstrName, _T("vscrollbar")) == 0)
     {
-        if (_tcscmp(pstrValue, _T("true")) == 0) { m_lTwhStyle |= ES_DISABLENOSCROLL | WS_VSCROLL; }
+        if (ParseBool(pstrValue)) { m_lTwhStyle |= ES_DISABLENOSCROLL | WS_VSCROLL; }
     }
 
     if (_tcscmp(pstrName, _T("autovscroll")) == 0)
     {
-        if (_tcscmp(pstrValue, _T("true")) == 0) { m_lTwhStyle |= ES_AUTOVSCROLL; }
+        if (ParseBool(pstrValue)) { m_lTwhStyle |= ES_AUTOVSCROLL; }
     }
     else if (_tcscmp(pstrName, _T("hscrollbar")) == 0)
     {
-        if (_tcscmp(pstrValue, _T("true")) == 0) { m_lTwhStyle |= ES_DISABLENOSCROLL | WS_HSCROLL; }
+        if (ParseBool(pstrValue)) { m_lTwhStyle |= ES_DISABLENOSCROLL | WS_HSCROLL; }
     }
 
     if (_tcscmp(pstrName, _T("autohscroll")) == 0)
     {
-        if (_tcscmp(pstrValue, _T("true")) == 0) { m_lTwhStyle |= ES_AUTOHSCROLL; }
+        if (ParseBool(pstrValue)) { m_lTwhStyle |= ES_AUTOHSCROLL; }
     }
     else if (_tcscmp(pstrName, _T("wanttab")) == 0)
     {
-        SetWantTab(_tcscmp(pstrValue, _T("true")) == 0);
+        SetWantTab(ParseBool(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("wantreturn")) == 0)
     {
-        SetWantReturn(_tcscmp(pstrValue, _T("true")) == 0);
+        SetWantReturn(ParseBool(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("wantctrlreturn")) == 0)
     {
-        SetWantCtrlReturn(_tcscmp(pstrValue, _T("true")) == 0);
+        SetWantCtrlReturn(ParseBool(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("transparent")) == 0)
     {
-        SetTransparent(_tcscmp(pstrValue, _T("true")) == 0);
+        SetTransparent(ParseBool(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("rich")) == 0)
     {
-        SetRich(_tcscmp(pstrValue, _T("true")) == 0);
+        SetRich(ParseBool(pstrValue));
     }
     else if (_tcscmp(pstrName, _T("multiline")) == 0)
     {
-        if (_tcscmp(pstrValue, _T("false")) == 0) { m_lTwhStyle &= ~ES_MULTILINE; }
+        if (!ParseBool(pstrValue)) { m_lTwhStyle &= ~ES_MULTILINE; }
     }
     else if (_tcscmp(pstrName, _T("readonly")) == 0)
     {
-        if (_tcscmp(pstrValue, _T("true")) == 0) { m_lTwhStyle |= ES_READONLY; m_bReadOnly = true; }
+        if (ParseBool(pstrValue)) { m_lTwhStyle |= ES_READONLY; m_bReadOnly = true; }
     }
     else if (_tcscmp(pstrName, _T("password")) == 0)
     {
-        if (_tcscmp(pstrValue, _T("true")) == 0) { m_lTwhStyle |= ES_PASSWORD; }
+        if (ParseBool(pstrValue)) { m_lTwhStyle |= ES_PASSWORD; }
     }
     else if (_tcscmp(pstrName, _T("align")) == 0)
     {
-        if (_tcsstr(pstrValue, _T("left")) != NULL)
+        CDuiString str = ParseString(pstrValue);
+
+        if (str == _T("left"))
         {
             m_lTwhStyle &= ~(ES_CENTER | ES_RIGHT);
             m_lTwhStyle |= ES_LEFT;
         }
-
-        if (_tcsstr(pstrValue, _T("center")) != NULL)
+        else if (str == _T("center"))
         {
             m_lTwhStyle &= ~(ES_LEFT | ES_RIGHT);
             m_lTwhStyle |= ES_CENTER;
         }
-
-        if (_tcsstr(pstrValue, _T("right")) != NULL)
+        else if (str == _T("right"))
         {
             m_lTwhStyle &= ~(ES_LEFT | ES_CENTER);
             m_lTwhStyle |= ES_RIGHT;
         }
     }
-    else if (_tcscmp(pstrName, _T("font")) == 0) { SetFont(_ttoi(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("font")) == 0) { SetFont(ParseInt(pstrValue)); }
     else if (_tcscmp(pstrName, _T("textcolor")) == 0)
     {
-        while (*pstrValue > _T('\0') && *pstrValue <= _T(' ')) { pstrValue = ::CharNext(pstrValue); }
-
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetTextColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetTextColor(clr);
     }
     else if (_tcscmp(pstrName, _T("textpadding")) == 0)
     {
-        RECT rcTextPadding = { 0 };
-        LPTSTR pstr = NULL;
-        rcTextPadding.left = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
-        rcTextPadding.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-        rcTextPadding.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
-        rcTextPadding.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
-        SetTextPadding(rcTextPadding);
+        RECT rt = ParseRect(pstrValue);
+        SetTextPadding(rt);
     }
-    else if (_tcscmp(pstrName, _T("tiptext")) == 0) { SetTipText(pstrValue); }
+    else if (_tcscmp(pstrName, _T("tiptext")) == 0) { SetTipText(pstrValue); }  // 2019-01-10 zhuyadong 不做任何处理
     else if (_tcscmp(pstrName, _T("tipcolor")) == 0)
     {
-        while (*pstrValue > _T('\0') && *pstrValue <= _T(' ')) { pstrValue = ::CharNext(pstrValue); }
-
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetTipColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetTipColor(clr);
     }
     else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else { CContainerUI::SetAttribute(pstrName, pstrValue); }

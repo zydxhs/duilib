@@ -412,65 +412,55 @@ void CRenderEngine::ParseDrawInfo(TDrawInfo &drawInfo, CDuiString &sResType, DWO
             }
             else if (sItem == _T("dest"))
             {
-                drawInfo.rcDestOffset.left = _tcstol(sValue.GetData(), &pstr, 10);  ASSERT(pstr);
-                drawInfo.rcDestOffset.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-                drawInfo.rcDestOffset.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
-                drawInfo.rcDestOffset.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
+                drawInfo.rcDestOffset = ParseRect(sValue);
             }
             else if (sItem == _T("source"))
             {
-                drawInfo.rcBmpPart.left = _tcstol(sValue.GetData(), &pstr, 10);  ASSERT(pstr);
-                drawInfo.rcBmpPart.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-                drawInfo.rcBmpPart.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
-                drawInfo.rcBmpPart.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
+                drawInfo.rcBmpPart = ParseRect(sValue);
             }
             else if (sItem == _T("corner") || sItem == _T("scale9"))
             {
-                drawInfo.rcScale9.left = _tcstol(sValue.GetData(), &pstr, 10);  ASSERT(pstr);
-                drawInfo.rcScale9.top = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-                drawInfo.rcScale9.right = _tcstol(pstr + 1, &pstr, 10);  ASSERT(pstr);
-                drawInfo.rcScale9.bottom = _tcstol(pstr + 1, &pstr, 10); ASSERT(pstr);
+                drawInfo.rcScale9 = ParseRect(sValue);
             }
             else if (sItem == _T("mask"))
             {
-                if (sValue[0] == _T('#')) { dwMask = _tcstoul(sValue.GetData() + 1, &pstr, 16); }
-                else { dwMask = _tcstoul(sValue.GetData(), &pstr, 16); }
+                dwMask = ParseColor(sValue);
             }
             else if (sItem == _T("fade"))
             {
-                drawInfo.byFade = (BYTE)_tcstoul(sValue.GetData(), &pstr, 10);
+                drawInfo.byFade = ParseByte(sValue);
             }
             else if (sItem == _T("hole"))
             {
-                drawInfo.bHole = (_tcscmp(sValue.GetData(), _T("true")) == 0);
+                drawInfo.bHole = ParseBool(sValue);
             }
             else if (sItem == _T("xtiled"))
             {
-                drawInfo.bTiledX = (_tcscmp(sValue.GetData(), _T("true")) == 0);
+                drawInfo.bTiledX = ParseBool(sValue);
             }
             else if (sItem == _T("ytiled"))
             {
-                drawInfo.bTiledY = (_tcscmp(sValue.GetData(), _T("true")) == 0);
+                drawInfo.bTiledY = ParseBool(sValue);
             }
             else if (sItem == _T("hsl"))
             {
-                bHSL = (_tcscmp(sValue.GetData(), _T("true")) == 0);
+                bHSL = ParseBool(sValue);
             }
             else if (sItem == _T("align"))
             {
-                if (_tcscmp(sValue.GetData(), _T("left")) == 0) { drawInfo.byAlign |= EPIC_ALIGN_LEFT; }
+                if (ParseString(sValue) == _T("left")) { drawInfo.byAlign |= EPIC_ALIGN_LEFT; }
 
-                if (_tcscmp(sValue.GetData(), _T("center")) == 0) { drawInfo.byAlign |= EPIC_ALIGN_CENTER; }
+                if (ParseString(sValue) == _T("center")) { drawInfo.byAlign |= EPIC_ALIGN_CENTER; }
 
-                if (_tcscmp(sValue.GetData(), _T("right")) == 0) { drawInfo.byAlign |= EPIC_ALIGN_RIGHT; }
+                if (ParseString(sValue) == _T("right")) { drawInfo.byAlign |= EPIC_ALIGN_RIGHT; }
             }
             else if (sItem == _T("valign"))
             {
-                if (_tcscmp(sValue.GetData(), _T("top")) == 0) { drawInfo.byAlign |= EPIC_ALIGN_TOP; }
+                if (ParseString(sValue) == _T("top")) { drawInfo.byAlign |= EPIC_ALIGN_TOP; }
 
-                if (_tcscmp(sValue.GetData(), _T("center")) == 0) { drawInfo.byAlign |= EPIC_ALIGN_VCENTER; }
+                if (ParseString(sValue) == _T("center")) { drawInfo.byAlign |= EPIC_ALIGN_VCENTER; }
 
-                if (_tcscmp(sValue.GetData(), _T("bottom")) == 0) { drawInfo.byAlign |= EPIC_ALIGN_BOTTOM; }
+                if (ParseString(sValue) == _T("bottom")) { drawInfo.byAlign |= EPIC_ALIGN_BOTTOM; }
             }
         }
 

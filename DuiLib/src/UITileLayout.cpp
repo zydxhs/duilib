@@ -101,29 +101,26 @@ void CTileLayoutUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if (_tcscmp(pstrName, _T("itemsize")) == 0)
     {
-        SIZE szItem = { 0 };
-        LPTSTR pstr = NULL;
-        m_szItem.cx = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
-        m_szItem.cy = _tcstol(pstr + 1, &pstr, 10);   ASSERT(pstr);
+        m_szItem = ParseSize(pstrValue);
     }
     else if (_tcscmp(pstrName, _T("columns")) == 0)
     {
-        m_nColumnsFixed = _ttoi(pstrValue);
+        m_nColumnsFixed = ParseInt(pstrValue);
         m_nColumnsFixed = m_nColumnsFixed > 0 ? m_nColumnsFixed : 1;
     }
     else if (_tcscmp(pstrName, _T("childvmargin")) == 0)
     {
-        m_iChildVMargin = _ttoi(pstrValue);
+        m_iChildVMargin = ParseInt(pstrValue);
         m_iChildVMargin = m_iChildVMargin >= 0 ? m_iChildVMargin : 0;
     }
     else if (_tcscmp(pstrName, _T("rows")) == 0)
     {
-        m_nRowsFixed = _ttoi(pstrValue);
+        m_nRowsFixed = ParseInt(pstrValue);
         m_nRowsFixed = m_nRowsFixed > 0 ? m_nRowsFixed : 1;
     }
     else if (_tcscmp(pstrName, _T("childrounded")) == 0)
     {
-        m_bChildRounded = (_tcscmp(pstrValue, _T("true")) == 0) ? true : false;
+        m_bChildRounded = ParseBool(pstrValue);
     }
     else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else if (_tcscmp(pstrName, _T("autoheight")) == 0) { DUITRACE(_T("不支持属性:autoheight")); }

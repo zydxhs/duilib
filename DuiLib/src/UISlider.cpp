@@ -314,22 +314,19 @@ void CSliderUI::DoEvent(TEventUI &event)
 
 void CSliderUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("thumbimage")) == 0) { SetThumbImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("thumbhotimage")) == 0) { SetThumbHotImage(pstrValue); }
-    else if (_tcscmp(pstrName, _T("thumbpushedimage")) == 0) { SetThumbPushedImage(pstrValue); }
+    if (_tcscmp(pstrName, _T("thumbimage")) == 0) { SetThumbImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("thumbhotimage")) == 0) { SetThumbHotImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("thumbpushedimage")) == 0) { SetThumbPushedImage(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("thumbsize")) == 0)
     {
-        SIZE szXY = {0};
-        LPTSTR pstr = NULL;
-        szXY.cx = _tcstol(pstrValue, &pstr, 10);  ASSERT(pstr);
-        szXY.cy = _tcstol(pstr + 1, &pstr, 10);    ASSERT(pstr);
-        SetThumbSize(szXY);
+        SIZE sz = ParseSize(pstrValue);
+        SetThumbSize(sz);
     }
     else if (_tcscmp(pstrName, _T("step")) == 0)
     {
-        SetChangeStep(_ttoi(pstrValue));
+        SetChangeStep(ParseInt(pstrValue));
     }
-    else if (_tcscmp(pstrName, _T("imm")) == 0) { SetImmMode(_tcscmp(pstrValue, _T("true")) == 0); }
+    else if (_tcscmp(pstrName, _T("imm")) == 0) { SetImmMode(ParseBool(pstrValue)); }
     else { CProgressUI::SetAttribute(pstrName, pstrValue); }
 }
 

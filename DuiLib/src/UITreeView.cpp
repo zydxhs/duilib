@@ -459,7 +459,7 @@ CTreeViewUI *CTreeNodeUI::GetTreeView()
 //************************************
 void CTreeNodeUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("text")) == 0) { pItemButton->SetText(pstrValue); }
+    if (_tcscmp(pstrName, _T("text")) == 0) { pItemButton->SetText(pstrValue); }    // 2019-01-10 zhuyadong 不做任何处理
     else if (_tcscmp(pstrName, _T("horizattr")) == 0) { pHoriz->SetAttributeList(pstrValue); }
     else if (_tcscmp(pstrName, _T("dotlineattr")) == 0) { pDottedLine->SetAttributeList(pstrValue); }
     else if (_tcscmp(pstrName, _T("folderattr")) == 0) { pFolderButton->SetAttributeList(pstrValue); }
@@ -467,35 +467,23 @@ void CTreeNodeUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if (_tcscmp(pstrName, _T("itemattr")) == 0) { pItemButton->SetAttributeList(pstrValue); }
     else if (_tcscmp(pstrName, _T("itemtextcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetItemTextColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetItemTextColor(clr);
     }
     else if (_tcscmp(pstrName, _T("itemhottextcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetItemHotTextColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetItemHotTextColor(clr);
     }
     else if (_tcscmp(pstrName, _T("selitemtextcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetSelItemTextColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetSelItemTextColor(clr);
     }
     else if (_tcscmp(pstrName, _T("selitemhottextcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetSelItemHotTextColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetSelItemHotTextColor(clr);
     }
     else if (_tcscmp(pstrName, _T("autowidth")) == 0) { DUITRACE(_T("不支持属性:autowidth")); }
     else { CListContainerElementUI::SetAttribute(pstrName, pstrValue); }
@@ -1247,42 +1235,30 @@ void CTreeViewUI::SetSelItemHotTextColor(DWORD _dwSelHotItemTextColor)
 void CTreeViewUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if (_tcscmp(pstrName, _T("visiblefolderbtn")) == 0)
-    { SetVisibleFolderBtn(_tcscmp(pstrValue, _T("true")) == 0); }
+    { SetVisibleFolderBtn(ParseBool(pstrValue)); }
     else if (_tcscmp(pstrName, _T("visiblecheckbtn")) == 0)
-    { SetVisibleCheckBtn(_tcscmp(pstrValue, _T("true")) == 0); }
+    { SetVisibleCheckBtn(ParseBool(pstrValue)); }
     else if (_tcscmp(pstrName, _T("itemminwidth")) == 0)
-    { SetItemMinWidth(_ttoi(pstrValue)); }
+    { SetItemMinWidth(ParseDWord(pstrValue)); }
     else if (_tcscmp(pstrName, _T("itemtextcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetItemTextColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetItemTextColor(clr);
     }
     else if (_tcscmp(pstrName, _T("itemhottextcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetItemHotTextColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetItemHotTextColor(clr);
     }
     else if (_tcscmp(pstrName, _T("selitemtextcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetSelItemTextColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetSelItemTextColor(clr);
     }
     else if (_tcscmp(pstrName, _T("selitemhottextcolor")) == 0)
     {
-        if (*pstrValue == _T('#')) { pstrValue = ::CharNext(pstrValue); }
-
-        LPTSTR pstr = NULL;
-        DWORD clrColor = _tcstoul(pstrValue, &pstr, 16);
-        SetSelItemHotTextColor(clrColor);
+        DWORD clr = ParseColor(pstrValue);
+        SetSelItemHotTextColor(clr);
     }
     else { CListUI::SetAttribute(pstrName, pstrValue); }
 }
