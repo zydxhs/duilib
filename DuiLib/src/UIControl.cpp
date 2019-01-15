@@ -1054,6 +1054,12 @@ void CControlUI::NeedUpdate()
     Invalidate();
 
     if (m_pManager != NULL) { m_pManager->NeedUpdate(); }
+
+    // 2019-01-04 zhuyadong 解决布局控件和子控件都启用自动计算宽/高，更新UI语言时布局控件没有计算宽/高
+    if (m_bAutoWidth || m_bAutoHeight)
+    {
+        NeedParentUpdate();
+    }
 }
 
 void CControlUI::NeedParentUpdate()
@@ -1063,10 +1069,12 @@ void CControlUI::NeedParentUpdate()
         GetParent()->NeedUpdate();
         GetParent()->Invalidate();
     }
-    else
-    {
-        NeedUpdate();
-    }
+
+    // 2019-01-04 zhuyadong 布局控件启用自动计算宽/高，导致循环调用：NeedUpdate->NeedParentUpdate
+    //else
+    //{
+    //    NeedUpdate();
+    //}
 
     if (m_pManager != NULL) { m_pManager->NeedUpdate(); }
 }
