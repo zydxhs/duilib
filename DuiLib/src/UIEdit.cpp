@@ -33,7 +33,7 @@ public:
 
     //void GetValidText(LPCTSTR pstrTxt, CDuiString &strValidTxt);
     //void GetRegExpMatch(LPCTSTR pstrTxt, CDuiString &strValidTxt);
-    bool GetValidNumber(LPTSTR &pstrTxt);
+    bool GetValidNumber(void);
 
     bool IsValidNumber(LPCTSTR pstrTxt);
     bool IsValidChar(LPCTSTR pstrTxt);
@@ -311,6 +311,14 @@ LRESULT CEditWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             return 0;
         }
 
+        // 检查数值范围
+        if (TIMERID_NUM_CHECK == wParam)
+        {
+            KillTimer(m_hWnd, wParam);
+            GetValidNumber();
+            return 0;
+        }
+
         bHandled = FALSE;
     }
     else if (uMsg == WM_CHAR)
@@ -418,7 +426,10 @@ LRESULT CEditWnd::OnEditChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPara
 
     ::GetWindowText(m_hWnd, pstr, cchLen);
 
-    if (m_pOwner->IsNumberOnly() && !GetValidNumber(pstr)) { MessageBeep(MB_ICONWARNING); }
+    // 2019-01-11 zhuyadong 修复数值范围限制问题。
+    // 说明：假如数值范围是 40~200，则输出入 5 时立即自动变为 40，没办法正常输入。
+    //if (m_pOwner->IsNumberOnly() && !GetValidNumber(pstr)) { MessageBeep(MB_ICONWARNING); }
+    if (m_pOwner->IsNumberOnly()) { SetTimer(GetHWND(), TIMERID_NUM_CHECK, 500, NULL); }
 
     m_pOwner->m_sText = pstr;
 
@@ -429,7 +440,6 @@ LRESULT CEditWnd::OnEditChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPara
     else { SetTimer(m_hWnd, TIMERID_DELAY_NTY, m_pOwner->GetDelayTxtChange(), NULL); }
 
     if (m_pOwner->GetManager()->IsLayered()) { m_pOwner->Invalidate(); }
-
 
     return 0;
 }
@@ -575,10 +585,17 @@ LRESULT CEditWnd::OnPaste(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandle
 //    strValidTxt = m_pOwner->IsRegExpMatch(pstrTxt) ? pstrTxt : _T("");
 //}
 
-bool CEditWnd::GetValidNumber(LPTSTR &pstrTxt)
+bool CEditWnd::GetValidNumber()
 {
+    int cchLen = ::GetWindowTextLength(m_hWnd) + 1;
+    LPTSTR pstrTxt = static_cast<LPTSTR>(_alloca(cchLen * sizeof(TCHAR)));
+    ASSERT(pstrTxt);
+
+    if (pstrTxt == NULL) { return 0; }
+
+    ::GetWindowText(m_hWnd, pstrTxt, cchLen);
     // 2018-03-07 zhuyadong 删除数字左侧的0
-    int nLen = (int)_tcslen(pstrTxt);
+    int nLen = cchLen - 1;
     WORD wIdx = LOWORD(::SendMessage(m_hWnd, EM_GETSEL, 0, 0));
 
     if (nLen > 1 && 0 != wIdx)
@@ -606,6 +623,7 @@ bool CEditWnd::GetValidNumber(LPTSTR &pstrTxt)
         _stprintf(pstrTxt, _T("%d"), m_pOwner->GetMinNumber());
         SetWindowText(m_hWnd, pstrTxt);
         ::SendMessage(m_hWnd, WM_KEYDOWN, VK_END, 0);
+        ::MessageBeep(MB_ICONWARNING);
         return false;
     }
 
@@ -614,6 +632,7 @@ bool CEditWnd::GetValidNumber(LPTSTR &pstrTxt)
         _stprintf(pstrTxt, _T("%d"), m_pOwner->GetMaxNumber());
         SetWindowText(m_hWnd, pstrTxt);
         ::SendMessage(m_hWnd, WM_KEYDOWN, VK_END, 0);
+        ::MessageBeep(MB_ICONWARNING);
         return false;
     }
 

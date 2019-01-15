@@ -57,6 +57,7 @@ enum EMInnerTimerId
     TIMERID_MOUSELEAVE,             // Menu     鼠标离开菜单项定时器
     TIMERID_DISABLE,                // Button   按钮响应频率控制定时器
     TIMERID_FADE,                   // Button   按钮图片透明度变化
+    TIMERID_NUM_CHECK,              // Edit     数值范围检测
 };
 
 // 用户不需要的常量
