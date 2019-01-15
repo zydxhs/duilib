@@ -70,7 +70,7 @@ protected:
     // .窗体 创建|显示 之前 初始化 数据。在 OnInitWindow 和 OnFinalMesssage 之间调用
     virtual void OnDataInit(void) { }
     // .窗体 销毁|隐藏 之前  保存  数据。在 OnInitWindow 和 OnFinalMesssage 之间调用
-    virtual void OnDataSave(void) { }
+    virtual void OnDataSave(void);
     // 窗体布局第一次正确初始化后调用的接口，此时窗口将提交刷新/动画。在窗口显示前调用
     virtual void OnPrepare(void) { }
 

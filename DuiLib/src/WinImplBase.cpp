@@ -61,6 +61,13 @@ DUI_INLINE void CWndImplBase::OnFinalMessage(HWND hWnd)
     m_pm.ReapObjects(m_pm.GetRoot());
 }
 
+void CWndImplBase::OnDataSave(void)
+{
+    DestroyChildDlg();
+    ResetBtnDlgItem();
+    m_pCtrlPlaceHolder = NULL;
+}
+
 LRESULT CWndImplBase::ResponseDefaultKeyEvent(WPARAM wParam)
 {
     if (wParam == VK_RETURN)
@@ -627,9 +634,14 @@ void CWndImplBase::DestroyChildDlg()
 {
     for (int i = 0; i < m_mapChild.GetSize(); ++i)
     {
-        CWndImplBase *pWnd = (CWndImplBase *)m_mapChild.GetAt(i);
+        LPCTSTR pKey = m_mapChild.GetAt(i);
 
-        if (NULL != pWnd && ::IsWindow(pWnd->GetHWND())) { pWnd->Close(); }
+        if (pKey)
+        {
+            CWndImplBase *pWnd = (CWndImplBase *)m_mapChild.Find(pKey);
+
+            if (NULL != pWnd && ::IsWindow(pWnd->GetHWND())) { pWnd->Close(IDCANCEL, true); }
+        }
     }
 
     m_mapChild.RemoveAll();
@@ -664,9 +676,14 @@ void CWndImplBase::ResetBtnDlgItem(void)
 {
     for (int i = 0; i < m_mapBtnItem.GetSize(); ++i)
     {
-        TBudddyItem *pItem = (TBudddyItem *)m_mapBtnItem.GetAt(i);
+        LPCTSTR pKey = m_mapBtnItem.GetAt(i);
 
-        if (NULL != pItem) { delete pItem; }
+        if (pKey)
+        {
+            TBudddyItem *pItem = (TBudddyItem *)m_mapBtnItem.Find(pKey);
+
+            if (NULL != pItem) { delete pItem; }
+        }
     }
 
     m_mapBtnItem.RemoveAll();
