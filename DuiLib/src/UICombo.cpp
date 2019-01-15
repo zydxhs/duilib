@@ -566,7 +566,9 @@ bool CComboUI::SelectItem(int iIndex, bool bTakeFocus, bool bTriggerEvent)
 
     // 2018-10-24 zhuyadong 解决组合框隐藏时，修改当前选择项导致当前选择项丢失，什么都不显示的问题
     // if (!pControl || !pControl->IsVisible() || !pControl->IsEnabled()) { return false; }
-    if (!pControl || !pControl->IsEnabled()) { return false; }
+    // 2019-01-07 zhuyadong 解决组合框禁用时，修改当前选择项导致当前选择项丢失，什么都不显示的问题
+    //if (!pControl || !pControl->IsEnabled()) { return false; }
+    if (!pControl) { return false; }
 
     IListItemUI *pListItem = static_cast<IListItemUI *>(pControl->GetInterface(DUI_CTR_ILISTITEM));
 
