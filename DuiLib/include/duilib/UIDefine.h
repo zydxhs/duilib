@@ -33,6 +33,7 @@ enum EMCUSTOM_EVENT
     // duilib 发出的消息，用户程序也可以接收这些消息
     WM_LANGUAGE_UPDATE,                     // 更新界面语言。用户通常只需要重载处理函数即可。
     WM_MENUITEM_CLICK,                      // 用来接收菜单单击的消息。还可以处理 Notify 通知。
+    WM_ICON_NOTIFY,                         // 系统托盘通知消息
 
     WM_DUILIB_PUB_MAX = 0xBFFF,             // 这里定义的消息ID，不能大于该值
 };

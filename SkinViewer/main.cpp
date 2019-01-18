@@ -102,7 +102,6 @@ private:
 class CFrameWnd : public CWndImplBase
 {
 public:
-
     virtual void Notify(TNotifyUI &msg);
 
 protected:
@@ -118,7 +117,7 @@ protected:
         PostQuitMessage(0);
     }
     virtual void OnInitWindow(void);
-
+    virtual void OnDataSave(void);
 
     void OnPreview(void);
     void AddXmlFile(CDuiString sZipFile);
@@ -134,6 +133,7 @@ private:
     CComboUI       *m_pCmbXmlFile;  // Zip 皮肤 xml文件名列表
 
     int             m_nType;        // 皮肤类型
+    CSystemTray     m_cSysTray;     // 系统托盘黑图标
 };
 
 
@@ -262,6 +262,29 @@ void CFrameWnd::OnInitWindow(void)
 
     COptionUI *pOpt = dynamic_cast<COptionUI *>(m_pm.FindControl(_T("optFile")));
     m_nType = pOpt->IsSelected() ? UILIB_FILE : UILIB_ZIP;
+
+    HICON hIcon = ::LoadIcon(CPaintManagerUI::GetInstance(), MAKEINTRESOURCE(IDI_LOGO));
+    BOOL bRet = m_cSysTray.Create(NULL,                            // Let icon deal with its own messages
+                                  WM_ICON_NOTIFY,                  // Icon notify message to use
+                                  _T("This is a Tray Icon - Right click on me!"),  // tooltip
+                                  hIcon,
+                                  IDR_MENU_SYS,                 // ID of tray icon
+                                  FALSE,
+                                  _T("Here's a cool new Win2K balloon!"), // balloon tip
+                                  _T("Look at me!"),               // balloon title
+                                  NIIF_WARNING,                    // balloon icon
+                                  20);
+
+    if (bRet)
+    {
+        m_cSysTray.SetTargetWnd(GetHWND());
+        m_cSysTray.SetMenuDefaultItem(1, TRUE);
+    }
+}
+
+void CFrameWnd::OnDataSave(void)
+{
+    m_cSysTray.RemoveIcon();
 }
 
 void CFrameWnd::OnPreview(void)

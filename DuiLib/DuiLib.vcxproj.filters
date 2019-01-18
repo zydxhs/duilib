@@ -213,6 +213,9 @@
     <ClCompile Include="src\ParseProperty.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\systemtray.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StdAfx.h">
@@ -420,6 +423,9 @@
       <Filter>Header Files\Effect</Filter>
     </ClInclude>
     <ClInclude Include="include\duilib\ParseProperty.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\duilib\systemtray.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>

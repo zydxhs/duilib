@@ -141,5 +141,6 @@
 #include "duilib/UIIPAddress.h"
 
 #include "duilib/OleDataHelper.h"
+#include "duilib/systemtray.h"
 
 #endif //__UILIB_H__

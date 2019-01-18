@@ -588,6 +588,7 @@
     <ClCompile Include="src\DropTarget.cpp" />
     <ClCompile Include="src\ParseProperty.cpp" />
     <ClCompile Include="src\Subject.cpp" />
+    <ClCompile Include="src\systemtray.cpp" />
     <ClCompile Include="src\UIActiveX.cpp" />
     <ClCompile Include="src\UIBase.cpp" />
     <ClCompile Include="src\UIButton.cpp" />
@@ -657,6 +658,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\duilib\ParseProperty.h" />
+    <ClInclude Include="include\duilib\systemtray.h" />
     <ClInclude Include="include\duilib\UIEffect.h" />
     <ClInclude Include="include\duilib\OleDataHelper.h" />
     <ClInclude Include="include\duilib\Subject.h" />
