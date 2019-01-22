@@ -79,7 +79,7 @@ CControlUI *CMenuWnd::CreateControl(LPCTSTR pstrClassName)
     return NULL;
 }
 
-void CMenuWnd::OnSubjectUpdate(WPARAM p1, WPARAM p2, LPARAM p3, CSubjectBase *pSub)
+bool CMenuWnd::OnSubjectUpdate(WPARAM p1, WPARAM p2, LPARAM p3, CSubjectBase *pSub)
 {
     switch (p1)
     {
@@ -107,6 +107,8 @@ void CMenuWnd::OnSubjectUpdate(WPARAM p1, WPARAM p2, LPARAM p3, CSubjectBase *pS
     default:
         break;
     }
+
+    return true;
 }
 
 CPaintManagerUI *CMenuWnd::GetManager(void)

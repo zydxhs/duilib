@@ -47,7 +47,7 @@ public:
     //继承来的接口
     virtual void Notify(TNotifyUI &msg) { }
     virtual CControlUI *CreateControl(LPCTSTR pstrClassName);
-    virtual void OnSubjectUpdate(WPARAM p1, WPARAM p2 = NULL, LPARAM p3 = NULL, CSubjectBase *pSub = NULL);
+    virtual bool OnSubjectUpdate(WPARAM p1, WPARAM p2 = NULL, LPARAM p3 = NULL, CSubjectBase *pSub = NULL);
 
     // 获取根菜单控件，用于动态添加子菜单
     CMenuUI *GetMenuUI(void);

@@ -68,7 +68,8 @@ public:
             {
                 for (; it != m_vecObs.end(); ++it)
                 {
-                    (*it)->OnSubjectUpdate(p1, p2, p3, m_pSub);
+                    // 返回 false，不再通知其它观察者
+                    if (!(*it)->OnSubjectUpdate(p1, p2, p3, m_pSub)) { break; }
                 }
             }
         }
@@ -91,7 +92,8 @@ public:
             {
                 for (; it != m_vecObs.rend(); ++it)
                 {
-                    (*it)->OnSubjectUpdate(p1, p2, p3, m_pSub);
+                    // 返回 false，不再通知其它观察者
+                    if (!(*it)->OnSubjectUpdate(p1, p2, p3, m_pSub)) { break; }
                 }
             }
         }

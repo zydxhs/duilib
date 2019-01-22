@@ -15,10 +15,10 @@ public:
      * \param NULL WPARAM p2=               参数2
      * \param NULL LPARAM p3=               参数3
      * \param NULL CSubjectBase *pSub=      主题对象指针
-     * \return virtual void
+     * \return virtual bool                 true表示继续通知其它观察者，否则终止
      *
      */
-    virtual void OnSubjectUpdate(WPARAM p1, WPARAM p2 = NULL, LPARAM p3 = NULL, CSubjectBase *pSub = NULL) = 0;
+    virtual bool OnSubjectUpdate(WPARAM p1, WPARAM p2 = NULL, LPARAM p3 = NULL, CSubjectBase *pSub = NULL) = 0;
 };
 
 //主题
