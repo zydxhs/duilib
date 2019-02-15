@@ -15,14 +15,14 @@ class DUILIB_API CSystemTray
 {
 public:
     CSystemTray();
-    CSystemTray(HWND hParent, UINT uCallbackMessage, LPCTSTR szTip, HICON icon, UINT uID,
-                BOOL bHidden = FALSE, LPCTSTR szBalloonTip = NULL, LPCTSTR szBalloonTitle = NULL,
+    CSystemTray(CPaintManagerUI *pTargetPM, LPCTSTR szTip, HICON icon, STRINGorID xml, LPCTSTR pSkinType = NULL,
+                BOOL bHidden = FALSE, LPCTSTR szBalloonText = NULL, LPCTSTR szBalloonTitle = NULL,
                 DWORD dwBalloonIcon = NIIF_NONE, UINT uBalloonTimeout = 10);
     virtual ~CSystemTray();
 
     // uBalloonTimeout: 10 ~ 30
-    BOOL Create(HWND hParent, UINT uCallbackMessage, LPCTSTR szTip, HICON hIcon, UINT uID,
-                BOOL bHidden = FALSE, LPCTSTR szBalloonTip = NULL, LPCTSTR szBalloonTitle = NULL,
+    BOOL Create(CPaintManagerUI *pTargetPM, LPCTSTR szTip, HICON hIcon, STRINGorID xml, LPCTSTR pSkinType = NULL,
+                BOOL bHidden = FALSE, LPCTSTR szBalloonText = NULL, LPCTSTR szBalloonTitle = NULL,
                 DWORD dwBalloonIcon = NIIF_NONE, UINT uBalloonTimeout = 10);
 
     BOOL IsEnable();
@@ -57,17 +57,13 @@ public:
     BOOL  StepAnimation();
     BOOL  StopAnimation();
 
-    // Change menu default item
-    void  GetMenuDefaultItem(UINT &uItem, BOOL &bByPos);
-    BOOL  SetMenuDefaultItem(UINT uItem, BOOL bByPos);
-
-    // Change or retrieve the window to send icon notification messages to
-    BOOL  SetNotificationWnd(HWND hNotifyWnd);
-    HWND  GetNotificationWnd() const;
+    // Change menu default item. 如果默认菜单项支持复选，则其选中状态需要用户维护
+    void  GetMenuDefaultItem(CDuiString &sItem);
+    BOOL  SetMenuDefaultItem(const CDuiString &sItem);
 
     // Change or retrieve the window to send menu commands to
-    BOOL  SetTargetWnd(HWND hTargetWnd);
-    HWND  GetTargetWnd() const;
+    BOOL  SetTargetWnd(CPaintManagerUI *pTargetPM);
+    CPaintManagerUI *GetTargetWnd() const;
 
     // Change or retrieve  notification messages sent to the window
     BOOL  SetCallbackMessage(UINT uCallbackMessage);
@@ -79,9 +75,6 @@ public:
 public:
     static void MinimiseToTray(HWND hWnd);
     static void MaximiseFromTray(HWND hWnd);
-
-protected:
-    virtual void CustomizeMenu(HMENU) { }
 
 private:
     CSystemTrayImpl    *m_pImpl;
