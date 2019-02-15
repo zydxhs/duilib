@@ -11,10 +11,10 @@ namespace DuiLib {
 
 enum EMMenuAlign
 {
-    EMENU_ALIGN_LEFT    = 1 << 1,
-    EMENU_ALIGN_TOP     = 1 << 2,
-    EMENU_ALIGN_RIGHT   = 1 << 3,
-    EMENU_ALIGN_BOTTOM  = 1 << 4,
+    EMENU_ALIGN_LEFT    = 1 << 0,   // 菜单位于鼠标左侧
+    EMENU_ALIGN_TOP     = 1 << 1,   // 菜单位于鼠标上侧
+    EMENU_ALIGN_RIGHT   = 1 << 2,   // 菜单位于鼠标右侧
+    EMENU_ALIGN_BOTTOM  = 1 << 3,   // 菜单位于鼠标下侧
 };
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -35,7 +35,7 @@ public:
     *   @dwAlign    菜单的出现位置，默认出现在鼠标的右下侧。
     */
     static CMenuWnd *CreateMenu(CMenuElementUI *pOwner, STRINGorID xml, LPCTSTR pSkinType, POINT pt,
-                                CPaintManagerUI *pParent, DWORD dwAlign = EMENU_ALIGN_LEFT | EMENU_ALIGN_TOP);
+                                CPaintManagerUI *pParent, DWORD dwAlign = EMENU_ALIGN_RIGHT | EMENU_ALIGN_BOTTOM);
     static CMenuWnd *GetInstance(void);
 
     static CDuiString       s_strName;      // 被单击菜单项的的 名字

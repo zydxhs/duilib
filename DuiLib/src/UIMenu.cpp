@@ -60,9 +60,8 @@ DuiLib::CMenuWnd *CMenuWnd::GetInstance(void)
     return s_pMenWnd;
 }
 
-CMenuWnd::CMenuWnd(void): m_pOwner(NULL), m_xml(_T(""))
+CMenuWnd::CMenuWnd(void) : m_pOwner(NULL), m_xml(_T("")), m_dwAlign(EMENU_ALIGN_RIGHT | EMENU_ALIGN_BOTTOM)
 {
-    m_dwAlign = EMENU_ALIGN_LEFT | EMENU_ALIGN_TOP;
 }
 
 CControlUI *CMenuWnd::CreateControl(LPCTSTR pstrClassName)
@@ -140,8 +139,6 @@ void CMenuWnd::ResizeMenu(void)
     szAvailable.cy += (rtInset.top + rtInset.bottom);
     m_pm.SetInitSize(szAvailable.cx, szAvailable.cy);
 
-    DWORD dwAlignment = EMENU_ALIGN_LEFT | EMENU_ALIGN_TOP;
-
     SIZE szInit = m_pm.GetInitSize();
     CDuiRect rc;
     CDuiPoint point = m_ptBase;
@@ -150,19 +147,54 @@ void CMenuWnd::ResizeMenu(void)
     rc.right = rc.left + szInit.cx;
     rc.bottom = rc.top + szInit.cy;
 
-    int nWidth = rc.GetWidth();
-    int nHeight = rc.GetHeight();
+    // 屏幕宽高
+    int  cx = GetSystemMetrics(SM_CXFULLSCREEN);
+    int  cy = GetSystemMetrics(SM_CYFULLSCREEN);
 
-    if (dwAlignment & EMENU_ALIGN_RIGHT)
+    if (m_dwAlign & EMENU_ALIGN_LEFT)
     {
-        rc.right = point.x;
-        rc.left = rc.right - nWidth;
+        if (point.x > szInit.cx)
+        {
+            rc.right = point.x;
+            rc.left = rc.right - szInit.cx;
+        }
+        else
+        {
+            rc.left = 0;
+            rc.right = szInit.cx;
+        }
     }
 
-    if (dwAlignment & EMENU_ALIGN_BOTTOM)
+    if (m_dwAlign & EMENU_ALIGN_TOP)
     {
-        rc.bottom = point.y;
-        rc.top = rc.bottom - nHeight;
+        if (point.y > szInit.cy)
+        {
+            rc.bottom = point.y;
+            rc.top = rc.bottom - szInit.cy;
+        }
+        else
+        {
+            rc.top = 0;
+            rc.bottom = szInit.cy;
+        }
+    }
+
+    if (m_dwAlign & EMENU_ALIGN_RIGHT)
+    {
+        if (rc.right > cx)
+        {
+            rc.left = cx - szInit.cx;
+            rc.right = cx;
+        }
+    }
+
+    if (m_dwAlign & EMENU_ALIGN_BOTTOM)
+    {
+        if (rc.bottom > cy)
+        {
+            rc.top = cy - szInit.cy;
+            rc.bottom = cy;
+        }
     }
 
     SetForegroundWindow(m_hWnd);
