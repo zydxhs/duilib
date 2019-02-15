@@ -243,6 +243,10 @@ void CFrameWnd::Notify(TNotifyUI &msg)
             }
         }
     }
+    else if (msg.sType == DUI_MSGTYPE_MENUITEM_CLICK)
+    {
+        if (CMenuWnd::s_ptrTag == 100) { Close(); return; }
+    }
 
     CWndImplBase::Notify(msg);
 }
@@ -264,11 +268,11 @@ void CFrameWnd::OnInitWindow(void)
     m_nType = pOpt->IsSelected() ? UILIB_FILE : UILIB_ZIP;
 
     HICON hIcon = ::LoadIcon(CPaintManagerUI::GetInstance(), MAKEINTRESOURCE(IDI_LOGO));
-    BOOL bRet = m_cSysTray.Create(NULL,                            // Let icon deal with its own messages
-                                  WM_ICON_NOTIFY,                  // Icon notify message to use
+    BOOL bRet = m_cSysTray.Create(&m_pm,                            // Let icon deal with its own messages
                                   _T("This is a Tray Icon - Right click on me!"),  // tooltip
                                   hIcon,
-                                  IDR_MENU_SYS,                 // ID of tray icon
+                                  STRINGorID(IDR_XML_MENU),
+                                  _T("xml"),
                                   FALSE,
                                   _T("Here's a cool new Win2K balloon!"), // balloon tip
                                   _T("Look at me!"),               // balloon title
@@ -277,8 +281,7 @@ void CFrameWnd::OnInitWindow(void)
 
     if (bRet)
     {
-        m_cSysTray.SetTargetWnd(GetHWND());
-        m_cSysTray.SetMenuDefaultItem(1, TRUE);
+        m_cSysTray.SetMenuDefaultItem(_T("exit"));
     }
 }
 

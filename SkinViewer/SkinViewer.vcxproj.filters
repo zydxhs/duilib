@@ -42,10 +42,23 @@
     <Image Include="res\logo.ico">
       <Filter>资源文件</Filter>
     </Image>
+    <Image Include="res\menu_checked.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="res\menu_expandable.png">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="res\viewer.xml">
       <Filter>资源文件</Filter>
     </Xml>
+    <Xml Include="res\menutest.xml" />
+    <Xml Include="res\menu.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\xml2.bin">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

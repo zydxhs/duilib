@@ -332,9 +332,16 @@
   <ItemGroup>
     <Image Include="res\logo.ico" />
     <Image Include="res\logo.png" />
+    <Image Include="res\menu_checked.png" />
+    <Image Include="res\menu_expandable.png" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="res\menu.xml" />
+    <Xml Include="res\menutest.xml" />
     <Xml Include="res\viewer.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\xml2.bin" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

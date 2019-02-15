@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Window shadowshow="true" shadowcolor="#FF4F4F4F" >
+    <Default shared="true" name="Menu" value="inset=&quot;3,3,3,3&quot; itemtextpadding=&quot;26,2,20,0&quot; bkcolor=&quot;#FFFFFFFF&quot; bordersize=&quot;1&quot; bordercolor=&quot;#FF848484&quot; itemselectedbkcolor=&quot;#FFD2D2D2&quot; " />
+    <Default shared="true" name="MenuElement" value="iconwidth=&quot;24&quot; expandwidth=&quot;20&quot; iconchecked=&quot;file='106' restype='PNG' source='0,0,16,16' dest='2,4,18,20'&quot; expandicon=&quot;file='107' restype='PNG' source='0,0,16,16' dest='0,4,16,20'&quot; " />
+
+    <Menu >
+        <MenuElement name="exit" text="%[Exit]" tag="100" />
+    </Menu>
+</Window>
