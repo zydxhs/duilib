@@ -1337,15 +1337,14 @@ void CMenuElementUI::OnLButtonUp(TEventUI &event)
         if (NULL != pManager)
         {
             HWND hWnd = pManager->GetPaintWindow();
-            WPARAM wParam = MAKEWPARAM(event.ptMouse.x, event.ptMouse.y);
-            PostMessage(hWnd, WM_MENUITEM_CLICK, wParam, (LPARAM)(IsChecked() ? TRUE : FALSE));
+            PostMessage(hWnd, WM_MENUITEM_CLICK, (WPARAM)CMenuWnd::s_ptrTag, (LPARAM)(IsChecked() ? TRUE : FALSE));
             TNotifyUI msg;
             msg.pSender = NULL;
             msg.dwTimestamp = 0;
             msg.ptMouse.x = msg.ptMouse.y = 0;
             msg.sType = DUI_MSGTYPE_MENUITEM_CLICK;
-            msg.wParam = (WPARAM)&CMenuWnd::s_strName;
-            msg.lParam = (LPARAM)CMenuWnd::s_ptrTag;
+            msg.wParam = (WPARAM)CMenuWnd::s_ptrTag;
+            msg.lParam = (LPARAM)(IsChecked() ? TRUE : FALSE);
             pManager->SendNotify(msg, true);
         }
 
@@ -1395,14 +1394,14 @@ void CMenuElementUI::OnKeyDown(TEventUI &event)
             if (NULL != pManager)
             {
                 HWND hWnd = pManager->GetPaintWindow();
-                PostMessage(hWnd, WM_MENUITEM_CLICK, NULL, (LPARAM)(IsChecked() ? TRUE : FALSE));
+                PostMessage(hWnd, WM_MENUITEM_CLICK, (WPARAM)CMenuWnd::s_ptrTag, (LPARAM)(IsChecked() ? TRUE : FALSE));
                 TNotifyUI msg;
                 msg.pSender = NULL;
                 msg.dwTimestamp = 0;
                 msg.ptMouse.x = msg.ptMouse.y = 0;
                 msg.sType = DUI_MSGTYPE_MENUITEM_CLICK;
-                msg.wParam = (WPARAM)&CMenuWnd::s_strName;
-                msg.lParam = (LPARAM)CMenuWnd::s_ptrTag;
+                msg.wParam = (WPARAM)CMenuWnd::s_ptrTag;
+                msg.lParam = (LPARAM)(IsChecked() ? TRUE : FALSE);
                 pManager->SendNotify(msg, true);
             }
 
