@@ -13,8 +13,8 @@ public:
     CSystemTrayImpl();
     virtual ~CSystemTrayImpl();
 
-    BOOL Create(HWND hParent, UINT uCallbackMessage, LPCTSTR szTip, HICON hIcon, UINT uID,
-                BOOL bHidden = FALSE, LPCTSTR szBalloonTip = NULL, LPCTSTR szBalloonTitle = NULL,
+    BOOL Create(CPaintManagerUI *pTargetPM, LPCTSTR szTip, HICON hIcon, STRINGorID xml, LPCTSTR pSkinType = NULL,
+                BOOL bHidden = FALSE, LPCTSTR szBalloonText = NULL, LPCTSTR szBalloonTitle = NULL,
                 DWORD dwBalloonIcon = NIIF_NONE, UINT uBalloonTimeout = 10);
 
     BOOL IsEnable();
@@ -51,16 +51,16 @@ public:
     BOOL  StopAnimation();
 
     // Change menu default item
-    void  GetMenuDefaultItem(UINT &uItem, BOOL &bByPos);
-    BOOL  SetMenuDefaultItem(UINT uItem, BOOL bByPos);
+    void  GetMenuDefaultItem(CDuiString &sItem);
+    BOOL  SetMenuDefaultItem(const CDuiString &sItem);
 
     // Change or retrieve the window to send icon notification messages to
-    BOOL  SetNotificationWnd(HWND hNotifyWnd);
-    HWND  GetNotificationWnd() const;
+    // BOOL  SetNotificationWnd(HWND hNotifyWnd);
+    // HWND  GetNotificationWnd() const;
 
     // Change or retrieve the window to send menu commands to
-    BOOL  SetTargetWnd(HWND hTargetWnd);
-    HWND  GetTargetWnd() const;
+    BOOL  SetTargetWnd(CPaintManagerUI *pTargetPM);
+    CPaintManagerUI *GetTargetWnd() const;
 
     // Change or retrieve  notification messages sent to the window
     BOOL  SetCallbackMessage(UINT uCallbackMessage);
@@ -99,12 +99,10 @@ private:
     ATOM RegisterClass(HINSTANCE hInstance);
     void InstallIconPending();
 
-    virtual void CustomizeMenu(HMENU) { }
-
 private:
+    CPaintManagerUI *m_pTargetPM;       // Window that menu commands are sent
     NOTIFYICONDATA  m_tnd;
     HWND            m_hWnd;
-    HWND            m_hTargetWnd;       // Window that menu commands are sent
 
     BOOL            m_bEnabled;         // does O/S support tray icon?
     BOOL            m_bHidden;          // Has the icon been hidden?
@@ -118,9 +116,15 @@ private:
     time_t          m_StartTime;
     int             m_nAnimationPeriod;
     HICON           m_hSavedIcon;
-    UINT            m_DefaultMenuItemID;
-    BOOL            m_DefaultMenuItemByPos;
     UINT            m_uCreationFlags;
+
+    // 默认菜单项
+    CDuiString      m_sItemName;        // 菜单项的 名字
+    CDuiString      m_sItemUserData;    // 菜单项的 用户数据
+    UINT_PTR        m_ptrItemTag;       // 菜单项的 Tag
+    // 菜单资源
+    STRINGorID      m_xml;
+    CDuiString      m_sSkinType;
 };
 
 const UINT CSystemTrayImpl::m_nTimerID = 4567;
@@ -133,16 +137,16 @@ HWND CSystemTrayImpl::m_hWndInvisible = NULL;
 #define TRAYICON_CLASS _T("TrayIconClass")
 
 CSystemTrayImpl::CSystemTrayImpl()
-    : m_bEnabled(FALSE)
+    : m_pTargetPM(NULL)
+    , m_bEnabled(FALSE)
     , m_bHidden(TRUE)
     , m_bRemoved(TRUE)
-    , m_DefaultMenuItemID(0)
-    , m_DefaultMenuItemByPos(TRUE)
     , m_bShowIconPending(FALSE)
     , m_uIDTimer(0)
     , m_hSavedIcon(NULL)
-    , m_hTargetWnd(NULL)
     , m_uCreationFlags(0)
+    , m_ptrItemTag(0)
+    , m_xml(_T(""))
 {
     m_pThis = this;
     memset(&m_tnd, 0, sizeof(m_tnd));
@@ -161,16 +165,13 @@ CSystemTrayImpl::~CSystemTrayImpl()
     if (m_hWnd) { ::DestroyWindow(m_hWnd); m_hWnd = NULL; }
 }
 
-BOOL CSystemTrayImpl::Create(HWND hParent, UINT uCallbackMessage, LPCTSTR szTip, HICON hIcon, UINT uID,
-                             BOOL bHidden /*= FALSE*/, LPCTSTR szBalloonTip /*= NULL*/, LPCTSTR szBalloonTitle /*= NULL*/,
-                             DWORD dwBalloonIcon /*= NIIF_NONE*/, UINT uBalloonTimeout /*= 10*/)
+BOOL CSystemTrayImpl::Create(CPaintManagerUI *pTargetPM, LPCTSTR szTip, HICON hIcon, STRINGorID xml,
+                             LPCTSTR pSkinType, BOOL bHidden, LPCTSTR szBalloonText, LPCTSTR szBalloonTitle,
+                             DWORD dwBalloonIcon, UINT uBalloonTimeout)
 {
     if (!m_bEnabled) { ASSERT(m_bEnabled); return FALSE; }
 
     m_nMaxTooltipLength = _countof(m_tnd.szTip);
-
-    // Make sure we avoid conflict with other messages
-    ASSERT(uCallbackMessage >= WM_APP);
 
     // Tray only supports tooltip text up to m_nMaxTooltipLength) characters
     ASSERT(_tcslen(szTip) <= m_nMaxTooltipLength);
@@ -181,22 +182,25 @@ BOOL CSystemTrayImpl::Create(HWND hParent, UINT uCallbackMessage, LPCTSTR szTip,
     m_hWnd = ::CreateWindow(TRAYICON_CLASS, _T(""), WS_POPUP,
                             CW_USEDEFAULT, CW_USEDEFAULT,
                             CW_USEDEFAULT, CW_USEDEFAULT,
-                            NULL, 0,
-                            CPaintManagerUI::GetInstance(), 0);
+                            NULL, 0, CPaintManagerUI::GetInstance(), 0);
 
+    m_pTargetPM = pTargetPM;
+    m_xml = xml;
+    m_sSkinType = pSkinType;
     // load up the NOTIFYICONDATA structure
     m_tnd.cbSize = sizeof(NOTIFYICONDATA);
-    m_tnd.hWnd = (hParent) ? hParent : m_hWnd;
-    m_tnd.uID = uID;
+    m_tnd.hWnd = m_hWnd;
+    // m_tnd.uID = uID;
     m_tnd.hIcon = hIcon;
     m_tnd.uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP;
-    m_tnd.uCallbackMessage = uCallbackMessage;
+    ASSERT(WM_ICON_NOTIFY >= WM_APP);
+    m_tnd.uCallbackMessage = WM_ICON_NOTIFY;
     _tcsncpy(m_tnd.szTip, szTip, m_nMaxTooltipLength);
 
-    if (m_bWin2K && szBalloonTip)
+    if (m_bWin2K && szBalloonText)
     {
         // The balloon tooltip text can be up to 255 chars long.
-        ASSERT(szBalloonTip && lstrlen(szBalloonTip) < 256);
+        ASSERT(szBalloonText && lstrlen(szBalloonText) < 256);
 
         // The balloon title text can be up to 63 chars long.
         ASSERT(szBalloonTitle && lstrlen(szBalloonTitle) < 64);
@@ -210,7 +214,7 @@ BOOL CSystemTrayImpl::Create(HWND hParent, UINT uCallbackMessage, LPCTSTR szTip,
 
         m_tnd.uFlags |= NIF_INFO;
 
-        if (szBalloonTip)   { _tcsncpy(m_tnd.szInfo, szBalloonTip, 255); }
+        if (szBalloonText)   { _tcsncpy(m_tnd.szInfo, szBalloonText, 255); }
         else                { m_tnd.szInfo[0] = _T('\0'); }
 
         if (szBalloonTitle) { _tcsncpy(m_tnd.szInfoTitle, szBalloonTitle, 63); }
@@ -221,7 +225,6 @@ BOOL CSystemTrayImpl::Create(HWND hParent, UINT uCallbackMessage, LPCTSTR szTip,
     }
 
     m_bHidden = bHidden;
-    m_hTargetWnd = m_tnd.hWnd;
 
     if (m_bWin2K && m_bHidden)
     {
@@ -240,7 +243,7 @@ BOOL CSystemTrayImpl::Create(HWND hParent, UINT uCallbackMessage, LPCTSTR szTip,
     }
 
     // Zero out the balloon text string so that later operations won't redisplay the balloon.
-    if (m_bWin2K && szBalloonTip) { m_tnd.szInfo[0] = _T('\0'); }
+    if (m_bWin2K && szBalloonText) { m_tnd.szInfo[0] = _T('\0'); }
 
     return bResult;
 }
@@ -515,68 +518,48 @@ BOOL CSystemTrayImpl::StopAnimation()
     return bResult;
 }
 
-void CSystemTrayImpl::GetMenuDefaultItem(UINT &uItem, BOOL &bByPos)
+void CSystemTrayImpl::GetMenuDefaultItem(CDuiString &sItem)
 {
-    uItem = m_DefaultMenuItemID;
-    bByPos = m_DefaultMenuItemByPos;
+    sItem = m_sItemName;
 }
 
-BOOL CSystemTrayImpl::SetMenuDefaultItem(UINT uItem, BOOL bByPos)
+BOOL CSystemTrayImpl::SetMenuDefaultItem(const CDuiString &sItem)
 {
-    if ((m_DefaultMenuItemID == uItem) && (m_DefaultMenuItemByPos == bByPos)) { return TRUE; }
+    m_sItemName = sItem;
+    return CMenuWnd::GetMenuItemInfo(m_pTargetPM, m_xml, m_sSkinType, sItem, m_sItemUserData, m_ptrItemTag);
+}
 
-    m_DefaultMenuItemID = uItem;
-    m_DefaultMenuItemByPos = bByPos;
+// BOOL CSystemTrayImpl::SetNotificationWnd(HWND hNotifyWnd)
+// {
+//     if (!m_bEnabled) { return FALSE; }
+//
+//     // Make sure Notification window is valid
+//     if (!hNotifyWnd || !::IsWindow(hNotifyWnd))
+//     {
+//         ASSERT(FALSE);
+//         return FALSE;
+//     }
+//
+//     m_tnd.hWnd = hNotifyWnd;
+//     m_tnd.uFlags = 0;
+//
+//     return m_bHidden ? TRUE : Shell_NotifyIcon(NIM_MODIFY, &m_tnd);
+// }
 
-    HMENU hMenu = ::LoadMenu(CPaintManagerUI::GetInstance(), MAKEINTRESOURCE(m_tnd.uID));
+// HWND CSystemTrayImpl::GetNotificationWnd() const
+// {
+//     return m_tnd.hWnd;
+// }
 
-    if (!hMenu) { return FALSE; }
-
-    HMENU hSubMenu = ::GetSubMenu(hMenu, 0);
-
-    if (!hSubMenu)
-    {
-        ::DestroyMenu(hMenu);
-        return FALSE;
-    }
-
-    ::SetMenuDefaultItem(hSubMenu, m_DefaultMenuItemID, m_DefaultMenuItemByPos);
-    ::DestroyMenu(hSubMenu);
-    ::DestroyMenu(hMenu);
+BOOL CSystemTrayImpl::SetTargetWnd(CPaintManagerUI *pTargetPM)
+{
+    m_pTargetPM = pTargetPM;
     return TRUE;
 }
 
-BOOL CSystemTrayImpl::SetNotificationWnd(HWND hNotifyWnd)
+CPaintManagerUI *CSystemTrayImpl::GetTargetWnd() const
 {
-    if (!m_bEnabled) { return FALSE; }
-
-    // Make sure Notification window is valid
-    if (!hNotifyWnd || !::IsWindow(hNotifyWnd))
-    {
-        ASSERT(FALSE);
-        return FALSE;
-    }
-
-    m_tnd.hWnd = hNotifyWnd;
-    m_tnd.uFlags = 0;
-
-    return m_bHidden ? TRUE : Shell_NotifyIcon(NIM_MODIFY, &m_tnd);
-}
-
-HWND CSystemTrayImpl::GetNotificationWnd() const
-{
-    return m_tnd.hWnd;
-}
-
-BOOL CSystemTrayImpl::SetTargetWnd(HWND hTargetWnd)
-{
-    m_hTargetWnd = hTargetWnd;
-    return TRUE;
-}
-
-HWND CSystemTrayImpl::GetTargetWnd() const
-{
-    return m_hTargetWnd ? m_hTargetWnd : m_tnd.hWnd;
+    return m_pTargetPM;
 }
 
 BOOL CSystemTrayImpl::SetCallbackMessage(UINT uCallbackMessage)
@@ -658,6 +641,8 @@ LRESULT PASCAL CSystemTrayImpl::WindowProc(HWND hWnd, UINT message, WPARAM wPara
     {
         return pTrayIcon->OnSettingChange(wParam, (LPCTSTR)lParam);
     }
+
+    DUITRACE(_T("message=%x - %x"), message, pTrayIcon->GetCallbackMessage());
 
     // Is the message from the icon for this TrayIcon?
     if (message == pTrayIcon->GetCallbackMessage())
@@ -906,69 +891,23 @@ LRESULT CSystemTrayImpl::OnTimer(UINT nIDEvent)
 LRESULT CSystemTrayImpl::OnTrayNotification(WPARAM wParam, LPARAM lParam)
 {
     //Return quickly if its not for this tray icon
-    if (wParam != m_tnd.uID) { return 0L; }
-
-    HWND hTargetWnd = GetTargetWnd();
-
-    if (!hTargetWnd) { return 0L; }
+    if (wParam != m_tnd.uID || !m_pTargetPM) { return 0L; }
 
     // Clicking with right button brings up a context menu
     if (LOWORD(lParam) == WM_RBUTTONUP)
     {
-        HMENU hMenu = ::LoadMenu(CPaintManagerUI::GetInstance(), MAKEINTRESOURCE(m_tnd.uID));
-
-        if (!hMenu) { return 0; }
-
-        HMENU hSubMenu = ::GetSubMenu(hMenu, 0);
-
-        if (!hSubMenu)
-        {
-            ::DestroyMenu(hMenu);        //Be sure to Destroy Menu Before Returning
-            return 0;
-        }
-
-        // Make chosen menu item the default (bold font)
-        ::SetMenuDefaultItem(hSubMenu, m_DefaultMenuItemID, m_DefaultMenuItemByPos);
-
-        CustomizeMenu(hSubMenu);
-
         // Display and track the popup menu
         POINT pos;
         GetCursorPos(&pos);
 
-        ::SetForegroundWindow(m_tnd.hWnd);
-        ::TrackPopupMenu(hSubMenu, 0, pos.x, pos.y, 0, hTargetWnd, NULL);
-
-        // BUGFIX: See "PRB: Menus for Notification Icons Don't Work Correctly"
-        ::PostMessage(m_tnd.hWnd, WM_NULL, 0, 0);
-        DestroyMenu(hMenu);
+        CMenuWnd *pWnd = CMenuWnd::CreateMenu(NULL, m_xml, m_sSkinType, pos, m_pTargetPM,
+                                              EMENU_ALIGN_LEFT | EMENU_ALIGN_TOP);
     }
 
     if (LOWORD(lParam) == WM_LBUTTONDBLCLK)
     {
-        // double click received, the default action is to execute default menu item
-        ::SetForegroundWindow(m_tnd.hWnd);
-        UINT uItem;
-
-        if (m_DefaultMenuItemByPos)
-        {
-            HMENU hMenu = ::LoadMenu(CPaintManagerUI::GetInstance(), MAKEINTRESOURCE(m_tnd.uID));
-
-            if (!hMenu) { return 0; }
-
-            HMENU hSubMenu = ::GetSubMenu(hMenu, 0);
-
-            if (!hSubMenu) { return 0; }
-
-            uItem = ::GetMenuItemID(hSubMenu, m_DefaultMenuItemID);
-            DestroyMenu(hMenu);
-        }
-        else
-        {
-            uItem = m_DefaultMenuItemID;
-        }
-
-        ::PostMessage(hTargetWnd, WM_COMMAND, uItem, 0);
+        // 触发默认菜单项
+        CMenuWnd::PostMenuItemClickMsg(m_pTargetPM, m_sItemName, m_sItemUserData, m_ptrItemTag);
     }
 
     return 1;
@@ -1005,12 +944,12 @@ CSystemTray::CSystemTray() : m_pImpl(NULL)
 {
 }
 
-CSystemTray::CSystemTray(HWND hParent, UINT uCallbackMessage, LPCTSTR szTip, HICON hIcon, UINT uID,
-                         BOOL bHidden /*= FALSE*/, LPCTSTR szBalloonTip /*= NULL*/, LPCTSTR szBalloonTitle /*= NULL*/,
-                         DWORD dwBalloonIcon /*= NIIF_NONE*/, UINT uBalloonTimeout /*= 10*/)
+CSystemTray::CSystemTray(CPaintManagerUI *pTargetPM, LPCTSTR szTip, HICON hIcon, STRINGorID xml,
+                         LPCTSTR pSkinType, BOOL bHidden, LPCTSTR szBalloonText, LPCTSTR szBalloonTitle,
+                         DWORD dwBalloonIcon, UINT uBalloonTimeout)
 {
-    Create(hParent, uCallbackMessage, szTip, hIcon, uID, bHidden, szBalloonTip, szBalloonTitle, dwBalloonIcon,
-           uBalloonTimeout);
+    Create(pTargetPM, szTip, hIcon, xml, pSkinType, bHidden,
+           szBalloonText, szBalloonTitle, dwBalloonIcon, uBalloonTimeout);
 }
 
 CSystemTray::~CSystemTray()
@@ -1018,16 +957,16 @@ CSystemTray::~CSystemTray()
     if (NULL != m_pImpl) { delete m_pImpl; m_pImpl = NULL; }
 }
 
-BOOL CSystemTray::Create(HWND hParent, UINT uCallbackMessage, LPCTSTR szTip, HICON hIcon, UINT uID,
-                         BOOL bHidden /*= FALSE*/, LPCTSTR szBalloonTip /*= NULL*/, LPCTSTR szBalloonTitle /*= NULL*/,
-                         DWORD dwBalloonIcon /*= NIIF_NONE*/, UINT uBalloonTimeout /*= 10*/)
+BOOL CSystemTray::Create(CPaintManagerUI *pTargetPM, LPCTSTR szTip, HICON hIcon, STRINGorID xml,
+                         LPCTSTR pSkinType, BOOL bHidden, LPCTSTR szBalloonText, LPCTSTR szBalloonTitle,
+                         DWORD dwBalloonIcon, UINT uBalloonTimeout)
 {
     if (NULL == m_pImpl) { m_pImpl = new CSystemTrayImpl(); }
 
     if (NULL == m_pImpl) { return FALSE; }
 
-    return m_pImpl->Create(hParent, uCallbackMessage, szTip, hIcon, uID, bHidden, szBalloonTip, szBalloonTitle,
-                           dwBalloonIcon, uBalloonTimeout);
+    return m_pImpl->Create(pTargetPM, szTip, hIcon, xml, pSkinType, bHidden,
+                           szBalloonText, szBalloonTitle, dwBalloonIcon, uBalloonTimeout);
 }
 
 BOOL CSystemTray::IsEnable()
@@ -1146,32 +1085,32 @@ BOOL CSystemTray::StopAnimation()
     return (NULL != m_pImpl) ? m_pImpl->StopAnimation() : FALSE;
 }
 
-void CSystemTray::GetMenuDefaultItem(UINT &uItem, BOOL &bByPos)
+void CSystemTray::GetMenuDefaultItem(CDuiString &sItem)
 {
-    (NULL != m_pImpl) ? m_pImpl->GetMenuDefaultItem(uItem, bByPos) : NULL;
+    (NULL != m_pImpl) ? m_pImpl->GetMenuDefaultItem(sItem) : NULL;
 }
 
-BOOL CSystemTray::SetMenuDefaultItem(UINT uItem, BOOL bByPos)
+BOOL CSystemTray::SetMenuDefaultItem(const CDuiString &sItem)
 {
-    return (NULL != m_pImpl) ? m_pImpl->SetMenuDefaultItem(uItem, bByPos) : FALSE;
+    return (NULL != m_pImpl) ? m_pImpl->SetMenuDefaultItem(sItem) : FALSE;
 }
 
-BOOL CSystemTray::SetNotificationWnd(HWND hNotifyWnd)
+// BOOL CSystemTray::SetNotificationWnd(HWND hNotifyWnd)
+// {
+//     return (NULL != m_pImpl) ? m_pImpl->SetNotificationWnd(hNotifyWnd) : FALSE;
+// }
+
+// HWND CSystemTray::GetNotificationWnd() const
+// {
+//     return (NULL != m_pImpl) ? m_pImpl->GetNotificationWnd() : NULL;
+// }
+
+BOOL CSystemTray::SetTargetWnd(CPaintManagerUI *pTargetPM)
 {
-    return (NULL != m_pImpl) ? m_pImpl->SetNotificationWnd(hNotifyWnd) : FALSE;
+    return (NULL != m_pImpl) ? m_pImpl->SetTargetWnd(pTargetPM) : FALSE;
 }
 
-HWND CSystemTray::GetNotificationWnd() const
-{
-    return (NULL != m_pImpl) ? m_pImpl->GetNotificationWnd() : NULL;
-}
-
-BOOL CSystemTray::SetTargetWnd(HWND hTargetWnd)
-{
-    return (NULL != m_pImpl) ? m_pImpl->SetTargetWnd(hTargetWnd) : FALSE;
-}
-
-HWND CSystemTray::GetTargetWnd() const
+CPaintManagerUI *CSystemTray::GetTargetWnd() const
 {
     return (NULL != m_pImpl) ? m_pImpl->GetTargetWnd() : NULL;
 }
