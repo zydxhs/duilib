@@ -15,6 +15,7 @@ enum EMMenuAlign
     EMENU_ALIGN_TOP     = 1 << 1,   // 菜单位于鼠标上侧
     EMENU_ALIGN_RIGHT   = 1 << 2,   // 菜单位于鼠标右侧
     EMENU_ALIGN_BOTTOM  = 1 << 3,   // 菜单位于鼠标下侧
+    EMENU_ALIGN_HIDE    = 1 << 4,   // 菜单不显示，用于获取指定菜单项用户数据、tag
 };
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -26,21 +27,51 @@ class DUILIB_API CMenuWnd : public CWindowWnd, public INotifyUI, public IDialogB
 {
     friend class CMenuElementUI;
 public:
-    /*
-    *   @pOwner     一级菜单不要指定这个参数，这是菜单内部使用的
-    *   @xml        菜单的布局文件
-    *   @pSkinType  菜单资源类型，当从资源加载菜单时有效
-    *   @point      菜单的左上角坐标
-    *   @pParent    菜单的父窗体管理器指针
-    *   @dwAlign    菜单的出现位置，默认出现在鼠标的右下侧。
-    */
+    /*!
+     * @brief      创建菜单并显示。
+     * @details
+     * @param[in]  CMenuElementUI * pOwner  创建子菜单时有效，这是菜单内部使用的。创建一级菜单时置为空值。
+     * @param[in]  STRINGorID xml           菜单的布局文件。.xml文件或资源ID。
+     * @param[in]  LPCTSTR pSkinType        菜单资源类型。xml为文件时忽略该参数；为资源ID时通知取_T("XML")，由用于指定。
+     * @param[in]  POINT pt                 菜单显示位置，菜单的左上角坐标。
+     * @param[in]  CPaintManagerUI * pParent 菜单的父窗体管理器指针，接收菜单消息。
+     * @param[in]  DWORD dwAlign            菜单位置鼠标的哪个位置。详见 EMMenuAlign，默认出现在鼠标的右下侧。
+     * @return     成功返回菜单窗口指定；失败返回 NULL。
+     * @attention  如果 dwAlign 组合了 EMENU_ALIGN_HIDE，则菜单不可见，用于获取指定菜单项信息。
+     */
     static CMenuWnd *CreateMenu(CMenuElementUI *pOwner, STRINGorID xml, LPCTSTR pSkinType, POINT pt,
                                 CPaintManagerUI *pParent, DWORD dwAlign = EMENU_ALIGN_RIGHT | EMENU_ALIGN_BOTTOM);
     static CMenuWnd *GetInstance(void);
+    /*!
+     * @brief      获取指定菜单项的用户数据、tag
+     * @details
+     * @param[in]  CPaintManagerUI * pm         菜单的父窗体管理器指针，接收菜单消息。
+     * @param[in]  const STRINGorID & xml       菜单的布局文件。.xml文件或资源ID。
+     * @param[in]  const CDuiString & sSkinType 菜单资源类型。xml为文件时忽略该参数；为资源ID时通知取_T("XML")，由用于指定。
+     * @param[in]  const CDuiString & sName     菜单项名字
+     * @param[in]  CDuiString & sUserData       用于保存返回的菜单项用户数据
+     * @param[in]  UINT_PTR & ptrTag            用于保存返回的菜单项tag
+     * @return     成功返回 true。
+     * @attention
+     */
+    static bool GetMenuItemInfo(CPaintManagerUI *pm, const STRINGorID &xml, const CDuiString &sSkinType,
+                                const CDuiString &sName, CDuiString &sUserData, UINT_PTR &ptrTag);
+    /*!
+     * @brief      向指定窗口发送指定的菜单项单击消息。
+     * @details
+     * @param[in]  CPaintManagerUI * pm         菜单的父窗体管理器指针，接收菜单消息。
+     * @param[in]  const CDuiString & sName     菜单项名字
+     * @param[in]  const CDuiString & sUserData 菜单项用户数据
+     * @param[in]  UINT_PTR ptrTag              菜单项tag
+     * @return
+     * @attention
+     */
+    static void PostMenuItemClickMsg(CPaintManagerUI *pm, const CDuiString &sName,
+                                     const CDuiString &sUserData, UINT_PTR ptrTag);
 
-    static CDuiString       s_strName;      // 被单击菜单项的的 名字
-    static CDuiString       s_strUserData;  // 被单击菜单项的的 用户数据
-    static UINT_PTR         s_ptrTag;       // 被单击菜单项的的 Tag
+    static CDuiString       s_strName;      // 被单击菜单项的 名字
+    static CDuiString       s_strUserData;  // 被单击菜单项的 用户数据
+    static UINT_PTR         s_ptrTag;       // 被单击菜单项的 Tag
 public:
     CMenuWnd(void);
 

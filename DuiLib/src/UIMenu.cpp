@@ -43,7 +43,7 @@ CSubjectMenu &GetGlobalMenuSubject()
 CMenuWnd   *s_pMenWnd = NULL;
 CDuiString CMenuWnd::s_strName;
 CDuiString CMenuWnd::s_strUserData;
-UINT_PTR   CMenuWnd::s_ptrTag;
+UINT_PTR   CMenuWnd::s_ptrTag = 0;
 
 CMenuWnd *CMenuWnd::CreateMenu(CMenuElementUI *pOwner, STRINGorID xml, LPCTSTR pSkinType, POINT pt,
                                CPaintManagerUI *pParent, DWORD dwAlign)
@@ -58,6 +58,51 @@ CMenuWnd *CMenuWnd::CreateMenu(CMenuElementUI *pOwner, STRINGorID xml, LPCTSTR p
 DuiLib::CMenuWnd *CMenuWnd::GetInstance(void)
 {
     return s_pMenWnd;
+}
+
+bool CMenuWnd::GetMenuItemInfo(CPaintManagerUI *pm, const STRINGorID &xml, const CDuiString &sSkinType,
+                               const CDuiString &sName, CDuiString &sUserData, UINT_PTR &ptrTag)
+{
+    POINT pos { 0, 0 };
+    CMenuWnd *pWnd = CMenuWnd::CreateMenu(NULL, xml, sSkinType, pos, pm, EMENU_ALIGN_HIDE);
+
+    if (NULL == pWnd) { return false; }
+
+    CMenuUI *pMenu = pWnd->GetMenuUI();
+
+    if (NULL == pMenu) { return false; }
+
+    CMenuElementUI *pItem = pMenu->FindMenuItem(sName);
+
+    if (NULL == pItem) { return false; }
+
+    bool bCheck = pItem->IsChecked();
+    sUserData = pItem->GetUserData();
+    ptrTag = pItem->GetTag();
+    pWnd->Close();
+    return true;
+}
+
+void CMenuWnd::PostMenuItemClickMsg(CPaintManagerUI *pm, const CDuiString &sName,
+                                    const CDuiString &sUserData, UINT_PTR ptrTag)
+{
+    ASSERT(pm);
+
+    if (pm != NULL)
+    {
+        CMenuWnd::s_strName = sName;
+        CMenuWnd::s_strUserData = sUserData;
+        CMenuWnd::s_ptrTag = ptrTag;
+        ::PostMessage(pm->GetPaintWindow(), WM_MENUITEM_CLICK, (WPARAM)CMenuWnd::s_ptrTag, NULL);
+        TNotifyUI msg;
+        msg.pSender = NULL;
+        msg.dwTimestamp = 0;
+        msg.ptMouse.x = msg.ptMouse.y = 0;
+        msg.sType = DUI_MSGTYPE_MENUITEM_CLICK;
+        msg.wParam = (WPARAM)CMenuWnd::s_ptrTag;
+        msg.lParam = NULL;
+        pm->SendNotify(msg, true);
+    }
 }
 
 CMenuWnd::CMenuWnd(void) : m_pOwner(NULL), m_xml(_T("")), m_dwAlign(EMENU_ALIGN_RIGHT | EMENU_ALIGN_BOTTOM)
@@ -374,7 +419,7 @@ void CMenuWnd::Init(CMenuElementUI *pOwner, STRINGorID xml, LPCTSTR pSkinType, P
 
     while (::GetParent(hWndParent) != NULL) { hWndParent = ::GetParent(hWndParent); }
 
-    ::ShowWindow(m_hWnd, SW_SHOW);
+    ::ShowWindow(m_hWnd, (EMENU_ALIGN_HIDE & dwAlign) ? SW_HIDE : SW_SHOW);
 #if defined(WIN32) && !defined(UNDER_CE)
     ::SendMessage(hWndParent, WM_NCACTIVATE, TRUE, 0L);
 #endif
