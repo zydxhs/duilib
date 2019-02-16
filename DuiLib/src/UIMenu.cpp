@@ -70,11 +70,11 @@ bool CMenuWnd::GetMenuItemInfo(CPaintManagerUI *pm, const STRINGorID &xml, const
 
     CMenuUI *pMenu = pWnd->GetMenuUI();
 
-    if (NULL == pMenu) { return false; }
+    if (NULL == pMenu) { pWnd->Close(); return false; }
 
     CMenuElementUI *pItem = pMenu->FindMenuItem(sName);
 
-    if (NULL == pItem) { return false; }
+    if (NULL == pItem) { pWnd->Close(); return false; }
 
     bool bCheck = pItem->IsChecked();
     sUserData = pItem->GetUserData();

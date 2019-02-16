@@ -525,8 +525,9 @@ void CSystemTrayImpl::GetMenuDefaultItem(CDuiString &sItem)
 
 BOOL CSystemTrayImpl::SetMenuDefaultItem(const CDuiString &sItem)
 {
-    m_sItemName = sItem;
-    return CMenuWnd::GetMenuItemInfo(m_pTargetPM, m_xml, m_sSkinType, sItem, m_sItemUserData, m_ptrItemTag);
+    bool bRet = CMenuWnd::GetMenuItemInfo(m_pTargetPM, m_xml, m_sSkinType, sItem, m_sItemUserData, m_ptrItemTag);
+    m_sItemName = bRet ? sItem : m_sItemName;
+    return bRet;
 }
 
 // BOOL CSystemTrayImpl::SetNotificationWnd(HWND hNotifyWnd)
