@@ -508,47 +508,70 @@ LRESULT CEditWnd::OnPaste(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandle
         return 0L;
     }
 
-    // 打开剪贴板，查看数据是否支持，如果支持则继续处理
+    // 保存编辑框当前内容
+    CDuiString strOrig = m_pOwner->GetText();
+    int nStart = 0, nEnd = 0;
+    SendMessage(EM_GETSEL, (WPARAM)&nStart, (LPARAM)&nEnd);
+
+    // 执行Paste操作
+    CWindowWnd::HandleMessage(WM_PASTE, wParam, lParam);
+
+    // 再次执行过滤，如果不满足过滤条件，恢复内容
+    // 过滤 仅数字、字符过滤、正则
+    CDuiString strTxt = m_pOwner->m_sText;
     bool bRet = false;
-    OpenClipboard(m_hWnd);
-#if defined(UNICODE) || defined(_UNICODE)
-    HANDLE hClip = GetClipboardData(CF_UNICODETEXT);
 
-    if (hClip)
+    if (m_pOwner->IsNumberOnly()) { bRet = IsValidNumber(strTxt); }
+    else if (m_pOwner->IsCharFilter()) { bRet = IsValidChar(strTxt); }
+    else if (m_pOwner->IsRegExpFilter()) { bRet = IsRegExpMatch(strTxt); }
+
+    if (!bRet)
     {
-        LPWSTR pBuf = (LPWSTR)GlobalLock(hClip);
-
-        // 过滤 仅数字、字符过滤、正则
-        if (m_pOwner->IsNumberOnly()) { bRet = IsValidNumber(pBuf); }
-        else if (m_pOwner->IsCharFilter()) { bRet = IsValidChar(pBuf); }
-        else if (m_pOwner->IsRegExpFilter()) { bRet = IsRegExpMatch(pBuf); }
-
-        GlobalUnlock(hClip);
+        SetWindowText(GetHWND(), strOrig);
+        SendMessage(EM_SETSEL, nStart, nEnd);
     }
 
-#else
-    HANDLE hClip = GetClipboardData(CF_TEXT);
-
-    if (hClip)
-    {
-        LPSTR pBuf = (LPSTR)GlobalLock(hClip);
-
-        // 过滤 仅数字、字符过滤、正则
-        if (m_pOwner->IsNumberOnly()) { bRet = IsValidNumber(pBuf); }
-        else if (m_pOwner->IsCharFilter()) { bRet = IsValidChar(pBuf); }
-        else if (m_pOwner->IsRegExpFilter()) { bRet = IsRegExpMatch(pBuf); }
-
-        GlobalUnlock(hClip);
-    }
-
-#endif
-    CloseClipboard();
-
-    if (bRet)
-    {
-        bHandled = FALSE;
-        return 0L;
-    }
+    // 打开剪贴板，查看数据是否支持，如果支持则继续处理
+    //     bool bRet = false;
+    //     OpenClipboard(m_hWnd);
+    // #if defined(UNICODE) || defined(_UNICODE)
+    //     HANDLE hClip = GetClipboardData(CF_UNICODETEXT);
+    //
+    //     if (hClip)
+    //     {
+    //         LPWSTR pBuf = (LPWSTR)GlobalLock(hClip);
+    //
+    //         // 过滤 仅数字、字符过滤、正则
+    //         if (m_pOwner->IsNumberOnly()) { bRet = IsValidNumber(pBuf); }
+    //         else if (m_pOwner->IsCharFilter()) { bRet = IsValidChar(pBuf); }
+    //         else if (m_pOwner->IsRegExpFilter()) { bRet = IsRegExpMatch(pBuf); }
+    //
+    //         GlobalUnlock(hClip);
+    //     }
+    //
+    // #else
+    //     HANDLE hClip = GetClipboardData(CF_TEXT);
+    //
+    //     if (hClip)
+    //     {
+    //         LPSTR pBuf = (LPSTR)GlobalLock(hClip);
+    //
+    //         // 过滤 仅数字、字符过滤、正则
+    //         if (m_pOwner->IsNumberOnly()) { bRet = IsValidNumber(pBuf); }
+    //         else if (m_pOwner->IsCharFilter()) { bRet = IsValidChar(pBuf); }
+    //         else if (m_pOwner->IsRegExpFilter()) { bRet = IsRegExpMatch(pBuf); }
+    //
+    //         GlobalUnlock(hClip);
+    //     }
+    //
+    // #endif
+    //     CloseClipboard();
+    //
+    //     if (bRet)
+    //     {
+    //         bHandled = FALSE;
+    //         return 0L;
+    //     }
 
     //CDuiString strValidTxt;
     //TCHAR buf[MAX_PATH] = { 0 };
