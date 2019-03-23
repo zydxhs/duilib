@@ -66,12 +66,12 @@ bool PromptBoxCallback(wkeWebView webView, void *param, const wkeString msg,
 //////////////////////////////////////////////////////////////////////////
 CWkeBrowserUI::CWkeBrowserUI(void) : m_pWeb(NULL)
 {
-    LoadWke(_T("node.dll"));
+    LoadMiniBlink(_T("node.dll"));
 }
 
 CWkeBrowserUI::~CWkeBrowserUI(void)
 {
-    FreeWke();
+    FreeMiniBlink();
 }
 
 LPCTSTR CWkeBrowserUI::GetClass() const

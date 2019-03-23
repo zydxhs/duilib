@@ -47,10 +47,10 @@ jsValue JS_CALL js_msgBox(jsExecState es)
     int n = jsArgCount(es);
     jsType t0 = jsArgType(es, 0);
     jsType t1 = jsArgType(es, 1);
-    const wchar_t *text = jsToTempStringW(es, jsArgValue(es, 0));
-    const wchar_t *title = jsToTempStringW(es, jsArgValue(es, 1));
+    CDuiString text = jsToTempString(es, jsArgValue(es, 0));
+    CDuiString title = jsToTempString(es, jsArgValue(es, 1));
 
-    return jsUndefined(es);
+    return jsUndefined();
 }
 
 void CMainDlg::OnInitWindow(void)
@@ -63,7 +63,7 @@ void CMainDlg::OnInitWindow(void)
 
     if (m_pWke)
     {
-        jsBindFunction("msgBox", js_msgBox, 2);//这里绑定js函数，让js主动调用c++函数
+        jsBindFunction(_T("msgBox"), js_msgBox, 2);//这里绑定js函数，让js主动调用c++函数
     }
 }
 

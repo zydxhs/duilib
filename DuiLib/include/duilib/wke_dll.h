@@ -1,34 +1,61 @@
-ï»¿#ifndef __WKE_DLL_H__
+#ifndef __WKE_DLL_H__
 #define __WKE_DLL_H__
 #pragma once
 
 namespace DuiLib {
+#define WKE_CALL __cdecl
+
+typedef char utf8;
+typedef __int64 jsValue;
+
+struct JsExecStateInfo;
+typedef JsExecStateInfo *jsExecState;
+
+struct _tagWkeWebView;
+typedef struct _tagWkeWebView *wkeWebView;
+
+struct _tagWkeString;
+typedef struct _tagWkeString *wkeString;
+
+typedef void *wkeWebFrameHandle;
+typedef void *wkeNetJob;
+
+typedef struct _tagWkeMediaPlayer *wkeMediaPlayer;
+typedef struct _tagWkeMediaPlayerClient *wkeMediaPlayerClient;
+typedef struct _tabblinkWebURLRequestPtr *blinkWebURLRequestPtr;
+typedef void *wkeWebFrameHandle;
 
 
-typedef struct
+struct wkeRect
 {
     int x;
     int y;
     int w;
     int h;
-} wkeRect;
+};
 
-typedef enum
+struct wkePoint
+{
+    int x;
+    int y;
+};
+
+enum wkeMouseFlags
 {
     WKE_LBUTTON = 0x01,
     WKE_RBUTTON = 0x02,
     WKE_SHIFT = 0x04,
     WKE_CONTROL = 0x08,
     WKE_MBUTTON = 0x10,
-} wkeMouseFlags;
+};
 
-typedef enum
+enum wkeKeyFlags
 {
     WKE_EXTENDED = 0x0100,
     WKE_REPEAT = 0x4000,
-} wkeKeyFlags;
+};
 
-typedef enum
+enum wkeMouseMsg
 {
     WKE_MSG_MOUSEMOVE = 0x0200,
     WKE_MSG_LBUTTONDOWN = 0x0201,
@@ -41,36 +68,9 @@ typedef enum
     WKE_MSG_MBUTTONUP = 0x0208,
     WKE_MSG_MBUTTONDBLCLK = 0x0209,
     WKE_MSG_MOUSEWHEEL = 0x020A,
-} wkeMouseMsg;
+};
 
-
-
-#if !defined(__cplusplus)
-    #ifndef HAVE_WCHAR_T
-        typedef unsigned short wchar_t;
-    #endif
-#endif
-
-#include <stdbool.h>
-
-typedef char utf8;
-
-#if !defined(__cplusplus)
-    typedef void *jsExecState;
-#else
-    struct JsExecStateInfo;
-    typedef JsExecStateInfo *jsExecState;
-#endif
-
-typedef __int64 jsValue;
-
-struct _tagWkeWebView;
-typedef struct _tagWkeWebView *wkeWebView;
-
-struct _tagWkeString;
-typedef struct _tagWkeString *wkeString;
-
-typedef enum
+enum wkeProxyType
 {
     WKE_PROXY_NONE,
     WKE_PROXY_HTTP,
@@ -78,16 +78,16 @@ typedef enum
     WKE_PROXY_SOCKS4A,
     WKE_PROXY_SOCKS5,
     WKE_PROXY_SOCKS5HOSTNAME
-} wkeProxyType;
+};
 
-typedef struct
+struct wkeProxy
 {
     wkeProxyType type;
     char hostname[100];
     unsigned short port;
     char username[50];
     char password[50];
-} wkeProxy;
+};
 
 enum wkeSettingMask
 {
@@ -95,59 +95,26 @@ enum wkeSettingMask
     WKE_SETTING_PAINTCALLBACK_IN_OTHER_THREAD = 1 << 2,
 };
 
-typedef struct
+struct wkeSettings
 {
     wkeProxy proxy;
     unsigned int mask;
-} wkeSettings;
+};
 
-typedef struct
+struct wkeViewSettings
 {
     int size;
     unsigned int bgColor;
-} wkeViewSettings;
+};
 
-typedef void *wkeWebFrameHandle;
-
-
-typedef void *(*WKE_FILE_OPEN)(const char *path);
-typedef void(*WKE_FILE_CLOSE)(void *handle);
-typedef size_t(*WKE_FILE_SIZE)(void *handle);
-typedef int(*WKE_FILE_READ)(void *handle, void *buffer, size_t size);
-typedef int(*WKE_FILE_SEEK)(void *handle, int offset, int origin);
-typedef bool(*WKE_EXISTS_FILE)(const char *path);
-
-struct _wkeClientHandler; // declare warning fix
-typedef void(*ON_TITLE_CHANGED)(const struct _wkeClientHandler *clientHandler, const wkeString title);
-typedef void(*ON_URL_CHANGED)(const struct _wkeClientHandler *clientHandler, const wkeString url);
-
-typedef struct _wkeClientHandler
+struct wkeMemBuf
 {
-    ON_TITLE_CHANGED onTitleChanged;
-    ON_URL_CHANGED onURLChanged;
-} wkeClientHandler;
+    int size;
+    void *data;
+    size_t length;
+};
 
-
-typedef bool(*wkeCookieVisitor)(
-    void *params,
-    const char *name,
-    const char *value,
-    const char *domain,
-    const char *path, // If |path| is non-empty only URLs at or below the path will get the cookie value.
-    int secure, // If |secure| is true the cookie will only be sent for HTTPS requests.
-    int httpOnly, // If |httponly| is true the cookie will only be sent for HTTP requests.
-    int *expires // The cookie expiration date is only valid if |has_expires| is true.
-);
-
-typedef enum
-{
-    wkeCookieCommandClearAllCookies,
-    wkeCookieCommandClearSessionCookies,
-    wkeCookieCommandFlushCookiesToFile,
-    wkeCookieCommandReloadCookiesFromFile,
-} wkeCookieCommand;
-
-typedef enum
+enum wkeNavigationType
 {
     WKE_NAVIGATION_TYPE_LINKCLICK,
     WKE_NAVIGATION_TYPE_FORMSUBMITTE,
@@ -155,9 +122,452 @@ typedef enum
     WKE_NAVIGATION_TYPE_RELOAD,
     WKE_NAVIGATION_TYPE_FORMRESUBMITT,
     WKE_NAVIGATION_TYPE_OTHER
-} wkeNavigationType;
+};
 
-typedef enum
+enum wkeWebDragOperation
+{
+    wkeWebDragOperationNone = 0,
+    wkeWebDragOperationCopy = 1,
+    wkeWebDragOperationLink = 2,
+    wkeWebDragOperationGeneric = 4,
+    wkeWebDragOperationPrivate = 8,
+    wkeWebDragOperationMove = 16,
+    wkeWebDragOperationDelete = 32,
+    wkeWebDragOperationEvery = 0xffffffff
+};
+typedef wkeWebDragOperation wkeWebDragOperationsMask;
+
+struct wkeWebDragData
+{
+    struct Item
+    {
+        enum wkeStorageType
+        {
+            // String data with an associated MIME type. Depending on the MIME type, there may be
+            // optional metadata attributes as well.
+            StorageTypeString,
+            // Stores the name of one file being dragged into the renderer.
+            StorageTypeFilename,
+            // An image being dragged out of the renderer. Contains a buffer holding the image data
+            // as well as the suggested name for saving the image to.
+            StorageTypeBinaryData,
+            // Stores the filesystem URL of one file being dragged into the renderer.
+            StorageTypeFileSystemFile,
+        } storageType;
+
+        // Only valid when storageType == StorageTypeString.
+        wkeMemBuf *stringType;
+        wkeMemBuf *stringData;
+        // Only valid when storageType == StorageTypeFilename.
+        wkeMemBuf *filenameData;
+        wkeMemBuf *displayNameData;
+        // Only valid when storageType == StorageTypeBinaryData.
+        wkeMemBuf *binaryData;
+        // Title associated with a link when stringType == "text/uri-list".
+        // Filename when storageType == StorageTypeBinaryData.
+        wkeMemBuf *title;
+        // Only valid when storageType == StorageTypeFileSystemFile.
+        wkeMemBuf *fileSystemURL;
+        __int64 fileSystemFileSize;
+        // Only valid when stringType == "text/html".
+        wkeMemBuf *baseURL;
+    };
+
+    struct Item *m_itemList;
+    int m_itemListLength;
+
+    int m_modifierKeyState; // State of Shift/Ctrl/Alt/Meta keys.
+    wkeMemBuf *m_filesystemId;
+};
+
+enum wkeHttBodyElementType
+{
+    wkeHttBodyElementTypeData,
+    wkeHttBodyElementTypeFile,
+};
+
+struct wkePostBodyElement
+{
+    int size;
+    wkeHttBodyElementType type;
+    wkeMemBuf *data;
+    wkeString filePath;
+    __int64 fileStart;
+    __int64 fileLength; // -1 means to the end of the file.
+};
+
+struct wkePostBodyElements
+{
+    int size;
+    wkePostBodyElement **element;
+    size_t elementSize;
+    bool isDirty;
+};
+
+enum wkeResourceType
+{
+    WKE_RESOURCE_TYPE_MAIN_FRAME = 0,       // top level page
+    WKE_RESOURCE_TYPE_SUB_FRAME = 1,        // frame or iframe
+    WKE_RESOURCE_TYPE_STYLESHEET = 2,       // a CSS stylesheet
+    WKE_RESOURCE_TYPE_SCRIPT = 3,           // an external script
+    WKE_RESOURCE_TYPE_IMAGE = 4,            // an image (jpg/gif/png/etc)
+    WKE_RESOURCE_TYPE_FONT_RESOURCE = 5,    // a font
+    WKE_RESOURCE_TYPE_SUB_RESOURCE = 6,     // an "other" subresource.
+    WKE_RESOURCE_TYPE_OBJECT = 7,           // an object (or embed) tag for a plugin, or a resource that a plugin requested.
+    WKE_RESOURCE_TYPE_MEDIA = 8,            // a media resource.
+    WKE_RESOURCE_TYPE_WORKER = 9,           // the main resource of a dedicated worker.
+    WKE_RESOURCE_TYPE_SHARED_WORKER = 10,   // the main resource of a shared worker.
+    WKE_RESOURCE_TYPE_PREFETCH = 11,        // an explicitly requested prefetch
+    WKE_RESOURCE_TYPE_FAVICON = 12,         // a favicon
+    WKE_RESOURCE_TYPE_XHR = 13,             // a XMLHttpRequest
+    WKE_RESOURCE_TYPE_PING = 14,            // a ping request for <a ping>
+    WKE_RESOURCE_TYPE_SERVICE_WORKER = 15,  // the main resource of a service worker.
+    WKE_RESOURCE_TYPE_LAST_TYPE
+};
+
+struct wkeWillSendRequestInfo
+{
+    wkeString url;
+    wkeString newUrl;
+    wkeResourceType resourceType;
+    int httpResponseCode;
+    wkeString method;
+    wkeString referrer;
+    void *headers;
+};
+
+struct wkeTempCallbackInfo
+{
+    int size;
+    wkeWebFrameHandle frame;
+    wkeWillSendRequestInfo *willSendRequestInfo;
+    const char *url;
+    wkePostBodyElements *postBody;
+    wkeNetJob job;
+};
+
+
+// miniblink ¶¯Ì¬¿âµÄ¼ÓÔØÓë³õÊ¼»¯¡£ÄÚ²¿Ê¹ÓÃÒıÓÃ¼ÆÊı£¬µ÷ÓÃ Load Ê±µ±ÒıÓÃ¼ÆÊı¼Ó1
+// ´Ë¾ä±ØĞëÔÚËùÓĞmb apiÇ°×îÏÈµ÷ÓÃ¡£²¢ÇÒËùÓĞmb api±ØĞëºÍµ÷ÓÃwkeInitµÄÏß³ÌÎªÍ¬¸öÏß³Ì
+// ²ÎÊı£º
+// szWkeDll£ºminiblink µÄÂ·¾¶£¬Â·¾¶ + ÎÄ¼şÃû¡£
+//   Ïà¶ÔÂ·¾¶£ºÏà¶ÔexeµÄÏà¶ÔÂ·¾¶ + ÎÄ¼şÃû
+//   ¾ø¶ÔÂ·¾¶£ºÈ«Â·¾¶ + ÎÄ¼şÃû
+// settings£º
+DUILIB_API bool LoadMiniBlink(LPCTSTR szWkeDll, const wkeSettings *settings = NULL);
+
+// µ÷ÓÃºóÒıÓÃ¼ÆÊı¼õ1£¬µ±ÒıÓÃ¼ÆÊıÎª0Ê±£¬Ğ¶ÔØ miniblink ¶¯Ì¬¿â£¬ËùÓĞmb api½«²»ÄÜÔÙ±»µ÷ÓÃ£¬·ñÔò»áÓĞ±ÀÀ£
+DUILIB_API void FreeMiniBlink(void);
+
+// ÉèÖÃÒ»Ğ©ÅäÖÃÏî
+// ²ÎÊı
+// typedef struct { wkeProxy proxy; unsigned int mask; } wkeSettings; mask¿ÉÒÔÈ¡:
+// WKE_SETTING_PROXY: Ğ§¹ûºÍwkeSetProxyÒ»Ñù, Í¨¹ıproxyÉèÖÃ
+// WKE_SETTING_PAINTCALLBACK_IN_OTHER_THREAD£ºÕâÊÇ¸ö¸ß¼¶ÓÃ·¨£¬¿ªÆôÊ±£¬on paint»Øµ÷»áÔÚÁíÍâ¸öÏß³Ì£¨ÆäÊµ¾ÍÊÇäÖÈ¾Ïß³Ì£©¡£
+// Õâ¸öÊÇÓÃÀ´ÊµÏÖ¶àÏß³ÌÉÏÆÁ¹¦ÄÜ£¬ĞÔÄÜ¸ü¿ì¡£
+DUILIB_API void wkeConfigure(const wkeSettings *settings);
+DUILIB_API bool wkeIsInitialize();
+DUILIB_API void wkeUpdate();
+
+// »ñÈ¡°æ±¾ºÅ
+DUILIB_API unsigned int wkeGetVersion();
+DUILIB_API CDuiString wkeGetVersionStr();
+
+// ´´½¨Ò»¸öwebview£¬µ«²»´´½¨Õæ´°¿Ú¡£Ò»°ãÓÃÔÚÀëÆÁäÖÈ¾Àï£¬ÈçÓÎÏ·
+DUILIB_API wkeWebView wkeCreateWebView();
+// Ğ§¹ûÍ¬wkeDestroyWebWindow
+DUILIB_API void wkeDestroyWebView(wkeWebView webView);
+
+// ÉèÖÃÒ»Ğ©webviewÏà¹ØµÄÉèÖÃ.Ä¿Ç°Ö»ÓĞ±³¾°ÑÕÉ«¿ÉÒÔÉèÖÃ
+DUILIB_API void wkeSetViewSettings(wkeWebView webView, const wkeViewSettings *settings);
+// ¿ªÆôÒ»Ğ©ÊµÑéĞÔÑ¡Ïî¡£
+// ²ÎÊı£º
+// debugString£º
+// "showDevTools"   ¿ªÆô¿ª·¢Õß¹¤¾ß£¬´ËÊ±paramÒªÌîĞ´¿ª·¢Õß¹¤¾ßµÄ×ÊÔ´Â·¾¶£¬Èçfile:///c:/miniblink-release/front_end/inspector.html¡£×¢Òâparam´ËÊ±±ØĞëÊÇutf8±àÂë
+// "wakeMinInterval"    ÉèÖÃÖ¡ÂÊ£¬Ä¬ÈÏÖµÊÇ10£¬ÖµÔ½´óÖ¡ÂÊÔ½µÍ
+// "drawMinInterval"    ÉèÖÃÖ¡ÂÊ£¬Ä¬ÈÏÖµÊÇ3£¬ÖµÔ½´óÖ¡ÂÊÔ½µÍ
+// "antiAlias"  ÉèÖÃ¿¹¾â³İäÖÈ¾¡£param±ØĞëÉèÖÃÎª"1"
+// "minimumFontSize"    ×îĞ¡×ÖÌå
+// "minimumLogicalFontSize" ×îĞ¡Âß¼­×ÖÌå
+// "defaultFontSize"    Ä¬ÈÏ×ÖÌå
+// "defaultFixedFontSize"   Ä¬ÈÏfixed×ÖÌå
+DUILIB_API void wkeSetDebugConfig(wkeWebView webView, CDuiString debugString, CDuiString param);
+// µ¥¶ÀÉèÖÃ×ÊÔ´»ØÊÕ¼ä¸ô
+DUILIB_API void wkeSetResourceGc(wkeWebView webView, long intervalSec);
+
+// ¿ªÆôÄÚ´æ»º´æ¡£ÍøÒ³µÄÍ¼Æ¬µÈ¶¼»áÔÚÄÚ´æ»º´æÀï¡£¹Ø±Õºó£¬ÄÚ´æÊ¹ÓÃ»á½µµÍÒ»Ğ©£¬µ«ÈİÒ×ÒıÆğÒ»Ğ©ÎÊÌâ£¬Èç¹û²»¶®ÔõÃ´ÓÃ£¬×îºÃ±ğ¿ª
+DUILIB_API void wkeSetMemoryCacheEnable(wkeWebView webView, bool b);
+// ¿ªÆô¹Ø±ÕÊó±êÏûÏ¢£¬¿ÉÒÔÔÚ¿ªÆô´¥ÆÁºó£¬¹Ø±ÕÊó±êÏûÏ¢
+DUILIB_API void wkeSetMouseEnabled(wkeWebView webView, bool b);
+// ¿ªÆô´¥ÆÁÄ£Ê½¡£¿ªÆôºó£¬Êó±êÏûÏ¢½«×Ô¶¯×ª»»³É´¥ÆÁÏûÏ¢
+DUILIB_API void wkeSetTouchEnabled(wkeWebView webView, bool b);
+DUILIB_API void wkeSetContextMenuEnabled(wkeWebView webView, bool b);
+// ¹Ø±Õºó£¬µãa±êÇ©½«²»»áµ¯³öĞÂ´°¿Ú£¬¶øÊÇÔÚ±¾´°¿ÚÌø×ª
+DUILIB_API void wkeSetNavigationToNewWindowEnable(wkeWebView webView, bool b);
+// ¹Ø±Õºó£¬¿çÓò¼ì²é½«±»½ûÖ¹£¬´ËÊ±¿ÉÒÔ×öÈÎºÎ¿çÓò²Ù×÷£¬Èç¿çÓòajax£¬¿çÓòÉèÖÃiframe
+DUILIB_API void wkeSetCspCheckEnable(wkeWebView webView, bool b);
+// ¿ªÆô¹Ø±Õnpapi²å¼ş£¬Èçflash
+DUILIB_API void wkeSetNpapiPluginsEnabled(wkeWebView webView, bool b);
+// ¿ªÆôÎŞÍ·Ä£Ê½¡£¿ªÆôºó£¬½«²»»áäÖÈ¾Ò³Ãæ£¬ÌáÉıÁËÍøÒ³ĞÔÄÜ¡£´Ë¹¦ÄÜ·½±ãÓÃÀ´ÊµÏÖÒ»Ğ©ÅÀ³æ£¬»òÕßË¢µ¥¹¤¾ß
+DUILIB_API void wkeSetHeadlessEnabled(wkeWebView webView, bool b);
+// ¿É¹Ø±ÕÍÏ×§ÎÄ¼ş¼ÓÔØÍøÒ³
+DUILIB_API void wkeSetDragEnable(wkeWebView webView, bool b);
+// ¿É¹Ø±ÕÍÏ×§µ½ÆäËû½ø³Ì
+DUILIB_API void wkeSetDragDropEnable(wkeWebView webView, bool b);
+DUILIB_API void wkeSetLanguage(wkeWebView webView, CDuiString language);
+
+DUILIB_API void wkeSetViewNetInterface(wkeWebView webView, CDuiString netInterface);
+
+// ÉèÖÃÕû¸ömbµÄ´úÂë¡£´Ë¾äÊÇÈ«¾ÖÉúĞ§
+DUILIB_API void wkeSetProxy(const wkeProxy *proxy);
+// ÉèÖÃÕû¸ömbµÄ´úÂë¡£´Ë¾äÊÇÕë¶ÔÌØ¶¨webviewÉúĞ§
+DUILIB_API void wkeSetViewProxy(wkeWebView webView, wkeProxy *proxy);
+
+DUILIB_API CDuiString wkeGetName(wkeWebView webView);
+DUILIB_API void wkeSetName(wkeWebView webView, CDuiString name);
+
+// ÉèÖÃwkeWebView¶ÔÓ¦µÄ´°¿Ú¾ä±ú¡£
+// ×¢Òâ£ºÖ»ÓĞÔÚÎŞ´°¿ÚÄ£Ê½ÏÂ²ÅÄÜÊ¹ÓÃ¡£Èç¹ûÊÇÓÃwkeCreateWebWindow´´½¨µÄwebview£¬ÒÑ¾­×Ô´ø´°¿Ú¾ä±úÁË¡£
+DUILIB_API void wkeSetHandle(wkeWebView webView, HWND wnd);
+// ÉèÖÃÎŞ´°¿ÚÄ£Ê½ÏÂµÄ»æÖÆÆ«ÒÆ¡£ÔÚÄ³Ğ©Çé¿öÏÂ£¨Ö÷ÒªÊÇÀëÆÁÄ£Ê½£©£¬»æÖÆµÄµØ·½²»ÔÚÕæ´°¿ÚµÄ(0, 0)´¦£¬¾ÍĞèÒªÊÖ¶¯µ÷ÓÃ´Ë½Ó¿Úvoid wkeSetCspCheckEnable(wkeWebView webView, bool b)
+// ¹Ø±Õºó£¬¿çÓò¼ì²é½«±»½ûÖ¹£¬´ËÊ±¿ÉÒÔ×öÈÎºÎ¿çÓò²Ù×÷£¬Èç¿çÓòajax£¬¿çÓòÉèÖÃiframe
+DUILIB_API void wkeSetHandleOffset(wkeWebView webView, int x, int y);
+
+// ÅĞ¶Ï´°¿ÚÊÇ·ñÊÇ·Ö²ã´°¿Ú£¨layer window£©
+DUILIB_API bool wkeIsTransparent(wkeWebView webView);
+// Í¨ÖªÎŞ´°¿ÚÄ£Ê½ÏÂ£¬webview¿ªÆôÍ¸Ã÷Ä£Ê½¡£
+DUILIB_API void wkeSetTransparent(wkeWebView webView, bool transparent);
+
+// ÉèÖÃwebviewµÄUA
+DUILIB_API void wkeSetUserAgent(wkeWebView webView, CDuiString userAgent);
+// »ñÈ¡webviewµÄUA
+DUILIB_API CDuiString wkeGetUserAgent(wkeWebView webView);
+
+typedef void(WKE_CALL *wkeOnShowDevtoolsCallback)(wkeWebView webView, void *param);
+DUILIB_API void wkeShowDevtools(wkeWebView webView, CDuiString path, wkeOnShowDevtoolsCallback callback,
+                                void *param);
+
+// ¼ÓÔØurl¡£url±ØĞëÊÇÍøÂçÂ·¾¶£¬Èç"http://qq.com/"
+DUILIB_API void wkeLoadURL(wkeWebView webView, CDuiString url);
+DUILIB_API void wkePostURL(wkeWebView wkeView, CDuiString url, CDuiString postData);
+// ¼ÓÔØÒ»¶Îhtml
+// ²ÎÊı£ºÂÔ
+// ×¢Òâ£ºÈç¹ûhtmlÀïÓĞÏà¶ÔÂ·¾¶£¬ÔòÊÇÏà¶ÔexeËùÔÚÄ¿Â¼µÄÂ·¾¶
+DUILIB_API void wkeLoadHTML(wkeWebView webView, CDuiString html);
+// ¼ÓÔØÒ»¶Îhtml£¬µ«¿ÉÒÔÖ¸¶¨baseURL£¬Ò²¾ÍÊÇÏà¶ÔÓÚÄÄ¸öÄ¿Â¼µÄurl
+DUILIB_API void wkeLoadHtmlWithBaseUrl(wkeWebView webView, CDuiString html, CDuiString baseUrl);
+
+DUILIB_API void wkeLoadFile(wkeWebView webView, CDuiString filename);
+
+// »ñÈ¡webviewÖ÷frameµÄurl
+DUILIB_API CDuiString wkeGetURL(wkeWebView webView);
+
+// »ñÈ¡frame¶ÔÓ¦µÄurl
+DUILIB_API CDuiString wkeGetFrameUrl(wkeWebView webView, wkeWebFrameHandle frameId);
+
+DUILIB_API bool wkeIsLoading(wkeWebView webView);
+DUILIB_API bool wkeIsLoadingSucceeded(wkeWebView webView);
+DUILIB_API bool wkeIsLoadingFailed(wkeWebView webView);
+DUILIB_API bool wkeIsLoadingCompleted(wkeWebView webView);
+// DOM ÎÄµµ½á¹¹ÊÇ·ñ¼ÓÔØÍê³É¡£
+DUILIB_API bool wkeIsDocumentReady(wkeWebView webView);
+// Í£Ö¹¼ÓÔØÒ³Ãæ
+DUILIB_API void wkeStopLoading(wkeWebView webView);
+// ÖØĞÂ¼ÓÔØÒ³Ãæ
+DUILIB_API void wkeReload(wkeWebView webView);
+DUILIB_API void wkeGoToOffset(wkeWebView webView, int offset);
+DUILIB_API void wkeGoToIndex(wkeWebView webView, int index);
+
+DUILIB_API int wkeGetWebviewId(wkeWebView webView);
+DUILIB_API bool wkeIsWebviewAlive(int id);
+
+DUILIB_API CDuiString wkeGetDocumentCompleteURL(wkeWebView webView, wkeWebFrameHandle frameId,
+                                                CDuiString partialURL);
+
+DUILIB_API wkeMemBuf *wkeCreateMemBuf(wkeWebView webView, void *buf, size_t length);
+DUILIB_API void wkeFreeMemBuf(wkeMemBuf *buf);
+
+// »ñÈ¡Ò³Ãæ±êÌâ
+DUILIB_API CDuiString wkeGetTitle(wkeWebView webView);
+
+// ÖØĞÂÉèÖÃÒ³ÃæµÄ¿í¸ß¡£Èç¹ûwebViewÊÇ´ø´°¿ÚÄ£Ê½µÄ£¬»áÉèÖÃÕæ´°¿ÚµÄ¿í¸ß¡£
+DUILIB_API void wkeResize(wkeWebView webView, int w, int h);
+// »ñÈ¡Ò³Ãæ¿í¶È
+DUILIB_API int wkeGetWidth(wkeWebView webView);
+// »ñÈ¡Ò³Ãæ¸ß¶È
+DUILIB_API int wkeGetHeight(wkeWebView webView);
+// »ñÈ¡ÍøÒ³ÅÅ°æ³öÀ´µÄ¿í¶È
+DUILIB_API int wkeGetContentWidth(wkeWebView webView);
+// »ñÈ¡ÍøÒ³ÅÅ°æ³öÀ´µÄ¸ß¶È
+DUILIB_API int wkeGetContentHeight(wkeWebView webView);
+
+DUILIB_API void wkeSetDirty(wkeWebView webView, bool dirty);
+DUILIB_API bool wkeIsDirty(wkeWebView webView);
+DUILIB_API void wkeAddDirtyArea(wkeWebView webView, int x, int y, int w, int h);
+DUILIB_API void wkeLayoutIfNeeded(wkeWebView webView);
+// »ñÈ¡Ò³ÃæÏñËØ¡£
+// ²ÎÊı£º
+// bits Íâ²¿ÉêÇë²¢´«µİ¸ømbµÄbuffer£¬´óĞ¡ÊÇbufWid * bufHei * 4 ×Ö½Ú
+// bufW¡¢bufH  bitsµÄ¿í¸ß
+// xDst¡¢yDst  »æÖÆµ½bitsµÄÄÄ¸ö×ø±ê
+// w¡¢h¡¢xSrc¡¢ySrc  mbĞèÒªÈ¡µÄ»­ÃæµÄÆğÊ¼×ø±ê
+// bCopyAlpha   ÊÇ·ñ¿½±´»­ÃæµÄÍ¸Ã÷¶ÈÖµ
+// ×¢Òâ£º´Ëº¯ÊıÒ»°ã¸ø3dÓÎÏ·Ê¹ÓÃ¡£ÁíÍâÆµ·±Ê¹ÓÃ´Ë½Ó¿Ú²¢¿½±´ÏñËØÓĞĞÔÄÜÎÊÌâ¡£×îºÃÓÃwkeGetViewDCÔÙÈ¥¿½±´dc¡£
+DUILIB_API void wkePaint2(wkeWebView webView, void *bits, int bufW, int bufH, int xDst, int yDst, int w,
+                          int h, int xSrc, int ySrc, bool bCopyAlpha);
+// »ñÈ¡Ò³ÃæµÄÏñËØµÄ¼ò»¯°æº¯Êı¡£
+// ²ÎÊı£º
+// bits£ºÍâ²¿ÉêÇë²¢´«µİ¸ømbµÄbuffer£¬´óĞ¡ÊÇwebview¿í¶È * ¸ß¶È * 4 ×Ö½Ú¡£
+// pitch£ºÌî0¼´¿É¡£Õâ¸ö²ÎÊıÍæ¹ıdirectXµÄÈËÓ¦¸Ã¶®
+DUILIB_API void wkePaint(wkeWebView webView, void *bits, int pitch);
+DUILIB_API void wkeRepaintIfNeeded(wkeWebView webView);
+// »ñÈ¡webviewµÄDC
+DUILIB_API HDC wkeGetViewDC(wkeWebView webView);
+// »ñÈ¡webveiw¶ÔÓ¦µÄ´°¿Ú¾ä±ú¡£ÊµÏÖºÍwkeGetWindowHandleÍêÈ«ÏàÍ¬
+DUILIB_API HWND wkeGetHostHWND(wkeWebView webView);
+
+// Ò³ÃæÊÇ·ñ¿ÉÒÔºóÍË£¬Ò³ÃæºóÍË
+DUILIB_API bool wkeCanGoBack(wkeWebView webView);
+DUILIB_API bool wkeGoBack(wkeWebView webView);
+// Ò³ÃæÊÇ·ñ¿ÉÒÔÇ°½ø£¬Ò³ÃæÇ°½ø
+DUILIB_API bool wkeCanGoForward(wkeWebView webView);
+DUILIB_API bool wkeGoForward(wkeWebView webView);
+
+// ¸øwebview·¢ËÍÈ«Ñ¡¡¢È¡ÏûÑ¡ÔñÃüÁî
+DUILIB_API void wkeEditorSelectAll(wkeWebView webView);
+DUILIB_API void wkeEditorUnSelect(wkeWebView webView);
+// ¿½±´¡¢¼ôÇĞ¡¢Õ³Ìù¡¢É¾³ı¡¢³·Ïû¡¢ÖØ×ö Ò³ÃæÀï±»Ñ¡ÖĞµÄ×Ö·û´®
+DUILIB_API void wkeEditorCopy(wkeWebView webView);
+DUILIB_API void wkeEditorCut(wkeWebView webView);
+DUILIB_API void wkeEditorPaste(wkeWebView webView);
+DUILIB_API void wkeEditorDelete(wkeWebView webView);
+DUILIB_API void wkeEditorUndo(wkeWebView webView);
+DUILIB_API void wkeEditorRedo(wkeWebView webView);
+
+// »ñÈ¡Ò³ÃæµÄcookie
+DUILIB_API CDuiString wkeGetCookie(wkeWebView webView);
+// ÉèÖÃÒ³Ãæcookie¡£
+// ×¢Òâ£ºcookie±ØĞë·ûºÏcurlµÄcookieĞ´·¨¡£Ò»¸öÀı×ÓÊÇ£ºPERSONALIZE=123;expires=Monday, 13-Jun-2022 03:04:55 GMT; domain=.fidelity.com; path=/; secure
+DUILIB_API void wkeSetCookie(wkeWebView webView, CDuiString url, CDuiString cookie);
+
+typedef bool(WKE_CALL *wkeCookieVisitor)(
+    void *params,
+    const utf8 *name,
+    const utf8 *value,
+    const utf8 *domain,
+    const utf8 *path, // If |path| is non-empty only URLs at or below the path will get the cookie value.
+    int secure, // If |secure| is true the cookie will only be sent for HTTPS requests.
+    int httpOnly, // If |httponly| is true the cookie will only be sent for HTTP requests.
+    int *expires // The cookie expiration date is only valid if |has_expires| is true.
+);
+// Í¨¹ı·ÃÎÊÆ÷visitor·ÃÎÊËùÓĞcookie¡£
+// ²ÎÊı£º
+// visitor£º·ÃÎÊÆ÷¡£
+DUILIB_API void wkeVisitAllCookie(void *params, wkeCookieVisitor visitor);
+
+enum wkeCookieCommand
+{
+    wkeCookieCommandClearAllCookies,
+    wkeCookieCommandClearSessionCookies,
+    wkeCookieCommandFlushCookiesToFile,
+    wkeCookieCommandReloadCookiesFromFile,
+};
+// Í¨¹ıÉèÖÃmbÄÚÖÃµÄcurlÀ´²Ù×÷cookie¡£
+// ²ÎÊı£º
+// command:
+// wkeCookieCommandClearAllCookies: ÄÚ²¿Êµ¼ÊÖ´ĞĞÁËcurl_easy_setopt(curl, CURLOPT_COOKIELIST, "ALL");
+// wkeCookieCommandClearSessionCookies: curl_easy_setopt(curl, CURLOPT_COOKIELIST, "SESS");
+// wkeCookieCommandFlushCookiesToFile: curl_easy_setopt(curl, CURLOPT_COOKIELIST, "FLUSH");
+// wkeCookieCommandReloadCookiesFromFile: curl_easy_setopt(curl, CURLOPT_COOKIELIST, "RELOAD");
+// ×¢Òâ£ºÕâ¸ö½Ó¿ÚÖ»ÊÇµ÷ÓÃcurlÉèÖÃÃüÁî£¬²¢²»»áÈ¥ĞŞ¸ÄjsÀïµÄÄÚÈİ
+DUILIB_API void wkePerformCookieCommand(wkeWebView webView, wkeCookieCommand command);
+
+// ¿ªÆô»ò¹Ø±Õcookie
+// ×¢Òâ£ºÕâ¸ö½Ó¿ÚÖ»ÊÇÓ°Ïìblink£¬²¢²»»áÉèÖÃcurl¡£ËùÒÔ»¹ÊÇ»áÉú³ÉcurlµÄcookieÎÄ¼ş
+DUILIB_API void wkeSetCookieEnabled(wkeWebView webView, bool enable);
+DUILIB_API bool wkeIsCookieEnabled(wkeWebView webView);
+// ÉèÖÃcookieµÄ±¾µØÎÄ¼şÄ¿Â¼¡£Ä¬ÈÏÊÇµ±Ç°Ä¿Â¼¡£cookies´æÔÚµ±Ç°Ä¿Â¼µÄ¡°cookie.dat¡±Àï
+DUILIB_API void wkeSetCookieJarPath(wkeWebView webView, CDuiString path);
+// ÉèÖÃcookieµÄÈ«Â·¾¶+ÎÄ¼şÃû£¬Èç¡°c:\mb\cookie.dat¡±
+DUILIB_API void wkeSetCookieJarFullPath(wkeWebView webView, CDuiString path);
+// ÉèÖÃlocal storageµÄÈ«Â·¾¶¡£Èç¡°c:\mb\LocalStorage\¡±
+// ×¢Òâ£ºÕâ¸ö½Ó¿ÚÖ»ÄÜ½ÓÊÜÄ¿Â¼¡£
+DUILIB_API void wkeSetLocalStorageFullPath(wkeWebView webView, CDuiString path);
+DUILIB_API void wkeAddPluginDirectory(wkeWebView webView, CDuiString path);
+
+// ÉèÖÃ¡¢»ñÈ¡ ÒôÁ¿
+DUILIB_API void wkeSetMediaVolume(wkeWebView webView, float volume);
+DUILIB_API float wkeGetMediaVolume(wkeWebView webView);
+
+// Ïòmb·¢ËÍÊó±êÏûÏ¢
+// ²ÎÊı£º
+// message£º¿ÉÈ¡WM_MOUSELEAVEµÈWindowsÏà¹ØÊó±êÏûÏ¢
+// x¡¢y£º×ø±ê
+// flags£º¿ÉÈ¡ÖµÓĞWKE_CONTROL¡¢WKE_SHIFT¡¢WKE_LBUTTON¡¢WKE_MBUTTON¡¢WKE_RBUTTON£¬¿ÉÍ¨¹ı¡°»ò¡±²Ù×÷²¢Áª¡£
+DUILIB_API bool wkeFireMouseEvent(wkeWebView webView, unsigned int message, int x, int y, unsigned int flags);
+// Ïòmb·¢ËÍ²Ëµ¥ÏûÏ¢£¨Î´ÊµÏÖ£©
+DUILIB_API bool wkeFireContextMenuEvent(wkeWebView webView, int x, int y, unsigned int flags);
+// Ïòmb·¢ËÍ¹öÂÖÏûÏ¢£¬ÓÃ·¨ºÍ²ÎÊıÀàËÆwkeFireMouseEvent¡£
+DUILIB_API bool wkeFireMouseWheelEvent(wkeWebView webView, int x, int y, int delta, unsigned int flags);
+// Ïòmb·¢ËÍWM_KEYUPÏûÏ¢£¬
+// ²ÎÊı£º
+// virtualKeyCode£º¼ûhttps://msdn.microsoft.com/en-us/library/windows/desktop/dd375731(v=vs.85).aspx
+// flags£º¿ÉÈ¡ÖµÓĞWKE_REPEAT¡¢WKE_EXTENDED£¬¿ÉÍ¨¹ı¡°»ò¡±²Ù×÷²¢Áª¡£ systemKey£ºÔİÊ±Ã»ÓÃ
+DUILIB_API bool wkeFireKeyUpEvent(wkeWebView webView, unsigned int virtualKeyCode, unsigned int flags,
+                                  bool systemKey);
+DUILIB_API bool wkeFireKeyDownEvent(wkeWebView webView, unsigned int virtualKeyCode, unsigned int flags,
+                                    bool systemKey);
+// ²ÎÊı£º
+// charCode£ºWM_CHARÏûÏ¢µÄThe character code of the key.
+// ¼ûhttps://msdn.microsoft.com/en-us/library/windows/desktop/ms646276(v=vs.85).aspx
+DUILIB_API bool wkeFireKeyPressEvent(wkeWebView webView, unsigned int charCode, unsigned int flags,
+                                     bool systemKey);
+// Ïòmb·¢ËÍÈÎÒâwindowsÏûÏ¢¡£²»¹ıÄ¿Ç°mbÖ÷ÒªÓÃÀ´´¦Àí¹â±êÏà¹Ø¡£mbÔÚÎŞ´°¿ÚÄ£Ê½ÏÂ£¬ÒªÏìÓ¦¹â±êÊÂ¼ş£¬ĞèÒªÍ¨¹ı±¾º¯ÊıÊÖ¶¯·¢ËÍ¹â±êÏûÏ¢
+DUILIB_API bool wkeFireWindowsMessage(wkeWebView webView, HWND hWnd, UINT message, WPARAM wParam,
+                                      LPARAM lParam, LRESULT *result);
+
+// ÉèÖÃwebviewÊÇ½¹µãÌ¬¡£Èç¹ûwebveiw¹ØÁªÁË´°¿Ú£¬´°¿ÚÒ²»áÓĞ½¹µã
+DUILIB_API void wkeSetFocus(wkeWebView webView);
+DUILIB_API void wkeKillFocus(wkeWebView webView);
+
+// »ñÈ¡±à¼­¿òµÄÄÇ¸öÓÎ±êµÄÎ»ÖÃ
+DUILIB_API wkeRect wkeGetCaretRect(wkeWebView webView);
+
+// ÔËĞĞÒ»¶Îjs¡£·µ»ØjsµÄÖµjsValue¡£jsValueÊÇ¸ö·â×°ÁËÄÚ²¿v8¸÷ÖÖÀàĞÍµÄÀà£¬Èç¹ûĞèÒª»ñÈ¡ÏêÏ¸ĞÅÏ¢£¬ÓĞjsXXXÏà¹Ø½Ó¿Ú¿ÉÒÔµ÷ÓÃ¡£¼ûÏÂÊö¡£
+// ×¢Òâ£¬´Ëº¯ÊıÒÔ¼°wkeRunJS£¬Ö´ĞĞµÄjs£¬Ò²¾ÍÊÇscript£¬ÊÇÔÚÒ»¸ö±Õ°üÖĞ
+DUILIB_API jsValue wkeRunJS(wkeWebView webView, CDuiString script);
+
+// »ñÈ¡Ò³ÃæÖ÷frameµÄjsExecState¡£jsExecStateÊÇÊ²Ã´£¬¼ûÏÂÊö¡£
+DUILIB_API jsExecState wkeGlobalExec(wkeWebView webView);
+DUILIB_API jsExecState wkeGetGlobalExecByFrame(wkeWebView webView, wkeWebFrameHandle frameId);
+
+DUILIB_API void wkeSleep(wkeWebView webView);
+DUILIB_API void wkeWake(wkeWebView webView);
+DUILIB_API bool wkeIsAwake(wkeWebView webView);
+
+// ÉèÖÃÒ³ÃæËõ·ÅÏµÊı£¬Ä¬ÈÏÊÇ1
+DUILIB_API void wkeSetZoomFactor(wkeWebView webView, float factor);
+DUILIB_API float wkeGetZoomFactor(wkeWebView webView);
+
+DUILIB_API void wkeSetEditable(wkeWebView webView, bool editable);
+
+// »ñÈ¡wkeString½á¹¹Ìå¶ÔÓ¦µÄ×Ö·û´®£¬ansi/utf16±àÂë
+DUILIB_API CDuiString wkeGetString(const wkeString s);
+// ÉèÖÃwkeString½á¹¹Ìå¶ÔÓ¦µÄ×Ö·û´®£¬ansi/utf16±àÂë
+DUILIB_API void wkeSetString(wkeString string, CDuiString str);
+
+// Í¨¹ıutf16±àÂëµÄ×Ö·û´®£¬´´½¨Ò»¸öwkeString
+DUILIB_API wkeString wkeCreateString(CDuiString str);
+// Îö¹¹Õâ¸öwkeString
+DUILIB_API void wkeDeleteString(wkeString str);
+
+DUILIB_API wkeWebView wkeGetWebViewForCurrentContext();
+// ¶ÔwebViewÉèÖÃÒ»¸ökey value¼üÖµ¶Ô¡£¿ÉÒÔÓÃÀ´±£´æÓÃ»§×Ô¼º¶¨ÒåµÄÈÎºÎÖ¸Õë
+DUILIB_API void wkeSetUserKeyValue(wkeWebView webView, CDuiString key, void *value);
+DUILIB_API void *wkeGetUserKeyValue(wkeWebView webView, CDuiString key);
+
+
+enum WkeCursorInfoType
 {
     WkeCursorInfoPointer,
     WkeCursorInfoCross,
@@ -203,9 +613,89 @@ typedef enum
     WkeCursorInfoGrab,
     WkeCursorInfoGrabbing,
     WkeCursorInfoCustom
-} WkeCursorInfoType;
+};
+DUILIB_API int wkeGetCursorInfoType(wkeWebView webView);
 
-typedef struct
+DUILIB_API void wkeSetDragFiles(wkeWebView webView, const POINT *clintPos, const POINT *screenPos,
+                                wkeString files[], int filesCount);
+
+// ÉèÖÃmbÄ£ÄâµÄÓ²¼şÉè±¸»·¾³¡£Ö÷ÒªÓÃÔÚÎ±×°ÊÖ»úÉè±¸³¡¾°
+// ²ÎÊı£º
+// device£ºÉè±¸µÄ×Ö·û´®¡£¿ÉÈ¡ÖµÓĞ£º
+// "navigator.maxTouchPoints"   ´ËÊ± paramInt ĞèÒª±»ÉèÖÃ£¬±íÊ¾ touch µÄµãÊı
+// "navigator.platform" ´ËÊ± paramStr ĞèÒª±»ÉèÖÃ£¬±íÊ¾jsÀï»ñÈ¡µÄ navigator.platform×Ö·û´®
+// "navigator.hardwareConcurrency"  ´ËÊ± paramInt ĞèÒª±»ÉèÖÃ£¬±íÊ¾jsÀï»ñÈ¡µÄ navigator.hardwareConcurrency ÕûÊıÖµ
+// "screen.width"   ´ËÊ± paramInt ĞèÒª±»ÉèÖÃ£¬±íÊ¾jsÀï»ñÈ¡µÄ screen.width ÕûÊıÖµ
+// "screen.height"  ´ËÊ± paramInt ĞèÒª±»ÉèÖÃ£¬±íÊ¾jsÀï»ñÈ¡µÄ screen.height ÕûÊıÖµ
+// "screen.availWidth"  ´ËÊ± paramInt ĞèÒª±»ÉèÖÃ£¬±íÊ¾jsÀï»ñÈ¡µÄ screen.availWidth ÕûÊıÖµ
+// "screen.availHeight" ´ËÊ± paramInt ĞèÒª±»ÉèÖÃ£¬±íÊ¾jsÀï»ñÈ¡µÄ screen.availHeight ÕûÊıÖµ
+// "screen.pixelDepth"  ´ËÊ± paramInt ĞèÒª±»ÉèÖÃ£¬±íÊ¾jsÀï»ñÈ¡µÄ screen.pixelDepth ÕûÊıÖµ
+// "screen.pixelDepth"  Ä¿Ç°µÈ¼ÛÓÚ"screen.pixelDepth"
+// "window.devicePixelRatio"    Í¬ÉÏ
+DUILIB_API void wkeSetDeviceParameter(wkeWebView webView, CDuiString device, CDuiString paramStr,
+                                      int paramInt, float paramFloat);
+
+DUILIB_API wkeTempCallbackInfo *wkeGetTempCallbackInfo(wkeWebView webView);
+
+
+//wke callback-----------------------------------------------------------------------------------
+typedef void(WKE_CALL *wkeTitleChangedCallback)(wkeWebView webView, void *param, const wkeString title);
+// ÉèÖÃ±êÌâ±ä»¯µÄÍ¨Öª»Øµ÷
+// ²ÎÊı£ºtypedef void(*wkeTitleChangedCallback)(wkeWebView webView, void* param, const wkeString title);
+// title£º±êÌâµÄ×Ö·û´®·â×°¡£wkeStringÔõÃ´ÓÃ£¬¼ûÏà¹Ø½Ó¿Ú¡£ param£ºÍ¨¹ıwkeOnTitleChangedµÄcallbackParamÉèÖÃ
+DUILIB_API void wkeOnTitleChanged(wkeWebView webView, wkeTitleChangedCallback callback, void *callbackParam);
+// Êó±ê»®¹ıµÄÔªËØ£¬Èç¹ûÊÇ£¬Ôòµ÷ÓÃ´Ë»Øµ÷£¬²¢·¢ËÍa±êÇ©µÄurl
+DUILIB_API void wkeOnMouseOverUrlChanged(wkeWebView webView, wkeTitleChangedCallback callback,
+                                         void *callbackParam);
+
+typedef void(WKE_CALL *wkeURLChangedCallback)(wkeWebView webView, void *param, const wkeString url);
+// url¸Ä±ä»Øµ÷
+DUILIB_API void wkeOnURLChanged(wkeWebView webView, wkeURLChangedCallback callback, void *callbackParam);
+typedef void(WKE_CALL *wkeURLChangedCallback2)(wkeWebView webView, void *param,
+                                               wkeWebFrameHandle frameId, const wkeString url);
+// ºÍÉÏ¸ö½Ó¿Ú²»Í¬µÄÊÇ£¬»Øµ÷¶àÁË¸ö²ÎÊı
+// ²ÎÊı£ºtypedef void(*wkeURLChangedCallback2)(wkeWebView webView, void* param, wkeWebFrameHandle frameId, const wkeString url)
+// frameId£º±íÊ¾frameµÄid¡£ÓĞÏà¹Ø½Ó¿Ú¿ÉÒÔÅĞ¶ÏÕâ¸öframeIdÊÇ·ñÊÇÖ÷frame
+DUILIB_API void wkeOnURLChanged2(wkeWebView webView, wkeURLChangedCallback2 callback, void *callbackParam);
+
+typedef void(WKE_CALL *wkePaintUpdatedCallback)(wkeWebView webView, void *param, const HDC hdc,
+                                                int x, int y, int cx, int cy);
+// Ò³ÃæÓĞÈÎºÎĞèÒªË¢ĞÂµÄµØ·½£¬½«µ÷ÓÃ´Ë»Øµ÷
+// ²ÎÊı£ºtypedef void(*wkePaintUpdatedCallback)(wkeWebView webView, void* param, const HDC hdc, int x, int y, int cx, int cy)
+// x¡¢y¡¢cx¡¢cy±íÊ¾Ë¢ĞÂµÄÇøÓò¾ØĞÎ
+DUILIB_API void wkeOnPaintUpdated(wkeWebView webView, wkePaintUpdatedCallback callback, void *callbackParam);
+
+typedef void(WKE_CALL *wkePaintBitUpdatedCallback)(wkeWebView webView, void *param, const void *buffer,
+                                                   const wkeRect *r, int width, int height);
+// Í¬ÉÏ¡£²»Í¬µÄÊÇ»Øµ÷¹ıÀ´µÄÊÇÌî³äºÃÏñËØµÄbuffer£¬¶ø²»ÊÇDC¡£·½±ãÇ¶Èëµ½ÓÎÏ·ÖĞ×öÀëÆÁäÖÈ¾
+DUILIB_API void wkeOnPaintBitUpdated(wkeWebView webView, wkePaintBitUpdatedCallback callback,
+                                     void *callbackParam);
+
+// ÍøÒ³µ÷ÓÃalert»á×ßµ½Õâ¸ö½Ó¿ÚÌîÈëµÄ»Øµ÷
+typedef void(WKE_CALL *wkeAlertBoxCallback)(wkeWebView webView, void *param, const wkeString msg);
+DUILIB_API void wkeOnAlertBox(wkeWebView webView, wkeAlertBoxCallback callback, void *callbackParam);
+
+typedef bool(WKE_CALL *wkeConfirmBoxCallback)(wkeWebView webView, void *param, const wkeString msg);
+DUILIB_API void wkeOnConfirmBox(wkeWebView webView, wkeConfirmBoxCallback callback, void *callbackParam);
+
+typedef bool(WKE_CALL *wkePromptBoxCallback)(wkeWebView webView, void *param, const wkeString msg,
+                                             const wkeString defaultResult, wkeString result);
+DUILIB_API void wkeOnPromptBox(wkeWebView webView, wkePromptBoxCallback callback, void *callbackParam);
+
+typedef bool(WKE_CALL *wkeNavigationCallback)(wkeWebView webView, void *param,
+                                              wkeNavigationType navigationType, const wkeString url);
+
+// ÍøÒ³¿ªÊ¼ä¯ÀÀ½«´¥·¢»Øµ÷
+// ²ÎÊı£ºtypedef bool(*wkeNavigationCallback)(wkeWebView webView, void* param, wkeNavigationType navigationType, const wkeString url);
+// wkeNavigationType: ±íÊ¾ä¯ÀÀ´¥·¢µÄÔ­Òò¡£¿ÉÒÔÈ¡µÄÖµÓĞ£º
+// WKE_NAVIGATION_TYPE_LINKCLICK£ºµã»÷a±êÇ©´¥·¢
+// WKE_NAVIGATION_TYPE_FORMSUBMITTE£ºµã»÷form´¥·¢
+// WKE_NAVIGATION_TYPE_BACKFORWARD£ºÇ°½øºóÍË´¥·¢
+// WKE_NAVIGATION_TYPE_RELOAD£ºÖØĞÂ¼ÓÔØ´¥·¢
+// ×¢Òâ£ºwkeNavigationCallback»Øµ÷µÄ·µ»ØÖµ£¬Èç¹ûÊÇtrue£¬±íÊ¾¿ÉÒÔ¼ÌĞø½øĞĞä¯ÀÀ£¬false±íÊ¾×èÖ¹±¾´Îä¯ÀÀ¡£
+DUILIB_API void wkeOnNavigation(wkeWebView webView, wkeNavigationCallback callback, void *param);
+
+struct wkeWindowFeatures
 {
     int x;
     int y;
@@ -219,214 +709,65 @@ typedef struct
     bool scrollbarsVisible;
     bool resizable;
     bool fullscreen;
-} wkeWindowFeatures;
+};
 
-//////////////////////////////////////////////////////////////////////////
-typedef struct
-{
-    struct Item
-    {
-        enum wkeStorageType
-        {
-            // String data with an associated MIME type. Depending on the MIME type, there may be
-            // optional metadata attributes as well.
-            StorageTypeString,
-            // Stores the name of one file being dragged into the renderer.
-            StorageTypeFilename,
-            // An image being dragged out of the renderer. Contains a buffer holding the image data
-            // as well as the suggested name for saving the image to.
-            StorageTypeBinaryData,
-            // Stores the filesystem URL of one file being dragged into the renderer.
-            StorageTypeFileSystemFile,
-        } storageType;
+typedef wkeWebView(WKE_CALL *wkeCreateViewCallback)(wkeWebView webView, void *param,
+                                                    wkeNavigationType navigationType, const wkeString url, const wkeWindowFeatures *windowFeatures);
+// ÍøÒ³µã»÷a±êÇ©´´½¨ĞÂ´°¿ÚÊ±½«´¥·¢»Øµ÷
+// ²ÎÊı£ºtypedef wkeWebView(*wkeCreateViewCallback)(wkeWebView webView, void* param, wkeNavigationType navigationType, const wkeString url, const wkeWindowFeatures* windowFeatures);
+DUILIB_API void wkeOnCreateView(wkeWebView webView, wkeCreateViewCallback callback, void *param);
 
-        // Only valid when storageType == StorageTypeString.
-        wkeString stringType;
-        wkeString stringData;
+typedef void(WKE_CALL *wkeDocumentReadyCallback)(wkeWebView webView, void *param);
+// ¶ÔÓ¦jsÀïµÄbody onloadÊÂ¼ş
+DUILIB_API void wkeOnDocumentReady(wkeWebView webView, wkeDocumentReadyCallback callback, void *param);
 
-        // Only valid when storageType == StorageTypeFilename.
-        wkeString filenameData;
-        wkeString displayNameData;
+typedef void(WKE_CALL *wkeDocumentReady2Callback)(wkeWebView webView, void *param, wkeWebFrameHandle frameId);
+// Í¬ÉÏ¡£Çø±ğÊÇwkeDocumentReady2Callback¶àÁËwkeWebFrameHandle frameId²ÎÊı¡£¿ÉÒÔÅĞ¶ÏÊÇ·ñÊÇÖ÷frame
+DUILIB_API void wkeOnDocumentReady2(wkeWebView webView, wkeDocumentReady2Callback callback, void *param);
 
-        // Only valid when storageType == StorageTypeBinaryData.
-        char *binaryData;
-        int binaryDataLength;
-
-        // Title associated with a link when stringType == "text/uri-list".
-        // Filename when storageType == StorageTypeBinaryData.
-        wkeString title;
-
-        // Only valid when storageType == StorageTypeFileSystemFile.
-        wkeString fileSystemURL;
-        long long fileSystemFileSize;
-
-        // Only valid when stringType == "text/html".
-        wkeString baseURL;
-    };
-
-    struct Item *m_itemList;
-    int m_itemListLength;
-
-    int m_modifierKeyState; // State of Shift/Ctrl/Alt/Meta keys.
-    wkeString m_filesystemId;
-} wkeWebDragData;
-
-typedef enum
-{
-    wkeWebDragOperationNone = 0,
-    wkeWebDragOperationCopy = 1,
-    wkeWebDragOperationLink = 2,
-    wkeWebDragOperationGeneric = 4,
-    wkeWebDragOperationPrivate = 8,
-    wkeWebDragOperationMove = 16,
-    wkeWebDragOperationDelete = 32,
-    wkeWebDragOperationEvery = 0xffffffff
-} wkeWebDragOperation;
-
-typedef wkeWebDragOperation wkeWebDragOperationsMask;
-
-typedef enum
-{
-    WKE_RESOURCE_TYPE_MAIN_FRAME = 0,       // top level page
-    WKE_RESOURCE_TYPE_SUB_FRAME = 1,        // frame or iframe
-    WKE_RESOURCE_TYPE_STYLESHEET = 2,       // a CSS stylesheet
-    WKE_RESOURCE_TYPE_SCRIPT = 3,           // an external script
-    WKE_RESOURCE_TYPE_IMAGE = 4,            // an image (jpg/gif/png/etc)
-    WKE_RESOURCE_TYPE_FONT_RESOURCE = 5,    // a font
-    WKE_RESOURCE_TYPE_SUB_RESOURCE = 6,     // an "other" subresource.
-    WKE_RESOURCE_TYPE_OBJECT = 7,           // an object (or embed) tag for a plugin,
-    // or a resource that a plugin requested.
-    WKE_RESOURCE_TYPE_MEDIA = 8,            // a media resource.
-    WKE_RESOURCE_TYPE_WORKER = 9,           // the main resource of a dedicated
-    // worker.
-    WKE_RESOURCE_TYPE_SHARED_WORKER = 10,   // the main resource of a shared worker.
-    WKE_RESOURCE_TYPE_PREFETCH = 11,        // an explicitly requested prefetch
-    WKE_RESOURCE_TYPE_FAVICON = 12,         // a favicon
-    WKE_RESOURCE_TYPE_XHR = 13,             // a XMLHttpRequest
-    WKE_RESOURCE_TYPE_PING = 14,            // a ping request for <a ping>
-    WKE_RESOURCE_TYPE_SERVICE_WORKER = 15,  // the main resource of a service worker.
-    WKE_RESOURCE_TYPE_LAST_TYPE
-} wkeResourceType;
-
-typedef struct
-{
-    bool isHolded;
-    wkeString url;
-    wkeString newUrl;
-    wkeResourceType resourceType;
-    int httpResponseCode;
-    wkeString method;
-    wkeString referrer;
-    void *headers;
-} wkeWillSendRequestInfo;
-
-typedef enum
-{
-    wkeHttBodyElementTypeData,
-    wkeHttBodyElementTypeFile,
-} wkeHttBodyElementType;
-
-typedef struct
-{
-    int size;
-    void *data;
-    size_t length;
-} wkeMemBuf;
-
-typedef struct
-{
-    int size;
-    wkeHttBodyElementType type;
-    wkeMemBuf *data;
-    wkeString filePath;
-    long long fileStart;
-    long long fileLength; // -1 means to the end of the file.
-} wkePostBodyElement;
-
-typedef struct
-{
-    int size;
-    wkePostBodyElement **element;
-    size_t elementSize;
-    bool isDirty;
-} wkePostBodyElements;
-
-typedef struct
-{
-    int size;
-    wkeWebFrameHandle frame;
-    wkeWillSendRequestInfo *willSendRequestInfo;
-    const char *url;
-    wkePostBodyElements *postBody;
-} wkeTempCallbackInfo;
-
-typedef enum _wkeRequestType
-{
-    kWkeRequestTypeInvalidation,
-    kWkeRequestTypeGet,
-    kWkeRequestTypePost,
-    kWkeRequestTypePut,
-} wkeRequestType;
-
-typedef void(*wkeTitleChangedCallback)(wkeWebView webView, void *param, const wkeString title);
-typedef void(*wkeURLChangedCallback)(wkeWebView webView, void *param, const wkeString url);
-typedef void(*wkeURLChangedCallback2)(wkeWebView webView, void *param, wkeWebFrameHandle frameId,
-                                      const wkeString url);
-typedef void(*wkePaintUpdatedCallback)(wkeWebView webView, void *param, const HDC hdc, int x, int y, int cx,
-                                       int cy);
-typedef void(*wkePaintBitUpdatedCallback)(wkeWebView webView, void *param, const void *buffer,
-                                          const wkeRect *r, int width, int height);
-typedef void(*wkeAlertBoxCallback)(wkeWebView webView, void *param, const wkeString msg);
-typedef bool(*wkeConfirmBoxCallback)(wkeWebView webView, void *param, const wkeString msg);
-typedef bool(*wkePromptBoxCallback)(wkeWebView webView, void *param, const wkeString msg,
-                                    const wkeString defaultResult, wkeString result);
-typedef bool(*wkeNavigationCallback)(wkeWebView webView, void *param, wkeNavigationType navigationType,
-                                     const wkeString url);
-typedef wkeWebView(*wkeCreateViewCallback)(wkeWebView webView, void *param, wkeNavigationType navigationType,
-                                           const wkeString url, const wkeWindowFeatures *windowFeatures);
-typedef void(*wkeDocumentReadyCallback)(wkeWebView webView, void *param);
-typedef void(*wkeDocumentReady2Callback)(wkeWebView webView, void *param, wkeWebFrameHandle frameId);
-
-typedef wkeWebView(*wkeCreateViewCallback)(wkeWebView webView, void *param, wkeNavigationType navigationType,
-                                           const wkeString url, const wkeWindowFeatures *windowFeatures);
-typedef void(*wkeDocumentReadyCallback)(wkeWebView webView, void *param);
-typedef void(*wkeDocumentReady2Callback)(wkeWebView webView, void *param, wkeWebFrameHandle frameId);
-
-typedef struct
-{
-    int size;
-    int width;
-    int height;
-    double duration;
-} wkeMediaLoadInfo;
-typedef void(*wkeWillMediaLoadCallback)(wkeWebView webView, void *param, const char *url,
-                                        wkeMediaLoadInfo *info);
-
-typedef enum
-{
-    WKE_DID_START_LOADING,
-    WKE_DID_STOP_LOADING,
-    WKE_DID_NAVIGATE,
-    WKE_DID_NAVIGATE_IN_PAGE,
-    WKE_DID_GET_RESPONSE_DETAILS,
-    WKE_DID_GET_REDIRECT_REQUEST,
-    WKE_DID_POST_REQUEST,
-} wkeOtherLoadType;
-typedef void(*wkeOnOtherLoadCallback)(wkeWebView webView, void *param, wkeOtherLoadType type,
-                                      wkeTempCallbackInfo *info);
-
-typedef enum
+enum wkeLoadingResult
 {
     WKE_LOADING_SUCCEEDED,
     WKE_LOADING_FAILED,
     WKE_LOADING_CANCELED
-} wkeLoadingResult;
+};
 
-typedef void(*wkeLoadingFinishCallback)(wkeWebView webView, void *param, const wkeString url,
-                                        wkeLoadingResult result, const wkeString failedReason);
-typedef bool(*wkeDownloadCallback)(wkeWebView webView, void *param, const char *url);
+typedef void(WKE_CALL *wkeLoadingFinishCallback)(wkeWebView webView, void *param, const wkeString url,
+                                                 wkeLoadingResult result, const wkeString failedReason);
+DUILIB_API void wkeOnLoadingFinish(wkeWebView webView, wkeLoadingFinishCallback callback, void *param);
 
-typedef enum
+typedef bool(WKE_CALL *wkeDownloadCallback)(wkeWebView webView, void *param, const char *url);
+// Ò³ÃæÏÂÔØÊÂ¼ş»Øµ÷¡£µã»÷Ä³Ğ©Á´½Ó£¬´¥·¢ÏÂÔØ»áµ÷ÓÃ
+DUILIB_API void wkeOnDownload(wkeWebView webView, wkeDownloadCallback callback, void *param);
+
+enum wkeDownloadOpt
+{
+    kWkeDownloadOptCancel,
+    kWkeDownloadOptCacheData,
+};
+
+typedef void(WKE_CALL *wkeNetJobDataRecvCallback)(void *ptr, wkeNetJob job, const char *data, int length);
+typedef void(WKE_CALL *wkeNetJobDataFinishCallback)(void *ptr, wkeNetJob job, wkeLoadingResult result);
+
+struct wkeNetJobDataBind
+{
+    void *ptr;
+    wkeNetJobDataRecvCallback recvCallback;
+    wkeNetJobDataFinishCallback finishCallback;
+};
+
+typedef wkeDownloadOpt(WKE_CALL *wkeDownload2Callback)(
+    wkeWebView webView,
+    void *param,
+    size_t expectedContentLength,
+    const char *url,
+    const char *mime,
+    const char *disposition,
+    wkeNetJob job,
+    wkeNetJobDataBind *dataBind);
+DUILIB_API void wkeOnDownload2(wkeWebView webView, wkeDownload2Callback callback, void *param);
+
+enum wkeConsoleLevel
 {
     wkeLevelDebug = 4,
     wkeLevelLog = 1,
@@ -435,53 +776,462 @@ typedef enum
     wkeLevelError = 3,
     wkeLevelRevokedError = 6,
     wkeLevelLast = wkeLevelInfo
-} wkeConsoleLevel;
-typedef void(*wkeConsoleCallback)(wkeWebView webView, void *param, wkeConsoleLevel level,
-                                  const wkeString message, const wkeString sourceName, unsigned sourceLine, const wkeString stackTrace);
+};
 
-typedef void(*wkeOnCallUiThread)(wkeWebView webView, void *paramOnInThread);
-typedef void(*wkeCallUiThread)(wkeWebView webView, wkeOnCallUiThread func, void *param);
+typedef void(WKE_CALL *wkeConsoleCallback)(wkeWebView webView, void *param, wkeConsoleLevel level,
+                                           const wkeString message, const wkeString sourceName, unsigned sourceLine, const wkeString stackTrace);
+// ÍøÒ³µ÷ÓÃconsole´¥·¢
+DUILIB_API void wkeOnConsole(wkeWebView webView, wkeConsoleCallback callback, void *param);
+
+typedef void(WKE_CALL *wkeOnCallUiThread)(wkeWebView webView, void *paramOnInThread);
+typedef void(WKE_CALL *wkeCallUiThread)(wkeWebView webView, wkeOnCallUiThread func, void *param);
+DUILIB_API void wkeSetUIThreadCallback(wkeWebView webView, wkeCallUiThread callback, void *param);
 
 //wkeNet--------------------------------------------------------------------------------------
-typedef bool(*wkeLoadUrlBeginCallback)(wkeWebView webView, void *param, const char *url, void *job);
-typedef void(*wkeLoadUrlEndCallback)(wkeWebView webView, void *param, const char *url, void *job, void *buf,
-                                     int len);
-typedef void(*wkeDidCreateScriptContextCallback)(wkeWebView webView, void *param, wkeWebFrameHandle frameId,
-                                                 void *context, int extensionGroup, int worldId);
-typedef void(*wkeWillReleaseScriptContextCallback)(wkeWebView webView, void *param, wkeWebFrameHandle frameId,
-                                                   void *context, int worldId);
-typedef bool(*wkeNetResponseCallback)(wkeWebView webView, void *param, const char *url, void *job);
+typedef bool(WKE_CALL *wkeLoadUrlBeginCallback)(wkeWebView webView, void *param, const utf8 *url,
+                                                wkeNetJob job);
+// ÈÎºÎÍøÂçÇëÇó·¢ÆğÇ°»á´¥·¢´Ë»Øµ÷
+// ²ÎÊı£ºtypedef bool(*wkeLoadUrlBeginCallback)(wkeWebView webView, void* param, const utf8 *url, void *job)
+// ×¢Òâ£º
+// 1£¬´Ë»Øµ÷¹¦ÄÜÇ¿´ó£¬ÔÚ»Øµ÷Àï£¬Èç¹û¶ÔjobÉèÖÃÁËwkeNetHookRequest£¬Ôò±íÊ¾mb»á»º´æ»ñÈ¡µ½µÄÍøÂçÊı¾İ£¬²¢ÔÚÕâ´ÎÍøÂçÇëÇó ½áÊøºóµ÷ÓÃwkeOnLoadUrlEndÉèÖÃµÄ»Øµ÷£¬Í¬Ê±´«µİ»º´æµÄÊı¾İ¡£ÔÚ´ËÆÚ¼ä£¬mb²»»á´¦ÀíÍøÂçÊı¾İ¡£
+// 2£¬Èç¹ûÔÚwkeLoadUrlBeginCallbackÀïÃ»ÉèÖÃwkeNetHookRequest£¬Ôò²»»á´¥·¢wkeOnLoadUrlEnd»Øµ÷¡£
+// 3£¬Èç¹ûwkeLoadUrlBeginCallback»Øµ÷Àï·µ»Øtrue£¬±íÊ¾mb²»´¦Àí´ËÍøÂçÇëÇó£¨¼È²»»á·¢ËÍÍøÂçÇëÇó£©¡£·µ»Øfalse£¬±íÊ¾mbÒÀÈ»»á·¢ËÍÍøÂçÇëÇó¡£
+// ÓÃ·¨¾ÙÀı£º
+// ¼ÙÈçĞèÒªhook°Ù¶ÈÄ³¸öurl£¨Èçhttdiv://baidu.com/a.js£©,Ìæ»»Îª±¾µØc:\b.js£¬Ôò¿ÉÒÔÕâÑùÊµÏÖ£º
+// void readJsFile(const wchar_t* divath, std::vector* buffer) {
+//      HANDLE hFile = CreateFileW(divath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+//      if (INVALID_HANDLE_VALUE == hFile) {
+//          DebugBreak();
+//          return;
+//      }
+//
+//      DWORD fileSizeHigh;
+//      const DWORD bufferSize = ::GetFileSize(hFile, &amdiv;fileSizeHigh);
+//
+//      DWORD numberOfBytesRead = 0;
+//      buffer->resize(bufferSize);
+//      BOOL b = ::ReadFile(hFile, &amdiv;buffer->at(0), bufferSize, &amdiv;numberOfBytesRead, nulldivtr);
+//      ::CloseHandle(hFile);
+//
+//  }
+//
+//  static bool HookUrl(void* job, const utf8* url, const utf8* hookUrl, const wchar_t* localFile, const utf8* mime) {
+//      if (0 != strstr(url, hookUrl)) {
+//          wkeNetSetMIMETydive(job, (utf8*)mime); // "text/html" "text/javascridivt"
+//          std::vector buffer;
+//              ReadJsFile(localFile, &amdiv;buffer);
+//              wkeNetSetData(job, &amdiv;buffer[0], buffer.size());
+//              return true;
+//      }
+//
+//      return false;
+//  }
+//
+//  bool handleLoadUrlBegin(wkeWebView webView, void* divaram, const utf8* url, void* job) {
+//      if (HookUrl(job, url, "httdiv://baidu.com/a.js", L"c:\\b.js", "text/javascridivt")) {
+//          return true;
+//      }
+//      return false;
+//  }
+//
+// Èç¹ûĞèÒªÄÃµ½httdiv://baidu.com/a.jsµÄÕæÊµÍøÂçÊı¾İÔÙĞŞ¸Ä£¬Ôò¿ÉÒÔ£º
+// bool handleLoadUrlBegin(wkeWebView webView, void* divaram, const utf8* url, void* job) {
+//     if (0 != strstr(url, "httdiv://baidu.com/a.js")) {
+//         wkeNetHookRequest(job);
+//         return false;
+//     }
+//     return false;
+// }
+//
+// void handleLoadUrlEnd(wkeWebView webView, void* divaram, const utf8* url, void* job, void* buf, int len) {
+//     utf8 code[] = "console.log('test')";
+//     wkeNetSetData(job, code, sizeof(code));
+// }
+DUILIB_API void wkeOnLoadUrlBegin(wkeWebView webView, wkeLoadUrlBeginCallback callback, void *callbackParam);
+
+typedef void(WKE_CALL *wkeLoadUrlEndCallback)(wkeWebView webView, void *param, const char *url,
+                                              wkeNetJob job, void *buf, int len);
+// ¼ûwkeOnLoadUrlBeginµÄÃèÊö
+DUILIB_API void wkeOnLoadUrlEnd(wkeWebView webView, wkeLoadUrlEndCallback callback, void *callbackParam);
+
+typedef void(WKE_CALL *wkeDidCreateScriptContextCallback)(wkeWebView webView, void *param,
+                                                          wkeWebFrameHandle frameId, void *context, int extensionGroup, int worldId);
+// javascriptµÄv8Ö´ĞĞ»·¾³±»´´½¨Ê±´¥·¢´Ë»Øµ÷
+// ²ÎÊı£ºÂÔ
+// ×¢Òâ£ºÃ¿¸öframe´´½¨Ê±¶¼»á´¥·¢´Ë»Øµ÷
+DUILIB_API void wkeOnDidCreateScriptContext(wkeWebView webView, wkeDidCreateScriptContextCallback callback,
+                                            void *callbackParam);
+
+typedef void(WKE_CALL *wkeWillReleaseScriptContextCallback)(wkeWebView webView, void *param,
+                                                            wkeWebFrameHandle frameId, void *context, int worldId);
+// Ã¿¸öframeµÄjavascriptµÄv8Ö´ĞĞ»·¾³±»¹Ø±ÕÊ±´¥·¢´Ë»Øµ÷
+DUILIB_API void wkeOnWillReleaseScriptContext(wkeWebView webView,
+                                              wkeWillReleaseScriptContextCallback callback, void *param);
+
+typedef bool(WKE_CALL *wkeWindowClosingCallback)(wkeWebView webView, void *param);
+// wkeWebViewÈç¹ûÊÇÕæ´°¿ÚÄ£Ê½£¬ÔòÔÚÊÕµ½WM_CLODEÏûÏ¢Ê±´¥·¢´Ë»Øµ÷¡£¿ÉÒÔÍ¨¹ıÔÚ»Øµ÷ÖĞ·µ»Øfalse¾Ü¾ø¹Ø±Õ´°¿Ú
+DUILIB_API void wkeOnWindowClosing(wkeWebView webView, wkeWindowClosingCallback callback, void *param);
+
+typedef void(WKE_CALL *wkeWindowDestroyCallback)(wkeWebView webView, void *param);
+// ´°¿Ú¼´½«±»Ïú»ÙÊ±´¥·¢»Øµ÷¡£²»ÏñwkeOnWindowClosing£¬Õâ¸ö²Ù×÷ÎŞ·¨È¡Ïû
+DUILIB_API void wkeOnWindowDestroy(wkeWebView webView, wkeWindowDestroyCallback callback, void *param);
+
+
+struct wkeDraggableRegion
+{
+    RECT bounds;
+    bool draggable;
+};
+typedef void(WKE_CALL *wkeDraggableRegionsChangedCallback)(wkeWebView webView, void *param,
+                                                           const wkeDraggableRegion *rects, int rectCount);
+DUILIB_API void wkeOnDraggableRegionsChanged(wkeWebView webView, wkeDraggableRegionsChangedCallback callback,
+                                             void *param);
+
+struct wkeMediaLoadInfo
+{
+    int size;
+    int width;
+    int height;
+    double duration;
+};
+typedef void(WKE_CALL *wkeWillMediaLoadCallback)(wkeWebView webView, void *param, const char *url,
+                                                 wkeMediaLoadInfo *info);
+// videoµÈ¶àÃ½Ìå±êÇ©´´½¨Ê±´¥·¢´Ë»Øµ÷
+DUILIB_API void wkeOnWillMediaLoad(wkeWebView webView, wkeWillMediaLoadCallback callback,
+                                   void *callbackParam);
+
+typedef void(WKE_CALL *wkeStartDraggingCallback)(
+    wkeWebView webView,
+    void *param,
+    wkeWebFrameHandle frame,
+    const wkeWebDragData *data,
+    wkeWebDragOperationsMask mask,
+    const void *image,
+    const wkePoint *dragImageOffset
+);
+DUILIB_API void wkeOnStartDragging(wkeWebView webView, wkeStartDraggingCallback callback, void *param);
+
+typedef void(WKE_CALL *wkeOnPrintCallback)(wkeWebView webView, void *param, wkeWebFrameHandle frameId,
+                                           void *printParams);
+DUILIB_API void wkeOnPrint(wkeWebView webView, wkeOnPrintCallback callback, void *param);
+
+enum wkeOtherLoadType
+{
+    WKE_DID_START_LOADING,
+    WKE_DID_STOP_LOADING,
+    WKE_DID_NAVIGATE,
+    WKE_DID_NAVIGATE_IN_PAGE,
+    WKE_DID_GET_RESPONSE_DETAILS,
+    WKE_DID_GET_REDIRECT_REQUEST,
+    WKE_DID_POST_REQUEST,
+};
+typedef void(WKE_CALL *wkeOnOtherLoadCallback)(wkeWebView webView, void *param, wkeOtherLoadType type,
+                                               wkeTempCallbackInfo *info);
+DUILIB_API void wkeOnOtherLoad(wkeWebView webView, wkeOnOtherLoadCallback callback, void *param);
+
+DUILIB_API bool wkeIsProcessingUserGesture(wkeWebView webView);
+
+// ÔÚwkeOnLoadUrlBegin»Øµ÷Àïµ÷ÓÃ£¬±íÊ¾ÉèÖÃhttpÇëÇóµÄMIME type
+DUILIB_API void wkeNetSetMIMEType(wkeNetJob jobPtr, CDuiString type);
+// ²ÎÊı£ºµÚ2¸ö²ÎÊı¿ÉÒÔ´«nullptr
+DUILIB_API CDuiString wkeNetGetMIMEType(wkeNetJob jobPtr, wkeString mime);
+// ÔÚwkeOnLoadUrlBegin»Øµ÷Àïµ÷ÓÃ£¬±íÊ¾ÉèÖÃhttpÇëÇó£¨»òÕßfile:///Ğ­Òé£©µÄ http header field¡£responseÒ»Ö±Òª±»ÉèÖÃ³Éfalse
+DUILIB_API void wkeNetSetHTTPHeaderField(wkeNetJob jobPtr, CDuiString key, CDuiString value, bool response);
+
+DUILIB_API CDuiString wkeNetGetHTTPHeaderField(wkeNetJob jobPtr, CDuiString key);
+DUILIB_API CDuiString wkeNetGetHTTPHeaderFieldFromResponse(wkeNetJob jobPtr, CDuiString key);
+
+// ÔÚwkeOnLoadUrlEndÀï±»µ÷ÓÃ£¬±íÊ¾ÉèÖÃhookºó»º´æµÄÊı¾İ
+// µ÷ÓÃ´Ëº¯Êıºó,ÍøÂç²ãÊÕµ½Êı¾İ»á´æ´¢ÔÚÒ»bufÄÚ,½ÓÊÕÊı¾İÍê³ÉºóÏìÓ¦OnLoadUrlEndÊÂ¼ş.#´Ëµ÷ÓÃÑÏÖØÓ°ÏìĞÔÄÜ,É÷ÓÃ
+// ´Ëº¯ÊıºÍwkeNetHookRequestµÄÇø±ğÊÇ£¬wkeNetHookRequest»áÔÚ½ÓÊÜµ½ÕæÕıÍøÂçÊı¾İºóÔÙµ÷ÓÃ»Øµ÷£¬²¢ÔÊĞí»Øµ÷ĞŞ¸ÄÍøÂçÊı¾İ¡£"\
+// ¶øwkeNetSetDataÊÇÔÚÍøÂçÊı¾İ»¹Ã»·¢ËÍµÄÊ±ºòĞŞ¸Ä
+DUILIB_API void wkeNetSetData(wkeNetJob jobPtr, void *buf, int len);
+DUILIB_API void wkeNetHookRequest(wkeNetJob jobPtr);
+
+typedef bool(WKE_CALL *wkeNetResponseCallback)(wkeWebView webView, void *param, const utf8 *url,
+                                               wkeNetJob job);
+// Ò»¸öÍøÂçÇëÇó·¢ËÍºó£¬ÊÕµ½·şÎñÆ÷response´¥·¢»Øµ÷
+DUILIB_API void wkeNetOnResponse(wkeWebView webView, wkeNetResponseCallback callback, void *param);
+
+enum wkeRequestType
+{
+    kWkeRequestTypeInvalidation,
+    kWkeRequestTypeGet,
+    kWkeRequestTypePost,
+    kWkeRequestTypePut,
+};
+
+// »ñÈ¡´ËÇëÇóµÄmethod£¬Èçpost»¹ÊÇget
+DUILIB_API wkeRequestType wkeNetGetRequestMethod(wkeNetJob jobPtr);
+
+typedef void(WKE_CALL *wkeOnNetGetFaviconCallback)(wkeWebView webView, void *param, const utf8 *url,
+                                                   wkeMemBuf *buf);
+// »ñÈ¡favicon¡£
+// ²ÎÊı£ºÂÔ
+// ×¢Òâ£º´Ë½Ó¿Ú±ØĞëÔÚwkeOnLoadingFinish»Øµ÷Àïµ÷ÓÃ¡£¿ÉÒÔÓÃÏÂÃæ·½Ê½À´ÅĞ¶ÏÊÇ·ñÊÇÖ÷frameµÄLoadingFinish:
+//      wkeTempCallbackInfo* temInfo = wkeGetTempCallbackInfo(webView);
+//      if (::wkeIsMainFrame(webView, temInfo->frame)) {
+//          ::wkeNetGetFavicon(webView, HandleFaviconReceived, divaram);
+//      }
+DUILIB_API int wkeNetGetFavicon(wkeWebView webView, wkeOnNetGetFaviconCallback callback, void *param);
+
+DUILIB_API void wkeNetContinueJob(wkeNetJob jobPtr);
+DUILIB_API CDuiString wkeNetGetUrlByJob(wkeNetJob jobPtr);
+// ÔÚwkeOnLoadUrlBegin»Øµ÷Àïµ÷ÓÃ£¬ÉèÖÃºó£¬´ËÇëÇó½«±»È¡Ïû¡£
+DUILIB_API void wkeNetCancelRequest(wkeNetJob jobPtr);
+
+// ¸ß¼¶ÓÃ·¨¡£ÔÚwkeOnLoadUrlBegin»Øµ÷Àïµ÷ÓÃ¡£ ÓĞÊ±ºò£¬wkeOnLoadUrlBeginÀïÀ¹½Øµ½Ò»¸öÇëÇóºó£¬²»ÄÜÂíÉÏÅĞ¶Ï³ö½á¹û¡£´ËÊ±¿ÉÒÔµ÷ÓÃ±¾½Ó¿Ú£¬È»ºóÔÚ Òì²½µÄÄ³¸öÊ±¿Ì£¬µ÷ÓÃwkeNetContinueJobÀ´ÈÃ´ËÇëÇó¼ÌĞø½øĞĞ
+// ²ÎÊı£ºÂÔ
+// ·µ»ØÖµ£ºTRUE´ú±í³É¹¦£¬FALSE´ú±íµ÷ÓÃÊ§°Ü£¬²»ÄÜÔÙµ÷ÓÃwkeNetContinueJobÁË
+DUILIB_API BOOL wkeNetHoldJobToAsynCommit(wkeNetJob jobPtr);
+
+DUILIB_API void wkeNetChangeRequestUrl(wkeNetJob jobPtr, CDuiString url);
+
+typedef struct wkeWebUrlRequest *wkeWebUrlRequestPtr;
+typedef struct wkeWebUrlResponse *wkeWebUrlResponsePtr;
+
+DUILIB_API wkeWebUrlRequestPtr wkeNetCreateWebUrlRequest(CDuiString url, CDuiString method, CDuiString mime);
+DUILIB_API wkeWebUrlRequestPtr wkeNetCreateWebUrlRequest2(const blinkWebURLRequestPtr request);
+DUILIB_API blinkWebURLRequestPtr wkeNetCopyWebUrlRequest(wkeNetJob jobPtr, bool needExtraData);
+DUILIB_API void wkeNetDeleteBlinkWebURLRequestPtr(blinkWebURLRequestPtr request);
+DUILIB_API void wkeNetAddHTTPHeaderFieldToUrlRequest(wkeWebUrlRequestPtr request, CDuiString name,
+                                                     CDuiString value);
+
+typedef void(WKE_CALL *wkeOnUrlRequestWillRedirectCallback)(wkeWebView webView, void *param,
+                                                            wkeWebUrlRequestPtr oldRequest, wkeWebUrlRequestPtr request,
+                                                            wkeWebUrlResponsePtr redirectResponse);
+typedef void(WKE_CALL *wkeOnUrlRequestDidReceiveResponseCallback)(wkeWebView webView, void *param,
+        wkeWebUrlRequestPtr request, wkeWebUrlResponsePtr response);
+typedef void(WKE_CALL *wkeOnUrlRequestDidReceiveDataCallback)(wkeWebView webView, void *param,
+        wkeWebUrlRequestPtr request, const char *data, int dataLength);
+typedef void(WKE_CALL *wkeOnUrlRequestDidFailCallback)(wkeWebView webView, void *param,
+                                                       wkeWebUrlRequestPtr request, const utf8 *error);
+typedef void(WKE_CALL *wkeOnUrlRequestDidFinishLoadingCallback)(wkeWebView webView, void *param,
+        wkeWebUrlRequestPtr request, double finishTime);
+
+struct wkeUrlRequestCallbacks
+{
+    wkeOnUrlRequestWillRedirectCallback willRedirectCallback;
+    wkeOnUrlRequestDidReceiveResponseCallback didReceiveResponseCallback;
+    wkeOnUrlRequestDidReceiveDataCallback didReceiveDataCallback;
+    wkeOnUrlRequestDidFailCallback didFailCallback;
+    wkeOnUrlRequestDidFinishLoadingCallback didFinishLoadingCallback;
+};
+DUILIB_API int wkeNetStartUrlRequest(wkeWebView webView, wkeWebUrlRequestPtr request, void *param,
+                                     const wkeUrlRequestCallbacks *callbacks);
+DUILIB_API int wkeNetGetHttpStatusCode(wkeWebUrlResponsePtr response);
+
+DUILIB_API __int64 wkeNetGetExpectedContentLength(wkeWebUrlResponsePtr response);
+DUILIB_API CDuiString wkeNetGetResponseUrl(wkeWebUrlResponsePtr response);
+DUILIB_API void wkeNetCancelWebUrlRequest(int requestId);
+
+// »ñÈ¡´ËÇëÇóÖĞµÄpostÊı¾İ¡£Ö»ÓĞµ±ÇëÇóÊÇpostÊ±²ÅÓĞĞ§¹û
+DUILIB_API wkePostBodyElements *wkeNetGetPostBody(wkeNetJob jobPtr);
+
+// ÕâËÄ¸ö½Ó¿ÚÒª½áºÏÆğÀ´Ê¹ÓÃ¡£
+// µ±wkeOnLoadUrlBeginÀïÅĞ¶ÏÊÇpostÊ±£¬¿ÉÒÔÍ¨¹ıwkeNetCreatePostBodyElementsÀ´´´½¨Ò»¸öĞÂµÄpostÊı¾İ°ü¡£
+// È»ºówkeNetFreePostBodyElementsÀ´ÊÍ·ÅÔ­postÊı¾İ¡£
+DUILIB_API wkePostBodyElements *wkeNetCreatePostBodyElements(wkeWebView webView, size_t length);
+DUILIB_API void wkeNetFreePostBodyElements(wkePostBodyElements *elements);
+
+DUILIB_API wkePostBodyElement *wkeNetCreatePostBodyElement(wkeWebView webView);
+DUILIB_API void wkeNetFreePostBodyElement(wkePostBodyElement *element);
+
+// ÅĞ¶ÏframeIdÊÇ·ñÊÇÖ÷frame
+DUILIB_API bool wkeIsMainFrame(wkeWebView webView, wkeWebFrameHandle frameId);
+DUILIB_API bool wkeIsWebRemoteFrame(wkeWebView webView, wkeWebFrameHandle frameId);
+// »ñÈ¡Ö÷frameµÄ¾ä±ú
+DUILIB_API wkeWebFrameHandle wkeWebFrameGetMainFrame(wkeWebView webView);
+
+// ÔËĞĞjsÔÚÖ¸¶¨µÄframeÉÏ£¬Í¨¹ıframeId
+// ²ÎÊı£ºisInClosure±íÊ¾ÊÇ·ñÔÚÍâ²ã°ü¸öfunction() {}ĞÎÊ½µÄ±Õ°ü
+// ×¢Òâ£ºÈç¹ûĞèÒª·µ»ØÖµ£¬ÔÚisInClosureÎªtrueÊ±£¬ĞèÒªĞ´return£¬ÎªfalseÔò²»ÓÃ
+DUILIB_API jsValue wkeRunJsByFrame(wkeWebView webView, wkeWebFrameHandle frameId, CDuiString script,
+                                   bool isInClosure);
+DUILIB_API void wkeInsertCSSByFrame(wkeWebView webView, wkeWebFrameHandle frameId, CDuiString cssText);
 
 typedef void *v8ContextPtr;
+DUILIB_API void wkeWebFrameGetMainWorldScriptContext(wkeWebView webView, wkeWebFrameHandle webFrameId,
+                                                     v8ContextPtr contextOut);
+
 typedef void *v8Isolate;
+DUILIB_API v8Isolate wkeGetBlinkMainThreadIsolate();
+
 
 //wkewindow-----------------------------------------------------------------------------------
-typedef enum
+enum wkeWindowType
 {
     WKE_WINDOW_TYPE_POPUP,
     WKE_WINDOW_TYPE_TRANSPARENT,
     WKE_WINDOW_TYPE_CONTROL
+};
+// ´´½¨Ò»¸ö´øÕæÊµ´°¿ÚµÄwkeWebView
+// ²ÎÊı£ºwkeWindowType
+// WKE_WINDOW_TYPE_POPUP£º      ÆÕÍ¨´°¿Ú
+// WKE_WINDOW_TYPE_TRANSPARENT£ºÍ¸Ã÷´°¿Ú¡£mbÄÚ²¿Í¨¹ılayer windowÊµÏÖ
+// WKE_WINDOW_TYPE_CONTROL£º    Ç¶ÈëÔÚ¸¸´°¿ÚÀïµÄ×Ó´°¿Ú¡£´ËÊ±parentĞèÒª±»ÉèÖÃ
+DUILIB_API wkeWebView wkeCreateWebWindow(wkeWindowType type, HWND parent, int x, int y, int width,
+                                         int height);
 
-} wkeWindowType;
-
-typedef bool(*wkeWindowClosingCallback)(wkeWebView webWindow, void *param);
-typedef void(*wkeWindowDestroyCallback)(wkeWebView webWindow, void *param);
-
-typedef struct
+struct wkeWindowCreateInfo
 {
-    RECT bounds;
-    bool draggable;
-} wkeDraggableRegion;
-typedef void(*wkeDraggableRegionsChangedCallback)(wkeWebView webWindow, void *param,
-                                                  const wkeDraggableRegion *rects, int rectCount);
+    int size;
+    HWND parent;
+    DWORD style;
+    DWORD styleEx;
+    int x;
+    int y;
+    int width;
+    int height;
+    COLORREF color;
+};
+DUILIB_API wkeWebView wkeCreateWebCustomWindow(const wkeWindowCreateInfo *info);
+
+// Ïú»ÙwkeWebView¶ÔÓ¦µÄËùÓĞÊı¾İ½á¹¹£¬°üÀ¨ÕæÊµ´°¿ÚµÈ
+DUILIB_API void wkeDestroyWebWindow(wkeWebView webView);
+// »ñÈ¡´°¿Ú¶ÔÓ¦µÄÕæÊµ¾ä±ú¡£ºÍwkeGetHostHWNDµÄÊµÏÖÍêÈ«ÏàÍ¬
+DUILIB_API HWND wkeGetWindowHandle(wkeWebView webView);
+
+DUILIB_API void wkeShowWindow(wkeWebView webView, bool showFlag);
+DUILIB_API void wkeEnableWindow(wkeWebView webView, bool enableFlag);
+
+DUILIB_API void wkeMoveWindow(wkeWebView webView, int x, int y, int width, int height);
+// ´°¿ÚÔÚ¸¸´°¿Ú»òÆÁÄ»Àï¾ÓÖĞ
+DUILIB_API void wkeMoveToCenter(wkeWebView webView);
+// resize´°¿Ú£¬ºÍwkeResizeĞ§¹ûÒ»Ñù
+DUILIB_API void wkeResizeWindow(wkeWebView webView, int width, int height);
+
+DUILIB_API wkeWebDragOperation wkeDragTargetDragEnter(wkeWebView webView, const wkeWebDragData *webDragData,
+                                                      const POINT *clientPoint, const POINT *screenPoint, wkeWebDragOperationsMask operationsAllowed,
+                                                      int modifiers);
+DUILIB_API wkeWebDragOperation wkeDragTargetDragOver(wkeWebView webView, const POINT *clientPoint,
+                                                     const POINT *screenPoint, wkeWebDragOperationsMask operationsAllowed, int modifiers);
+DUILIB_API void wkeDragTargetDragLeave(wkeWebView webView);
+DUILIB_API void wkeDragTargetDrop(wkeWebView webView, const POINT *clientPoint, const POINT *screenPoint,
+                                  int modifiers);
+DUILIB_API void wkeDragTargetEnd(wkeWebView webView, const POINT *clientPoint, const POINT *screenPoint,
+                                 wkeWebDragOperation operation);
+
+typedef void(WKE_CALL *wkeUiThreadRunCallback)(HWND hWnd, void *param);
+typedef int(WKE_CALL *wkeUiThreadPostTaskCallback)(HWND hWnd, wkeUiThreadRunCallback callback,
+                                                   void *param);
+
+DUILIB_API void wkeUtilSetUiCallback(wkeUiThreadPostTaskCallback callback);
+DUILIB_API CDuiString wkeUtilSerializeToMHTML(wkeWebView webView);
+
+struct wkePdfDatas
+{
+    int count;
+    size_t *sizes;
+    const void **datas;
+};
+
+struct wkePrintSettings
+{
+    int structSize;
+    int dpi;
+    int width; // in px
+    int height;
+    int marginTop;
+    int marginBottom;
+    int marginLeft;
+    int marginRight;
+    BOOL isPrintPageHeadAndFooter;
+    BOOL isPrintBackgroud;
+};
+
+struct wkeScreenshotSettings
+{
+    int structSize;
+    int width;
+    int height;
+};
+
+DUILIB_API const wkePdfDatas *wkeUtilPrintToPdf(wkeWebView webView, wkeWebFrameHandle frameId,
+                                                const wkePrintSettings *settings);
+DUILIB_API const wkeMemBuf *wkePrintToBitmap(wkeWebView webView, wkeWebFrameHandle frameId,
+                                             const wkeScreenshotSettings *settings);
+DUILIB_API void wkeUtilRelasePrintPdfDatas(const wkePdfDatas *datas);
+
+DUILIB_API void wkeSetWindowTitle(wkeWebView webView, CDuiString title);
+
+typedef void(WKE_CALL *wkeNodeOnCreateProcessCallback)(wkeWebView webView, void *param,
+                                                       const WCHAR *applicationPath, const WCHAR *arguments, STARTUPINFOW *startup);
+DUILIB_API void wkeNodeOnCreateProcess(wkeWebView webView, wkeNodeOnCreateProcessCallback callback,
+                                       void *param);
+
+typedef void(WKE_CALL *wkeOnPluginFindCallback)(wkeWebView webView, void *param, const utf8 *mime,
+                                                void *initializeFunc, void *getEntryPointsFunc, void *shutdownFunc);
+DUILIB_API void wkeOnPluginFind(wkeWebView webView, CDuiString mime, wkeOnPluginFindCallback callback,
+                                void *param);
+DUILIB_API void wkeAddNpapiPlugin(wkeWebView webView, void *initializeFunc, void *getEntryPointsFunc,
+                                  void *shutdownFunc);
+
+DUILIB_API wkeWebView wkeGetWebViewByNData(void *ndata);
+
+DUILIB_API bool wkeRegisterEmbedderCustomElement(wkeWebView webView, wkeWebFrameHandle frameId,
+                                                 CDuiString name, void *options, void *outResult);
+
+typedef wkeMediaPlayer(WKE_CALL *wkeMediaPlayerFactory)(wkeWebView webView, wkeMediaPlayerClient client,
+                                                        void *npBrowserFuncs, void *npPluginFuncs);
+typedef bool(WKE_CALL *wkeOnIsMediaPlayerSupportsMIMEType)(const utf8 *mime);
+DUILIB_API void wkeSetMediaPlayerFactory(wkeWebView webView, wkeMediaPlayerFactory factory,
+                                         wkeOnIsMediaPlayerSupportsMIMEType callback);
+
+DUILIB_API CDuiString wkeGetContentAsMarkup(wkeWebView webView, wkeWebFrameHandle frame, size_t *size);
+
+DUILIB_API CDuiString wkeUtilDecodeURLEscape(CDuiString url);
+DUILIB_API CDuiString wkeUtilEncodeURLEscape(CDuiString url);
+DUILIB_API CDuiString wkeUtilBase64Encode(CDuiString str);
+DUILIB_API CDuiString wkeUtilBase64Decode(CDuiString str);
+DUILIB_API const wkeMemBuf *wkeUtilCreateV8Snapshot(CDuiString str);
+
+DUILIB_API void wkeRunMessageLoop();
 
 //JavaScript Bind-----------------------------------------------------------------------------------
 #define JS_CALL __fastcall
+
 typedef jsValue(JS_CALL *jsNativeFunction)(jsExecState es);
 
-typedef jsValue(*wkeJsNativeFunction)(jsExecState es, void *param);
+// °ó¶¨Ò»¸öÈ«¾Öº¯Êıµ½Ö÷frameµÄwindowÉÏ¡£
+// ²ÎÊı£ºÂÔ
+// ×¢Òâ£º´Ë½Ó¿ÚÖ»ÄÜ°ó¶¨Ö÷frame£¬²¢ÇÒÌØ±ğĞèÒª×¢ÒâµÄÊÇ£¬ÒòÎªÀúÊ·Ô­Òò£¬´Ë½Ó¿ÚÊÇfastcallµ÷ÓÃÔ¼¶¨£¡£¨µ«wkeJsBindFunction²»ÊÇ£©
+// ÁíÍâ´Ë½Ó¿ÚºÍwkeJsBindFunction±ØĞëÔÚwebview´´½¨Ç°µ÷ÓÃ
+// Ê¹ÓÃÊ¾Àı£º
+// c++Àï£º
+//  --------
+//  jsValue JS_CALL onNativeFunction(jsExecState es) {
+//      jsValue v = jsArg(es, 0);
+//      const wchar_t* str = jsToTemdivStringW(es, v);
+//      OutdivutdebugStringW(str);
+//  }
+//  jsBindFunction("testCall", onNativeFunction£¬ 1);
+//
+// jsÀï£º
+//  --------
+//  window.testCall('testStrt');
+DUILIB_API void __fastcall jsBindFunction(CDuiString name, jsNativeFunction fn, unsigned int argCount);
+// ¶Ôjs winows°ó¶¨Ò»¸öÊôĞÔ·ÃÎÊÆ÷£¬ÔÚjsÀïwindows.XXXÕâÖÖĞÎÊ½µ÷ÓÃÊ±£¬fn»á±»µ÷ÓÃ
+// Ê¾Àı£ºjsBindGetter("XXX")
+DUILIB_API void jsBindGetter(CDuiString name, jsNativeFunction fn);
+// ¶Ôjs winows°ó¶¨Ò»¸öÊôĞÔÉèÖÃÆ÷¡£
+DUILIB_API void jsBindSetter(CDuiString name, jsNativeFunction fn);
 
-typedef enum
+typedef jsValue(WKE_CALL *jsNativeFunctionEx)(jsExecState es, void *param);
+
+// ºÍjsBindFunction¹¦ÄÜÀàËÆ£¬µ«¸ü·½±ãÒ»µã£¬¿ÉÒÔ´«Ò»¸öparam×ö×Ô¶¨ÒåÊı¾İ¡£
+// ´Ë½Ó¿ÚºÍwkeJsBindFunction±ØĞëÔÚwebview´´½¨Ç°µ÷ÓÃ
+DUILIB_API void jsBindFunctionEx(CDuiString name, jsNativeFunctionEx fn, void *param, unsigned int argCount);
+// ¶Ôjs winows°ó¶¨Ò»¸öÊôĞÔ·ÃÎÊÆ÷£¬ÔÚjsÀïwindows.XXXÕâÖÖĞÎÊ½µ÷ÓÃÊ±£¬fn»á±»µ÷ÓÃ
+// Ê¾Àı£ºjsBindGetterEx("XXX")
+DUILIB_API void jsBindGetterEx(CDuiString name, jsNativeFunctionEx fn, void *param);
+// ¶Ôjs winows°ó¶¨Ò»¸öÊôĞÔÉèÖÃÆ÷¡£
+DUILIB_API void jsBindSetterEx(CDuiString name, jsNativeFunctionEx fn, void *param);
+
+// »ñÈ¡esÀï´æµÄ²ÎÊı¸öÊı¡£Ò»°ãÊÇÔÚ°ó¶¨µÄjsµ÷ÓÃc++»Øµ÷ÀïÊ¹ÓÃ£¬ÅĞ¶Ïjs´«µİÁË¶àÉÙ²ÎÊı¸øc++
+DUILIB_API int jsArgCount(jsExecState es);
+
+enum jsType
 {
     JSTYPE_NUMBER,
     JSTYPE_STRING,
@@ -490,14 +1240,76 @@ typedef enum
     JSTYPE_FUNCTION,
     JSTYPE_UNDEFINED,
     JSTYPE_ARRAY,
-} jsType;
+    JSTYPE_NULL,
+};
 
-// cexer JSå¯¹è±¡ã€å‡½æ•°ç»‘å®šæ”¯æŒ
-typedef jsValue(*jsGetPropertyCallback)(jsExecState es, jsValue object, const char *propertyName);
-typedef bool(*jsSetPropertyCallback)(jsExecState es, jsValue object, const char *propertyName, jsValue value);
-typedef jsValue(*jsCallAsFunctionCallback)(jsExecState es, jsValue object, jsValue *args, int argCount);
+// ÅĞ¶ÏµÚargIdx¸ö²ÎÊıµÄ²ÎÊıÀàĞÍ¡£argIdx´ÓÊÇ¸ö0¿ªÊ¼¼ÆÊıµÄÖµ¡£Èç¹û³¬³öjsArgCount·µ»ØµÄÖµ£¬½«·¢Éú±ÀÀ£
+DUILIB_API jsType jsArgType(jsExecState es, int argIdx);
+
+// »ñÈ¡µÚargIdx¶ÔÓ¦µÄ²ÎÊıµÄjsValueÖµ¡£
+DUILIB_API jsValue jsArgValue(jsExecState es, int argIdx);
+
+// »ñÈ¡v¶ÔÓ¦µÄÀàĞÍ¡£
+DUILIB_API jsType jsTypeOf(jsValue v);
+
+// ÅĞ¶ÏvÊÇ·ñÎªÊı×Ö¡¢×Ö·û´®¡¢bool
+DUILIB_API bool jsIsNumber(jsValue v);
+DUILIB_API bool jsIsString(jsValue v);
+DUILIB_API bool jsIsBoolean(jsValue v);
+// µ±v²»ÊÇÊı×Ö¡¢×Ö·û´®¡¢undefined¡¢null¡¢º¯ÊıµÄÊ±ºò£¬´Ë½Ó¿Ú·µ»Øtrue
+DUILIB_API bool jsIsObject(jsValue v);
+DUILIB_API bool jsIsFunction(jsExecState es, jsValue v);
+DUILIB_API bool jsIsUndefined(jsExecState es, jsValue v);
+DUILIB_API bool jsIsNull(jsExecState es, jsValue v);
+DUILIB_API bool jsIsArray(jsExecState es, jsValue v);
+// Èç¹ûv±¾ÉíÊÇ¸ö²¼¶ûÖµ£¬·µ»Ø¶ÔÓ¦µÄtrue»òÕßfalse£»Èç¹ûÊÇ¸ö¶ÔÏó£¨JSTYPE_OBJECT£©£¬·µ»Øfalse£¨ÕâÀï×¢Òâ£©
+DUILIB_API bool jsIsTrue(jsValue v);
+// µÈ¼ÛÓÚ!jsIsTrue(v)
+DUILIB_API bool jsIsFalse(jsValue v);
+
+
+// Èç¹ûvÊÇ¸öÕûĞÎ»òÕß¸¡µã£¬·µ»ØÏàÓ¦Öµ£¨Èç¹ûÊÇ¸¡µã£¬·µ»ØÈ¡ÕûºóµÄÖµ£©¡£Èç¹ûÊÇÆäËûÀàĞÍ£¬·µ»Ø0£¨ÕâÀï×¢Òâ£©
+DUILIB_API int jsToInt(jsExecState es, jsValue v);
+// Èç¹ûvÊÇ¸ö¸¡µãĞÎ£¬·µ»ØÏàÓ¦Öµ¡£Èç¹ûÊÇÆäËûÀàĞÍ£¬·µ»Ø0.0£¨ÕâÀï×¢Òâ£©
+DUILIB_API double jsToFloat(jsExecState es, jsValue v);
+DUILIB_API double jsToDouble(jsExecState es, jsValue v);
+DUILIB_API bool jsToBoolean(jsExecState es, jsValue v);
+
+// ¹¹½¨Ò»¸öjsµÄarraybufferÀàĞÍµÄjaValue¡£Ö÷ÒªÓÃÀ´´¦ÀíÒ»Ğ©¶ş½øÖÆÊı¾İ£¬×¢ÒâÊÇ´´½¨
+DUILIB_API jsValue jsArrayBuffer(jsExecState es, char *buffer, size_t size);
+// »ñÈ¡Ò»¸öjsµÄarraybufferÀàĞÍµÄÊı¾İ¡£Ö÷ÒªÓÃÀ´´¦ÀíÒ»Ğ©¶ş½øÖÆÊı¾İ
+DUILIB_API wkeMemBuf *jsGetArrayBuffer(jsExecState es, jsValue v);
+
+// Èç¹ûvÊÇ¸ö×Ö·û´®£¬·µ»ØÏàÓ¦Öµ¡£Èç¹ûÊÇÆäËûÀàĞÍ£¬·µ»ØL""£¨ÕâÀï×¢Òâ£© ÁíÍâ£¬·µ»ØµÄ×Ö·û´®²»ĞèÒªÍâ²¿ÊÍ·Å¡£mb»áÔÚÏÂÒ»Ö¡×Ô¶¯ÊÍ·Å
+DUILIB_API CDuiString jsToTempString(jsExecState es, jsValue v);
+
+// return v8::Persistent<v8::Value>*
+DUILIB_API void *jsToV8Value(jsExecState es, jsValue v);
+
+// ´´½¨½¨Ò»¸öintĞÍµÄjsValue£¬×¢ÒâÊÇ´´½¨
+DUILIB_API jsValue jsInt(int v);
+DUILIB_API jsValue jsFloat(float v);
+DUILIB_API jsValue jsDouble(jsExecState es, double v);
+DUILIB_API jsValue jsBoolean(jsExecState es, bool v);
+
+DUILIB_API jsValue jsUndefined();
+DUILIB_API jsValue jsNull();
+DUILIB_API jsValue jsTrue();
+DUILIB_API jsValue jsFalse();
+
+// ¹¹½¨Ò»¸öutf8±àÂëµÄ×Ö·û´®µÄµÄjsValue¡£str»áÔÚÄÚ²¿¿½±´±£´æ£¬×¢ÒâÊÇ´´½¨
+DUILIB_API jsValue jsString(jsExecState es, CDuiString str);
+// ¹¹½¨Ò»¸öÁÙÊ±js objectµÄjsValue£¬×¢ÒâÊÇ´´½¨
+DUILIB_API jsValue jsEmptyObject(jsExecState es);
+DUILIB_API jsValue jsEmptyArray(jsExecState es);
+
+typedef jsValue(WKE_CALL *jsGetPropertyCallback)(jsExecState es, jsValue obj, const char *propertyName);
+typedef bool(WKE_CALL *jsSetPropertyCallback)(jsExecState es, jsValue obj, const char *propertyName,
+                                              jsValue value);
+typedef jsValue(WKE_CALL *jsCallAsFunctionCallback)(jsExecState es, jsValue obj, jsValue *args,
+                                                    int argCount);
 struct tagjsData; // declare warning fix
-typedef void(*jsFinalizeCallback)(struct tagjsData *data);
+typedef void(WKE_CALL *jsFinalizeCallback)(struct tagjsData *data);
 
 typedef struct tagjsData
 {
@@ -508,555 +1320,95 @@ typedef struct tagjsData
     jsCallAsFunctionCallback callAsFunction;
 } jsData;
 
-
-
-//////////////////////////////////////////////////////////////////////////
-// miniblink åŠ¨æ€åº“çš„åŠ è½½ä¸åˆå§‹åŒ–ï¼Œå¿…é¡»æˆå¯¹è°ƒç”¨ã€‚
-// å†…éƒ¨ä½¿ç”¨å¼•ç”¨è®¡æ•°ï¼Œå½“å¼•ç”¨è®¡æ•°ä¸º0æ—¶ï¼Œå¸è½½ miniblink åŠ¨æ€åº“
-DUILIB_API bool LoadWke(LPCTSTR szWkeDll);
-DUILIB_API void FreeWke(void);
-
-
-DUILIB_API void            wkeOnMouseOverUrlChanged(wkeWebView webView, wkeTitleChangedCallback callback,
-                                                    void *param);
-DUILIB_API void            wkeOnTitleChanged(wkeWebView webView, wkeTitleChangedCallback callback,
-                                             void *param);
-DUILIB_API void            wkeOnURLChanged(wkeWebView webView, wkeURLChangedCallback callback, void *param);
-DUILIB_API void            wkeOnURLChanged2(wkeWebView webView, wkeURLChangedCallback2 callback, void *param);
-DUILIB_API void            wkeOnPaintUpdated(wkeWebView webView, wkePaintUpdatedCallback callback,
-                                             void *param);
-DUILIB_API void            wkeOnPaintBitUpdated(wkeWebView webView, wkePaintBitUpdatedCallback callback,
-                                                void *param);
-DUILIB_API void            wkeOnAlertBox(wkeWebView webView, wkeAlertBoxCallback callback, void *param);
-DUILIB_API void            wkeOnConfirmBox(wkeWebView webView, wkeConfirmBoxCallback callback, void *param);
-DUILIB_API void            wkeOnPromptBox(wkeWebView webView, wkePromptBoxCallback callback, void *param);
-DUILIB_API void            wkeOnNavigation(wkeWebView webView, wkeNavigationCallback callback, void *param);
-DUILIB_API void            wkeOnCreateView(wkeWebView webView, wkeCreateViewCallback callback, void *param);
-DUILIB_API void            wkeOnDocumentReady(wkeWebView webView, wkeDocumentReadyCallback callback,
-                                              void *param);
-DUILIB_API void            wkeOnDocumentReady2(wkeWebView webView, wkeDocumentReady2Callback callback,
-                                               void *param);
-DUILIB_API void            wkeOnLoadingFinish(wkeWebView webView, wkeLoadingFinishCallback callback,
-                                              void *param);
-DUILIB_API void            wkeOnDownload(wkeWebView webView, wkeDownloadCallback callback, void *param);
-DUILIB_API void            wkeOnConsole(wkeWebView webView, wkeConsoleCallback callback, void *param);
-DUILIB_API void            wkeSetUIThreadCallback(wkeWebView webView, wkeCallUiThread callback, void *param);
-DUILIB_API void            wkeOnLoadUrlBegin(wkeWebView webView, wkeLoadUrlBeginCallback callback,
-                                             void *param);
-DUILIB_API void            wkeOnLoadUrlEnd(wkeWebView webView, wkeLoadUrlEndCallback callback, void *param);
-DUILIB_API void            wkeOnDidCreateScriptContext(wkeWebView webView,
-                                                       wkeDidCreateScriptContextCallback callback, void *param);
-DUILIB_API void            wkeOnWillReleaseScriptContext(wkeWebView webView,
-                                                         wkeWillReleaseScriptContextCallback callback, void *param);
-DUILIB_API void            wkeOnWindowClosing(wkeWebView webWindow, wkeWindowClosingCallback callback,
-                                              void *param);
-DUILIB_API void            wkeOnWindowDestroy(wkeWebView webWindow, wkeWindowDestroyCallback callback,
-                                              void *param);
-DUILIB_API void            wkeOnDraggableRegionsChanged(wkeWebView webWindow,
-                                                        wkeDraggableRegionsChangedCallback callback, void *param);
-DUILIB_API void            wkeOnWillMediaLoad(wkeWebView webWindow, wkeWillMediaLoadCallback callback,
-                                              void *param);
-DUILIB_API void            wkeOnOtherLoad(wkeWebView webWindow, wkeOnOtherLoadCallback callback, void *param);
-
-
-DUILIB_API void            wkeInitialize();
-DUILIB_API void            wkeInitializeEx(const wkeSettings *settings);
-DUILIB_API void            wkeConfigure(const wkeSettings *settings);
-DUILIB_API bool            wkeIsInitialize();
-DUILIB_API void            wkeUpdate();
-
-DUILIB_API void            wkeFinalize();
-DUILIB_API void            wkeShutdown();
-
-DUILIB_API void            wkeSetViewSettings(wkeWebView webView, const wkeViewSettings *settings);
-DUILIB_API void            wkeSetDebugConfig(wkeWebView webView, const char *debugString, const char *param);
-
-DUILIB_API unsigned int    wekGetVersion();
-DUILIB_API const utf8     *wkeGetVersionString();
-#define wkeVersion          wkeGetVersion
-#define wkeVersionString    wkeGetVersionString
-
-DUILIB_API void            wkeGC(wkeWebView webView, long delayMs);
-DUILIB_API void            wkeSetFileSystem(WKE_FILE_OPEN pfnOpen, WKE_FILE_CLOSE pfnClose,
-                                            WKE_FILE_SIZE pfnSize, WKE_FILE_READ pfnRead, WKE_FILE_SEEK pfnSeek);
-
-DUILIB_API const char     *wkeGetWebViewName(wkeWebView webView);
-DUILIB_API void            wkeSetWebViewName(wkeWebView webView, const char *name);
-#define wkeWebViewName      wkeGetWebViewName
-
-DUILIB_API void            wkeDestroyWebView(wkeWebView webView);
-DUILIB_API wkeWebView      wkeCreateWebView();
-DUILIB_API wkeWebView      wkeGetWebViewForCurrentContext();
-
-DUILIB_API bool            wkeIsLoaded(wkeWebView webView);
-DUILIB_API bool            wkeIsLoadFailed(wkeWebView webView);
-DUILIB_API bool            wkeIsLoadComplete(wkeWebView webView);
-
-DUILIB_API bool            wkeIsLoading(wkeWebView webView);
-DUILIB_API bool            wkeIsLoadingSucceeded(wkeWebView webView);
-DUILIB_API bool            wkeIsLoadingFailed(wkeWebView webView);
-DUILIB_API bool            wkeIsLoadingCompleted(wkeWebView webView);
-DUILIB_API bool            wkeIsDocumentReady(wkeWebView webView);
-DUILIB_API void            wkeStopLoading(wkeWebView webView);
-DUILIB_API void            wkeReload(wkeWebView webView);
-
-DUILIB_API const utf8     *wkeGetSource(wkeWebView webView);
-DUILIB_API const utf8     *wkeGetTitleA(wkeWebView webView);
-DUILIB_API const wchar_t  *wkeGetTitleW(wkeWebView webView);
-#if defined(UNICODE) || defined(_UNICODE)
-    #define wkeGetTitle     wkeGetTitleW
-#else
-    #define wkeGetTitle     wkeGetTitleA
-#endif
-
-DUILIB_API void            wkeResize(wkeWebView webView, int w, int h);
-DUILIB_API int             wkeGetWidth(wkeWebView webView);
-DUILIB_API int             wkeGetHeight(wkeWebView webView);
-#define wkeWidth    wkeGetWidth
-#define wkeHeight   wkeGetHeight
-
-DUILIB_API int             wkeGetContentWidth(wkeWebView webView);
-DUILIB_API int             wkeGetContentHeight(wkeWebView webView);
-#define wkeContentsWidth    wkeGetContentWidth
-#define wkeContentsHeight   wkeGetContentHeight
-
-DUILIB_API void            wkeEditorSelectAll(wkeWebView webView);
-DUILIB_API void            wkeEditorUnSelect(wkeWebView webView);
-DUILIB_API void            wkeEditorCopy(wkeWebView webView);
-DUILIB_API void            wkeEditorCut(wkeWebView webView);
-DUILIB_API void            wkeEditorPaste(wkeWebView webView);
-DUILIB_API void            wkeEditorDelete(wkeWebView webView);
-DUILIB_API void            wkeEditorUndo(wkeWebView webView);
-DUILIB_API void            wkeEditorRedo(wkeWebView webView);
-#define         wkeSelectAll        wkeEditorSelectAll
-#define         wkeUnSelect         wkeEditorUnSelect
-#define         wkeCopy             wkeEditorCopy
-#define         wkeCut              wkeEditorCut
-#define         wkePaste            wkeEditorPaste
-#define         wkeDelete           wkeEditorDelete
-#define         wkeUndo             wkeEditorUndo
-#define         wkeRedo             wkeEditorRedo
-
-// miniblink å†…éƒ¨æ²¡æœ‰å®ç°
-// DUILIB_API void            wkeSetEditable(wkeWebView webView, bool editable);
-
-DUILIB_API bool            wkeFireMouseEvent(wkeWebView webView, unsigned int message, int x, int y,
-                                             unsigned int flags);
-// miniblink å†…éƒ¨æ²¡æœ‰å®ç°
-// DUILIB_API bool            wkeFireContextMenuEvent(wkeWebView webView, int x, int y, unsigned int flags);
-DUILIB_API bool            wkeFireMouseWheelEvent(wkeWebView webView, int x, int y, int delta,
-                                                  unsigned int flags);
-DUILIB_API bool            wkeFireKeyUpEvent(wkeWebView webView, unsigned int virtualKeyCode,
-                                             unsigned int flags, bool systemKey);
-DUILIB_API bool            wkeFireKeyDownEvent(wkeWebView webView, unsigned int virtualKeyCode,
-                                               unsigned int flags, bool systemKey);
-DUILIB_API bool            wkeFireKeyPressEvent(wkeWebView webView, unsigned int charCode,
-                                                unsigned int flags, bool systemKey);
-DUILIB_API bool            wkeFireWindowsMessage(wkeWebView webView, HWND hWnd, UINT message,
-                                                 WPARAM wParam, LPARAM lParam, LRESULT *result);
-#define         wkeMouseEvent           wkeFireMouseEvent
-#define         wkeContextMenuEvent     wkeFireContextMenuEvent
-#define         wkeMouseWheel           wkeFireMouseWheelEvent
-#define         wkeKeyUp                wkeFireKeyUpEvent
-#define         wkeKeyDown              wkeFireKeyDownEvent
-#define         wkeKeyPress             wkeFireKeyPressEvent
-#define         wkeWindowsMessage       wkeFireWindowsMessage
-
-DUILIB_API void            wkeSetFocus(wkeWebView webView);
-DUILIB_API void            wkeKillFocus(wkeWebView webView);
-#define wkeFocus    wkeSetFocus
-#define wkeUnfocus  wkeKillFocus
-
-DUILIB_API wkeRect         wkeGetCaretRect(wkeWebView webView);
-
-DUILIB_API void            wkeSetClientHandler(wkeWebView webView, const wkeClientHandler *handler);
-DUILIB_API const wkeClientHandler *wkeGetClientHandler(wkeWebView webView);
-
-DUILIB_API void            wkeSetMemoryCacheEnable(wkeWebView webView, bool b);
-DUILIB_API void            wkeSetMouseEnabled(wkeWebView webView, bool b);
-DUILIB_API void            wkeSetTouchEnabled(wkeWebView webView, bool b);
-DUILIB_API void            wkeSetNavigationToNewWindowEnable(wkeWebView webView, bool b);
-DUILIB_API void            wkeSetCspCheckEnable(wkeWebView webView, bool b);
-DUILIB_API void            wkeSetNpapiPluginsEnabled(wkeWebView webView, bool b);
-DUILIB_API void            wkeSetHeadlessEnabled(wkeWebView webView, bool b);  // å¯ä»¥å…³é—­æ¸²æŸ“
-DUILIB_API void            wkeGetCursorInfoType(wkeWebView webView);
-
-DUILIB_API void            wkeSetDragEnable(wkeWebView webView,
-                                            bool b);       // å¯å…³é—­æ‹–æ‹½æ–‡ä»¶åŠ è½½ç½‘é¡µ
-DUILIB_API void            wkeSetDragFiles(wkeWebView webView, const POINT *clintPos, const POINT *screenPos,
-                                           wkeString files[ ], int filesCount);
-
-DUILIB_API void            wkeSetViewNetInterface(wkeWebView webView, const char *netInterface);
-
-DUILIB_API void            wkeSetProxy(const wkeProxy *proxy);
-DUILIB_API void            wkeSetViewProxy(wkeWebView webView, wkeProxy *proxy);
-
-DUILIB_API void            wkeSetHandle(wkeWebView webView, HWND wnd);
-DUILIB_API void            wkeSetHandleOffset(wkeWebView webView, int x, int y);
-
-DUILIB_API bool            wkeIsTransparent(wkeWebView webView);
-DUILIB_API void            wkeSetTransparent(wkeWebView webView, bool transparent);
-
-DUILIB_API void            wkeSetUserAgentA(wkeWebView webView, const utf8 *userAgent);
-DUILIB_API void            wkeSetUserAgentW(wkeWebView webView, const wchar_t *userAgent);
-#if defined(UNICODE) || defined(_UNICODE)
-    #define wkeSetUserAgent     wkeSetUserAgentW
-#else
-    #define wkeSetUserAgent     wkeSetUserAgentA
-#endif
-
-DUILIB_API void            wkeLoadURLA(wkeWebView webView, const utf8 *url);
-DUILIB_API void            wkeLoadURLW(wkeWebView webView, const wchar_t *url);
-#if defined(UNICODE) || defined(_UNICODE)
-    #define wkeLoadURL     wkeLoadURLW
-#else
-    #define wkeLoadURL     wkeLoadURLA
-#endif
-
-DUILIB_API void            wkePostURLA(wkeWebView wkeView, const utf8 *url,
-                                       const char *postData, int  postLen);
-DUILIB_API void            wkePostURLW(wkeWebView wkeView, const wchar_t *url,
-                                       const char *postData, int postLen);
-#if defined(UNICODE) || defined(_UNICODE)
-    #define wkePostURL     wkePostURLW
-#else
-    #define wkePostURL     wkePostURLA
-#endif
-
-DUILIB_API void            wkeLoadHTMLA(wkeWebView webView, const utf8 *html);
-DUILIB_API void            wkeLoadHTMLW(wkeWebView webView, const wchar_t *html);
-#if defined(UNICODE) || defined(_UNICODE)
-    #define wkeLoadHTML     wkeLoadHTMLW
-#else
-    #define wkeLoadHTML     wkeLoadHTMLA
-#endif
-
-DUILIB_API void            wkeLoadFileA(wkeWebView webView, const utf8 *filename);
-DUILIB_API void            wkeLoadFileW(wkeWebView webView, const wchar_t *filename);
-#if defined(UNICODE) || defined(_UNICODE)
-    #define wkeLoadFile     wkeLoadFileW
-#else
-    #define wkeLoadFile     wkeLoadFileA
-#endif
-
-DUILIB_API const utf8     *wkeGetURLA(wkeWebView webView);
-DUILIB_API const wchar_t  *wkeGetURLW(wkeWebView webView);     // TODO æœªå®ç°
-#if defined(UNICODE) || defined(_UNICODE)
-    #define wkeGetURL     wkeGetURLW
-#else
-    #define wkeGetURL     wkeGetURLA
-#endif
-
-DUILIB_API void            wkeSetDirty(wkeWebView webView, bool dirty);
-DUILIB_API bool            wkeIsDirty(wkeWebView webView);
-DUILIB_API void            wkeAddDirtyArea(wkeWebView webView, int x, int y, int w, int h);
-DUILIB_API void            wkeLayoutIfNeeded(wkeWebView webView);
-DUILIB_API void            wkePaint(wkeWebView webView, void *bits, int pitch);
-// miniblink å†…éƒ¨æ²¡æœ‰å®ç°
-// DUILIB_API void            wkePaint2(wkeWebView webView, void *bits, int bufW, int bufH, int xDst,
-//                                      int yDst, int w, int h, int xSrc, int ySrc, bool bCopyAlpha);
-DUILIB_API bool            wkeRepaintIfNeeded(wkeWebView webView);
-DUILIB_API HDC             wkeGetViewDC(wkeWebView webView);
-DUILIB_API HWND            wkeGetHostHWND(wkeWebView webView);
-
-DUILIB_API bool            wkeCanGoBack(wkeWebView webView);
-DUILIB_API bool            wkeGoBack(wkeWebView webView);
-DUILIB_API bool            wkeCanGoForward(wkeWebView webView);
-DUILIB_API bool            wkeGoForward(wkeWebView webView);
-
-DUILIB_API const utf8     *wkeGetCookieA(wkeWebView webView);
-DUILIB_API const wchar_t  *wkeGetCookieW(wkeWebView webView);
-#if defined(UNICODE) || defined(_UNICODE)
-    #define wkeGetCookie     wkeGetCookieW
-#else
-    #define wkeGetCookie     wkeGetCookieA
-#endif
-
-DUILIB_API bool            wkeIsCookieEnabled(wkeWebView webView);
-DUILIB_API void            wkeSetCookieEnabled(wkeWebView webView, bool enable);
-#define wkeCookieEnabled    wkeIsCookieEnabled
-
-// TODO unicode æœªå®ç°
-// cookieæ ¼å¼å¿…é¡»æ˜¯:Set-cookie: PRODUCTINFO=webxpress; domain=.fidelity.com; path=/; secure")
-DUILIB_API void            wkeSetCookieA(wkeWebView webView, const utf8 *url, const utf8 *cookie);
-DUILIB_API void            wkeSetCookieW(wkeWebView webView, const wchar_t *url, const wchar_t *cookie);
-#if defined(UNICODE) || defined(_UNICODE)
-    #define wkeSetCookie     wkeSetCookieW
-#else
-    #define wkeSetCookie     wkeSetCookieA
-#endif
-
-DUILIB_API void            wkeVisitAllCookie(void *params, wkeCookieVisitor visitor);
-DUILIB_API void            wkePerformCookieCommand(wkeCookieCommand command);
-
-// TODO ansi æœªå®ç°
-DUILIB_API void            wkeSetCookieJarPathA(wkeWebView webView, const utf8 *path);
-DUILIB_API void            wkeSetCookieJarPathW(wkeWebView webView, const wchar_t *path);
-#if defined(UNICODE) || defined(_UNICODE)
-    #define wkeSetCookieJarPath     wkeSetCookieJarPathW
-#else
-    #define wkeSetCookieJarPath     wkeSetCookieJarPathA
-#endif
-
-// TODO ansi æœªå®ç°
-DUILIB_API void            wkeSetCookieJarFullPathA(wkeWebView webView, const utf8 *path);
-DUILIB_API void            wkeSetCookieJarFullPathW(wkeWebView webView, const wchar_t *path);
-#if defined(UNICODE) || defined(_UNICODE)
-    #define wkeSetCookieJarFullPath     wkeSetCookieJarFullPathW
-#else
-    #define wkeSetCookieJarFullPath     wkeSetCookieJarFullPathA
-#endif
-
-// TODO ansi æœªå®ç°
-DUILIB_API void            wkeSetLocalStorageFullPathA(wkeWebView webView, const utf8 *path);
-DUILIB_API void            wkeSetLocalStorageFullPathW(wkeWebView webView, const wchar_t *path);
-#if defined(UNICODE) || defined(_UNICODE)
-    #define wkeSetLocalStorageFullPath     wkeSetLocalStorageFullPathW
-#else
-    #define wkeSetLocalStorageFullPath     wkeSetLocalStorageFullPathA
-#endif
-
-// TODO ansi æœªå®ç°
-DUILIB_API void            wkeAddPluginDirectoryA(wkeWebView webView, const utf8 *path);
-DUILIB_API void            wkeAddPluginDirectoryW(wkeWebView webView, const wchar_t *path);
-#if defined(UNICODE) || defined(_UNICODE)
-    #define wkeAddPluginDirectory     wkeAddPluginDirectoryW
-#else
-    #define wkeAddPluginDirectory     wkeAddPluginDirectoryA
-#endif
-
-DUILIB_API float           wkeGetMediaVolume(wkeWebView webView);
-DUILIB_API void            wkeSetMediaVolume(wkeWebView webView, float volume);
-#define wkeMediaVolume  wkeGetMediaVolume
-
-DUILIB_API float           wkeGetZoomFactor(wkeWebView webView);
-DUILIB_API void            wkeSetZoomFactor(wkeWebView webView, float factor);
-#define wkeZoomFactor   wkeGetZoomFactor
-
-DUILIB_API void            wkeSetStringA(wkeString *string, const utf8 *str, size_t len);
-DUILIB_API void            wkeSetStringW(wkeString *string, const wchar_t *str, size_t len);
-#if defined(UNICODE) || defined(_UNICODE)
-    #define wkeSetString     wkeSetStringW
-#else
-    #define wkeSetString     wkeSetStringA
-#endif
-
-DUILIB_API const utf8     *wkeGetStringA(const wkeString string);
-DUILIB_API const wchar_t  *wkeGetStringW(const wkeString string);
-#if defined(UNICODE) || defined(_UNICODE)
-    #define wkeGetString    wkeGetStringW
-    #define wkeToString     wkeToStringW
-#else
-    #define wkeGetString    wkeGetStringA
-    #define wkeToString     wkeGetStringA
-#endif
-
-DUILIB_API void            wkeDeleteString(wkeString str);
-DUILIB_API wkeString       wkeCreateStringA(const utf8 *str, size_t len);  // TODO æœªå®ç°
-DUILIB_API wkeString       wkeCreateStringW(const wchar_t *str, size_t len);
-#if defined(UNICODE) || defined(_UNICODE)
-    #define wkeCreateString     wkeCreateStringW
-#else
-    #define wkeCreateString     wkeCreateStringA
-#endif
-
-DUILIB_API void            wkeSleep(wkeWebView webView);
-DUILIB_API bool            wkeAwake(wkeWebView webView);
-DUILIB_API bool            wkeIsAwake(wkeWebView webView);
-#define wkeAwaken   wkeAwake
-
-// TODO éœ€è¦å®ç° unicode
-DUILIB_API void            wkeSetUserKeyValue(wkeWebView webView, const char *key, void *value);
-DUILIB_API void           *wkeGetUserKeyValue(wkeWebView webView, const char *key);
-
-DUILIB_API void            wkeSetDeviceParameter(wkeWebView webView, const char *device,
-                                                 const char *paramStr, int paramInt, float paramFloat);
-DUILIB_API wkeTempCallbackInfo wkeGetTempCallbackInfo(wkeWebView webView);
-
-DUILIB_API void            wkeDeleteWillSendRequestInfo(wkeWebView webWindow, wkeWillSendRequestInfo *info);
-
-// TODO éœ€è¦å®ç° unicode/ansi
-DUILIB_API void            wkeNetSetMIMEType(void *job, char *type);
-DUILIB_API void            wkeNetGetMIMEType(void *job, wkeString mime);
-DUILIB_API void            wkeNetSetHTTPHeaderField(void *job, wchar_t *key, wchar_t *value, bool response);
-DUILIB_API const char     *wkeNetGetHTTPHeaderField(void *job, const char *key);
-DUILIB_API void            wkeNetSetURL(void *job, const char *url);
-// è°ƒç”¨æ­¤å‡½æ•°å,ç½‘ç»œå±‚æ”¶åˆ°æ•°æ®ä¼šå­˜å‚¨åœ¨ä¸€bufå†…,æ¥æ”¶æ•°æ®å®Œæˆåå“åº”OnLoadUrlEndäº‹ä»¶.#æ­¤è°ƒç”¨ä¸¥é‡å½±å“æ€§èƒ½,æ…ç”¨
-// æ­¤å‡½æ•°å’ŒwkeNetSetDataçš„åŒºåˆ«æ˜¯ï¼ŒwkeNetHookRequestä¼šåœ¨æ¥å—åˆ°çœŸæ­£ç½‘ç»œæ•°æ®åå†è°ƒç”¨å›è°ƒï¼Œå¹¶å…è®¸å›è°ƒä¿®æ”¹ç½‘ç»œæ•°æ®ã€‚
-// è€ŒwkeNetSetDataæ˜¯åœ¨ç½‘ç»œæ•°æ®è¿˜æ²¡å‘é€çš„æ—¶å€™ä¿®æ”¹
-DUILIB_API void            wkeNetSetData(void *job, void *buf, int len);
-DUILIB_API void            wkeNetHookRequest(void *job);
-DUILIB_API void            wkeNetOnResponse(wkeWebView webView, wkeNetResponseCallback callback, void *param);
-
-DUILIB_API wkePostBodyElements    *wkeNetGetPostBody(void *jobPtr);
-DUILIB_API wkeRequestType  wkeNetGetRequestMethod(void *jobPtr);
-
-DUILIB_API void            wkeNetContinueJob(void *jobPtr);
-DUILIB_API const char     *wkeNetGetUrlByJob(void *jobPtr);
-DUILIB_API void            wkeNetCancelRequest(void *jobPtr);
-DUILIB_API void            wkeNetChangeRequestUrl(void *jobPtr, const char *url);
-DUILIB_API void            wkeNetHoldJobToAsynCommit(void *jobPtr);
-
-DUILIB_API wkePostBodyElements    *wkeNetCreatePostBodyElements(wkeWebView webView, size_t length);
-DUILIB_API void            wkeNetFreePostBodyElements(wkePostBodyElements *element);
-DUILIB_API wkePostBodyElement     *wkeNetCreatePostBodyElement(wkeWebView webView);
-DUILIB_API void            wkeNetFreePostBodyElement(wkePostBodyElement *element);
-DUILIB_API wkeMemBuf      *wkeCreateMemBuf(wkeWebView webView, void *buf, size_t length);
-DUILIB_API void            wkeFreeMemBuf(wkeMemBuf *buffer);
-
-DUILIB_API bool            wkeIsMainFrame(wkeWebView webView, wkeWebFrameHandle frameId);
-DUILIB_API bool            wkeIsWebRemoteFrame(wkeWebView webView, wkeWebFrameHandle frameId);
-DUILIB_API wkeWebFrameHandle   wkeWebFrameGetMainFrame(wkeWebView webView);
-
-DUILIB_API void            wkeWebFrameGetMainWorldScriptContext(wkeWebView webView,
-        wkeWebFrameHandle webFrameId, v8ContextPtr contextOut);
-DUILIB_API v8Isolate       wkeGetBlinkMainThreadIsolate();
-
-DUILIB_API wkeWebView      wkeCreateWebWindow(wkeWindowType type, HWND parent,
-                                              int x, int y, int width, int height);
-DUILIB_API void            wkeDestroyWebWindow(wkeWebView webWindow);
-DUILIB_API void           *wkeGetWindowHandle(wkeWebView webWindow);
-
-DUILIB_API void            wkeShowWindow(wkeWebView webWindow, bool show);
-DUILIB_API void            wkeEnableWindow(wkeWebView webWindow, bool enable);
-
-DUILIB_API void            wkeMoveWindow(wkeWebView webWindow, int x, int y, int width, int height);
-DUILIB_API void            wkeMoveToCenter(wkeWebView webWindow);
-DUILIB_API void            wkeResizeWindow(wkeWebView webWindow, int width, int height);
-
-DUILIB_API wkeWebDragOperation wkeDragTargetDragEnter(wkeWebView webWindow, const wkeWebDragData *webDragData,
-                                                      const POINT *clientPoint, const POINT *screenPoint,
-                                                      wkeWebDragOperationsMask operationsAllowed, int modifiers);
-DUILIB_API wkeWebDragOperation wkeDragTargetDragOver(wkeWebView webWindow, const POINT *clientPoint,
-                                                     const POINT *screenPoint, wkeWebDragOperationsMask operationsAllowed,
-                                                     int modifiers);
-DUILIB_API void            wkeDragTargetDragLeave(wkeWebView webWindow);
-DUILIB_API void            wkeDragTargetDrop(wkeWebView webWindow, const POINT *clientPoint,
-                                             const POINT *screenPoint, int modifiers);
-
-DUILIB_API void            wkeSetWindowTitleA(wkeWebView webWindow, const utf8 *title);
-DUILIB_API void            wkeSetWindowTitleW(wkeWebView webWindow, const wchar_t *title);
-#if defined(UNICODE) || defined(_UNICODE)
-    #define wkeSetWindowTitle     wkeSetWindowTitleW
-#else
-    #define wkeSetWindowTitle     wkeSetWindowTitleA
-#endif
-
-//////////////////////////////////////////////////////////////////////////
-// ä»¥ä¸‹æ˜¯C/C++ ä¸ JS äº’è°ƒç›¸å…³ API
-
-DUILIB_API jsValue      wkeRunJSA(wkeWebView webView, const utf8 *script);
-DUILIB_API jsValue      wkeRunJSW(wkeWebView webView, const wchar_t *script);
-#if defined(UNICODE) || defined(_UNICODE)
-    #define wkeRunJS     wkeRunJSW
-#else
-    #define wkeRunJS     wkeRunJSA
-#endif
-
-DUILIB_API jsValue         wkeRunJsByFrame(wkeWebView webView, wkeWebFrameHandle frameId,
-                                           const utf8 *script, bool isInClosure);
-
-DUILIB_API jsExecState     wkeGlobalExec(wkeWebView webView);
-
-DUILIB_API void            jsBindFunction(const char *name, jsNativeFunction fn, unsigned int argCount);
-DUILIB_API void            jsBindGetter(const char *name, jsNativeFunction fn); /*get property*/
-DUILIB_API void            jsBindSetter(const char *name, jsNativeFunction fn); /*set property*/
-
-DUILIB_API void            jsBindFunctionEx(const char *name, wkeJsNativeFunction fn, void *param,
-                                            unsigned int argCount);
-DUILIB_API void            jsBindGetterEx(const char *name, wkeJsNativeFunction fn, void *param);
-DUILIB_API void            jsBindSetterEx(const char *name, wkeJsNativeFunction fn, void *param);
-#define wkeJsBindFunction   jsBindFunctionEx
-#define wkeJsBindGetter     jsBindGetterEx
-#define wkeJsBindSetter     jsBindSetterEx
-
-DUILIB_API int             jsArgCount(jsExecState es);
-DUILIB_API jsType          jsArgType(jsExecState es, int index);
-DUILIB_API jsValue         jsArgValue(jsExecState es, int index);  // TODO æ·»åŠ è¯¥æ¥å£ï¼Œä¸ jsArg å¹¶å­˜
-#define jsArg   jsArgValue
-
-DUILIB_API jsType          jsTypeOf(jsExecState es, jsValue v);
-DUILIB_API bool            jsIsNumber(jsExecState es, jsValue v);
-DUILIB_API bool            jsIsString(jsExecState es, jsValue v);
-DUILIB_API bool            jsIsBoolean(jsExecState es, jsValue v);
-DUILIB_API bool            jsIsObject(jsExecState es, jsValue v);
-DUILIB_API bool            jsIsFunction(jsExecState es, jsValue v);
-DUILIB_API bool            jsIsUndefined(jsExecState es, jsValue v);
-DUILIB_API bool            jsIsNull(jsExecState es, jsValue v);
-DUILIB_API bool            jsIsArray(jsExecState es, jsValue v);
-DUILIB_API bool            jsIsTrue(jsExecState es, jsValue v);
-DUILIB_API bool            jsIsFalse(jsExecState es, jsValue v);
-
-DUILIB_API int             jsToInt(jsExecState es, jsValue v);
-DUILIB_API float           jsToFloat(jsExecState es, jsValue v);
-DUILIB_API double          jsToDouble(jsExecState es, jsValue v);
-DUILIB_API bool            jsToBoolean(jsExecState es, jsValue v);
-DUILIB_API const utf8     *jsToTempStringA(jsExecState es, jsValue v);
-DUILIB_API const wchar_t  *jsToTempStringW(jsExecState es, jsValue v);
-#if defined(UNICODE) || defined(_UNICODE)
-    #define jsToTempString      jsToTempStringW
-    #define jsToString          jsToTempStringW
-#else
-    #define jsToTempString      jsToTempStringA
-    #define jsToString          jsToTempStringA
-#endif
-
-DUILIB_API jsValue         jsInt(jsExecState es, int v);
-DUILIB_API jsValue         jsFloat(jsExecState es, float v);
-DUILIB_API jsValue         jsDouble(jsExecState es, double v);
-DUILIB_API jsValue         jsBoolean(jsExecState es, bool v);
-DUILIB_API jsValue         jsUndefined(jsExecState es);
-DUILIB_API jsValue         jsNull(jsExecState es);
-DUILIB_API jsValue         jsTrue(jsExecState es);
-DUILIB_API jsValue         jsFalse(jsExecState es);
-DUILIB_API jsValue         jsStringA(jsExecState es, const utf8 *str);
-DUILIB_API jsValue         jsStringW(jsExecState es, const wchar_t *str);
-#if defined(UNICODE) || defined(_UNICODE)
-    #define jsString     jsStringW
-#else
-    #define jsString     jsStringA
-#endif
-DUILIB_API jsValue         jsEmptyObject(jsExecState es);
-DUILIB_API jsValue         jsEmptyArray(jsExecState es);
-DUILIB_API jsValue         jsArrayBuffer(jsExecState es, char *buffer, size_t size);
-
-DUILIB_API jsValue         jsObject(jsExecState es, jsData *obj);
-DUILIB_API jsValue         jsSetObjData(jsExecState es, jsData *obj);
-DUILIB_API jsData         *jsGetObjData(jsExecState es, jsValue obj);
-#define jsFunction  jsSetObjData
-#define jsGetData   jsGetObjData
-
-DUILIB_API jsValue         jsGet(jsExecState es, jsValue obj, const char *prop);
-DUILIB_API void            jsSet(jsExecState es, jsValue obj, const char *prop, jsValue v);
-
-DUILIB_API jsValue         jsGetAt(jsExecState es, jsValue obj, int index);
-DUILIB_API void            jsSetAt(jsExecState es, jsValue obj, int index, jsValue v);
-
-DUILIB_API int             jsGetLength(jsExecState es, jsValue obj);
-DUILIB_API void            jsSetLength(jsExecState es, jsValue obj, int length);
-
-DUILIB_API jsValue         jsGlobalObject(jsExecState es);
-DUILIB_API wkeWebView      jsGetWebView(jsExecState es);
-
-DUILIB_API jsValue         jsEvalA(jsExecState es, const utf8 *str);
-DUILIB_API jsValue         jsEvalW(jsExecState es, const wchar_t *str);
-#if defined(UNICODE) || defined(_UNICODE)
-    #define jsEval     jsEvalW
-#else
-    #define jsEval     jsEvalA
-#endif
-
-// TOOD ANSI
-DUILIB_API jsValue         jsEvalExW(jsExecState es, const wchar_t *str, bool isInClosure);
-
-DUILIB_API jsValue         jsCall(jsExecState es, jsValue func, jsValue thisObject,
-                                  jsValue *args, int argCount);
-DUILIB_API jsValue         jsCallGlobal(jsExecState es, jsValue func, jsValue *args, int argCount);
-
-DUILIB_API jsValue         jsGetGlobal(jsExecState es, const char *prop);
-DUILIB_API void            jsSetGlobal(jsExecState es, const char *prop, jsValue v);
-
-DUILIB_API void            jsGC();
+// ¹¹½¨Ò»¸öjs Objcet£¬¿ÉÒÔ´«µİ¸øjsÊ¹ÓÃ¡£
+// ²ÎÊı£º
+// DUILIB_API typedef jsValue(*jsGetPropertyCallback)(jsExecState es, jsValue obj, const utf8* propertyName);;
+//   ÊôĞÔ·ÃÎÊÆ÷¡£ÔÚjsÀïXXX.yyyÕâÑùµ÷ÓÃÊ±£¬jsGetPropertyCallback»á±»´¥·¢£¬²¢ÇÒpropertyNameµÄÖµÎªyyy
+// typedef bool(*jsSetPropertyCallback)(jsExecState es, jsValue obj, const utf8* propertyName, jsValue value);
+//   ÊôĞÔÉèÖÃÆ÷¡£ÔÚjsÀïXXX.yyy=1ÕâÑùµ÷ÓÃÊ±£¬jsSetPropertyCallback»á±»´¥·¢£¬²¢ÇÒpropertyNameµÄÖµÎªyyy£¬valueµÄÖµÊÇ×Ö·û´®ÀàĞÍ¡£¿ÉÒÔÍ¨¹ıÖ®Ç°Ìáµ½µÄ×Ö·û´®²Ù×÷½Ó¿ÚÀ´»ñÈ¡
+// typedef jsValue(*jsCallAsFunctionCallback)(jsExecState es, jsValue obj, jsValue* args, int argCount);
+//   ÔÚjsÀïXXX()ÕâÑùµ÷ÓÃÊ±»á´¥·¢¡£
+// typedef void(*jsFinalizeCallback)(struct tagjsData* data);
+//   ÔÚjsÀïÃ»ÈËÒıÓÃ£¬ÇÒÀ¬»ø»ØÊÕÊ±»á´¥·¢
+DUILIB_API jsValue jsObject(jsExecState es, jsData *data);
+// ´´½¨Ò»¸öÖ÷frameµÄÈ«¾Öº¯Êı¡£jsDataµÄÓÃ·¨ÈçÉÏ¡£jsµ÷ÓÃ£ºXXX() ´ËÊ±jsDataµÄcallAsFunction´¥·¢¡£ ÆäÊµjsFunctionºÍjsObject¹¦ÄÜ»ù±¾ÀàËÆ¡£ÇÒjsObjectµÄ¹¦ÄÜ¸üÇ¿´óÒ»Ğ©
+DUILIB_API jsValue jsFunction(jsExecState es, jsData *data);
+// »ñÈ¡jsObject»òjsFunction´´½¨µÄjsValue¶ÔÓ¦µÄjsDataÖ¸Õë¡£
+DUILIB_API jsData *jsGetData(jsExecState es, jsValue value);
+
+// Èç¹ûobjectÊÇ¸öjsµÄobject£¬Ôò»ñÈ¡propÖ¸¶¨µÄÊôĞÔ¡£Èç¹ûobject²»ÊÇjs objectÀàĞÍ£¬Ôò·µ»ØjsUndefined
+DUILIB_API jsValue jsGet(jsExecState es, jsValue obj, CDuiString prop);
+// ÉèÖÃobjectµÄÊôĞÔ
+DUILIB_API void jsSet(jsExecState es, jsValue obj, CDuiString prop, jsValue v);
+
+// ÉèÖÃjs arraryµÄµÚindex¸ö³ÉÔ±µÄÖµ£¬object±ØĞëÊÇjs array²ÅÓĞÓÃ£¬·ñÔò»á·µ»ØjsUndefined
+DUILIB_API jsValue jsGetAt(jsExecState es, jsValue obj, int index);
+// ÉèÖÃjs arraryµÄµÚindex¸ö³ÉÔ±µÄÖµ£¬object±ØĞëÊÇjs array²ÅÓĞÓÃ¡£
+DUILIB_API void jsSetAt(jsExecState es, jsValue obj, int index, jsValue value);
+
+struct jsKeys
+{
+    unsigned int length;
+    const utf8 **keys;
+};
+// »ñÈ¡objectÓĞÄÄĞ©key
+DUILIB_API jsKeys *jsGetKeys(jsExecState es, jsValue obj);
+DUILIB_API void jsFreeKeys(jsKeys *obj);
+
+DUILIB_API bool jsIsJsValueValid(jsExecState es, jsValue obj);
+DUILIB_API bool jsIsValidExecState(jsExecState es);
+DUILIB_API void jsDeleteObjectProp(jsExecState es, jsValue obj, CDuiString prop);
+
+// »ñÈ¡js arraryµÄ³¤¶È£¬object±ØĞëÊÇjs array²ÅÓĞÓÃ¡£
+DUILIB_API int jsGetLength(jsExecState es, jsValue obj);
+// ÉèÖÃjs arraryµÄ³¤¶È£¬object±ØĞëÊÇjs array²ÅÓĞÓÃ¡£
+DUILIB_API void jsSetLength(jsExecState es, jsValue obj, int length);
+
+DUILIB_API jsValue jsGlobalObject(jsExecState es);
+// »ñÈ¡es¶ÔÓ¦µÄwebview
+DUILIB_API wkeWebView jsGetWebView(jsExecState es);
+
+// Ö´ĞĞÒ»¶Îjs£¬²¢·µ»ØÖµ¡£
+// ×¢Òâ£ºstrµÄ´úÂë»áÔÚmbÄÚ²¿×Ô¶¯±»°ü¹üÔÚÒ»¸öfunction(){}ÖĞ¡£ËùÒÔÊ¹ÓÃµÄ±äÁ¿»á±»¸ôÀë ×¢Òâ£ºÒª»ñÈ¡·µ»ØÖµ£¬ÇëĞ´return¡£ÕâºÍwke²»Ì«Ò»Ñù¡£wke²»ĞèÒªĞ´retrun
+DUILIB_API jsValue jsEval(jsExecState es, CDuiString str);
+// ºÍÉÏÊö½Ó¿ÚµÄÇø±ğÊÇ£¬isInClosure±íÊ¾ÊÇ·ñÒª°ü¹üÒ»²ãfunction(){}¡£jsEvalWÏàµ±ÓÚjsEvalExW(es, str, false)
+// ×¢Òâ£ºÈç¹ûĞèÒª·µ»ØÖµ£¬ÔÚisInClosureÎªtrueÊ±£¬ĞèÒªĞ´return£¬ÎªfalseÔò²»ÓÃ
+DUILIB_API jsValue jsEvalExW(jsExecState es, CDuiString str, bool isInClosure);
+
+// µ÷ÓÃÒ»¸öfunc¶ÔÓ¦µÄjsº¯Êı¡£Èç¹û´Ëjsº¯ÊıÊÇ³ÉÔ±º¯Êı£¬ÔòĞèÒªÌîthisValue¡£ ·ñÔò¿ÉÒÔ´«jsUndefined¡£argsÊÇ¸öÊı×é£¬¸öÊıÓÉargCount¿ØÖÆ¡£ func¿ÉÒÔÊÇ´ÓjsÀïÈ¡µÄ£¬Ò²¿ÉÒÔÊÇ×ÔĞĞ¹¹ÔìµÄ¡£
+DUILIB_API jsValue jsCall(jsExecState es, jsValue func, jsValue thisValue, jsValue *args, int argCount);
+// µ÷ÓÃwindowÉÏµÄÈ«¾Öº¯Êı
+DUILIB_API jsValue jsCallGlobal(jsExecState es, jsValue func, jsValue *args, int argCount);
+
+// »ñÈ¡windowÉÏµÄÊôĞÔ
+DUILIB_API jsValue jsGetGlobal(jsExecState es, CDuiString prop);
+// ÉèÖÃwindowÉÏµÄÊôĞÔ
+DUILIB_API void jsSetGlobal(jsExecState es, CDuiString prop, jsValue v);
+
+// Ç¿ÖÆÀ¬»ø»ØÊÕ
+DUILIB_API void jsGC();
+
+DUILIB_API bool jsAddRef(jsExecState es, jsValue val);
+DUILIB_API bool jsReleaseRef(jsExecState es, jsValue val);
+
+struct jsExceptionInfo
+{
+    const utf8 *message; // Returns the exception message.
+    const utf8 *sourceLine; // Returns the line of source code that the exception occurred within.
+    const utf8 *scriptResourceName; // Returns the resource name for the script from where the function causing the error originates.
+    int lineNumber; // Returns the 1-based number of the line where the error occurred or 0 if the line number is unknown.
+    int startPosition; // Returns the index within the script of the first character where the error occurred.
+    int endPosition; // Returns the index within the script of the last character where the error occurred.
+    int startColumn; // Returns the index within the line of the first character where the error occurred.
+    int endColumn; // Returns the index within the line of the last character where the error occurred.
+    const utf8 *callstackString;
+};
+
+// µ±wkeRunJs¡¢jsCallµÈ½Ó¿Úµ÷ÓÃÊ±£¬Èç¹ûÖ´ĞĞµÄjs´úÂëÓĞÒì³££¬´Ë½Ó¿Ú½«»ñÈ¡µ½Òì³£ĞÅÏ¢¡£·ñÔò·µ»Ønullptr¡£
+DUILIB_API jsExceptionInfo *jsGetLastErrorIfException(jsExecState es);
+
+DUILIB_API jsValue jsThrowException(jsExecState es, const utf8 *exception);
+DUILIB_API CDuiString jsGetCallstack(jsExecState es);
 
 }
 
