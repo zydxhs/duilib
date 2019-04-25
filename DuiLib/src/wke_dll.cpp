@@ -1120,6 +1120,13 @@ int wkeGetCursorInfoType(wkeWebView webView)
     return pfn ? pfn(webView) : 0;
 }
 
+void wkeSetCursorInfoType(wkeWebView webView, int type)
+{
+    typedef void(*FUN)(wkeWebView, int);
+    LOADFUN(wkeSetCursorInfoType);
+    pfn ? pfn(webView, type) : pfn;
+}
+
 void wkeSetDragFiles(wkeWebView webView, const POINT *clintPos, const POINT *screenPos, wkeString files[],
                      int filesCount)
 {

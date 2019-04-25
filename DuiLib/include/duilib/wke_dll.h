@@ -615,6 +615,7 @@ enum WkeCursorInfoType
     WkeCursorInfoCustom
 };
 DUILIB_API int wkeGetCursorInfoType(wkeWebView webView);
+DUILIB_API void wkeSetCursorInfoType(wkeWebView webView, int type);
 
 DUILIB_API void wkeSetDragFiles(wkeWebView webView, const POINT *clintPos, const POINT *screenPos,
                                 wkeString files[], int filesCount);
@@ -1395,7 +1396,8 @@ struct jsExceptionInfo
 {
     const utf8 *message; // Returns the exception message.
     const utf8 *sourceLine; // Returns the line of source code that the exception occurred within.
-    const utf8 *scriptResourceName; // Returns the resource name for the script from where the function causing the error originates.
+    const utf8
+    *scriptResourceName; // Returns the resource name for the script from where the function causing the error originates.
     int lineNumber; // Returns the 1-based number of the line where the error occurred or 0 if the line number is unknown.
     int startPosition; // Returns the index within the script of the first character where the error occurred.
     int endPosition; // Returns the index within the script of the last character where the error occurred.
