@@ -152,7 +152,7 @@ protected:
     CRegexpT<TCHAR>    *m_pRegExp;  // 正则表达式对象
 
     DWORD   m_dwDelayTxtChangeTime; // 编辑框内容变化时，延时多少毫秒通知。默认0,表示立即通知
-    DWORD   m_dwDelayValidateTime;  // 数值范围越界检查时间。仅数字编辑框有效
+    DWORD   m_dwDelayValidateTime;  // 数值范围越界检查延时毫秒，默认2000。仅数字编辑框有效
 };
 
 }

@@ -12,6 +12,14 @@ const TCHAR *const LINUX_NOTSUPPORT =
     _T("@#$&()*/，。！……——￥（）、？:：；“”＆～％×＠＃＋－＝＜＞，．~·《》\\|\"'[]{}<>!?; \t");
 const TCHAR *const SPECIAL_SYMBOL = _T("`~!@#$%^&*()-_=+[]{};:,.<>/?'\"\\|");
 
+// 仅数字、字符过滤、正则过滤 说明：
+// 1. 大多数按键，先触发 WM_CHAR，再触发 EN_CHANGE
+// 2. Delete/Shift+Delete，只触发 EN_CHANGE
+// 3. 保存 TEXTCHANGED 通知消息一定在 越界检查、字符过滤、正则过滤之后
+//
+// 数值越界检查，不能在用户输入后立即进行，否则会导致用户无法正常输入。必须延时进行越界检查。检查后立即发送 TEXTCHANGED 通知
+//     比如：输入范围限制为 [10,30]，用户输入第一个数字时，由于立即进行越界检查，会导致编辑框内容变成 10
+// 字符过滤、正则过滤：在用户输入时进行，检查后，根据属性 delaytxtchange 决定怎么发送 TEXTCHANGED 通知
 
 class CEditWnd : public CWindowWnd
 {
@@ -27,36 +35,42 @@ public:
 
     LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
     LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
-    // LRESULT OnEditChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
-    LRESULT OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
-    LRESULT OnPaste(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
+    LRESULT OnEditChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
 
-protected:
-    bool GetValidNumber(void);
+private:
+    bool CheckValidNumber(void);        // CEditUI 内容改变时返回true
 
-    // paste操作判断是否是合法数据
     bool IsValidChar(LPCTSTR pstrTxt);
     bool IsRegExpMatch(LPCTSTR pstrTxt);
 
-    // 执行过滤（字符、正则）失败，用已保存的内容，恢复Edit的内容
-    void RestoreContent(WORD wIdx);
-    // 发送编辑框内容改变通知；如果是 layered 窗口，触发重画
-    void SendTxtChangeNty();
     // 返回当前Edit窗口的内容
     CDuiString GetWndText();
 
+    // 发送编辑框内容改变通知；如果是 layered 窗口，触发重画
+    void SendTxtChangeNty();
+    // 执行过滤（字符、正则）失败，用已保存的内容，恢复Edit的内容
+    void RestoreContent();
+
 protected:
-    CEditUI *m_pOwner;
-    HBRUSH m_hBkBrush;
-    bool m_bInit;
-    bool m_bDrawCaret;
+    CEditUI    *m_pOwner;
+    HBRUSH      m_hBkBrush;
+    bool        m_bInit;
+    bool        m_bDrawCaret;
+    bool        m_bEditChangeNoAction;  // true 表示在 OnEditChanged 中不做任何处理
+    int         m_nCaretPos;    // 触发 WM_CHAR 消息时光标位置
 #ifndef UNICODE
     BYTE m_byDChar; // 非0表示当前输入字符为双字节字符
 #endif // UNICODE
 };
 
 
-CEditWnd::CEditWnd() : m_pOwner(NULL), m_hBkBrush(NULL), m_bInit(false), m_bDrawCaret(false)
+CEditWnd::CEditWnd()
+    : m_pOwner(NULL)
+    , m_hBkBrush(NULL)
+    , m_bInit(false)
+    , m_bDrawCaret(false)
+    , m_bEditChangeNoAction(false)
+    , m_nCaretPos(0)
 {
 #ifndef UNICODE
     m_byDChar = 0;
@@ -221,13 +235,8 @@ LRESULT CEditWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     else if (uMsg == WM_KILLFOCUS) { lRes = OnKillFocus(uMsg, wParam, lParam, bHandled); }
     else if (uMsg == OCM_COMMAND)
     {
-        // 2019-04-19 保证 TEXTCHANGED 消息在仅数字、字符、正则过滤之后
-        // if (GET_WM_COMMAND_CMD(wParam, lParam) == EN_CHANGE)
-        // {
-        //     lRes = OnEditChanged(uMsg, wParam, lParam, bHandled);
-        // }
-        // else
-        if (GET_WM_COMMAND_CMD(wParam, lParam) == EN_UPDATE)
+        if (GET_WM_COMMAND_CMD(wParam, lParam) == EN_CHANGE) { lRes = OnEditChanged(uMsg, wParam, lParam, bHandled); }
+        else if (GET_WM_COMMAND_CMD(wParam, lParam) == EN_UPDATE)
         {
             RECT rcClient;
             ::GetClientRect(m_hWnd, &rcClient);
@@ -236,11 +245,10 @@ LRESULT CEditWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
     else if (uMsg == WM_KEYDOWN && TCHAR(wParam) == VK_RETURN)
     {
-        // 2019-04-19 zhuyadong 仅数字模式，失去焦点时立即执行越界检查，并发送文本变化通知
+        // 2019-04-24 zhuyadong 仅数字模式，按回车键时立即执行越界检查，并发送文本变化通知
         if (m_pOwner->IsNumberOnly())
         {
-            GetValidNumber();
-            SendTxtChangeNty();
+            CheckValidNumber() ? SendTxtChangeNty() : NULL;
         }
 
         m_pOwner->GetManager()->SendNotify(m_pOwner, DUI_MSGTYPE_RETURN);
@@ -334,9 +342,7 @@ LRESULT CEditWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         if (TIMERID_NUM_CHECK == wParam)
         {
             KillTimer(m_hWnd, wParam);
-            GetValidNumber();
-            // 2019-04-19 zhuyadong 仅数字模式在越界检查后发送文本变化通知
-            SendTxtChangeNty();
+            CheckValidNumber() ? SendTxtChangeNty() : NULL;
             return 0;
         }
 
@@ -344,13 +350,13 @@ LRESULT CEditWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
     else if (uMsg == WM_CHAR)
     {
-        lRes = CWindowWnd::HandleMessage(uMsg, wParam, lParam);
-        OnChar(uMsg, wParam, lParam, bHandled);
+        bHandled = FALSE;
+        m_nCaretPos = ::SendMessage(m_hWnd, EM_GETSEL, 0, 0);
     }
     else if (uMsg == WM_PASTE)
     {
-        OnPaste(uMsg, wParam, lParam, bHandled);
-        //lRes = CWindowWnd::HandleMessage(uMsg, wParam, lParam);
+        bHandled = FALSE;
+        m_nCaretPos = ::SendMessage(m_hWnd, EM_GETSEL, 0, 0);
     }
     // 2018-06-02 修复编辑框获取焦点后不显示Tooltip的问题
     else if (uMsg == WM_MOUSEMOVE)
@@ -428,85 +434,31 @@ LRESULT CEditWnd::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHa
         m_pOwner->NeedParentUpdate();
     }
 
-    // 2019-04-19 zhuyadong 仅数字模式，失去焦点时立即执行越界检查，并发送文本变化通知
+    // 2019-04-24 zhuyadong 仅数字模式，失去焦点时立即执行越界检查，并发送文本变化通知
     if (m_pOwner->IsNumberOnly())
     {
-        GetValidNumber();
-        SendTxtChangeNty();
+        CheckValidNumber() ? SendTxtChangeNty() : NULL;
     }
 
     SendMessage(WM_CLOSE);
     return lRes;
 }
 
-// LRESULT CEditWnd::OnEditChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL & /*bHandled*/)
-// {
-//     if (!m_bInit) { return 0; }
-//
-//     if (m_pOwner == NULL) { return 0; }
-//
-//     // Copy text back
-//     int cchLen = ::GetWindowTextLength(m_hWnd) + 1;
-//     LPTSTR pstr = static_cast<LPTSTR>(_alloca(cchLen * sizeof(TCHAR)));
-//     ASSERT(pstr);
-//
-//     if (pstr == NULL) { return 0; }
-//
-//     ::GetWindowText(m_hWnd, pstr, cchLen);
-//
-//     // 2019-01-11 zhuyadong 修复数值范围限制问题。
-//     // 说明：假如数值范围是 40~200，则输出入 5 时立即自动变为 40，没办法正常输入。
-//     //if (m_pOwner->IsNumberOnly() && !GetValidNumber(pstr)) { MessageBeep(MB_ICONWARNING); }
-//     // 2019-04-19 zhuyadong 支持属性设置越界检查超时时间
-//     if (m_pOwner->IsNumberOnly())
-//     {
-//         SetTimer(GetHWND(), TIMERID_NUM_CHECK, m_pOwner->GetDelayValidateTime(), NULL);
-//     }
-//
-//     m_pOwner->m_sText = pstr;
-//
-//     if (!m_pOwner->IsDelayTxtChange())
-//     {
-//         m_pOwner->GetManager()->SendNotify(m_pOwner, DUI_MSGTYPE_TEXTCHANGED);
-//     }
-//     else { SetTimer(m_hWnd, TIMERID_DELAY_NTY, m_pOwner->GetDelayTxtChange(), NULL); }
-//
-//     if (m_pOwner->GetManager()->IsLayered()) { m_pOwner->Invalidate(); }
-//
-//     return 0;
-// }
-
-// bHandled 必须为TRUE
-LRESULT CEditWnd::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
+LRESULT CEditWnd::OnEditChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL & /*bHandled*/)
 {
-#ifndef UNICODE
+    if (!m_bInit) { return 0; }
 
-    if (0 != m_byDChar)
-    {
-        m_byDChar -= 1;
-        return 0;
-    }
+    if (m_pOwner == NULL) { return 0; }
 
-#endif // UNICODE
+    m_bEditChangeNoAction = m_bEditChangeNoAction ? false : m_bEditChangeNoAction;
+    CDuiString sTxt = GetWndText();
 
-    // 过滤条件：
-    // 1. 按下 CTRL 键时
-    // 2. 按下 VK_BACK,VK_RETURN
-    // 3. 只读模式
-    // if (VK_BACK == wParam || (VK_HOME <= wParam && VK_DOWN >= wParam) ||
-    //     ::GetKeyState(VK_CONTROL) < 0 || ::GetKeyState(VK_SHIFT) < 0)
-    if (::GetKeyState(VK_CONTROL) < 0 || VK_BACK == wParam || VK_RETURN == wParam || m_pOwner->IsReadOnly())
-    {
-        return 0;
-    }
-
-    // Copy text back
-    CDuiString sTxt(GetWndText());
-    WORD wIdx = LOWORD(::SendMessage(m_hWnd, EM_GETSEL, 0, 0));
-
+    // 2019-01-11 zhuyadong 修复数值范围限制问题。
+    // 说明：假如数值范围是 40~200，则输出入 5 时立即自动变为 40，没办法正常输入。
+    //if (m_pOwner->IsNumberOnly() && !GetValidNumber(pstr)) { MessageBeep(MB_ICONWARNING); }
     if (m_pOwner->IsNumberOnly())
     {
-        // 2019-04-19 zhuyadong 仅数字模式支持属性设置越界检查超时时间
+        // 2019-04-24 zhuyadong 仅数字模式支持属性设置越界检查超时时间
         SetTimer(GetHWND(), TIMERID_NUM_CHECK, m_pOwner->GetDelayValidateTime(), NULL);
         return 0;
     }
@@ -514,12 +466,12 @@ LRESULT CEditWnd::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled
     // 字符过滤
     if (m_pOwner->IsCharFilter())
     {
-        if (m_pOwner->IsValidChar(wParam))
+        if (IsValidChar(sTxt))
         {
             m_pOwner->m_sText = sTxt;
-            SendTxtChangeNty();             // 发送文件变化通知
+            SendTxtChangeNty();     // 发送文本变化通知
         }
-        else { RestoreContent(wIdx); }      // 恢复之前的文本
+        else { RestoreContent(); }  // 恢复之前的文本
 
         return 0;
     }
@@ -527,68 +479,32 @@ LRESULT CEditWnd::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled
     // 正则过滤
     if (m_pOwner->IsRegExpFilter())
     {
-        if (m_pOwner->IsRegExpMatch(wParam))
+        if (m_pOwner->IsRegExpMatch(sTxt))
         {
             m_pOwner->m_sText = sTxt;
-            SendTxtChangeNty();             // 发送文件变化通知
+            SendTxtChangeNty();     // 发送文本变化通知
         }
-        else { RestoreContent(wIdx); }      // 恢复之前的文本
+        else { RestoreContent(); }  // 恢复之前的文本
 
         return 0;
     }
 
+    m_pOwner->m_sText = sTxt;
+    SendTxtChangeNty();     // 发送文本变化通知
     return 0;
 }
 
-// bHandled = TRUE 消息不再继续处理
-LRESULT CEditWnd::OnPaste(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
+bool CEditWnd::CheckValidNumber()
 {
-    // 2019-04-19 只读时不会走到这里；仅数字模式系统自动过滤；没有字符、正则过滤，不需要执行下面的过滤，直接返回
-    if (m_pOwner->IsNumberOnly() || (!m_pOwner->IsCharFilter() && !m_pOwner->IsRegExpFilter()))
-    {
-        bHandled = FALSE;
-        return 0L;
-    }
-
-    // 保存编辑框当前内容
-    CDuiString strOrig = m_pOwner->GetText();
-    int nStart = 0, nEnd = 0;
-    SendMessage(EM_GETSEL, (WPARAM)&nStart, (LPARAM)&nEnd);
-
-    // 执行Paste操作
-    CWindowWnd::HandleMessage(WM_PASTE, wParam, lParam);
-
-    // 执行过滤，如果不满足过滤条件，恢复内容
-    // 过滤 仅数字、字符过滤、正则
-    CDuiString strTxt = GetWndText();
     bool bRet = false;
-
-    if (m_pOwner->IsCharFilter()) { bRet = IsValidChar(strTxt); }
-    else if (m_pOwner->IsRegExpFilter()) { bRet = IsRegExpMatch(strTxt); }
-
-    if (!bRet)
-    {
-        SetWindowText(GetHWND(), strOrig);
-        SendMessage(EM_SETSEL, nStart, nEnd);
-    }
-    else
-    {
-        SendTxtChangeNty(); // 2019-04-19 zhuyadong 发送文本变化通知
-    }
-
-    return 0L;
-}
-
-bool CEditWnd::GetValidNumber()
-{
-    // 2018-03-07 zhuyadong 删除数字左侧的0
     CDuiString sTxt = GetWndText();
-    LPTSTR pstrTxt = sTxt.GetData(0);
     int nLen = sTxt.GetLength();
+    // 2018-03-07 zhuyadong 删除数字左侧的0
     WORD wIdx = LOWORD(::SendMessage(m_hWnd, EM_GETSEL, 0, 0));
 
     if (nLen > 1 && 0 != wIdx)
     {
+        LPTSTR pstrTxt = sTxt.GetData(0);
         int i = 0;
 
         for (; i < nLen; ++i)
@@ -600,35 +516,37 @@ bool CEditWnd::GetValidNumber()
         {
             i = (i == nLen) ? --i : i;
             pstrTxt += i;
-            SetWindowText(m_hWnd, pstrTxt);
-            ::SendMessage(m_hWnd, WM_KEYDOWN, VK_END, 0);
+            sTxt = pstrTxt;
+            bRet = true;
         }
     }
 
-    int nValue = _ttoi(pstrTxt);
+    int nValue = _ttoi(sTxt.GetData());
 
     if (nValue < m_pOwner->GetMinNumber())
     {
-        _stprintf(pstrTxt, _T("%d"), m_pOwner->GetMinNumber());
-        SetWindowText(m_hWnd, pstrTxt);
-        ::SendMessage(m_hWnd, WM_KEYDOWN, VK_END, 0);
-        ::MessageBeep(MB_ICONWARNING);
-        m_pOwner->m_sText = pstrTxt;
-        return false;
+        sTxt.Format(_T("%d"), m_pOwner->GetMinNumber());
+        bRet = true;
     }
 
     if (nValue > m_pOwner->GetMaxNumber())
     {
-        _stprintf(pstrTxt, _T("%d"), m_pOwner->GetMaxNumber());
-        SetWindowText(m_hWnd, pstrTxt);
-        ::SendMessage(m_hWnd, WM_KEYDOWN, VK_END, 0);
-        ::MessageBeep(MB_ICONWARNING);
-        m_pOwner->m_sText = pstrTxt;
-        return false;
+        sTxt.Format(_T("%d"), m_pOwner->GetMaxNumber());
+        bRet = true;
     }
 
-    m_pOwner->m_sText = pstrTxt;
-    return true;
+    if (bRet || m_pOwner->m_sText != sTxt)
+    {
+        // 2019-04-24 zhuyadong 这里应设置标记，在 EN_CHANGE 中使用，避免重复触发
+        m_bEditChangeNoAction = true;
+        bRet = true;
+        m_pOwner->m_sText = sTxt;
+        SetWindowText(m_hWnd, sTxt);
+        ::SendMessage(m_hWnd, WM_KEYDOWN, VK_END, 0);
+        ::MessageBeep(MB_ICONWARNING);
+    }
+
+    return bRet;
 }
 
 bool CEditWnd::IsValidChar(LPCTSTR pstrTxt)
@@ -639,31 +557,6 @@ bool CEditWnd::IsValidChar(LPCTSTR pstrTxt)
     }
 
     return true;
-}
-
-bool CEditWnd::IsRegExpMatch(LPCTSTR pstrTxt)
-{
-    return m_pOwner->IsRegExpMatch(pstrTxt);
-}
-
-void CEditWnd::RestoreContent(WORD wIdx)
-{
-    ::MessageBeep(MB_ICONWARNING);
-    ::SetWindowText(m_hWnd, m_pOwner->m_sText.GetData());
-    wIdx -= 1;
-    ::SendMessage(m_hWnd, EM_SETSEL, wIdx, wIdx);
-}
-
-void CEditWnd::SendTxtChangeNty()
-{
-    // 2019-04-19 仅数字模式 忽略延迟通知，加快响应速度。因为此时已完成越界检查
-    if (!m_pOwner->IsDelayTxtChange() || m_pOwner->IsNumberOnly())
-    {
-        m_pOwner->GetManager()->SendNotify(m_pOwner, DUI_MSGTYPE_TEXTCHANGED);
-    }
-    else { SetTimer(m_hWnd, TIMERID_DELAY_NTY, m_pOwner->GetDelayTxtChange(), NULL); }
-
-    if (m_pOwner->GetManager()->IsLayered()) { m_pOwner->Invalidate(); }
 }
 
 DuiLib::CDuiString CEditWnd::GetWndText()
@@ -678,15 +571,49 @@ DuiLib::CDuiString CEditWnd::GetWndText()
     return CDuiString(pstrTxt);
 }
 
+void CEditWnd::SendTxtChangeNty()
+{
+    if (!m_pOwner->IsDelayTxtChange() || m_pOwner->IsNumberOnly())
+    {
+        m_pOwner->GetManager()->SendNotify(m_pOwner, DUI_MSGTYPE_TEXTCHANGED);
+    }
+    else { SetTimer(m_hWnd, TIMERID_DELAY_NTY, m_pOwner->GetDelayTxtChange(), NULL); }
+
+    if (m_pOwner->GetManager()->IsLayered()) { m_pOwner->Invalidate(); }
+}
+
+void CEditWnd::RestoreContent()
+{
+    // 2019-04-24 zhuyadong 这里应设置标记，在 EN_CHANGE 中使用，避免重复触发
+    m_bEditChangeNoAction = true;
+    ::MessageBeep(MB_ICONWARNING);
+    ::SetWindowText(m_hWnd, m_pOwner->m_sText.GetData());
+    // SendMessage 在此会引发异常
+    ::PostMessage(m_hWnd, EM_SETSEL, LOWORD(m_nCaretPos), HIWORD(m_nCaretPos));
+}
+
 /////////////////////////////////////////////////////////////////////////////////////
 //
 //
 
-CEditUI::CEditUI() : m_pWindow(NULL), m_uMaxChar(255), m_bReadOnly(false),
-    m_bPasswordMode(false), m_cPasswordChar(_T('*')), m_bAutoSelAll(false), m_uButtonState(0),
-    m_iWindowStyls(0), m_dwTipColor(0xFFBAC0C5), m_nMinNumber(0), m_nMaxNumber(0),
-    m_bCharFilter(false), m_bWiteList(true), m_bRegExp(false), m_pRegExp(NULL), m_dwDelayTxtChangeTime(0),
-    m_dwDelayValidateTime(2000)
+CEditUI::CEditUI()
+    : m_pWindow(NULL)
+    , m_uMaxChar(255)
+    , m_bReadOnly(false)
+    , m_bPasswordMode(false)
+    , m_cPasswordChar(_T('*'))
+    , m_bAutoSelAll(false)
+    , m_uButtonState(0)
+    , m_iWindowStyls(0)
+    , m_dwTipColor(0xFFBAC0C5)
+    , m_nMinNumber(0)
+    , m_nMaxNumber(0)
+    , m_bCharFilter(false)
+    , m_bWiteList(true)
+    , m_bRegExp(false)
+    , m_pRegExp(NULL)
+    , m_dwDelayTxtChangeTime(0)
+    , m_dwDelayValidateTime(2000)
 {
     SetTextPadding(CDuiRect(4, 3, 4, 3));
     SetBkColor(0xFFFFFFFF);
