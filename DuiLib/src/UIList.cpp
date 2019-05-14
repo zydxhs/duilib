@@ -1143,10 +1143,10 @@ void CListUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         SetItemHLineColor(clr);
     }
     else if (_tcscmp(pstrName, _T("itemshowhtml")) == 0) { SetItemShowHtml(ParseBool(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("ischeckbox")) == 0)
+    // ischeckbox 属性废弃，改用 checkable
+    else if (_tcscmp(pstrName, _T("ischeckbox")) == 0 || _tcscmp(pstrName, _T("checkable")) == 0)
     {
-        m_bCheckBox = ParseBool(pstrValue);
-        m_ListInfo.bCheckBox = m_bCheckBox;
+        m_ListInfo.bCheckBox = ParseBool(pstrValue);
     }
     else if (_tcscmp(pstrName, _T("unselimage")) == 0) { m_diUnSel.sDrawString = ParseString(pstrValue); }
     else if (_tcscmp(pstrName, _T("selimage")) == 0) { m_diSel.sDrawString = ParseString(pstrValue); }
@@ -3142,17 +3142,20 @@ void CListTextElementUI::DoEvent(TEventUI &event)
         ReleaseCapture();
 
         TListInfoUI *pInfo = m_pOwner->GetListInfo();
-        RECT rcItem = { pInfo->rcColumn[0].left, m_rcItem.top, pInfo->rcColumn[0].right, m_rcItem.bottom };
-        rcItem.left += pInfo->rcTextPadding.left;
-        rcItem.right -= pInfo->rcTextPadding.right;
-        rcItem.top += pInfo->rcTextPadding.top;
-        rcItem.bottom -= pInfo->rcTextPadding.bottom;
 
-        if (PtInRect(&rcItem, event.ptMouse) && pInfo->bCheckBox)
+        if (pInfo && pInfo->bCheckBox)
         {
-            m_bCheckBoxSelect = !m_bCheckBoxSelect;
-            //m_pManager->SendNotify((CListUI *)m_pOwner, NTY_NAME_LTEN_CHECKBOX_CLICK, (WPARAM)this);
-            Invalidate();
+            RECT rcItem = { pInfo->rcColumn[0].left, m_rcItem.top, pInfo->rcColumn[0].right, m_rcItem.bottom };
+            rcItem.left += pInfo->rcTextPadding.left;
+            rcItem.right -= pInfo->rcTextPadding.right;
+            rcItem.top += pInfo->rcTextPadding.top;
+            rcItem.bottom -= pInfo->rcTextPadding.bottom;
+
+            if (PtInRect(&rcItem, event.ptMouse))
+            {
+                m_bCheckBoxSelect = !m_bCheckBoxSelect;
+                Invalidate();
+            }
         }
 
         for (int i = 0; i < m_nLinks; i++)

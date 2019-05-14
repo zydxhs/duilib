@@ -107,14 +107,14 @@
 #include "duilib/UIChildLayout.h"
 #include "duilib/UIHWeightLayout.h"
 
+#include "duilib/UILabel.h"
+#include "duilib/UIText.h"
+#include "duilib/UIEdit.h"
+
 #include "duilib/UIList.h"
 #include "duilib/UICombo.h"
 #include "duilib/UIScrollBar.h"
 #include "duilib/UITreeView.h"
-
-#include "duilib/UILabel.h"
-#include "duilib/UIText.h"
-#include "duilib/UIEdit.h"
 
 #include "duilib/UIButton.h"
 #include "duilib/UIOption.h"

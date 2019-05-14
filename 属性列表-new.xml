@@ -432,7 +432,8 @@
             <Attribute name="itemhlinesize" default="" type="INT" comment="item水平分割线宽度"/>
             <Attribute name="itemhlinecolor" default="#FF3C3C3C" type="DWORD" comment="item水平分割线颜色"/>
             <Attribute name="itemshowhtml" default="false" type="BOOL" comment="item是否使用类html富文本绘制,如(false)"/>
-            <Attribute name="ischeckbox" default="false" type="BOOL" comment="是否支持第一列显示复选框"/>
+            <Attribute name="ischeckbox" default="false" type="BOOL" comment="是否支持第一列显示复选框。废弃"/>
+            <Attribute name="checkable" default="false" type="BOOL" comment="是否支持第一列显示复选框，取代 ischeckbox"/>
             <Attribute name="unselimage" default="" type="STRING" comment="未选中状态图片，支持 Image 中的 file,res,restype 属性"/>
             <Attribute name="selimage" default="" type="STRING" comment="选中状态图片，支持 Image 中的 file,res,restype 属性"/>
         </List>
@@ -462,7 +463,7 @@
             <Attribute name="bkcolor" default="false" type="BOOL" comment="是否使用自定义背景色"/>
         </ListElement>
         <ListLabelElement parent="ListElement" notifies="setfocus killfocus timer itemactivate itemclick windowinit(root)">
-            <!-- 支持单列 -->
+            <!-- 支持单列。不支持复选框 -->
         </ListLabelElement>
         <ListTextElement parent="ListLabelElement" notifies="setfocus killfocus timer itemactivate itemclick link windowinit(root)">
             <!-- 支持多列；不支持 XML 中添加列表项 -->

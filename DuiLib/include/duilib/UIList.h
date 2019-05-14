@@ -233,9 +233,8 @@ protected:
     CListHeaderUI *m_pHeader;
     TListInfoUI m_ListInfo;
 
-    bool m_bCheckBox;
-    TDrawInfo m_diUnSel;
-    TDrawInfo m_diSel;
+    TDrawInfo m_diUnSel;        // 复选框未选中状态图片
+    TDrawInfo m_diSel;          // 复选框选中状态图片
 };
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -369,7 +368,7 @@ protected:
 
 
 /////////////////////////////////////////////////////////////////////////////////////
-//
+// CListLabelElementUI 不支持复选框
 
 class DUILIB_API CListLabelElementUI : public CListElementUI
 {
