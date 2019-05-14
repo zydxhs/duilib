@@ -1121,7 +1121,23 @@ void CEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     // }
     else if (_tcscmp(pstrName, _T("regexp")) == 0)
     {
-        SetRegExpFilter(ParseBool(pstrValue));
+        // 是否支持正则过滤
+        CDuiString str(pstrValue);
+        int nPos = str.Find(_T(','));
+
+        if (-1 != nPos)
+        {
+            SetRegExpFilter(ParseBool(str.Left(nPos).GetData()));
+            str = str.Right(str.GetLength() - nPos - 1);
+        }
+        else
+        {
+            SetRegExpFilter(ParseBool(str.GetData()));
+            str.Empty();
+        }
+
+        // 设置正则表达式
+        SetRegExpPattern(str);
     }
     else if (_tcscmp(pstrName, _T("delaytxtchange")) == 0) { m_dwDelayTxtChangeTime = ParseDWord(pstrValue); }
     else if (_tcscmp(pstrName, _T("delayvalidate")) == 0)
