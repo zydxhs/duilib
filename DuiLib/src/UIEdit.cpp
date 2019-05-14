@@ -1083,12 +1083,42 @@ void CEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     }
     else if (_tcscmp(pstrName, _T("charfilter")) == 0)
     {
-        SetCharFilter(ParseBool(pstrValue));
+        // 是否支持字符过滤
+        CDuiString str(pstrValue);
+        int nPos = str.Find(_T(','));
+
+        if (-1 != nPos)
+        {
+            SetCharFilter(ParseBool(str.Left(nPos).GetData()));
+            str = str.Right(str.GetLength() - nPos - 1);
+        }
+        else
+        {
+            SetCharFilter(ParseBool(str.GetData()));
+            str.Empty();
+        }
+
+        // 黑白名单模式
+        nPos = str.Find(_T(','));
+
+        if (-1 != nPos)
+        {
+            m_bWiteList = ParseBool(str.Left(nPos).GetData());
+            str = str.Right(str.GetLength() - nPos - 1);
+        }
+        else
+        {
+            m_bWiteList = ParseBool(str.GetData());
+            str.Empty();
+        }
+
+        // 过滤字符集合
+        SetFilterCharSet(str);
     }
-    else if (_tcscmp(pstrName, _T("whitelist")) == 0)
-    {
-        m_bWiteList = ParseBool(pstrValue);
-    }
+    // else if (_tcscmp(pstrName, _T("whitelist")) == 0)
+    // {
+    //     m_bWiteList = ParseBool(pstrValue);
+    // }
     else if (_tcscmp(pstrName, _T("regexp")) == 0)
     {
         SetRegExpFilter(ParseBool(pstrValue));
@@ -1113,6 +1143,7 @@ void CEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if (_tcscmp(pstrName, _T("textcolor1")) == 0) { DUITRACE(_T("不支持属性:textcolor1")); }
     else if (_tcscmp(pstrName, _T("textshadowcolora")) == 0) { DUITRACE(_T("不支持属性:textshadowcolora")); }
     else if (_tcscmp(pstrName, _T("textshadowcolorb")) == 0) { DUITRACE(_T("不支持属性:textshadowcolorb")); }
+    else if (_tcscmp(pstrName, _T("textshadowcolorb")) == 0) { DUITRACE(_T("不支持属性:whitelist，详见 charfilter")); }
     else { CLabelUI::SetAttribute(pstrName, pstrValue); }
 }
 
@@ -1296,7 +1327,15 @@ DuiLib::CDuiString CEditUI::GetFilterCharSet(void)
 
 void CEditUI::SetFilterCharSet(CDuiString sCharSet)
 {
-    m_sFilterCharSet = sCharSet;
+    std::set<TCHAR> setChar;
+    m_sFilterCharSet.Empty();
+
+    for (int i = 0; i < sCharSet.GetLength(); ++i) { setChar.insert(sCharSet[i]); }
+
+    for (auto it(setChar.begin()); it != setChar.end(); ++it)
+    {
+        m_sFilterCharSet += *it;
+    }
 }
 
 void CEditUI::SetFilterCharSet(int nFilterType)

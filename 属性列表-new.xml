@@ -359,8 +359,8 @@
             <!-- 扩展属性 -->
             <Attribute name="tiptext" default="" type="STRING" comment="默认提示信息,获取焦点或内容不空时消失"/>
             <Attribute name="tipcolor" default="#FFBAC0C5" type="DWORD" comment="默认提示信息的颜色,如(#FFBAC0C5)"/>
-            <Attribute namle="charfilter" default="false" type="BOOL" comment="是否启用字符过滤,字符集调用成员函数设置。与numberonly/regexp属性互斥。" />
-            <Attribute name="witelist" default="true" type="BOOL" comment="黑白名单过滤模式。白名单允许，黑名单禁止" />
+            <Attribute namle="charfilter" default="false,true,xxx" type="BOOL,BOOL,STRING" comment="是否启用字符过滤,黑白名单过滤模式(白名单允许，黑名单禁止),字符集。字符集也可以调用成员函数设置。与numberonly/regexp属性互斥。" />
+            <Attribute name="witelist" default="true" type="BOOL" comment="黑白名单过滤模式。白名单允许，黑名单禁止。不再支持。" />
             <Attribute namle="regexp" default="false" type="BOOL" comment="是否启用正则过滤,正则式调用成员函数设置,支持与Perl兼容的正则表达式基本语法。与numberonly/charfilter属性互斥。" />
             <Attribute name="delaytxtchange" default="0" type="DWORD" comment="默认0毫秒,表示编辑框内容更新立即通知；否则表示指定的毫秒数后通知用户。如果仅数字模式，在越界检查后产即发送通知。" />
             <Attribute name="delayvalidate" default="2000" type="DWORD" comment="默认2000毫秒，数值越界检查超时时间，不能小于300。" />
