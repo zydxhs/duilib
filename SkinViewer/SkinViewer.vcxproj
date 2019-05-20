@@ -337,7 +337,6 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="res\menu.xml" />
-    <Xml Include="res\menutest.xml" />
     <Xml Include="res\viewer.xml" />
   </ItemGroup>
   <ItemGroup>
