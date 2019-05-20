@@ -2718,17 +2718,24 @@ int CListElementUI::GetMouseColumn(POINT pt)
     return -1;
 }
 
-RECT CListElementUI::GetSubItemPos(int nIndex)
+RECT CListElementUI::GetSubItemPos(int nColumn, bool bList)
 {
     CListUI *pList = (CListUI *)m_pOwner;
-    CListHeaderUI *pHeader = pList->GetHeader();
+    TListInfoUI *pInfo = m_pOwner->GetListInfo();
 
-    if (nIndex >= pHeader->GetCount()) { return RECT { 0, 0, 0, 0 }; }
+    if (nColumn >= pList->GetHeader()->GetCount()) { return RECT { 0, 0, 0, 0 }; }
 
-    RECT rtColumn = m_rcItem;
-    RECT rtTmp = pHeader->GetItemAt(nIndex)->GetPos();
-    rtColumn.left = rtTmp.left;
-    rtColumn.right = rtTmp.right;
+    RECT rtColumn = { pInfo->rcColumn[nColumn].left, m_rcItem.top, pInfo->rcColumn[nColumn].right, m_rcItem.bottom };
+
+    if (bList)
+    {
+        // 相对当前List位置
+        rtColumn.left -= m_rcItem.left;
+        rtColumn.top -= pInfo->rcColumn[nColumn].top;
+        rtColumn.right -= m_rcItem.left;
+        rtColumn.bottom -= pInfo->rcColumn[nColumn].top;
+    }
+
     // 避免遮住滚动条
     CScrollBarUI *pSB = pList->GetVerticalScrollBar();
 

@@ -355,8 +355,10 @@ public:
 
     void DrawItemBk(HDC hDC, const RECT &rcItem);
 
-    int GetMouseColumn(POINT pt);       // 返回鼠标所在的列
-    RECT GetSubItemPos(int nIndex);     // 返回鼠标所在列的矩形
+    int GetMouseColumn(POINT pt);                       // 返回鼠标所在的列
+    // 返回鼠标所在列的矩形。
+    // bList=true 表示相对当前列表的位置；false 表示相对当前窗体的位置
+    RECT GetSubItemPos(int nColumn, bool bList = false);
 protected:
     int m_iIndex;
     int m_iDrawIndex;
