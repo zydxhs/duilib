@@ -17,32 +17,32 @@ class CListHeaderUI;
 
 typedef struct tagTListInfoUI
 {
-    int nColumns;
-    RECT rcColumn[UILIST_MAX_COLUMNS];
-    UINT uFixedHeight;
-    int nFont;
-    UINT uTextStyle;
-    RECT rcTextPadding;
-    DWORD dwTextColor;
-    DWORD dwBkColor;
+    int       nColumns;
+    RECT      rcColumn[UILIST_MAX_COLUMNS];
+    UINT      uFixedHeight;
+    int       nFont;
+    UINT      uTextStyle;
+    RECT      rcTextPadding;
+    DWORD     dwTextColor;
+    DWORD     dwBkColor;
     TDrawInfo diBk;
-    bool bAlternateBk;
-    DWORD dwSelectedTextColor;
-    DWORD dwSelectedBkColor;
+    bool      bAlternateBk;
+    DWORD     dwSelectedTextColor;
+    DWORD     dwSelectedBkColor;
     TDrawInfo diSelected;
-    DWORD dwHotTextColor;
-    DWORD dwHotBkColor;
+    DWORD     dwHotTextColor;
+    DWORD     dwHotBkColor;
     TDrawInfo diHot;
-    DWORD dwDisabledTextColor;
-    DWORD dwDisabledBkColor;
+    DWORD     dwDisabledTextColor;
+    DWORD     dwDisabledBkColor;
     TDrawInfo diDisabled;
-    int iHLineSize;
-    DWORD dwHLineColor;
-    int iVLineSize;
-    DWORD dwVLineColor;
-    bool bShowHtml;
-    bool bMultiExpandable;
-    bool bCheckBox;
+    int       iHLineSize;
+    DWORD     dwHLineColor;
+    int       iVLineSize;
+    DWORD     dwVLineColor;
+    bool      bShowHtml;
+    bool      bMultiExpandable;
+    bool      bCheckBox;
 } TListInfoUI;
 
 
@@ -73,6 +73,9 @@ public:
     virtual CContainerUI *GetList() const = 0;
     virtual IListCallbackUI *GetTextCallback() const = 0;
     virtual void SetTextCallback(IListCallbackUI *pCallback) = 0;
+
+    virtual void ShowEdit(int nRow, int nColumn, RECT &rt, CDuiString &sItemTxt) = 0;
+    virtual void HideEdit() = 0;
 };
 
 class IListItemUI
@@ -222,19 +225,34 @@ public:
     void SetAllItemSelected(bool bSelect);
     virtual void DoInit();
 
+    void GetLastModifiedItem(int &nRow, int &nColumn);
+    virtual void ShowEdit(int nRow, int nColumn, RECT &rt, CDuiString &sItemTxt);
+    virtual void HideEdit();
+    CEditUI *GetEditUI();
+
 protected:
     bool OnFirstHeaderItemNotify(void *pParam);
+    bool OnEditNotify(void *pParam);
 protected:
-    bool m_bScrollSelect;
-    int m_iCurSel;
-    int m_iExpandedItem;
+    bool             m_bScrollSelect;
+    int              m_iCurSel;
+    int              m_iExpandedItem;
     IListCallbackUI *m_pCallback;
-    CListBodyUI *m_pList;
-    CListHeaderUI *m_pHeader;
-    TListInfoUI m_ListInfo;
+    CListBodyUI     *m_pList;
+    CListHeaderUI   *m_pHeader;
+    TListInfoUI      m_ListInfo;
 
-    TDrawInfo m_diUnSel;        // 复选框未选中状态图片
-    TDrawInfo m_diSel;          // 复选框选中状态图片
+    TDrawInfo        m_diUnSel;         // 复选框未选中状态图片
+    TDrawInfo        m_diSel;           // 复选框选中状态图片
+
+    // 2019-05-19 zhuyadong 编辑框、下拉框使用说明：
+    // 1. ListHeaderItem 的属性 editable/comboable，用于标识该列是否可编辑、下拉框
+    // 2. 编辑框、下拉框的消息，需要开发人员处理。比如编辑框的过滤、回车键，下拉框的展开、收起、选项改变等等
+    // 3. 用户：双击时显示编辑框、下拉框；
+    // 4. 编辑框中按回车键，自动更新List、隐藏编辑框，开发人员需要处理 DUI_MSGTYPE_RETURN 保存更新后的数据
+    int                 m_nRow;         // 编辑框所在的行、列
+    int                 m_nColumn;
+    CEditUI            *m_pEdit;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -300,17 +318,21 @@ public:
     void PaintText(HDC hDC);
     void PaintStatusImage(HDC hDC);
 
+    void SetEditable(bool bEditable);
+    bool IsEditable();
+
 protected:
-    POINT ptLastMouse;
-    bool m_bDragable;
-    UINT m_uButtonState;
-    int m_iSepWidth;
-    DWORD m_dwTextColor;
-    DWORD m_dwSepColor;
-    int m_iFont;
-    UINT m_uTextStyle;
-    bool m_bShowHtml;
-    RECT m_rcTextPadding;
+    POINT     m_ptLastMouse;
+    bool      m_bDragable;
+    bool      m_bShowHtml;
+    bool      m_bEditable;      // 当前列是否支持编辑
+    UINT      m_uButtonState;
+    int       m_iSepWidth;
+    DWORD     m_dwTextColor;
+    DWORD     m_dwSepColor;
+    int       m_iFont;
+    UINT      m_uTextStyle;
+    RECT      m_rcTextPadding;
     TDrawInfo m_diNormal;
     TDrawInfo m_diHot;
     TDrawInfo m_diPushed;

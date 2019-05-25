@@ -457,13 +457,14 @@
             <Attribute name="sepwidth" default="4" type="INT" comment="分隔符宽,如(4)"/>
             <Attribute name="sepcolor" default="#00000000" type="DWORD" comment="分隔符颜色,如(#FFF00F0F)"/>
             <Attribute name="sepimage" default="" type="STRING" comment="分隔符图片"/>
+            <Attribute name="editable" default="false" type="BOOL" comment="是否支持可编辑,如(false)。双击显示编辑框。"/>
         </ListHeaderItem>
         <ListElement parent="Control" notifies="setfocus killfocus timer headerclick windowinit(root)">
             <Attribute name="selected" default="false" type="BOOL" comment="是否选中"/>
             <Attribute name="bkcolor" default="false" type="BOOL" comment="是否使用自定义背景色"/>
         </ListElement>
         <ListLabelElement parent="ListElement" notifies="setfocus killfocus timer itemactivate itemclick windowinit(root)">
-            <!-- 支持单列。不支持复选框 -->
+            <!-- 支持单列。不支持复选框、可编辑 -->
         </ListLabelElement>
         <ListTextElement parent="ListLabelElement" notifies="setfocus killfocus timer itemactivate itemclick link windowinit(root)">
             <!-- 支持多列；不支持 XML 中添加列表项 -->

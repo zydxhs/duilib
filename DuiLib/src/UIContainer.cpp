@@ -313,8 +313,11 @@ bool CContainerUI::SetVisible(bool bVisible /*= true*/)
     // 2018-08-18 zhuyadong 添加特效。显示特效
     if (TRIGGER_NONE == m_byEffectTrigger && bVisible)
     {
-        if (m_rcItem.left == m_rcItem.right || m_rcItem.top == m_rcItem.bottom && m_pParent)
+        // 2019-05-25 zhuyadong 修复条件判断不正确的问题
+        //if (m_rcItem.left == m_rcItem.right || m_rcItem.top == m_rcItem.bottom && m_pParent)
+        if ((m_rcItem.left == m_rcItem.right || m_rcItem.top == m_rcItem.bottom) && m_pParent)
         {
+            // 当父控件不空、并且当前控件位置矩形不正确时，触发计算所有子控件位置，以解决特效不能正常显示
             RECT rc = m_pParent->GetPos();
             m_pParent->SetPos(rc, true);
         }

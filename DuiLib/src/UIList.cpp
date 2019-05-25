@@ -31,7 +31,8 @@ protected:
 //
 //
 
-CListUI::CListUI() : m_pCallback(NULL), m_bScrollSelect(false), m_iCurSel(-1), m_iExpandedItem(-1)
+CListUI::CListUI() : m_pCallback(NULL), m_bScrollSelect(false), m_iCurSel(-1), m_iExpandedItem(-1),
+    m_nRow(-1), m_nColumn(-1), m_pCmbCallback(NULL), m_pEdit(NULL)
 {
     m_pList = new CListBodyUI(this);
     m_pHeader = new CListHeaderUI;
@@ -509,6 +510,12 @@ void CListUI::DoEvent(TEventUI &event)
         else { CVerticalLayoutUI::DoEvent(event); }
 
         return;
+    }
+
+    if (event.Type == UIEVENT_SCROLLWHEEL || event.Type == UIEVENT_BUTTONDOWN)
+    {
+        // 隐藏编辑框
+        HideEdit();
     }
 
     if (event.Type == UIEVENT_SETFOCUS)
@@ -1342,6 +1349,78 @@ void CListUI::DoInit()
     }
 }
 
+void CListUI::GetLastModifiedItem(int &nRow, int &nColumn)
+{
+    nRow = m_nRow;
+    nColumn = m_nColumn;
+}
+
+void CListUI::ShowEdit(int nRow, int nColumn, RECT &rt, CDuiString &sItemTxt)
+{
+    if (!GetEditUI()) { return; }
+
+    m_nRow = nRow;
+    m_nColumn = nColumn;
+
+    m_pEdit->SetVisible(true);
+    //移动位置
+    m_pEdit->SetPos(rt);
+
+    //设置文字
+    if (m_pCallback)
+    {
+        CDuiString str = m_pCallback->GetItemText(this, nRow, nColumn);
+        m_pEdit->SetText(str);
+    }
+    else
+    {
+        m_pEdit->SetText(sItemTxt);
+    }
+
+    m_pEdit->SetFocus();
+}
+
+void CListUI::HideEdit()
+{
+    if (NULL != m_pEdit)
+    {
+        RECT rc = { 0, 0, 0, 0 };
+        m_pEdit->SetPos(rc);
+        m_pEdit->SetVisible(false);
+    }
+}
+
+CEditUI *CListUI::GetEditUI()
+{
+    if (NULL == m_pEdit)
+    {
+        m_pEdit = new CEditUI;
+        ASSERT(m_pEdit);
+
+        if (NULL == m_pEdit)
+        {
+            DUITRACE(_T("GetEditUI failed."));
+            return NULL;
+        }
+
+        CVerticalLayoutUI::Add(m_pEdit);    // duilib 会自动销毁编辑框
+        m_pEdit->OnNotify += MakeDelegate(this, &CListUI::OnEditNotify);
+
+        m_pEdit->SetName(_T("_edt_list"));
+        m_pEdit->SetBkColor(0xFFFFFFFF);
+        m_pEdit->SetTextPadding(CDuiRect(2, 2, 2, 2));
+
+        LPCTSTR pDefAttr = GetManager()->GetDefaultAttributeList(_T("Edit"), true);
+        pDefAttr ? m_pEdit->SetAttributeList(pDefAttr) : pDefAttr;
+        pDefAttr = GetManager()->GetDefaultAttributeList(_T("Edit"), false);
+        pDefAttr ? m_pEdit->SetAttributeList(pDefAttr) : pDefAttr;
+        m_pEdit->SetFloat(true);
+        m_pEdit->SetAttribute(_T("autohscroll"), _T("true"));
+    }
+
+    return m_pEdit;
+}
+
 bool CListUI::OnFirstHeaderItemNotify(void *pParam)
 {
     if (NULL == pParam) { return false; }
@@ -1354,6 +1433,28 @@ bool CListUI::OnFirstHeaderItemNotify(void *pParam)
     SetAllItemSelected(((CCheckBoxUI *)pMsg->pSender)->IsSelected());
     return true;
 }
+
+bool CListUI::OnEditNotify(void *pParam)
+{
+    if (NULL == pParam) { return false; }
+
+    TNotifyUI *pMsg = (TNotifyUI *)pParam;
+
+    if (DUI_MSGTYPE_RETURN == pMsg->sType)
+    {
+        if (!m_pCallback)
+        {
+            CListTextElementUI *pItem = dynamic_cast<CListTextElementUI *>(GetItemAt(m_nRow));
+
+            if (NULL != pItem) { pItem->SetText(m_nColumn, pMsg->pSender->GetText()); }
+        }
+
+        HideEdit();
+    }
+
+    return true;
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1871,13 +1972,13 @@ SIZE CListHeaderUI::EstimateSize(SIZE szAvailable)
 
 CListHeaderItemUI::CListHeaderItemUI() : m_bDragable(true), m_uButtonState(0), m_iSepWidth(4),
     m_uTextStyle(DT_LEFT | DT_VCENTER | DT_SINGLELINE), m_dwTextColor(0), m_dwSepColor(0),
-    m_iFont(-1), m_bShowHtml(false)
+    m_iFont(-1), m_bShowHtml(false), m_bEditable(false)
 {
     //设置内边距，防止遮挡拖放的间隔条
     if (0 == m_rcInset.left || 0 == m_rcInset.right) { m_rcInset.left = m_rcInset.right = 4; }
 
     SetTextPadding(CDuiRect(2, 0, 2, 0));
-    ptLastMouse.x = ptLastMouse.y = 0;
+    m_ptLastMouse.x = m_ptLastMouse.y = 0;
     SetMinWidth(16);
 }
 
@@ -2140,6 +2241,7 @@ void CListHeaderItemUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         SetSepColor(clr);
     }
     else if (_tcscmp(pstrName, _T("sepimage")) == 0) { SetSepImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("editable")) == 0) { SetEditable(ParseBool(pstrValue)); }
     else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
     else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
     else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("不支持属性:dropenable")); }
@@ -2179,7 +2281,7 @@ void CListHeaderItemUI::DoEvent(TEventUI &event)
             if (m_bDragable)
             {
                 m_uButtonState |= UISTATE_CAPTURED;
-                ptLastMouse = event.ptMouse;
+                m_ptLastMouse = event.ptMouse;
             }
         }
         else
@@ -2227,17 +2329,17 @@ void CListHeaderItemUI::DoEvent(TEventUI &event)
 
             if (m_iSepWidth >= 0)
             {
-                rc.right -= ptLastMouse.x - event.ptMouse.x;
+                rc.right -= m_ptLastMouse.x - event.ptMouse.x;
             }
             else
             {
-                rc.left -= ptLastMouse.x - event.ptMouse.x;
+                rc.left -= m_ptLastMouse.x - event.ptMouse.x;
             }
 
             if (rc.right - rc.left > GetMinWidth())
             {
                 m_cxyFixed.cx = rc.right - rc.left;
-                ptLastMouse = event.ptMouse;
+                m_ptLastMouse = event.ptMouse;
 
                 if (GetParent()) { GetParent()->NeedParentUpdate(); }
             }
@@ -2350,6 +2452,16 @@ void CListHeaderItemUI::PaintStatusImage(HDC hDC)
             }
         }
     }
+}
+
+void CListHeaderItemUI::SetEditable(bool bEditable)
+{
+    m_bEditable = bEditable;
+}
+
+bool CListHeaderItemUI::IsEditable()
+{
+    return m_bEditable;
 }
 
 void CListHeaderItemUI::PaintText(HDC hDC)
@@ -2727,15 +2839,6 @@ RECT CListElementUI::GetSubItemPos(int nColumn, bool bList)
 
     RECT rtColumn = { pInfo->rcColumn[nColumn].left, m_rcItem.top, pInfo->rcColumn[nColumn].right, m_rcItem.bottom };
 
-    if (bList)
-    {
-        // 相对当前List位置
-        rtColumn.left -= m_rcItem.left;
-        rtColumn.top -= pInfo->rcColumn[nColumn].top;
-        rtColumn.right -= m_rcItem.left;
-        rtColumn.bottom -= pInfo->rcColumn[nColumn].top;
-    }
-
     // 避免遮住滚动条
     CScrollBarUI *pSB = pList->GetVerticalScrollBar();
 
@@ -2743,8 +2846,17 @@ RECT CListElementUI::GetSubItemPos(int nColumn, bool bList)
     {
         int nSBW = pSB->GetWidth();
         int nRight = pList->GetPos().right;
+        nRight -= nSBW;
+        rtColumn.right = (rtColumn.right > nRight) ? nRight : rtColumn.right;
+    }
 
-        if (rtColumn.right > nRight - nSBW) { rtColumn.right -= nSBW; }
+    if (bList)
+    {
+        // 相对当前List位置
+        rtColumn.left -= m_rcItem.left;
+        rtColumn.top -= pInfo->rcColumn[nColumn].top;
+        rtColumn.right -= m_rcItem.left;
+        rtColumn.bottom -= pInfo->rcColumn[nColumn].top;
     }
 
     return rtColumn;
@@ -3221,11 +3333,30 @@ void CListTextElementUI::DoEvent(TEventUI &event)
         {
             Select();
             Invalidate();
-            m_pManager->SendNotify((CListUI *)m_pOwner, DUI_MSGTYPE_ITEMDBCLICK, (WPARAM)this,
-                                   GetMouseColumn(event.ptMouse));
+            // 编辑框
+            int nColumn = GetMouseColumn(event.ptMouse);
+            CListHeaderItemUI *pHeader = dynamic_cast<CListHeaderItemUI *>(m_pOwner->GetHeader()->GetItemAt(nColumn));
+            RECT rt = GetSubItemPos(nColumn, true);
+            CDuiString sTxt = GetText(nColumn);
+
+            if (pHeader->IsEditable())
+            {
+                m_pOwner->ShowEdit(GetIndex(), nColumn, rt, sTxt);
+            }
+            else
+            {
+                m_pOwner->HideEdit();
+                m_pManager->SendNotify((CListUI *)m_pOwner, DUI_MSGTYPE_ITEMDBCLICK, (WPARAM)this, nColumn);
+            }
         }
 
         return;
+    }
+
+    if (event.Type == UIEVENT_SCROLLWHEEL || event.Type == UIEVENT_BUTTONDOWN)
+    {
+        // 隐藏编辑框
+        m_pOwner->HideEdit();
     }
 
     CListLabelElementUI::DoEvent(event);
