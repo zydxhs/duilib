@@ -32,7 +32,7 @@ protected:
 //
 
 CListUI::CListUI() : m_pCallback(NULL), m_bScrollSelect(false), m_iCurSel(-1), m_iExpandedItem(-1),
-    m_nRow(-1), m_nColumn(-1), m_pCmbCallback(NULL), m_pEdit(NULL)
+    m_nRow(-1), m_nColumn(-1), m_pCmbCallback(NULL), m_pEdit(NULL), m_pCombo(NULL)
 {
     m_pList = new CListBodyUI(this);
     m_pHeader = new CListHeaderUI;
@@ -514,8 +514,9 @@ void CListUI::DoEvent(TEventUI &event)
 
     if (event.Type == UIEVENT_SCROLLWHEEL || event.Type == UIEVENT_BUTTONDOWN)
     {
-        // 隐藏编辑框
+        // 隐藏编辑框、下拉框
         HideEdit();
+        HideCombo();
     }
 
     if (event.Type == UIEVENT_SETFOCUS)
@@ -1421,6 +1422,76 @@ CEditUI *CListUI::GetEditUI()
     return m_pEdit;
 }
 
+IListCmbCallbackUI *CListUI::GetCmbItemCallback() const
+{
+    return m_pCmbCallback;
+}
+
+void CListUI::SetCmbItemCallback(IListCmbCallbackUI *pCallback)
+{
+    m_pCmbCallback = pCallback;
+}
+
+void CListUI::ShowCombo(int nRow, int nColumn, RECT &rt)
+{
+    if (!GetComboUI()) { return; }
+
+    m_nRow = nRow;
+    m_nColumn = nColumn;
+
+    m_pCombo->RemoveAll();
+    //移动位置
+    m_pCombo->SetPos(rt);
+    m_pCombo->SetVisible(true);
+    m_pCombo->SetFocus();
+
+    // 设置下拉框可选项
+    if (m_pCmbCallback)
+    {
+        m_pCmbCallback->GetComboItems(m_pCombo, nRow, nColumn);
+    }
+}
+
+void CListUI::HideCombo()
+{
+    if (NULL != m_pCombo)
+    {
+        RECT rc = { 0, 0, 0, 0 };
+        m_pCombo->SetPos(rc);
+        m_pCombo->SetVisible(false);
+    }
+}
+
+CComboUI *CListUI::GetComboUI()
+{
+    if (NULL == m_pCombo)
+    {
+        m_pCombo = new CComboUI;
+        ASSERT(m_pCombo);
+
+        if (NULL == m_pCombo)
+        {
+            DUITRACE(_T("GetEditUI failed."));
+            return NULL;
+        }
+
+        CVerticalLayoutUI::Add(m_pCombo);    // duilib 会自动销毁下拉框
+        m_pCombo->OnNotify += MakeDelegate(this, &CListUI::OnComboNotify);
+
+        m_pCombo->SetName(_T("_cmb_list"));
+        m_pCombo->SetBkColor(0xFFFFFFFF);
+        m_pCombo->SetTextPadding(CDuiRect(2, 2, 2, 2));
+
+        LPCTSTR pDefAttr = GetManager()->GetDefaultAttributeList(_T("Combo"), true);
+        pDefAttr ? m_pCombo->SetAttributeList(pDefAttr) : pDefAttr;
+        pDefAttr = GetManager()->GetDefaultAttributeList(_T("Combo"), false);
+        pDefAttr ? m_pCombo->SetAttributeList(pDefAttr) : pDefAttr;
+        m_pCombo->SetFloat(true);
+    }
+
+    return m_pCombo;
+}
+
 bool CListUI::OnFirstHeaderItemNotify(void *pParam)
 {
     if (NULL == pParam) { return false; }
@@ -1455,6 +1526,26 @@ bool CListUI::OnEditNotify(void *pParam)
     return true;
 }
 
+bool CListUI::OnComboNotify(void *pParam)
+{
+    if (NULL == pParam) { return false; }
+
+    TNotifyUI *pMsg = (TNotifyUI *)pParam;
+
+    // Combo 下拉框收起时更新列表框
+    if (DUI_MSGTYPE_DROPUP == pMsg->sType)
+    {
+        if (!m_pCallback && m_pCombo)
+        {
+            CListTextElementUI *pItem = dynamic_cast<CListTextElementUI *>(GetItemAt(m_nRow));
+            CControlUI *pSel = m_pCombo->GetItemAt(m_pCombo->GetCurSel());
+
+            if (NULL != pItem && NULL != pSel) { pItem->SetText(m_nColumn, pSel->GetText()); }
+        }
+    }
+
+    return true;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1972,7 +2063,7 @@ SIZE CListHeaderUI::EstimateSize(SIZE szAvailable)
 
 CListHeaderItemUI::CListHeaderItemUI() : m_bDragable(true), m_uButtonState(0), m_iSepWidth(4),
     m_uTextStyle(DT_LEFT | DT_VCENTER | DT_SINGLELINE), m_dwTextColor(0), m_dwSepColor(0),
-    m_iFont(-1), m_bShowHtml(false), m_bEditable(false)
+    m_iFont(-1), m_bShowHtml(false), m_bEditable(false), m_bComboable(false)
 {
     //设置内边距，防止遮挡拖放的间隔条
     if (0 == m_rcInset.left || 0 == m_rcInset.right) { m_rcInset.left = m_rcInset.right = 4; }
@@ -2242,6 +2333,7 @@ void CListHeaderItemUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     }
     else if (_tcscmp(pstrName, _T("sepimage")) == 0) { SetSepImage(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("editable")) == 0) { SetEditable(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("comboable")) == 0) { SetComboable(ParseBool(pstrValue)); }
     else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
     else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
     else if (_tcscmp(pstrName, _T("dropenable")) == 0) { DUITRACE(_T("不支持属性:dropenable")); }
@@ -2462,6 +2554,16 @@ void CListHeaderItemUI::SetEditable(bool bEditable)
 bool CListHeaderItemUI::IsEditable()
 {
     return m_bEditable;
+}
+
+void CListHeaderItemUI::SetComboable(bool bComboable)
+{
+    m_bComboable = bComboable;
+}
+
+bool CListHeaderItemUI::IsComboable()
+{
+    return m_bComboable;
 }
 
 void CListHeaderItemUI::PaintText(HDC hDC)
@@ -3333,7 +3435,7 @@ void CListTextElementUI::DoEvent(TEventUI &event)
         {
             Select();
             Invalidate();
-            // 编辑框
+            // 编辑框 下拉框
             int nColumn = GetMouseColumn(event.ptMouse);
             CListHeaderItemUI *pHeader = dynamic_cast<CListHeaderItemUI *>(m_pOwner->GetHeader()->GetItemAt(nColumn));
             RECT rt = GetSubItemPos(nColumn, true);
@@ -3343,9 +3445,14 @@ void CListTextElementUI::DoEvent(TEventUI &event)
             {
                 m_pOwner->ShowEdit(GetIndex(), nColumn, rt, sTxt);
             }
+            else if (pHeader->IsComboable())
+            {
+                m_pOwner->ShowCombo(GetIndex(), nColumn, rt);
+            }
             else
             {
                 m_pOwner->HideEdit();
+                m_pOwner->HideCombo();
                 m_pManager->SendNotify((CListUI *)m_pOwner, DUI_MSGTYPE_ITEMDBCLICK, (WPARAM)this, nColumn);
             }
         }
@@ -3355,8 +3462,9 @@ void CListTextElementUI::DoEvent(TEventUI &event)
 
     if (event.Type == UIEVENT_SCROLLWHEEL || event.Type == UIEVENT_BUTTONDOWN)
     {
-        // 隐藏编辑框
+        // 隐藏编辑框、下拉框
         m_pOwner->HideEdit();
+        m_pOwner->HideCombo();
     }
 
     CListLabelElementUI::DoEvent(event);

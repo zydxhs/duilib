@@ -873,7 +873,6 @@ void CScrollBarUI::DoEvent(TEventUI &event)
         {
             if (!m_bHorizontal)
             {
-
                 int vRange = m_rcItem.bottom - m_rcItem.top - m_rcThumb.bottom + m_rcThumb.top;
 
                 if (m_bShowButton1)
@@ -888,7 +887,6 @@ void CScrollBarUI::DoEvent(TEventUI &event)
             }
             else
             {
-
                 int hRange = m_rcItem.right - m_rcItem.left - m_rcThumb.right + m_rcThumb.left;
 
                 if (m_bShowButton1)

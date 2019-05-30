@@ -55,6 +55,12 @@ public:
     virtual LPCTSTR GetItemText(CControlUI *pList, int iItem, int iSubItem) = 0;
 };
 
+class IListCmbCallbackUI
+{
+public:
+    virtual void GetComboItems(CControlUI *pCtrl, int iItem, int iSubItem) = 0;
+};
+
 class IListOwnerUI
 {
 public:
@@ -76,6 +82,10 @@ public:
 
     virtual void ShowEdit(int nRow, int nColumn, RECT &rt, CDuiString &sItemTxt) = 0;
     virtual void HideEdit() = 0;
+    virtual IListCmbCallbackUI *GetCmbItemCallback() const = 0;
+    virtual void SetCmbItemCallback(IListCmbCallbackUI *pCallback) = 0;
+    virtual void ShowCombo(int nRow, int nColumn, RECT &rt) = 0;
+    virtual void HideCombo() = 0;
 };
 
 class IListItemUI
@@ -100,6 +110,7 @@ public:
 
 class CListBodyUI;
 class CListHeaderUI;
+class CComboUI;
 
 class DUILIB_API CListUI : public CVerticalLayoutUI, public IListUI
 {
@@ -230,9 +241,17 @@ public:
     virtual void HideEdit();
     CEditUI *GetEditUI();
 
+    virtual IListCmbCallbackUI *GetCmbItemCallback() const;
+    virtual void SetCmbItemCallback(IListCmbCallbackUI *pCallback);
+    virtual void ShowCombo(int nRow, int nColumn, RECT &rt);
+    virtual void HideCombo();
+    CComboUI *GetComboUI();
+
 protected:
     bool OnFirstHeaderItemNotify(void *pParam);
     bool OnEditNotify(void *pParam);
+    bool OnComboNotify(void *pParam);
+
 protected:
     bool             m_bScrollSelect;
     int              m_iCurSel;
@@ -253,6 +272,8 @@ protected:
     int                 m_nRow;         // 编辑框所在的行、列
     int                 m_nColumn;
     CEditUI            *m_pEdit;
+    IListCmbCallbackUI *m_pCmbCallback; // 用于获取下拉框可选项列表
+    CComboUI           *m_pCombo;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -321,11 +342,15 @@ public:
     void SetEditable(bool bEditable);
     bool IsEditable();
 
+    void SetComboable(bool bComboable);
+    bool IsComboable();
+
 protected:
     POINT     m_ptLastMouse;
     bool      m_bDragable;
     bool      m_bShowHtml;
     bool      m_bEditable;      // 当前列是否支持编辑
+    bool      m_bComboable;     // 当前列是否支持下拉框
     UINT      m_uButtonState;
     int       m_iSepWidth;
     DWORD     m_dwTextColor;

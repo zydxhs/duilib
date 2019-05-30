@@ -458,6 +458,7 @@
             <Attribute name="sepcolor" default="#00000000" type="DWORD" comment="分隔符颜色,如(#FFF00F0F)"/>
             <Attribute name="sepimage" default="" type="STRING" comment="分隔符图片"/>
             <Attribute name="editable" default="false" type="BOOL" comment="是否支持可编辑,如(false)。双击显示编辑框。"/>
+            <Attribute name="comboable" default="false" type="BOOL" comment="是否支持下拉框,如(false)。双击显示下拉框。"/>
         </ListHeaderItem>
         <ListElement parent="Control" notifies="setfocus killfocus timer headerclick windowinit(root)">
             <Attribute name="selected" default="false" type="BOOL" comment="是否选中"/>
