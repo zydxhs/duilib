@@ -251,6 +251,7 @@ protected:
     bool OnFirstHeaderItemNotify(void *pParam);
     bool OnEditNotify(void *pParam);
     bool OnComboNotify(void *pParam);
+    bool OnScrollNotify(void *pParam);
 
 protected:
     bool             m_bScrollSelect;

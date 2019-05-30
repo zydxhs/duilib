@@ -426,6 +426,14 @@ void CListUI::SetPos(RECT rc, bool bNeedInvalidate)
 
     CVerticalLayoutUI::SetPos(rc, bNeedInvalidate);
 
+    // 当 ListUI改变大小时，重新计算 编辑框/下拉框的大小
+    CListElementUI *pItem = dynamic_cast<CListElementUI *>(GetItemAt(m_nRow));
+    RECT rt = pItem ? pItem->GetSubItemPos(m_nColumn, false) : RECT{ 0,0,0,0 };
+    rt.left -= m_rcItem.left;   rt.right -= m_rcItem.left;
+    rt.top -= m_rcItem.top;     rt.bottom -= m_rcItem.top;
+    (m_pEdit && m_pEdit->IsVisible()) ?m_pEdit->SetPos(rt) : NULL;
+    (m_pCombo && m_pCombo->IsVisible()) ? m_pCombo->SetPos(rt) : NULL;
+
     if (m_pHeader == NULL) { return; }
 
     rc = m_rcItem;
@@ -1406,6 +1414,11 @@ CEditUI *CListUI::GetEditUI()
 
         CVerticalLayoutUI::Add(m_pEdit);    // duilib 会自动销毁编辑框
         m_pEdit->OnNotify += MakeDelegate(this, &CListUI::OnEditNotify);
+        // 列表框内容滚动时，隐藏编辑框
+        CScrollBarUI *pScrollBar = m_pList->GetVerticalScrollBar();
+        pScrollBar ? pScrollBar->OnNotify += MakeDelegate(this, &CListUI::OnScrollNotify) : NULL;
+        pScrollBar = m_pList->GetHorizontalScrollBar();
+        pScrollBar ? pScrollBar->OnNotify += MakeDelegate(this, &CListUI::OnScrollNotify) : NULL;
 
         m_pEdit->SetName(_T("_edt_list"));
         m_pEdit->SetBkColor(0xFFFFFFFF);
@@ -1477,6 +1490,11 @@ CComboUI *CListUI::GetComboUI()
 
         CVerticalLayoutUI::Add(m_pCombo);    // duilib 会自动销毁下拉框
         m_pCombo->OnNotify += MakeDelegate(this, &CListUI::OnComboNotify);
+        // 列表框内容滚动时，隐藏下拉框
+        CScrollBarUI *pScrollBar = m_pList->GetVerticalScrollBar();
+        pScrollBar ? pScrollBar->OnNotify += MakeDelegate(this, &CListUI::OnScrollNotify) : NULL;
+        pScrollBar = m_pList->GetHorizontalScrollBar();
+        pScrollBar ? pScrollBar->OnNotify += MakeDelegate(this, &CListUI::OnScrollNotify) : NULL;
 
         m_pCombo->SetName(_T("_cmb_list"));
         m_pCombo->SetBkColor(0xFFFFFFFF);
@@ -1541,8 +1559,21 @@ bool CListUI::OnComboNotify(void *pParam)
             CControlUI *pSel = m_pCombo->GetItemAt(m_pCombo->GetCurSel());
 
             if (NULL != pItem && NULL != pSel) { pItem->SetText(m_nColumn, pSel->GetText()); }
+
+            HideCombo();
         }
     }
+
+    return true;
+}
+
+bool CListUI::OnScrollNotify(void *pParam)
+{
+    if (NULL == pParam) { return false; }
+
+    TNotifyUI *pMsg = (TNotifyUI *)pParam;
+
+    if (DUI_MSGTYPE_SCROLL == pMsg->sType) { HideEdit(); HideCombo(); }
 
     return true;
 }
