@@ -810,10 +810,11 @@ void CContainerUI::SetPos(RECT rc, bool bNeedInvalidate)
     if (m_items.IsEmpty()) { return; }
 
     rc = m_rcItem;
-    rc.left += m_rcInset.left;
-    rc.top += m_rcInset.top;
-    rc.right -= m_rcInset.right;
-    rc.bottom -= m_rcInset.bottom;
+    // 2019-05-30 zhuyadong 排除边框占用的空间
+    rc.left += (m_rcBorderSize.left + m_rcInset.left);
+    rc.top += (m_rcBorderSize.top + m_rcInset.top);
+    rc.right -= (m_rcBorderSize.right + m_rcInset.right);
+    rc.bottom -= (m_rcBorderSize.bottom + m_rcInset.bottom);
 
     if (m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible())
     {
