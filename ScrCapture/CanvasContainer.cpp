@@ -28,7 +28,7 @@ RECT CCanvasContainerUI::GetSizerRect(int iIndex)
 {
 	LONG lMiddleX = (m_rcItem.left + m_rcItem.right) / 2;
 	LONG lMiddleY = (m_rcItem.top + m_rcItem.bottom) / 2;
-	LONG SIZER_WIDTH = m_rcInset.left*2;
+	LONG SIZER_WIDTH = m_rcPadding.left*2;
 	switch( iIndex ) {
 	case 0:
 		return CDuiRect(m_rcItem.left, m_rcItem.top, m_rcItem.left + SIZER_WIDTH, m_rcItem.top + SIZER_WIDTH);
@@ -56,8 +56,8 @@ RECT CCanvasContainerUI::GetSizerRect(int iIndex)
 
 LPTSTR CCanvasContainerUI::GetSizerCursor(POINT& pt, int& iCursor)
 {
-	LONG SIZER_WIDTH = m_rcInset.left*2;
-	LONG SIZER_TO_ROOT = 20;	
+	LONG SIZER_WIDTH = m_rcPadding.left*2;
+	LONG SIZER_TO_ROOT = 20;
 	RECT rcRoot = m_pManager->GetRoot()->GetPos();
 
 	iCursor = -1;
@@ -122,14 +122,14 @@ void CCanvasContainerUI::PaintBorder(HDC hDC) {
 		CRenderEngine::DrawColor(hDC, GetSizerRect(i), m_dwBorderColor);
 	}
 	RECT rc = m_rcItem;
-	rc.left += m_rcInset.left;
-	rc.top += m_rcInset.left;
-	rc.right -= m_rcInset.left;
-	rc.bottom -= m_rcInset.left;
+	rc.left += m_rcPadding.left;
+	rc.top += m_rcPadding.left;
+	rc.right -= m_rcPadding.left;
+	rc.bottom -= m_rcPadding.left;
 	CRenderEngine::DrawRect(hDC, rc, m_rcBorderSize.left, m_dwBorderColor);
 }
 
-void CCanvasContainerUI::DoEvent(TEventUI& event) 
+void CCanvasContainerUI::DoEvent(TEventUI& event)
 {
 	if( event.Type == UIEVENT_SETCURSOR && IsEnabled())
 	{
