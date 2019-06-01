@@ -17,7 +17,6 @@ CContainerUI::CContainerUI()
     , m_pHorizontalScrollBar(NULL)
     , m_bScrollProcess(false)
 {
-    ::ZeroMemory(&m_rcInset, sizeof(m_rcInset));
 }
 
 CContainerUI::~CContainerUI()
@@ -221,14 +220,9 @@ void CContainerUI::SetDelayedDestroy(bool bDelayed)
     m_bDelayedDestroy = bDelayed;
 }
 
-RECT CContainerUI::GetInset() const
+void CContainerUI::SetPadding(RECT rcPadding)
 {
-    return m_rcInset;
-}
-
-void CContainerUI::SetInset(RECT rcInset)
-{
-    m_rcInset = rcInset;
+    m_rcPadding = rcPadding;
     NeedUpdate();
 }
 
@@ -589,7 +583,7 @@ void CContainerUI::LineDown()
 void CContainerUI::PageUp()
 {
     SIZE sz = GetScrollPos();
-    int iOffset = m_rcItem.bottom - m_rcItem.top - m_rcInset.top - m_rcInset.bottom;
+    int iOffset = m_rcItem.bottom - m_rcItem.top - m_rcPadding.top - m_rcPadding.bottom;
 
     if (m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible()) { iOffset -= m_pHorizontalScrollBar->GetFixedHeight(); }
 
@@ -600,7 +594,7 @@ void CContainerUI::PageUp()
 void CContainerUI::PageDown()
 {
     SIZE sz = GetScrollPos();
-    int iOffset = m_rcItem.bottom - m_rcItem.top - m_rcInset.top - m_rcInset.bottom;
+    int iOffset = m_rcItem.bottom - m_rcItem.top - m_rcPadding.top - m_rcPadding.bottom;
 
     if (m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible()) { iOffset -= m_pHorizontalScrollBar->GetFixedHeight(); }
 
@@ -649,7 +643,7 @@ void CContainerUI::LineRight()
 void CContainerUI::PageLeft()
 {
     SIZE sz = GetScrollPos();
-    int iOffset = m_rcItem.right - m_rcItem.left - m_rcInset.left - m_rcInset.right;
+    int iOffset = m_rcItem.right - m_rcItem.left - m_rcPadding.left - m_rcPadding.right;
 
     if (m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible()) { iOffset -= m_pVerticalScrollBar->GetFixedWidth(); }
 
@@ -660,7 +654,7 @@ void CContainerUI::PageLeft()
 void CContainerUI::PageRight()
 {
     SIZE sz = GetScrollPos();
-    int iOffset = m_rcItem.right - m_rcItem.left - m_rcInset.left - m_rcInset.right;
+    int iOffset = m_rcItem.right - m_rcItem.left - m_rcPadding.left - m_rcPadding.right;
 
     if (m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible()) { iOffset -= m_pVerticalScrollBar->GetFixedWidth(); }
 
@@ -785,10 +779,10 @@ int CContainerUI::FindSelectable(int iIndex, bool bForward /*= true*/) const
 RECT CContainerUI::GetClientPos() const
 {
     RECT rc = m_rcItem;
-    rc.left += m_rcInset.left;
-    rc.top += m_rcInset.top;
-    rc.right -= m_rcInset.right;
-    rc.bottom -= m_rcInset.bottom;
+    rc.left += (m_rcBorderSize.left + m_rcPadding.left);
+    rc.top += (m_rcBorderSize.top + m_rcPadding.top);
+    rc.right -= (m_rcBorderSize.right + m_rcPadding.right);
+    rc.bottom -= (m_rcBorderSize.bottom + m_rcPadding.bottom);
 
     if (m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible())
     {
@@ -811,10 +805,10 @@ void CContainerUI::SetPos(RECT rc, bool bNeedInvalidate)
 
     rc = m_rcItem;
     // 2019-05-30 zhuyadong 排除边框占用的空间
-    rc.left += (m_rcBorderSize.left + m_rcInset.left);
-    rc.top += (m_rcBorderSize.top + m_rcInset.top);
-    rc.right -= (m_rcBorderSize.right + m_rcInset.right);
-    rc.bottom -= (m_rcBorderSize.bottom + m_rcInset.bottom);
+    rc.left += (m_rcBorderSize.left + m_rcPadding.left);
+    rc.top += (m_rcBorderSize.top + m_rcPadding.top);
+    rc.right -= (m_rcBorderSize.right + m_rcPadding.right);
+    rc.bottom -= (m_rcBorderSize.bottom + m_rcPadding.bottom);
 
     if (m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible())
     {
@@ -881,7 +875,7 @@ void CContainerUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     if (_tcscmp(pstrName, _T("padding")) == 0 || _tcscmp(pstrName, _T("inset")) == 0)
     {
         RECT rt = ParseRect(pstrValue);
-        SetInset(rt);
+        SetPadding(rt);
     }
     else if (_tcscmp(pstrName, _T("mousechild")) == 0) { SetMouseChildEnabled(ParseBool(pstrValue)); }
     else if (_tcscmp(pstrName, _T("vscrollbar")) == 0)
@@ -977,10 +971,10 @@ CControlUI *CContainerUI::FindControl(FINDCONTROLPROC Proc, LPVOID pData, UINT u
     if ((uFlags & UIFIND_HITTEST) == 0 || IsMouseChildEnabled())
     {
         RECT rc = m_rcItem;
-        rc.left += m_rcInset.left;
-        rc.top += m_rcInset.top;
-        rc.right -= m_rcInset.right;
-        rc.bottom -= m_rcInset.bottom;
+        rc.left += (m_rcBorderSize.left + m_rcPadding.left);
+        rc.top += (m_rcBorderSize.top + m_rcPadding.top);
+        rc.right -= (m_rcBorderSize.right + m_rcPadding.right);
+        rc.bottom -= (m_rcBorderSize.bottom + m_rcPadding.bottom);
 
         if (m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible()) { rc.right -= m_pVerticalScrollBar->GetFixedWidth(); }
 
@@ -1058,10 +1052,10 @@ bool CContainerUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopContro
     if (m_items.GetSize() > 0)
     {
         RECT rc = m_rcItem;
-        rc.left += m_rcInset.left;
-        rc.top += m_rcInset.top;
-        rc.right -= m_rcInset.right;
-        rc.bottom -= m_rcInset.bottom;
+        rc.left += (m_rcBorderSize.left + m_rcPadding.left);
+        rc.top += (m_rcBorderSize.top + m_rcPadding.top);
+        rc.right -= (m_rcBorderSize.right + m_rcPadding.right);
+        rc.bottom -= (m_rcBorderSize.bottom + m_rcPadding.bottom);
 
         if (m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible()) { rc.right -= m_pVerticalScrollBar->GetFixedWidth(); }
 
@@ -1166,9 +1160,17 @@ SIZE CContainerUI::EstimateSize(SIZE szAvailable)
             if (sz2.cy > m_cxyFixed.cy) { m_cxyFixed.cy = sz2.cy; }
         }
 
-        if (m_bAutoWidth) { m_cxyFixed.cx += m_rcInset.left + m_rcInset.right; sz.cx = m_cxyFixed.cx; }
+        if (m_bAutoWidth)
+        {
+            m_cxyFixed.cx += m_rcPadding.left + m_rcPadding.right + m_rcBorderSize.left + m_rcBorderSize.right;
+            sz.cx = m_cxyFixed.cx;
+        }
 
-        if (m_bAutoHeight) { m_cxyFixed.cy += m_rcInset.top + m_rcInset.bottom; sz.cy = m_cxyFixed.cy; }
+        if (m_bAutoHeight)
+        {
+            m_cxyFixed.cy += m_rcPadding.top + m_rcPadding.bottom + m_rcBorderSize.top + m_rcBorderSize.bottom;
+            sz.cy = m_cxyFixed.cy;
+        }
     }
 
     return sz;

@@ -38,10 +38,10 @@ bool CComboBodyUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopContro
     if (m_items.GetSize() > 0)
     {
         RECT rc = m_rcItem;
-        rc.left += m_rcInset.left;
-        rc.top += m_rcInset.top;
-        rc.right -= m_rcInset.right;
-        rc.bottom -= m_rcInset.bottom;
+        rc.left += (m_rcBorderSize.left + m_rcPadding.left);
+        rc.top += (m_rcBorderSize.top + m_rcPadding.top);
+        rc.right -= (m_rcBorderSize.right + m_rcPadding.right);
+        rc.bottom -= (m_rcBorderSize.bottom + m_rcPadding.bottom);
 
         if (m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible()) { rc.right -= m_pVerticalScrollBar->GetFixedWidth(); }
 
@@ -290,7 +290,7 @@ LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         //     m_pLayout->SetAttributeList(pDefaultAttributes);
         // }
 
-        m_pLayout->SetInset(CDuiRect(1, 1, 1, 1));
+        m_pLayout->SetPadding(CDuiRect(1, 1, 1, 1));
         m_pLayout->SetBkColor(0xFFFFFFFF);
         m_pLayout->SetBorderColor(0xFFC6C7D2);
         m_pLayout->SetBorderSize(RECT { 1, 1, 1, 1 });
@@ -457,7 +457,6 @@ UINT CComboWnd::GetClassStyle() const
 CComboUI::CComboUI() : m_pWindow(NULL), m_iCurSel(-1), m_uButtonState(0)
 {
     m_szDropBox = CDuiSize(0, 150);
-    ::ZeroMemory(&m_rcTextPadding, sizeof(m_rcTextPadding));
 
     m_ListInfo.nColumns = 0;
     m_ListInfo.uFixedHeight = 0;
@@ -481,7 +480,7 @@ CComboUI::CComboUI() : m_pWindow(NULL), m_iCurSel(-1), m_uButtonState(0)
 
     m_bShowText = true;
     m_bSelectCloseFlag = true;
-    ::ZeroMemory(&m_ListInfo.rcTextPadding, sizeof(m_ListInfo.rcTextPadding));
+    ::ZeroMemory(&m_ListInfo.rcPadding, sizeof(m_ListInfo.rcPadding));
     ::ZeroMemory(&m_ListInfo.rcColumn, sizeof(m_ListInfo.rcColumn));
 }
 
@@ -988,14 +987,9 @@ void CComboUI::SetShowText(bool flag)
     Invalidate();
 }
 
-RECT CComboUI::GetTextPadding() const
+void CComboUI::SetPadding(RECT rc)
 {
-    return m_rcTextPadding;
-}
-
-void CComboUI::SetTextPadding(RECT rc)
-{
-    m_rcTextPadding = rc;
+    m_rcPadding = rc;
     Invalidate();
 }
 
@@ -1107,14 +1101,14 @@ void CComboUI::SetItemTextStyle(UINT uStyle)
     Invalidate();
 }
 
-RECT CComboUI::GetItemTextPadding() const
+RECT CComboUI::GetItemPadding() const
 {
-    return m_ListInfo.rcTextPadding;
+    return m_ListInfo.rcPadding;
 }
 
-void CComboUI::SetItemTextPadding(RECT rc)
+void CComboUI::SetItemPadding(RECT rc)
 {
-    m_ListInfo.rcTextPadding = rc;
+    m_ListInfo.rcPadding = rc;
     Invalidate();
 }
 
@@ -1331,10 +1325,10 @@ void CComboUI::Move(SIZE szOffset, bool bNeedInvalidate)
 
 void CComboUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
-    if (_tcscmp(pstrName, _T("textpadding")) == 0)
+    if (_tcscmp(pstrName, _T("textpadding")) == 0 || _tcscmp(pstrName, _T("padding")) == 0)
     {
         RECT rt = ParseRect(pstrValue);
-        SetTextPadding(rt);
+        SetPadding(rt);
     }
     else if (_tcscmp(pstrName, _T("showtext")) == 0) { SetShowText(ParseBool(pstrValue)); }
     else if (_tcscmp(pstrName, _T("normalimage")) == 0) { SetNormalImage(ParseString(pstrValue)); }
@@ -1381,10 +1375,10 @@ void CComboUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
             m_ListInfo.uTextStyle &= ~DT_END_ELLIPSIS;
         }
     }
-    else if (_tcscmp(pstrName, _T("itemtextpadding")) == 0)
+    else if (_tcscmp(pstrName, _T("itemtextpadding")) == 0 || _tcscmp(pstrName, _T("itempadding")) == 0)
     {
         RECT rt = ParseRect(pstrValue);
-        SetItemTextPadding(rt);
+        SetItemPadding(rt);
     }
     else if (_tcscmp(pstrName, _T("itemtextcolor")) == 0)
     {
@@ -1492,10 +1486,10 @@ void CComboUI::PaintText(HDC hDC)
     if (!m_bShowText) { return; }
 
     RECT rcText = m_rcItem;
-    rcText.left += m_rcTextPadding.left;
-    rcText.right -= m_rcTextPadding.right;
-    rcText.top += m_rcTextPadding.top;
-    rcText.bottom -= m_rcTextPadding.bottom;
+    rcText.left += (m_rcBorderSize.left + m_rcPadding.left);
+    rcText.right -= (m_rcBorderSize.right + m_rcPadding.right);
+    rcText.top += (m_rcBorderSize.top + m_rcPadding.top);
+    rcText.bottom -= (m_rcBorderSize.bottom + m_rcPadding.bottom);
 
     if (m_iCurSel >= 0)
     {

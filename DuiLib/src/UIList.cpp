@@ -45,8 +45,8 @@ CListUI::CListUI() : m_pCallback(NULL), m_bScrollSelect(false), m_iCurSel(-1), m
     m_ListInfo.uFixedHeight = 0;
     m_ListInfo.nFont = -1;
     m_ListInfo.uTextStyle = DT_VCENTER | DT_SINGLELINE | DT_END_ELLIPSIS;
-    m_ListInfo.rcTextPadding.left = m_ListInfo.rcTextPadding.right = 0;
-    m_ListInfo.rcTextPadding.top = m_ListInfo.rcTextPadding.bottom = 0;
+    m_ListInfo.rcPadding.left = m_ListInfo.rcPadding.right = 0;
+    m_ListInfo.rcPadding.top = m_ListInfo.rcPadding.bottom = 0;
     m_ListInfo.dwTextColor = 0;
     m_ListInfo.dwBkColor = 0;
     m_ListInfo.bAlternateBk = false;
@@ -377,8 +377,8 @@ void CListUI::SetPos(RECT rc, bool bNeedInvalidate)
 {
     if (m_pHeader != NULL)    // 设置header各子元素x坐标,因为有些listitem的setpos需要用到(临时修复)
     {
-        int iLeft = rc.left + m_rcInset.left;
-        int iRight = rc.right - m_rcInset.right;
+        int iLeft = rc.left + m_rcPadding.left + m_rcBorderSize.left;
+        int iRight = rc.right - m_rcPadding.right - m_rcBorderSize.right;
 
         m_ListInfo.nColumns = std::min<int>(m_pHeader->GetCount(), UILIST_MAX_COLUMNS);
 
@@ -428,19 +428,19 @@ void CListUI::SetPos(RECT rc, bool bNeedInvalidate)
 
     // 当 ListUI改变大小时，重新计算 编辑框/下拉框的大小
     CListElementUI *pItem = dynamic_cast<CListElementUI *>(GetItemAt(m_nRow));
-    RECT rt = pItem ? pItem->GetSubItemPos(m_nColumn, false) : RECT{ 0,0,0,0 };
+    RECT rt = pItem ? pItem->GetSubItemPos(m_nColumn, false) : RECT{ 0, 0, 0, 0 };
     rt.left -= m_rcItem.left;   rt.right -= m_rcItem.left;
     rt.top -= m_rcItem.top;     rt.bottom -= m_rcItem.top;
-    (m_pEdit && m_pEdit->IsVisible()) ?m_pEdit->SetPos(rt) : NULL;
+    (m_pEdit && m_pEdit->IsVisible()) ? m_pEdit->SetPos(rt) : NULL;
     (m_pCombo && m_pCombo->IsVisible()) ? m_pCombo->SetPos(rt) : NULL;
 
     if (m_pHeader == NULL) { return; }
 
     rc = m_rcItem;
-    rc.left += m_rcInset.left;
-    rc.top += m_rcInset.top;
-    rc.right -= m_rcInset.right;
-    rc.bottom -= m_rcInset.bottom;
+    rc.left += (m_rcBorderSize.left + m_rcPadding.left);
+    rc.top += (m_rcBorderSize.top + m_rcPadding.top);
+    rc.right -= (m_rcBorderSize.right + m_rcPadding.right);
+    rc.bottom -= (m_rcBorderSize.bottom + m_rcPadding.bottom);
 
     if (m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible())
     {
@@ -717,15 +717,15 @@ void CListUI::SetItemTextStyle(UINT uStyle)
     NeedUpdate();
 }
 
-void CListUI::SetItemTextPadding(RECT rc)
+void CListUI::SetItemPadding(RECT rc)
 {
-    m_ListInfo.rcTextPadding = rc;
+    m_ListInfo.rcPadding = rc;
     NeedUpdate();
 }
 
-RECT CListUI::GetItemTextPadding() const
+RECT CListUI::GetItemPadding() const
 {
-    return m_ListInfo.rcTextPadding;
+    return m_ListInfo.rcPadding;
 }
 
 void CListUI::SetItemTextColor(DWORD dwTextColor)
@@ -996,7 +996,7 @@ void CListUI::EnsureVisible(int iIndex)
 
     RECT rcItem = m_pList->GetItemAt(iIndex)->GetPos();
     RECT rcList = m_pList->GetPos();
-    RECT rcListInset = m_pList->GetInset();
+    RECT rcListInset = m_pList->GetPadding();
 
     rcList.left += rcListInset.left;
     rcList.top += rcListInset.top;
@@ -1090,10 +1090,10 @@ void CListUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         }
         else { m_ListInfo.uTextStyle |= DT_SINGLELINE; }
     }
-    else if (_tcscmp(pstrName, _T("itemtextpadding")) == 0)
+    else if (_tcscmp(pstrName, _T("itemtextpadding")) == 0 || _tcscmp(pstrName, _T("itempadding")) == 0)
     {
         RECT rt = ParseRect(pstrValue);
-        SetItemTextPadding(rt);
+        SetItemPadding(rt);
     }
     else if (_tcscmp(pstrName, _T("itemtextcolor")) == 0)
     {
@@ -1422,7 +1422,7 @@ CEditUI *CListUI::GetEditUI()
 
         m_pEdit->SetName(_T("_edt_list"));
         m_pEdit->SetBkColor(0xFFFFFFFF);
-        m_pEdit->SetTextPadding(CDuiRect(2, 2, 2, 2));
+        m_pEdit->SetPadding(CDuiRect(2, 2, 2, 2));
 
         LPCTSTR pDefAttr = GetManager()->GetDefaultAttributeList(_T("Edit"), true);
         pDefAttr ? m_pEdit->SetAttributeList(pDefAttr) : pDefAttr;
@@ -1498,7 +1498,7 @@ CComboUI *CListUI::GetComboUI()
 
         m_pCombo->SetName(_T("_cmb_list"));
         m_pCombo->SetBkColor(0xFFFFFFFF);
-        m_pCombo->SetTextPadding(CDuiRect(2, 2, 2, 2));
+        m_pCombo->SetPadding(CDuiRect(2, 2, 2, 2));
 
         LPCTSTR pDefAttr = GetManager()->GetDefaultAttributeList(_T("Combo"), true);
         pDefAttr ? m_pCombo->SetAttributeList(pDefAttr) : pDefAttr;
@@ -1695,10 +1695,10 @@ void CListBodyUI::SetPos(RECT rc, bool bNeedInvalidate)
     rc = m_rcItem;
 
     // Adjust for inset
-    rc.left += m_rcInset.left;
-    rc.top += m_rcInset.top;
-    rc.right -= m_rcInset.right;
-    rc.bottom -= m_rcInset.bottom;
+    rc.left += (m_rcBorderSize.left + m_rcPadding.left);
+    rc.top += (m_rcBorderSize.top + m_rcPadding.top);
+    rc.right -= (m_rcBorderSize.right + m_rcPadding.right);
+    rc.bottom -= (m_rcBorderSize.bottom + m_rcPadding.bottom);
 
     if (m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible()) { rc.right -= m_pVerticalScrollBar->GetFixedWidth(); }
 
@@ -1925,10 +1925,10 @@ bool CListBodyUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl
     if (m_items.GetSize() > 0)
     {
         RECT rc = m_rcItem;
-        rc.left += m_rcInset.left;
-        rc.top += m_rcInset.top;
-        rc.right -= m_rcInset.right;
-        rc.bottom -= m_rcInset.bottom;
+        rc.left += (m_rcBorderSize.left + m_rcPadding.left);
+        rc.top += (m_rcBorderSize.top + m_rcPadding.top);
+        rc.right -= (m_rcBorderSize.right + m_rcPadding.right);
+        rc.bottom -= (m_rcBorderSize.bottom + m_rcPadding.bottom);
 
         if (m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible()) { rc.right -= m_pVerticalScrollBar->GetFixedWidth(); }
 
@@ -2097,9 +2097,10 @@ CListHeaderItemUI::CListHeaderItemUI() : m_bDragable(true), m_uButtonState(0), m
     m_iFont(-1), m_bShowHtml(false), m_bEditable(false), m_bComboable(false)
 {
     //设置内边距，防止遮挡拖放的间隔条
-    if (0 == m_rcInset.left || 0 == m_rcInset.right) { m_rcInset.left = m_rcInset.right = 4; }
+    m_rcPadding.left = m_rcPadding.right = 2;
+    // if (0 == m_rcPadding.left || 0 == m_rcPadding.right) { m_rcPadding.left = m_rcPadding.right = 4; }
+    //SetPadding(CDuiRect(2, 0, 2, 0));
 
-    SetTextPadding(CDuiRect(2, 0, 2, 0));
     m_ptLastMouse.x = m_ptLastMouse.y = 0;
     SetMinWidth(16);
 }
@@ -2184,14 +2185,9 @@ void CListHeaderItemUI::SetSepColor(DWORD dwSepColor)
     Invalidate();
 }
 
-RECT CListHeaderItemUI::GetTextPadding() const
+void CListHeaderItemUI::SetPadding(RECT rc)
 {
-    return m_rcTextPadding;
-}
-
-void CListHeaderItemUI::SetTextPadding(RECT rc)
-{
-    m_rcTextPadding = rc;
+    m_rcPadding = rc;
     Invalidate();
 }
 
@@ -2346,10 +2342,10 @@ void CListHeaderItemUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         DWORD clr = ParseColor(pstrValue);
         SetTextColor(clr);
     }
-    else if (_tcscmp(pstrName, _T("textpadding")) == 0)
+    else if (_tcscmp(pstrName, _T("textpadding")) == 0 || _tcscmp(pstrName, _T("padding")) == 0)
     {
         RECT rt = ParseRect(pstrValue);
-        SetTextPadding(rt);
+        SetPadding(rt);
     }
     else if (_tcscmp(pstrName, _T("showhtml")) == 0) { SetShowHtml(ParseBool(pstrValue)); }
     else if (_tcscmp(pstrName, _T("normalimage")) == 0) { SetNormalImage(ParseString(pstrValue)); }
@@ -2602,10 +2598,10 @@ void CListHeaderItemUI::PaintText(HDC hDC)
     if (m_dwTextColor == 0) { m_dwTextColor = m_pManager->GetDefaultFontColor(); }
 
     RECT rcText = m_rcItem;
-    rcText.left += m_rcTextPadding.left;
-    rcText.top += m_rcTextPadding.top;
-    rcText.right -= m_rcTextPadding.right;
-    rcText.bottom -= m_rcTextPadding.bottom;
+    rcText.left += (m_rcBorderSize.left + m_rcPadding.left);
+    rcText.top += (m_rcBorderSize.top + m_rcPadding.top);
+    rcText.right -= (m_rcBorderSize.right + m_rcPadding.right);
+    rcText.bottom -= (m_rcBorderSize.bottom + m_rcPadding.bottom);
 
     if (m_sText.IsEmpty()) { return; }
 
@@ -2716,7 +2712,7 @@ void CListElementUI::Invalidate()
         if (pParentContainer)
         {
             RECT rc = pParentContainer->GetPos();
-            RECT rcInset = pParentContainer->GetInset();
+            RECT rcInset = pParentContainer->GetPadding();
             rc.left += rcInset.left;
             rc.top += rcInset.top;
             rc.right -= rcInset.right;
@@ -3146,10 +3142,10 @@ SIZE CListLabelElementUI::EstimateSize(SIZE szAvailable)
 
     if (m_uFixedHeightLast != pInfo->uFixedHeight || m_nFontLast != pInfo->nFont ||
         m_uTextStyleLast != pInfo->uTextStyle ||
-        m_rcTextPaddingLast.left != pInfo->rcTextPadding.left ||
-        m_rcTextPaddingLast.right != pInfo->rcTextPadding.right ||
-        m_rcTextPaddingLast.top != pInfo->rcTextPadding.top ||
-        m_rcTextPaddingLast.bottom != pInfo->rcTextPadding.bottom)
+        m_rcTextPaddingLast.left != pInfo->rcPadding.left ||
+        m_rcTextPaddingLast.right != pInfo->rcPadding.right ||
+        m_rcTextPaddingLast.top != pInfo->rcPadding.top ||
+        m_rcTextPaddingLast.bottom != pInfo->rcPadding.bottom)
     {
         m_bNeedEstimateSize = true;
     }
@@ -3161,7 +3157,7 @@ SIZE CListLabelElementUI::EstimateSize(SIZE szAvailable)
         m_uFixedHeightLast = pInfo->uFixedHeight;
         m_nFontLast = pInfo->nFont;
         m_uTextStyleLast = pInfo->uTextStyle;
-        m_rcTextPaddingLast = pInfo->rcTextPadding;
+        m_rcTextPaddingLast = pInfo->rcPadding;
 
         m_cxyFixedLast = m_cxyFixed;
 
@@ -3175,7 +3171,7 @@ SIZE CListLabelElementUI::EstimateSize(SIZE szAvailable)
             if (m_cxyFixedLast.cy == 0)
             {
                 m_cxyFixedLast.cy = m_pManager->GetFontInfo(pInfo->nFont)->tm.tmHeight + 8;
-                m_cxyFixedLast.cy += pInfo->rcTextPadding.top + pInfo->rcTextPadding.bottom;
+                m_cxyFixedLast.cy += pInfo->rcPadding.top + pInfo->rcPadding.bottom;
             }
 
             if (m_cxyFixedLast.cx == 0)
@@ -3193,7 +3189,7 @@ SIZE CListLabelElementUI::EstimateSize(SIZE szAvailable)
                                             DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
                 }
 
-                m_cxyFixedLast.cx = rcText.right - rcText.left + pInfo->rcTextPadding.left + pInfo->rcTextPadding.right;
+                m_cxyFixedLast.cx = rcText.right - rcText.left + pInfo->rcPadding.left + pInfo->rcPadding.right;
             }
         }
         else
@@ -3204,8 +3200,8 @@ SIZE CListLabelElementUI::EstimateSize(SIZE szAvailable)
             }
 
             RECT rcText = { 0, 0, m_cxyFixedLast.cx, MAX_CTRL_WIDTH };
-            rcText.left += pInfo->rcTextPadding.left;
-            rcText.right -= pInfo->rcTextPadding.right;
+            rcText.left += pInfo->rcPadding.left;
+            rcText.right -= pInfo->rcPadding.right;
 
             if (pInfo->bShowHtml)
             {
@@ -3218,7 +3214,7 @@ SIZE CListLabelElementUI::EstimateSize(SIZE szAvailable)
                                         DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
             }
 
-            m_cxyFixedLast.cy = rcText.bottom - rcText.top + pInfo->rcTextPadding.top + pInfo->rcTextPadding.bottom;
+            m_cxyFixedLast.cy = rcText.bottom - rcText.top + pInfo->rcPadding.top + pInfo->rcPadding.bottom;
         }
     }
 
@@ -3260,10 +3256,10 @@ void CListLabelElementUI::DrawItemText(HDC hDC, const RECT &rcItem)
     }
 
     RECT rcText = rcItem;
-    rcText.left += pInfo->rcTextPadding.left;
-    rcText.right -= pInfo->rcTextPadding.right;
-    rcText.top += pInfo->rcTextPadding.top;
-    rcText.bottom -= pInfo->rcTextPadding.bottom;
+    rcText.left += pInfo->rcPadding.left;
+    rcText.right -= pInfo->rcPadding.right;
+    rcText.top += pInfo->rcPadding.top;
+    rcText.bottom -= pInfo->rcPadding.bottom;
 
     if (pInfo->bShowHtml)
         CRenderEngine::DrawHtmlText(hDC, m_pManager, rcText, m_sText, iTextColor,
@@ -3398,10 +3394,10 @@ void CListTextElementUI::DoEvent(TEventUI &event)
         if (pInfo && pInfo->bCheckBox)
         {
             RECT rcItem = { pInfo->rcColumn[0].left, m_rcItem.top, pInfo->rcColumn[0].right, m_rcItem.bottom };
-            rcItem.left += pInfo->rcTextPadding.left;
-            rcItem.right -= pInfo->rcTextPadding.right;
-            rcItem.top += pInfo->rcTextPadding.top;
-            rcItem.bottom -= pInfo->rcTextPadding.bottom;
+            rcItem.left += pInfo->rcPadding.left;
+            rcItem.right -= pInfo->rcPadding.right;
+            rcItem.top += pInfo->rcPadding.top;
+            rcItem.bottom -= pInfo->rcPadding.bottom;
 
             if (PtInRect(&rcItem, event.ptMouse))
             {
@@ -3532,10 +3528,10 @@ SIZE CListTextElementUI::EstimateSize(SIZE szAvailable)
 
     if (m_uFixedHeightLast != pInfo->uFixedHeight || m_nFontLast != pInfo->nFont ||
         m_uTextStyleLast != pInfo->uTextStyle ||
-        m_rcTextPaddingLast.left != pInfo->rcTextPadding.left ||
-        m_rcTextPaddingLast.right != pInfo->rcTextPadding.right ||
-        m_rcTextPaddingLast.top != pInfo->rcTextPadding.top ||
-        m_rcTextPaddingLast.bottom != pInfo->rcTextPadding.bottom)
+        m_rcTextPaddingLast.left != pInfo->rcPadding.left ||
+        m_rcTextPaddingLast.right != pInfo->rcPadding.right ||
+        m_rcTextPaddingLast.top != pInfo->rcPadding.top ||
+        m_rcTextPaddingLast.bottom != pInfo->rcPadding.bottom)
     {
         m_bNeedEstimateSize = true;
     }
@@ -3556,7 +3552,7 @@ SIZE CListTextElementUI::EstimateSize(SIZE szAvailable)
         m_uFixedHeightLast = pInfo->uFixedHeight;
         m_nFontLast = pInfo->nFont;
         m_uTextStyleLast = pInfo->uTextStyle;
-        m_rcTextPaddingLast = pInfo->rcTextPadding;
+        m_rcTextPaddingLast = pInfo->rcPadding;
         m_sTextLast = strText;
 
         m_cxyFixedLast = m_cxyFixed;
@@ -3576,7 +3572,7 @@ SIZE CListTextElementUI::EstimateSize(SIZE szAvailable)
             if (m_cxyFixedLast.cy == 0)
             {
                 m_cxyFixedLast.cy = m_pManager->GetFontInfo(pInfo->nFont)->tm.tmHeight + 8;
-                m_cxyFixedLast.cy += pInfo->rcTextPadding.top + pInfo->rcTextPadding.bottom;
+                m_cxyFixedLast.cy += pInfo->rcPadding.top + pInfo->rcPadding.bottom;
             }
 
             if (m_cxyFixedLast.cx == 0)
@@ -3594,7 +3590,7 @@ SIZE CListTextElementUI::EstimateSize(SIZE szAvailable)
                                             DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
                 }
 
-                m_cxyFixedLast.cx = rcText.right - rcText.left + pInfo->rcTextPadding.left + pInfo->rcTextPadding.right;
+                m_cxyFixedLast.cx = rcText.right - rcText.left + pInfo->rcPadding.left + pInfo->rcPadding.right;
             }
         }
         else
@@ -3605,8 +3601,8 @@ SIZE CListTextElementUI::EstimateSize(SIZE szAvailable)
             }
 
             RECT rcText = { 0, 0, m_cxyFixedLast.cx, MAX_CTRL_WIDTH };
-            rcText.left += pInfo->rcTextPadding.left;
-            rcText.right -= pInfo->rcTextPadding.right;
+            rcText.left += pInfo->rcPadding.left;
+            rcText.right -= pInfo->rcPadding.right;
 
             if (pInfo->bShowHtml)
             {
@@ -3619,7 +3615,7 @@ SIZE CListTextElementUI::EstimateSize(SIZE szAvailable)
                                         DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
             }
 
-            m_cxyFixedLast.cy = rcText.bottom - rcText.top + pInfo->rcTextPadding.top + pInfo->rcTextPadding.bottom;
+            m_cxyFixedLast.cy = rcText.bottom - rcText.top + pInfo->rcPadding.top + pInfo->rcPadding.bottom;
         }
     }
 
@@ -3678,7 +3674,7 @@ void CListTextElementUI::DrawItemText(HDC hDC, const RECT &rcItem)
             {
                 CListUI *pListUI = (CListUI *)m_pOwner;
                 CListHeaderItemUI *pHeaderItem = (CListHeaderItemUI *)pListUI->GetHeader()->GetItemAt(0);
-                RECT rt = pHeaderItem->GetInset();
+                RECT rt = pHeaderItem->GetPadding();
                 CDuiString str;
 
                 if (m_bCheckBoxSelect == false)
@@ -3701,10 +3697,10 @@ void CListTextElementUI::DrawItemText(HDC hDC, const RECT &rcItem)
             }
             else
             {
-                rcItem.left += pInfo->rcTextPadding.left;
-                rcItem.right -= pInfo->rcTextPadding.right;
-                rcItem.top += pInfo->rcTextPadding.top;
-                rcItem.bottom -= pInfo->rcTextPadding.bottom;
+                rcItem.left += pInfo->rcPadding.left;
+                rcItem.right -= pInfo->rcPadding.right;
+                rcItem.top += pInfo->rcPadding.top;
+                rcItem.bottom -= pInfo->rcPadding.bottom;
 
                 if (pInfo->bShowHtml)
                     CRenderEngine::DrawHtmlText(hDC, m_pManager, rcItem, strText.GetData(), iTextColor,
@@ -3722,10 +3718,10 @@ void CListTextElementUI::DrawItemText(HDC hDC, const RECT &rcItem)
     else
     {
         RECT rcItem = m_rcItem;
-        rcItem.left += pInfo->rcTextPadding.left;
-        rcItem.right -= pInfo->rcTextPadding.right;
-        rcItem.top += pInfo->rcTextPadding.top;
-        rcItem.bottom -= pInfo->rcTextPadding.bottom;
+        rcItem.left += pInfo->rcPadding.left;
+        rcItem.right -= pInfo->rcPadding.right;
+        rcItem.top += pInfo->rcPadding.top;
+        rcItem.bottom -= pInfo->rcPadding.bottom;
 
         CDuiString strText;
 
@@ -3864,7 +3860,7 @@ void CListContainerElementUI::Invalidate()
         if (pParentContainer)
         {
             RECT rc = pParentContainer->GetPos();
-            RECT rcInset = pParentContainer->GetInset();
+            RECT rcInset = pParentContainer->GetPadding();
             rc.left += rcInset.left;
             rc.top += rcInset.top;
             rc.right -= rcInset.right;
@@ -4331,7 +4327,7 @@ void CListHBoxElementUI::SetPos(RECT rc, bool bNeedInvalidate)
             if (NULL != pHeader)
             {
                 CListHeaderItemUI *pHItem0 = (CListHeaderItemUI *)pHeader->GetItemAt(it2);
-                RECT rtInset = pHItem0->GetInset();
+                RECT rtInset = pHItem0->GetPadding();
                 rcItem.left += rtInset.left;
                 rcItem.right -= rtInset.right;
             }

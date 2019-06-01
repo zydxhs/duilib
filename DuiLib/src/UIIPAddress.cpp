@@ -462,7 +462,7 @@ bool CIPAddressWnd::IsValidChar(TCHAR ch)
 CIPAddressUI::CIPAddressUI() : m_pWindow(NULL), m_dwIp(0), m_bReadOnly(false),
     m_uEditState(0), m_eField(EM_FIELD1)
 {
-    SetTextPadding(CDuiRect(4, 3, 4, 3));
+    SetPadding(CDuiRect(4, 3, 4, 3));
     SetBkColor(0xFFFFFFFF);
 }
 
@@ -820,12 +820,12 @@ void CIPAddressUI::SetPos(RECT rc, bool bNeedInvalidate)
 {
     CControlUI::SetPos(rc, bNeedInvalidate);
 
-    int nWidth = (rc.right - rc.left - m_rcTextPadding.left - m_rcTextPadding.right - DOT_WIDTH * 3) / 4;
+    int nWidth = (rc.right - rc.left - m_rcPadding.left - m_rcPadding.right - DOT_WIDTH * 3) / 4;
 
-    m_rcField[0].left = rc.left + m_rcTextPadding.left;
+    m_rcField[0].left = rc.left + m_rcPadding.left;
     m_rcField[0].right = m_rcField[0].left + nWidth;
-    m_rcField[0].top = rc.top + m_rcTextPadding.top;
-    m_rcField[0].bottom = rc.bottom - m_rcTextPadding.bottom;
+    m_rcField[0].top = rc.top + m_rcPadding.top;
+    m_rcField[0].bottom = rc.bottom - m_rcPadding.bottom;
 
     m_rcField[1].left = m_rcField[0].right + DOT_WIDTH;
     m_rcField[1].right = m_rcField[1].left + nWidth;
@@ -838,7 +838,7 @@ void CIPAddressUI::SetPos(RECT rc, bool bNeedInvalidate)
     m_rcField[2].bottom = m_rcField[1].bottom;
 
     m_rcField[3].left = m_rcField[2].right + DOT_WIDTH;
-    m_rcField[3].right = rc.right - m_rcTextPadding.right;
+    m_rcField[3].right = rc.right - m_rcPadding.right;
     m_rcField[3].top = m_rcField[2].top;
     m_rcField[3].bottom = m_rcField[2].bottom;
 }

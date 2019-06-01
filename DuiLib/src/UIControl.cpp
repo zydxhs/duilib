@@ -56,6 +56,7 @@ CControlUI::CControlUI()
 
     ::ZeroMemory(&m_rcItem, sizeof(RECT));
     ::ZeroMemory(&m_rcMargin, sizeof(RECT));
+    ::ZeroMemory(&m_rcPadding, sizeof(m_rcPadding));
     ::ZeroMemory(&m_rcPaint, sizeof(RECT));
     ::ZeroMemory(&m_rcBorderSize, sizeof(RECT));
     m_piFloatPercent.left = m_piFloatPercent.top = m_piFloatPercent.right = m_piFloatPercent.bottom = 0.0f;
@@ -1913,6 +1914,18 @@ RECT CControlUI::GetMargin() const
 void CControlUI::SetMargin(RECT rcMargin)
 {
     m_rcMargin = rcMargin;
+    NeedParentUpdate();
+}
+
+
+RECT CControlUI::GetPadding() const
+{
+    return m_rcPadding;
+}
+
+void CControlUI::SetPadding(RECT rcPadding)
+{
+    m_rcPadding = rcPadding;
     NeedParentUpdate();
 }
 

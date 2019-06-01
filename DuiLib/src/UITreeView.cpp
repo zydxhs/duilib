@@ -163,7 +163,7 @@ void CTreeNodeUI::Invalidate()
         if (pParentContainer)
         {
             RECT rc = pParentContainer->GetPos();
-            RECT rcInset = pParentContainer->GetInset();
+            RECT rcInset = pParentContainer->GetPadding();
             rc.left += rcInset.left;
             rc.top += rcInset.top;
             rc.right -= rcInset.right;

@@ -1062,7 +1062,6 @@ CRichEditUI::CRichEditUI() : m_pTwh(NULL), m_bVScrollBarFixing(false), m_bWantTa
     m_dwTextColor(0), m_iFont(-1), m_dwTipColor(0xFFBAC0C5),
     m_iLimitText(cInitTextMax), m_lTwhStyle(ES_MULTILINE), m_bDrawCaret(true), m_bInited(false)
 {
-    ::ZeroMemory(&m_rcTextPadding, sizeof(m_rcTextPadding));
 }
 
 CRichEditUI::~CRichEditUI()
@@ -1745,14 +1744,9 @@ long CRichEditUI::StreamOut(int nFormat, EDITSTREAM &es)
     return (long)lResult;
 }
 
-RECT CRichEditUI::GetTextPadding() const
+void CRichEditUI::SetPadding(RECT rc)
 {
-    return m_rcTextPadding;
-}
-
-void CRichEditUI::SetTextPadding(RECT rc)
-{
-    m_rcTextPadding = rc;
+    m_rcPadding = rc;
     Invalidate();
 }
 
@@ -2148,10 +2142,10 @@ void CRichEditUI::SetPos(RECT rc, bool bNeedInvalidate)
     CControlUI::SetPos(rc, bNeedInvalidate);
     rc = m_rcItem;
 
-    rc.left += m_rcInset.left;
-    rc.top += m_rcInset.top;
-    rc.right -= m_rcInset.right;
-    rc.bottom -= m_rcInset.bottom;
+    rc.left += (m_rcBorderSize.left + m_rcPadding.left);
+    rc.top += (m_rcBorderSize.top + m_rcPadding.top);
+    rc.right -= (m_rcBorderSize.right + m_rcPadding.right);
+    rc.bottom -= (m_rcBorderSize.bottom + m_rcPadding.bottom);
 
     RECT rcScrollView = rc;
 
@@ -2179,15 +2173,15 @@ void CRichEditUI::SetPos(RECT rc, bool bNeedInvalidate)
     if (m_pTwh != NULL)
     {
         RECT rcScrollTextView = rcScrollView;
-        rcScrollTextView.left += m_rcTextPadding.left;
-        rcScrollTextView.right -= m_rcTextPadding.right;
-        rcScrollTextView.top += m_rcTextPadding.top;
-        rcScrollTextView.bottom -= m_rcTextPadding.bottom;
+        // rcScrollTextView.left += m_rcPadding.left;
+        // rcScrollTextView.right -= m_rcPadding.right;
+        // rcScrollTextView.top += m_rcPadding.top;
+        // rcScrollTextView.bottom -= m_rcPadding.bottom;
         RECT rcText = rc;
-        rcText.left += m_rcTextPadding.left;
-        rcText.right -= m_rcTextPadding.right;
-        rcText.top += m_rcTextPadding.top;
-        rcText.bottom -= m_rcTextPadding.bottom;
+        // rcText.left += m_rcPadding.left;
+        // rcText.right -= m_rcPadding.right;
+        // rcText.top += m_rcPadding.top;
+        // rcText.bottom -= m_rcPadding.bottom;
         m_pTwh->SetClientRect(&rcScrollTextView);
 
         if (bVScrollBarVisiable && (!m_pVerticalScrollBar->IsVisible() || m_bVScrollBarFixing))
@@ -2273,10 +2267,10 @@ void CRichEditUI::Move(SIZE szOffset, bool bNeedInvalidate)
     if (m_pTwh != NULL)
     {
         RECT rc = m_rcItem;
-        rc.left += m_rcInset.left;
-        rc.top += m_rcInset.top;
-        rc.right -= m_rcInset.right;
-        rc.bottom -= m_rcInset.bottom;
+        rc.left += (m_rcBorderSize.left + m_rcPadding.left);
+        rc.top += (m_rcBorderSize.top + m_rcPadding.top);
+        rc.right -= (m_rcBorderSize.right + m_rcPadding.right);
+        rc.bottom -= (m_rcBorderSize.bottom + m_rcPadding.bottom);
 
         if (m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible()) { rc.right -= m_pVerticalScrollBar->GetFixedWidth(); }
 
@@ -2363,10 +2357,10 @@ bool CRichEditUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl
     if (m_items.GetSize() > 0)
     {
         RECT rc = m_rcItem;
-        rc.left += m_rcInset.left;
-        rc.top += m_rcInset.top;
-        rc.right -= m_rcInset.right;
-        rc.bottom -= m_rcInset.bottom;
+        rc.left += (m_rcBorderSize.left + m_rcPadding.left);
+        rc.top += (m_rcBorderSize.top + m_rcPadding.top);
+        rc.right -= (m_rcBorderSize.right + m_rcPadding.right);
+        rc.bottom -= (m_rcBorderSize.bottom + m_rcPadding.bottom);
 
         if (m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible()) { rc.right -= m_pVerticalScrollBar->GetFixedWidth(); }
 
@@ -2553,10 +2547,10 @@ void CRichEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         DWORD clr = ParseColor(pstrValue);
         SetTextColor(clr);
     }
-    else if (_tcscmp(pstrName, _T("textpadding")) == 0)
+    else if (_tcscmp(pstrName, _T("textpadding")) == 0 || _tcscmp(pstrName, _T("padding")) == 0)
     {
         RECT rt = ParseRect(pstrValue);
-        SetTextPadding(rt);
+        SetPadding(rt);
     }
     else if (_tcscmp(pstrName, _T("tiptext")) == 0) { SetTipText(pstrValue); }  // 2019-01-10 zhuyadong 不做任何处理
     else if (_tcscmp(pstrName, _T("tipcolor")) == 0)

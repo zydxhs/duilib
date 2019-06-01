@@ -660,10 +660,10 @@ void CButtonUI::PaintText(HDC hDC)
     if (m_sText.IsEmpty()) { return; }
 
     RECT rc = m_rcItem;
-    rc.left += m_rcTextPadding.left;
-    rc.right -= m_rcTextPadding.right;
-    rc.top += m_rcTextPadding.top;
-    rc.bottom -= m_rcTextPadding.bottom;
+    rc.left += (m_rcBorderSize.left + m_rcPadding.left);
+    rc.right -= (m_rcBorderSize.right + m_rcPadding.right);
+    rc.top += (m_rcBorderSize.top + m_rcPadding.top);
+    rc.bottom -= (m_rcBorderSize.bottom + m_rcPadding.bottom);
 
     if (GetEnabledEffect())
     {

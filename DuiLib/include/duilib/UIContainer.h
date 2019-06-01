@@ -56,8 +56,7 @@ public:
     virtual bool IsEnabled() const;
     virtual void SetEnabled(bool bEnable = true);
 
-    virtual RECT GetInset() const;
-    virtual void SetInset(RECT rcInset); // 设置内边距，相当于设置客户区
+    virtual void SetPadding(RECT rcPadding); // 设置内边距，相当于设置客户区
     virtual int GetChildMargin() const;
     virtual void SetChildMargin(int iMargin);
     virtual UINT GetChildAlign() const;
@@ -75,7 +74,7 @@ public:
 
     virtual void ReloadText(void);
 
-    RECT GetClientPos() const;      // 返回客户区域（除去scrollbar和inset/padding）
+    RECT GetClientPos() const;      // 返回客户区域（除去scrollbar,border和inset/padding）
     void SetPos(RECT rc, bool bNeedInvalidate = true);
     void Move(SIZE szOffset, bool bNeedInvalidate = true);
     bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl);
@@ -127,8 +126,7 @@ protected:
 
 protected:
     CDuiPtrArray m_items;
-    RECT m_rcInset;         // 内边距
-    int m_iChildMargin;     // 子控件外边距
+    int m_iChildMargin;     // 子控件间隔
     UINT m_iChildAlign;     // 子控件水平对齐方式
     UINT m_iChildVAlign;    // 子控件垂直对齐方式
     bool m_bAutoDestroy;    // 自动销毁子控件

@@ -67,7 +67,7 @@ void CHotKeyWnd::Init(CHotKeyUI *pOwner)
 RECT CHotKeyWnd::CalPos()
 {
     CDuiRect rcPos = m_pOwner->GetPos();
-    RECT rcInset = m_pOwner->GetTextPadding();
+    RECT rcInset = m_pOwner->GetPadding();
     rcPos.left += rcInset.left;
     rcPos.top += rcInset.top;
     rcPos.right -= rcInset.right;
@@ -293,7 +293,7 @@ CDuiString CHotKeyWnd::GetHotKeyName()
 //////////////////////////////////////////////////////////////////////////
 CHotKeyUI::CHotKeyUI() : m_pWindow(NULL), m_wVirtualKeyCode(0), m_wModifiers(0), m_uButtonState(0)
 {
-    SetTextPadding(CDuiRect(4, 3, 4, 3));
+    SetPadding(CDuiRect(4, 3, 4, 3));
     SetBkColor(0xFFFFFFFF);
 }
 

@@ -48,8 +48,7 @@ public:
 
     bool GetShowText() const;
     void SetShowText(bool flag);
-    RECT GetTextPadding() const;
-    void SetTextPadding(RECT rc);
+    void SetPadding(RECT rc);
     LPCTSTR GetNormalImage() const;
     void SetNormalImage(LPCTSTR pStrImage);
     LPCTSTR GetHotImage() const;
@@ -68,8 +67,8 @@ public:
     void SetItemFont(int index);
     UINT GetItemTextStyle();
     void SetItemTextStyle(UINT uStyle);
-    RECT GetItemTextPadding() const;
-    void SetItemTextPadding(RECT rc);
+    RECT GetItemPadding() const;
+    void SetItemPadding(RECT rc);
     DWORD GetItemTextColor() const;
     void SetItemTextColor(DWORD dwTextColor);
     DWORD GetItemBkColor() const;
@@ -124,21 +123,20 @@ protected:
     void SendDropUpNty();   // 2018-08-21 zhuyadong 下拉框收起通知
 
 protected:
-    CComboWnd *m_pWindow;
+    CComboWnd  *m_pWindow;
 
-    int m_iCurSel;
-    bool m_bShowText;
-    bool m_bSelectCloseFlag;
-    RECT m_rcTextPadding;
-    CDuiString m_sDropBoxAttributes;
-    SIZE m_szDropBox;
-    UINT m_uButtonState;
+    int         m_iCurSel;
+    bool        m_bShowText;
+    bool        m_bSelectCloseFlag;
+    CDuiString  m_sDropBoxAttributes;
+    SIZE        m_szDropBox;
+    UINT        m_uButtonState;
 
-    TDrawInfo m_diNormal;
-    TDrawInfo m_diHot;
-    TDrawInfo m_diPushed;
-    TDrawInfo m_diFocused;
-    TDrawInfo m_diDisabled;
+    TDrawInfo   m_diNormal;
+    TDrawInfo   m_diHot;
+    TDrawInfo   m_diPushed;
+    TDrawInfo   m_diFocused;
+    TDrawInfo   m_diDisabled;
 
     TListInfoUI m_ListInfo;
 };

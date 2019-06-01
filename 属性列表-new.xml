@@ -97,6 +97,8 @@
             <Attribute name="name" default="" type="STRING" comment="控件名字，同一窗口内必须唯一，如(testbtn)"/>
             <Attribute name="pos" default="0,0,0,0" type="RECT" comment="位置，如果为float控件则指定位置和大小，否则只指定大小,如(0,0,100,100)"/>
             <Attribute name="margin" default="0,0,0,0" type="RECT" comment="外边距,如(2,2,2,2)。采用 IE 的盒子模型，控件宽/高包含边框+padding+content" />
+            <Attribute name="inset" default="0,0,0,0" type="RECT" comment="内边距,如(2,2,2,2)，已废弃，推荐使用padding" />
+            <Attribute name="padding" default="0,0,0,0" type="RECT" comment="内边距,如(2,2,2,2)，用于取代inset" />
             <Attribute name="bkcolor" default="#00000000" type="DWORD" comment="背景颜色,如(#FFFF0000),使用bkcolor1取代"/>
             <Attribute name="bkcolor2" default="#00000000" type="DWORD" comment="背景渐变色2,和bkcolor配合使用,如(#FFFFFF00)"/>
             <Attribute name="bkcolor3" default="#00000000" type="DWORD" comment="背景渐变色3,和bkcolor、bkcolor2配合使用,如(#FFFF00FF)"/>
@@ -142,8 +144,6 @@
             <Attribute name="triggerhide" default="" type="BYTE,WORD,BOOL,BOOL" comment="控件隐藏特效。"/>
         </Control>
         <Container parent="Control" notifies="setfocus killfocus timer menu windowinit(root) dblclick">
-            <Attribute name="inset" default="0,0,0,0" type="RECT" comment="内边距,如(2,2,2,2)，推荐使用padding" />
-            <Attribute name="padding" default="0,0,0,0" type="RECT" comment="内边距,如(2,2,2,2)，用于取代inset" />
             <Attribute name="mousechild" default="true" type="BOOL" comment="本控件的子控件是否可以响应用户操作,如(true)"/>
             <Attribute name="vscrollbar" default="false" type="BOOL" comment="是否使用竖向滚动条,如(true)"/>
             <Attribute name="vscrollbarstyle" default="" type="STRING" comment="垂直滚动条样式"/>
@@ -203,7 +203,6 @@
             <Attribute name="autonavi" default="false" type="BOOL" comment="是否打开默认首页" />
         </WebBrowser>
         <Combo parent="Container" notifies="setfocus killfocus timer menu dropdown itemselect windowinit(root) dblclick">
-            <Attribute name="textpadding" default="0,0,0,0" type="RECT" comment="文字显示的边距,如(2,2,2,2)"/>
             <Attribute name="showtext" default="true" type="BOOL" comment="是否显示文本"/>
             <Attribute name="normalimage" default="" type="STRING" comment="普通状态图片"/>
             <Attribute name="hotimage" default="" type="STRING" comment="鼠标悬浮的状态图片"/>
@@ -216,7 +215,8 @@
             <Attribute name="itemfont" default="-1" type="INT" comment="item的字体id,如(0)"/>
             <Attribute name="itemalign" default="center" type="STRING" comment="item对齐方式,取值left、right、center，如(center)"/>
             <Attribute name="itemendellipsis" default="false" type="BOOL" comment="item句末显示不全是否使用...代替,如(true)"/>
-            <Attribute name="itemtextpadding" default="0,0,0,0" type="RECT" comment="item文字显示的边距,如(2,2,2,2)"/>
+            <Attribute name="itemtextpadding" default="0,0,0,0" type="RECT" comment="废弃，请用itempadding。item文字显示的边距,如(2,2,2,2)"/>
+            <Attribute name="itempadding" default="0,0,0,0" type="RECT" comment="item文字显示的边距,如(2,2,2,2)，用于取代itemtextpadding"/>
             <Attribute name="itemtextcolor" default="#00000000" type="DWORD" comment="item字体颜色，0表示使用默认字体颜色"/>
             <Attribute name="itembkcolor" default="#00000000" type="DWORD" comment="item背景颜色"/>
             <Attribute name="itembkimage" default="" type="STRING" comment="item背景图片"/>
@@ -243,7 +243,6 @@
             <Attribute name="font" default="-1" type="INT" comment="字体id,如(0)"/>
             <Attribute name="textcolor" default="#00000000" type="DWORD" comment="字体颜色，0表示使用默认字体颜色,如(#FFFF0000)"/>
             <Attribute name="disabledtextcolor" default="#00000000" type="DWORD" comment="disabled字体颜色，0表示使用默认disabled字体颜色,如(#FFFF0000)"/>
-            <Attribute name="textpadding" default="0,0,0,0" type="RECT" comment="文字显示的边距,如(2,2,2,2)"/>
             <Attribute name="multiline" default="true" type="BOOL" comment="是否使用多行,如(true)"/>
             <Attribute name="showhtml" default="false" type="BOOL" comment="是否使用类html富文本绘制,如(false)"/>
             <Attribute name="autowidth" default="false" type="BOOL" comment="是否自动计算宽度"/>
@@ -413,7 +412,8 @@
             <Attribute name="itemvalign" default="center" type="STRING" comment="item纵向对齐方式,取值top、center、bottom"/>
             <Attribute name="itemendellipsis" default="false" type="BOOL" comment="item句末显示不全是否使用...代替,如(true)"/>
             <Attribute name="itemmultiline" default="true" type="BOOL" comment="是否支持多行文本,如(true)"/>
-            <Attribute name="itemtextpadding" default="0,0,0,0" type="RECT" comment="item文字显示的边距,如(2,2,2,2)"/>
+            <Attribute name="itemtextpadding" default="0,0,0,0" type="RECT" comment="废弃，请用itempadding。item文字显示的边距,如(2,2,2,2)"/>
+            <Attribute name="itempadding" default="0,0,0,0" type="RECT" comment="item文字显示的边距,如(2,2,2,2)，用于取代itemtextpadding"/>
             <Attribute name="itemtextcolor" default="#00000000" type="DWORD" comment="item字体颜色，0表示使用默认字体颜色"/>
             <Attribute name="itembkcolor" default="#00000000" type="DWORD" comment="item背景颜色"/>
             <Attribute name="itembkimage" default="" type="STRING" comment="item背景图片"/>
@@ -439,7 +439,7 @@
         </List>
         <ListHeader parent="HorizontalLayout" notifies="setfocus killfocus timer windowinit(root) dblclick">
         </ListHeader>
-        <ListHeaderItem parent="Control" notifies="setfocus killfocus timer headerclick windowinit(root)">
+        <ListHeaderItem parent="Container" notifies="setfocus killfocus timer headerclick windowinit(root)">
             <Attribute name="dragable" default="true" type="BOOL" comment="是否可拖动改变大小,如(true)"/>
             <Attribute name="align" default="left" type="STRING" comment="文字对齐方式,取值left、right、cente，如(center)"/>
             <Attribute name="valign" default="center" type="STRING" comment="item纵向对齐方式,取值top、center、bottom"/>
@@ -447,7 +447,6 @@
             <Attribute name="multiline" default="true" type="BOOL" comment="是否使用多行,如(true)"/>
             <Attribute name="font" default="-1" type="INT" comment="字体id,如(0)"/>
             <Attribute name="textcolor" default="#00000000" type="DWORD" comment="字体颜色，0表示使用默认字体颜色,如(#FFFF0000)"/>
-            <Attribute name="textpadding" default="2,0,2,0" type="RECT" comment="文字显示的边距,如(2,2,2,2)"/>
             <Attribute name="showhtml" default="false" type="BOOL" comment="是否使用类html富文本绘制,如(false)"/>
             <Attribute name="normalimage" default="" type="STRING" comment="普通状态图片"/>
             <Attribute name="hotimage" default="" type="STRING" comment="鼠标悬浮的状态图片"/>
@@ -495,7 +494,6 @@
             <Attribute name="align" default="left" type="STRING" comment="文字对齐方式,取值left、right、cente，如(center)"/>
             <Attribute name="font" default="-1" type="INT" comment="字体id,如(0)"/>
             <Attribute name="textcolor" default="#00000000" type="DWORD" comment="字体颜色，0表示使用默认字体颜色，如(#FFFF0000)"/>
-            <Attribute name="textpadding" default="0,0,0,0" type="RECT" comment="文字显示的边距,如(2,2,2,2)"/>
             <!-- 扩展属性 -->
             <Attribute name="tiptext" default="" type="STRING" comment="默认提示信息,内容不空时消失"/>
             <Attribute name="tipcolor" default="#FFBAC0C5" type="DWORD" comment="默认提示信息的颜色,如(#FFBAC0C5)"/>
@@ -542,8 +540,8 @@
             <Attribute name="pwd" default"" type="STRING" comment="待检测强度的密码" />
         </PwdCheck>
         <Menu parent="List" notifies="setfocus killfocus timer menu itemselect windowinit(root)">
-            <!-- itemtextpadding 属性标识菜单文本的位置，包含菜单项左/右侧边距-->
-            <!-- 菜单项左侧图标默认占用 26 像素，菜单项左侧下级菜单图标默认占用 20 像素。-->
+            <!-- itempadding(itemtextpadding) 属性标识菜单文本的位置，包含菜单项左/右侧边距-->
+            <!-- 菜单项左侧图标默认占用 26 像素，菜单项右侧下级菜单图标默认占用 20 像素。-->
             <!-- 为了让下级菜单也能拥有同样的外观，Menu标签的属性要通过Default来定义。-->
         </Menu>
         <MenuElement parent="ListContainerElement" notifies="click valuechanged WM_MENUCLICK">

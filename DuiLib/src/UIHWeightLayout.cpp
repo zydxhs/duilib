@@ -49,10 +49,10 @@ void CHWeightLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
 
     // Adjust for inset
     // 2019-05-30 zhuyadong 排除边框占用的空间
-    rc.left += (m_rcBorderSize.left + m_rcInset.left);
-    rc.top += (m_rcBorderSize.top + m_rcInset.top);
-    rc.right -= (m_rcBorderSize.right + m_rcInset.right);
-    rc.bottom -= (m_rcBorderSize.bottom + m_rcInset.bottom);
+    rc.left += (m_rcBorderSize.left + m_rcPadding.left);
+    rc.top += (m_rcBorderSize.top + m_rcPadding.top);
+    rc.right -= (m_rcBorderSize.right + m_rcPadding.right);
+    rc.bottom -= (m_rcBorderSize.bottom + m_rcPadding.bottom);
 
     if (m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible()) { rc.right -= m_pVerticalScrollBar->GetFixedWidth(); }
 

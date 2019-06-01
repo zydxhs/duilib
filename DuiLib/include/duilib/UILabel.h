@@ -27,8 +27,7 @@ public:
     DWORD GetDisabledTextColor() const;
     void SetFont(int index);
     int GetFont() const;
-    RECT GetTextPadding() const;
-    void SetTextPadding(RECT rc);
+    void SetPadding(RECT rc);
     bool IsShowHtml();
     void SetShowHtml(bool bShowHtml = true);
 
@@ -79,7 +78,6 @@ protected:
     DWORD   m_dwDisabledTextColor;
     int     m_iFont;
     UINT    m_uTextStyle;
-    RECT    m_rcTextPadding;
     bool    m_bShowHtml;
     SIZE    m_szAvailableLast;
     SIZE    m_cxyFixedLast;

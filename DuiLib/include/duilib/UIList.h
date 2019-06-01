@@ -22,7 +22,7 @@ typedef struct tagTListInfoUI
     UINT      uFixedHeight;
     int       nFont;
     UINT      uTextStyle;
-    RECT      rcTextPadding;
+    RECT      rcPadding;
     DWORD     dwTextColor;
     DWORD     dwBkColor;
     TDrawInfo diBk;
@@ -159,8 +159,8 @@ public:
     void SetItemFont(int index);
     UINT GetItemTextStyle();
     void SetItemTextStyle(UINT uStyle);
-    RECT GetItemTextPadding() const;
-    void SetItemTextPadding(RECT rc);
+    RECT GetItemPadding() const;
+    void SetItemPadding(RECT rc);
     DWORD GetItemTextColor() const;
     void SetItemTextColor(DWORD dwTextColor);
     DWORD GetItemBkColor() const;
@@ -316,8 +316,7 @@ public:
     void SetTextColor(DWORD dwTextColor);
     DWORD GetSepColor() const;
     void SetSepColor(DWORD dwSepColor);
-    void SetTextPadding(RECT rc);
-    RECT GetTextPadding() const;
+    void SetPadding(RECT rc);
     void SetFont(int index);
     bool IsShowHtml();
     void SetShowHtml(bool bShowHtml = true);
@@ -358,7 +357,6 @@ protected:
     DWORD     m_dwSepColor;
     int       m_iFont;
     UINT      m_uTextStyle;
-    RECT      m_rcTextPadding;
     TDrawInfo m_diNormal;
     TDrawInfo m_diHot;
     TDrawInfo m_diPushed;

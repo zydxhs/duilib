@@ -733,7 +733,7 @@ bool CWndImplBase::Relayout(void *pParam)
     if (NULL == pWndChild) { return false; }
 
     CDuiRect rt = m_pCtrlPlaceHolder->GetPos();
-    CDuiRect rtInset = m_pCtrlPlaceHolder->GetInset();
+    CDuiRect rtInset = m_pCtrlPlaceHolder->GetPadding();
     ::SetWindowPos(pWndChild->GetHWND(), NULL, rt.left + rtInset.left, rt.top + rtInset.top,
                    rt.GetWidth() - rtInset.left - rtInset.right, rt.GetHeight() - rtInset.top - rtInset.bottom,
                    SWP_SHOWWINDOW);

@@ -179,7 +179,7 @@ void CMenuWnd::ResizeMenu(void)
 #endif
     SIZE szAvailable = { rcWork.right - rcWork.left, rcWork.bottom - rcWork.top };
     szAvailable = pRoot->EstimateSize(szAvailable);
-    RECT rtInset = GetMenuUI()->GetInset();
+    RECT rtInset = GetMenuUI()->GetPadding();
     szAvailable.cx += (rtInset.left + rtInset.right);
     szAvailable.cy += (rtInset.top + rtInset.bottom);
     m_pm.SetInitSize(szAvailable.cx, szAvailable.cy);
@@ -284,7 +284,7 @@ void CMenuWnd::ResizeSubMenu(void)
         }
     }
 
-    RECT rtInset = GetMenuUI()->GetInset();
+    RECT rtInset = GetMenuUI()->GetPadding();
     cxFixed += (rtInset.left + rtInset.right);
     cyFixed += (rtInset.top + rtInset.bottom);
 
@@ -740,22 +740,26 @@ CMenuElementUI *CMenuUI::FindMenuItem(LPCTSTR pstrName)
 
 SIZE CMenuUI::EstimateSize(SIZE szAvailable)
 {
-    int cxFixed = 0;
-    int cyFixed = 0;
+    int cxFixed = m_rcBorderSize.left + m_rcBorderSize.right + m_rcPadding.left + m_rcPadding.right;
+    int cyFixed = m_rcBorderSize.top + m_rcBorderSize.bottom + m_rcPadding.top + m_rcPadding.bottom;
+    // 2019-06-01 zhuyadong 修复菜单宽度计算不正确的问题
+    int nIconWidth = 0, nExpandWidth = 0;
 
     for (int it = 0; it < GetCount(); it++)
     {
-        CControlUI *pControl = static_cast<CControlUI *>(GetItemAt(it));
+        CMenuElementUI *pControl = dynamic_cast<CMenuElementUI *>(GetItemAt(it));
 
-        if (!pControl->IsVisible()) { continue; }
+        if (!pControl || !pControl->IsVisible()) { continue; }
 
         SIZE sz = pControl->EstimateSize(szAvailable);
         cyFixed += sz.cy;
+        nIconWidth = (pControl->IsCheckItem() ? pControl->GetIconWidth() : nIconWidth);
+        nExpandWidth = (pControl->IsExpandable() ? pControl->GetExpandWidth() : nExpandWidth);
 
         if (cxFixed < sz.cx) { cxFixed = sz.cx; }
     }
 
-    return CDuiSize(cxFixed, cyFixed);
+    return CDuiSize(cxFixed + nIconWidth + nExpandWidth, cyFixed);
 }
 
 void CMenuUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
@@ -834,10 +838,10 @@ bool CMenuElementUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopCont
     if (m_items.GetSize() > 0)
     {
         RECT rc = m_rcItem;
-        rc.left += m_rcInset.left;
-        rc.top += m_rcInset.top;
-        rc.right -= m_rcInset.right;
-        rc.bottom -= m_rcInset.bottom;
+        rc.left += (m_rcBorderSize.left + m_rcPadding.left);
+        rc.top += (m_rcBorderSize.top + m_rcPadding.top);
+        rc.right -= (m_rcBorderSize.right + m_rcPadding.right);
+        rc.bottom -= (m_rcBorderSize.bottom + m_rcPadding.bottom);
 
         if (m_pVerticalScrollBar && m_pVerticalScrollBar->IsVisible()) { rc.right -= m_pVerticalScrollBar->GetFixedWidth(); }
 
@@ -947,30 +951,12 @@ SIZE CMenuElementUI::EstimateSize(SIZE szAvailable)
         if (cXY.cx < sz.cx) { cXY.cx = sz.cx; }
     }
 
-    if (cXY.cy == 0)
+    if (cXY.cy == 0 || cXY.cy == 0)
     {
         TListInfoUI *pInfo = m_pOwner->GetListInfo();
 
         DWORD iTextColor = pInfo->dwTextColor;
-
-        if ((m_uButtonState & UISTATE_HOT) != 0)
-        {
-            iTextColor = pInfo->dwHotTextColor;
-        }
-
-        if (IsChecked())
-        {
-            iTextColor = pInfo->dwSelectedTextColor;
-        }
-
-        if (!IsEnabled())
-        {
-            iTextColor = pInfo->dwDisabledTextColor;
-        }
-
         RECT rcText = { 0, 0, std::max<int>(szAvailable.cx, m_cxyFixed.cx), MAX_CTRL_WIDTH };
-        rcText.left += pInfo->rcTextPadding.left;
-        rcText.right -= pInfo->rcTextPadding.right;
 
         if (pInfo->bShowHtml)
         {
@@ -984,8 +970,8 @@ SIZE CMenuElementUI::EstimateSize(SIZE szAvailable)
                                     pInfo->nFont, DT_CALCRECT | pInfo->uTextStyle & ~DT_RIGHT & ~DT_CENTER);
         }
 
-        cXY.cy = rcText.bottom - rcText.top + pInfo->rcTextPadding.top + pInfo->rcTextPadding.bottom;
-        cXY.cx = rcText.right - rcText.left + pInfo->rcTextPadding.left + pInfo->rcTextPadding.right + 20;
+        cXY.cy = rcText.bottom - rcText.top + pInfo->rcPadding.top + pInfo->rcPadding.bottom;
+        cXY.cx = rcText.right - rcText.left + pInfo->rcPadding.left + pInfo->rcPadding.right;
     }
 
     if (m_cxyFixed.cy != 0) { cXY.cy = m_cxyFixed.cy; }
@@ -1124,10 +1110,10 @@ void CMenuElementUI::DrawItemText(HDC hDC, const RECT &rcItem)
     }
 
     RECT rcText = rcItem;
-    rcText.left += pInfo->rcTextPadding.left;
-    rcText.right -= pInfo->rcTextPadding.right;
-    rcText.top += pInfo->rcTextPadding.top;
-    rcText.bottom -= pInfo->rcTextPadding.bottom;
+    rcText.left += pInfo->rcPadding.left;
+    rcText.right -= pInfo->rcPadding.right;
+    rcText.top += pInfo->rcPadding.top;
+    rcText.bottom -= pInfo->rcPadding.bottom;
 
     if (pInfo->bShowHtml)
     {

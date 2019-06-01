@@ -75,8 +75,10 @@ public:
     // 位置相关
     virtual RECT GetMargin() const;
     virtual void SetMargin(RECT rcMargin);      // 设置外边距，由上层窗口绘制
-#define GetPadding GetMargin
-#define SetPadding SetMargin
+    virtual RECT GetPadding() const;
+    virtual void SetPadding(RECT rcPadding);    // 内边距
+#define GetInset GetPadding
+#define SetInset SetPadding
     virtual const RECT &GetPos() const;
     virtual RECT GetRelativePos() const; // 相对(父控件)位置
     virtual RECT GetClientPos() const;   // 返回控件矩形区域
@@ -252,6 +254,7 @@ protected:
     BYTE m_byEffectTrigger; // 正在播放的动画的触发器ID
     RECT m_rcItem;          // 控件包含边框的矩形
     RECT m_rcMargin;        // 外边距
+    RECT m_rcPadding;       // 内边距
     SIZE m_cXY;
     SIZE m_cxyFixed;
     SIZE m_cxyMin;

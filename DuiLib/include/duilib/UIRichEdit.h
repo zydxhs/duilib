@@ -97,8 +97,7 @@ public:
     long StreamIn(int nFormat, EDITSTREAM &es);
     long StreamOut(int nFormat, EDITSTREAM &es);
 
-    RECT GetTextPadding() const;
-    void SetTextPadding(RECT rc);
+    void SetPadding(RECT rc);
 
     //2018-04-15 zhuyadong 添加提示文字及其颜色
     void SetTipText(LPCTSTR pstrTip);
@@ -156,7 +155,6 @@ protected:
     LONG m_lTwhStyle;
     bool m_bDrawCaret;
     bool m_bInited;
-    RECT    m_rcTextPadding;
     // 2018-04-15 zhuyadong 添加提示文字及其颜色
     CDuiString m_sTipText;
     CDuiString m_sTipTextOrig;
