@@ -169,76 +169,73 @@ void CMenuWnd::ResizeMenu(void)
 {
     CControlUI *pRoot = m_pm.GetRoot();
 #if defined(WIN32) && !defined(UNDER_CE)
-    MONITORINFO oMonitor = { };
+    MONITORINFOEX oMonitor = { };
     oMonitor.cbSize = sizeof(oMonitor);
-    ::GetMonitorInfo(::MonitorFromWindow(*this, MONITOR_DEFAULTTOPRIMARY), &oMonitor);
-    CDuiRect rcWork = oMonitor.rcWork;
+    ::GetMonitorInfo(::MonitorFromPoint(m_ptBase, MONITOR_DEFAULTTOPRIMARY), &oMonitor);
+    CDuiRect rcWork = oMonitor.rcMonitor;
 #else
     CDuiRect rcWork;
-    GetWindowRect(m_pOwner->GetManager()->GetPaintWindow(), &rcWork);
+    HWND hWndOwner = GetGlobalMenuSubject().GetManager()->GetPaintWindow();
+    GetWindowRect(hWndOwner, &rcWork);
 #endif
     SIZE szAvailable = { rcWork.right - rcWork.left, rcWork.bottom - rcWork.top };
     szAvailable = pRoot->EstimateSize(szAvailable);
-    RECT rtInset = GetMenuUI()->GetPadding();
-    szAvailable.cx += (rtInset.left + rtInset.right);
-    szAvailable.cy += (rtInset.top + rtInset.bottom);
     m_pm.SetInitSize(szAvailable.cx, szAvailable.cy);
-
-    SIZE szInit = m_pm.GetInitSize();
     CDuiRect rc;
-    CDuiPoint point = m_ptBase;
-    rc.left = point.x;
-    rc.top = point.y;
-    rc.right = rc.left + szInit.cx;
-    rc.bottom = rc.top + szInit.cy;
-
-    // 屏幕宽高
-    int  cx = GetSystemMetrics(SM_CXFULLSCREEN);
-    int  cy = GetSystemMetrics(SM_CYFULLSCREEN);
 
     if (m_dwAlign & EMENU_ALIGN_LEFT)
     {
-        if (point.x > szInit.cx)
+        if (m_ptBase.x - szAvailable.cx > rcWork.left)
         {
-            rc.right = point.x;
-            rc.left = rc.right - szInit.cx;
+            rc.right = m_ptBase.x;
+            rc.left = rc.right - szAvailable.cx;
         }
         else
         {
-            rc.left = 0;
-            rc.right = szInit.cx;
+            rc.left = m_ptBase.x;
+            rc.right = rc.left + szAvailable.cx;
         }
     }
 
     if (m_dwAlign & EMENU_ALIGN_TOP)
     {
-        if (point.y > szInit.cy)
+        if (m_ptBase.y - szAvailable.cy < rcWork.top)
         {
-            rc.bottom = point.y;
-            rc.top = rc.bottom - szInit.cy;
+            rc.top = m_ptBase.y;
+            rc.bottom = rc.top + szAvailable.cy;
         }
         else
         {
-            rc.top = 0;
-            rc.bottom = szInit.cy;
+            rc.bottom = m_ptBase.y;
+            rc.top = rc.bottom - szAvailable.cy;
         }
     }
 
     if (m_dwAlign & EMENU_ALIGN_RIGHT)
     {
-        if (rc.right > cx)
+        if (m_ptBase.x + szAvailable.cx > rcWork.right)
         {
-            rc.left = cx - szInit.cx;
-            rc.right = cx;
+            rc.right = m_ptBase.x;
+            rc.left = rc.right - szAvailable.cx;
+        }
+        else
+        {
+            rc.left = m_ptBase.x;
+            rc.right = rc.left + szAvailable.cx;
         }
     }
 
     if (m_dwAlign & EMENU_ALIGN_BOTTOM)
     {
-        if (rc.bottom > cy)
+        if (m_ptBase.y + szAvailable.cy > rcWork.bottom)
         {
-            rc.top = cy - szInit.cy;
-            rc.bottom = cy;
+            rc.bottom = m_ptBase.y;
+            rc.top = rc.bottom - szAvailable.cy;
+        }
+        else
+        {
+            rc.top = m_ptBase.y;
+            rc.bottom = rc.top + szAvailable.cy;
         }
     }
 
@@ -259,13 +256,14 @@ void CMenuWnd::ResizeSubMenu(void)
     int cyFixed = 0;
 
 #if defined(WIN32) && !defined(UNDER_CE)
-    MONITORINFO oMonitor = { };
+    MONITORINFOEX oMonitor = { };
     oMonitor.cbSize = sizeof(oMonitor);
-    ::GetMonitorInfo(::MonitorFromWindow(*this, MONITOR_DEFAULTTOPRIMARY), &oMonitor);
-    CDuiRect rcWork = oMonitor.rcWork;
+    ::GetMonitorInfo(::MonitorFromPoint(m_ptBase, MONITOR_DEFAULTTOPRIMARY), &oMonitor);
+    CDuiRect rcWork = oMonitor.rcMonitor;
 #else
     CDuiRect rcWork;
-    GetWindowRect(m_pOwner->GetManager()->GetPaintWindow(), &rcWork);
+    HWND hWndOwner = GetGlobalMenuSubject().GetManager()->GetPaintWindow();
+    GetWindowRect(hWndOwner, &rcWork);
 #endif
     SIZE szAvailable = { rcWork.right - rcWork.left, rcWork.bottom - rcWork.top };
 
@@ -740,8 +738,8 @@ CMenuElementUI *CMenuUI::FindMenuItem(LPCTSTR pstrName)
 
 SIZE CMenuUI::EstimateSize(SIZE szAvailable)
 {
-    int cxFixed = m_rcBorderSize.left + m_rcBorderSize.right + m_rcPadding.left + m_rcPadding.right;
-    int cyFixed = m_rcBorderSize.top + m_rcBorderSize.bottom + m_rcPadding.top + m_rcPadding.bottom;
+    int cxFixed = 0;
+    int cyFixed = 0;
     // 2019-06-01 zhuyadong 修复菜单宽度计算不正确的问题
     int nIconWidth = 0, nExpandWidth = 0;
 
@@ -759,6 +757,8 @@ SIZE CMenuUI::EstimateSize(SIZE szAvailable)
         if (cxFixed < sz.cx) { cxFixed = sz.cx; }
     }
 
+    cxFixed += (m_rcBorderSize.left + m_rcBorderSize.right + m_rcPadding.left + m_rcPadding.right);
+    cyFixed += (m_rcBorderSize.top + m_rcBorderSize.bottom + m_rcPadding.top + m_rcPadding.bottom);
     return CDuiSize(cxFixed + nIconWidth + nExpandWidth, cyFixed);
 }
 
