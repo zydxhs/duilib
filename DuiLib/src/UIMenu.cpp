@@ -283,9 +283,10 @@ void CMenuWnd::ResizeSubMenu(void)
         }
     }
 
+    RECT rtBorder = GetMenuUI()->GetBorderSize();
     RECT rtInset = GetMenuUI()->GetPadding();
-    cxFixed += (rtInset.left + rtInset.right);
-    cyFixed += (rtInset.top + rtInset.bottom);
+    cxFixed += (rtBorder.left + rtBorder.right + rtInset.left + rtInset.right);
+    cyFixed += (rtBorder.top + rtBorder.bottom + rtInset.top + rtInset.bottom);
 
     RECT rcWindow;
     GetWindowRect(m_pOwner->GetManager()->GetPaintWindow(), &rcWindow);
