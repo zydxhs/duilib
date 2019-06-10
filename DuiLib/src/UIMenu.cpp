@@ -1,6 +1,7 @@
 ﻿//2017-02-23 zhuyadong 添加菜单控件
 #include "stdafx.h"
 #include "UIShadow.h"
+#include <algorithm>
 
 namespace DuiLib {
 

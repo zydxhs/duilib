@@ -1,6 +1,7 @@
 ﻿#include "StdAfx.h"
 #include "gifinfo.h"
 #include "XUnzip.h"
+#include <algorithm>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"

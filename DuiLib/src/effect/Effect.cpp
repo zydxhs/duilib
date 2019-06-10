@@ -1,11 +1,12 @@
 #include "stdafx.h"
+#include <time.h>
+#include <algorithm>
 
 #include "Effect.h"
 #include "image_process.h"
 #include "graph_projection.h"
 #include "color_helper.h"
 #include "motion.h"
-#include <time.h>
 #pragma warning ( disable : 4244)
 
 

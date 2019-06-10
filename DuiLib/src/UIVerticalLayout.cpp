@@ -1,4 +1,5 @@
 ﻿#include "stdafx.h"
+#include <algorithm>
 
 namespace DuiLib {
 CVerticalLayoutUI::CVerticalLayoutUI() : m_iSepHeight(0), m_uButtonState(0), m_bImmMode(false)

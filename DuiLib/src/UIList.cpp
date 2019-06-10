@@ -1,4 +1,5 @@
 ﻿#include "StdAfx.h"
+#include <algorithm>
 
 namespace DuiLib {
 

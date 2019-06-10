@@ -1,4 +1,5 @@
 ﻿#include "stdafx.h"
+#include <algorithm>
 
 namespace DuiLib {
 CTabLayoutUI::CTabLayoutUI() : m_iCurSel(-1)

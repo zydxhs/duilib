@@ -46,8 +46,6 @@
 
 #include <olectl.h>
 #include <algorithm>
-#include <string>
-#include <set>
 
 #define LENGTHOF(x) (sizeof(x)/sizeof(*x))
 

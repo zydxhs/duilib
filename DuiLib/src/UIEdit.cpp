@@ -1,5 +1,6 @@
 ﻿#include "stdafx.h"
 #include "deelx.h"
+#include <set>
 
 namespace DuiLib {
 const TCHAR *const ALPHABET_LOWER = _T("abcdefghijklmnopqrstuvwxyz");
