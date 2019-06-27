@@ -1100,21 +1100,24 @@ void CEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         }
 
         // 黑白名单模式
-        nPos = str.Find(_T(','));
+        if (!str.IsEmpty())
+        {
+            nPos = str.Find(_T(','));
 
-        if (-1 != nPos)
-        {
-            m_bWiteList = ParseBool(str.Left(nPos).GetData());
-            str = str.Right(str.GetLength() - nPos - 1);
-        }
-        else
-        {
-            m_bWiteList = ParseBool(str.GetData());
-            str.Empty();
+            if (-1 != nPos)
+            {
+                m_bWiteList = ParseBool(str.Left(nPos).GetData());
+                str = str.Right(str.GetLength() - nPos - 1);
+            }
+            else
+            {
+                m_bWiteList = ParseBool(str.GetData());
+                str.Empty();
+            }
         }
 
         // 过滤字符集合
-        SetFilterCharSet(str);
+        if (!str.IsEmpty()) { SetFilterCharSet(str); }
     }
     // else if (_tcscmp(pstrName, _T("whitelist")) == 0)
     // {
