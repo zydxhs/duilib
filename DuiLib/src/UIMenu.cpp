@@ -1021,7 +1021,7 @@ void CMenuElementUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     {
         SetIconChecked(ParseString(pstrValue));
     }
-    else if (_tcscmp(pstrName, _T("checkitem")) == 0)
+    else if (_tcscmp(pstrName, _T("checkable")) == 0)
     {
         SetCheckItem(ParseBool(pstrValue));
     }

@@ -53,11 +53,8 @@
     <Xml Include="res\viewer.xml">
       <Filter>资源文件</Filter>
     </Xml>
-    <Xml Include="res\menu.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="res\xml2.bin">
+    <Xml Include="res\menu.xml">
       <Filter>资源文件</Filter>
-    </None>
+    </Xml>
   </ItemGroup>
 </Project>

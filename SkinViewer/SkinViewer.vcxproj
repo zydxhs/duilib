@@ -339,9 +339,6 @@
     <Xml Include="res\menu.xml" />
     <Xml Include="res\viewer.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="res\xml2.bin" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -432,8 +432,6 @@
             <Attribute name="itemhlinesize" default="" type="INT" comment="item水平分割线宽度"/>
             <Attribute name="itemhlinecolor" default="#FF3C3C3C" type="DWORD" comment="item水平分割线颜色"/>
             <Attribute name="itemshowhtml" default="false" type="BOOL" comment="item是否使用类html富文本绘制,如(false)"/>
-            <Attribute name="ischeckbox" default="false" type="BOOL" comment="是否支持第一列显示复选框。废弃"/>
-            <Attribute name="checkable" default="false" type="BOOL" comment="是否支持第一列显示复选框，取代 ischeckbox"/>
             <Attribute name="unselimage" default="" type="STRING" comment="未选中状态图片，支持 Image 中的 file,res,restype 属性"/>
             <Attribute name="selimage" default="" type="STRING" comment="选中状态图片，支持 Image 中的 file,res,restype 属性"/>
         </List>
@@ -458,6 +456,7 @@
             <Attribute name="sepimage" default="" type="STRING" comment="分隔符图片"/>
             <Attribute name="editable" default="false" type="BOOL" comment="是否支持可编辑,如(false)。双击显示编辑框。"/>
             <Attribute name="comboable" default="false" type="BOOL" comment="是否支持下拉框,如(false)。双击显示下拉框。"/>
+            <Attribute name="checkable" default="false" type="BOOL" comment="是否支持复选框"/>
         </ListHeaderItem>
         <ListElement parent="Control" notifies="setfocus killfocus timer headerclick windowinit(root)">
             <Attribute name="selected" default="false" type="BOOL" comment="是否选中"/>
@@ -550,7 +549,7 @@
             <Attribute name="iconwidth" default="26" type="INT" comment="菜单项左侧图标占用宽度"/>
             <Attribute name="iconnormal" default="" type="STRING" comment="菜单项正常状态的图片"/>
             <Attribute name="iconchecked" default="" type="STRING" comment="菜单项选中状态的图片"/>
-            <Attribute name="checkitem" default="false" type="BOOL" comment="是否有复选功能"/>
+            <Attribute name="checkable" default="false" type="BOOL" comment="是否有复选功能"/>
             <Attribute name="checked" default="false" type="BOOL" comment="是否被选中（前提是开启了复选功能，复选功能属性应该写在本属性的前面）"/>
             <Attribute name="expandwidth" default="20" type="INT" comment="菜单项右侧图标占用宽度"/>
             <Attribute name="expandicon" default="" type="STRING" comment="下级菜单小三角图片，仅当 expland 为 true 时有效"/>

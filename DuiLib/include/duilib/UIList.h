@@ -232,8 +232,8 @@ public:
 
     TDrawInfo &GetUnSelImage(void);
     TDrawInfo &GetSelImage(void);
-    void GetAllSelectedItem(CDuiValArray &arySelIdx);
-    void SetAllItemSelected(bool bSelect);
+    void GetAllSelectedItem(CDuiValArray &arySelIdx, int nColumn = 0);
+    void SetAllItemSelected(bool bSelect, int nColumn = 0);
     virtual void DoInit();
 
     void GetLastModifiedItem(int &nRow, int &nColumn);
@@ -247,8 +247,10 @@ public:
     virtual void HideCombo();
     CComboUI *GetComboUI();
 
+    int GetMouseColumn(POINT pt);                       // 返回鼠标所在的列
+
 protected:
-    bool OnFirstHeaderItemNotify(void *pParam);
+    bool OnHeaderCheckBoxNotify(void *pParam);
     bool OnEditNotify(void *pParam);
     bool OnComboNotify(void *pParam);
     bool OnScrollNotify(void *pParam);
@@ -345,12 +347,16 @@ public:
     void SetComboable(bool bComboable);
     bool IsComboable();
 
+    void SetCheckable(bool bCheckable);
+    bool IsCheckable();
+
 protected:
     POINT     m_ptLastMouse;
     bool      m_bDragable;
     bool      m_bShowHtml;
     bool      m_bEditable;      // 当前列是否支持编辑
     bool      m_bComboable;     // 当前列是否支持下拉框
+    bool      m_bCheckable;     // 当前列是否支持复选框
     UINT      m_uButtonState;
     int       m_iSepWidth;
     DWORD     m_dwTextColor;
@@ -405,6 +411,10 @@ public:
     // 返回鼠标所在列的矩形。
     // bList=true 表示相对当前列表的位置；false 表示相对当前窗体的位置
     RECT GetSubItemPos(int nColumn, bool bList = false);
+
+    virtual void SetCheckBoxState(bool bSelect, int nColumn = 0) { }
+    virtual bool GetCheckBoxState(int nColumn = 0) { return false; }
+
 protected:
     int m_iIndex;
     int m_iDrawIndex;
@@ -474,8 +484,8 @@ public:
 
     void DrawItemText(HDC hDC, const RECT &rcItem);
 
-    void SetCheckBoxState(bool bSelect);
-    bool GetCheckBoxState(void);
+    virtual void SetCheckBoxState(bool bSelect, int nColumn = 0);
+    virtual bool GetCheckBoxState(int nColumn = 0);
 protected:
     enum { MAX_LINK = 8 };
     int m_nLinks;
@@ -530,12 +540,9 @@ public:
 
     SIZE EstimateSize(SIZE szAvailable);
 
-    void SetCheckBoxState(bool bSelect);
-    bool GetCheckBoxState(void);
+    virtual void SetCheckBoxState(bool bSelect, int nColumn = 0);
+    virtual bool GetCheckBoxState(int nColumn = 0);
 
-protected:
-    bool GetCheckBoxState(CContainerUI *pRoot);
-    void SetCheckBoxState(CContainerUI *pRoot, bool bSelect);
 protected:
     int m_iIndex;
     int m_iDrawIndex;
@@ -559,6 +566,10 @@ public:
 
     void SetPos(RECT rc, bool bNeedInvalidate = true);
     bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl);
+
+    virtual void SetCheckBoxState(bool bSelect, int nColumn = 0);
+    virtual bool GetCheckBoxState(int nColumn = 0);
+
 };
 
 } // namespace DuiLib
