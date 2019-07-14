@@ -454,7 +454,7 @@ void wkeLoadFile(wkeWebView webView, CDuiString filename)
 #endif
     typedef void(*FUN)(wkeWebView, const wchar_t *);
     LOADFUN(wkeLoadFileW);
-    pfn ? pfn(webView, filename.GetData()) : pfn;
+    pfn ? pfn(webView, strFile.c_str()) : pfn;
 }
 
 CDuiString wkeGetURL(wkeWebView webView)
@@ -1069,7 +1069,7 @@ wkeString wkeCreateString(CDuiString str)
 #if defined(UNICODE) || defined(_UNICODE)
     std::wstring strStr = str.GetData();
 #else
-    std::wstring strStr = Ansi2WStr(str.c_str());
+    std::wstring strStr = Ansi2WStr(str.GetData());
 #endif
     typedef wkeString(*FUN)(const wchar_t *, size_t);
     LOADFUN(wkeCreateStringW);
@@ -1377,7 +1377,7 @@ void wkeNetSetMIMEType(wkeNetJob job, CDuiString type)
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strType = WStr2Utf8(type.GetData());
 #else
-    std::string strType = Ansi2Utf8(key.GetData());
+    std::string strType = Ansi2Utf8(type.GetData());
 #endif
     typedef void(*FUN)(wkeNetJob, const utf8 *);
     LOADFUN(wkeNetSetMIMEType);

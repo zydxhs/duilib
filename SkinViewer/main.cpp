@@ -3,6 +3,7 @@
 #include <string>
 #include "resource.h"
 #include "XUnzip.h"
+#include <io.h>
 
 using namespace DuiLib;
 using std::string;

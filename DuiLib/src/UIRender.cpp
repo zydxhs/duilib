@@ -191,7 +191,7 @@ PFunAlphaBlend GetAlphaBlend(void)
 }
 
 //////////////////////////////////////////////////////////////////////////
-// UI开发离不开GDI，然后要用传统的GDI函数来处理alpha通道通常是一个恶梦：
+// UI开发离不开GDI，然而要用传统的GDI函数来处理alpha通道通常是一个恶梦：
 // 虽然有AlphaBlend这个API可以做alpha混合，但是前提必须是操作的DC中的位图有alpha通道的数据，
 // 问题的关键在于GDI函数在操作的地方会把原来的alpha通道清空。
 
@@ -199,82 +199,84 @@ PFunAlphaBlend GetAlphaBlend(void)
 // 1、需要把内容画到一个临时位图上，同时保护好alpha通道。
 // 2、在于把临时位图的数据和原位图做混合，而且不能改变镂空部分原位图的alpha通道的值。
 // 辅助类，用于解决 GDI 不支持 alpha 的问题
-class CHDCHelper
-{
-public:
-    CHDCHelper(HDC hdc, const LPCRECT pRect, BYTE byAlpha, BOOL bCopyBits = TRUE)
-        : m_hdc(hdc)
-        , m_byAlpha(byAlpha)
-        , m_pRc(pRect)
-        , m_bCopyBits(bCopyBits)
-    {
-        m_nWidth = pRect->right - pRect->left;
-        m_nHeight = pRect->bottom - pRect->top;
-        m_hBmp = CRenderEngine::CreateARGB32Bitmap(m_hdc, m_nWidth, m_nHeight, (COLORREF **)&m_pBits);
-        m_hMemDC = ::CreateCompatibleDC(hdc);
-        ::SetBkMode(m_hMemDC, TRANSPARENT);
-        ::SelectObject(m_hMemDC, m_hBmp);
-        ::SetViewportOrgEx(m_hMemDC, -pRect->left, -pRect->top, NULL);
-        //从原DC中获得画笔，画刷，字体，颜色等
-        m_hCurPen = ::SelectObject(hdc, GetStockObject(BLACK_PEN));
-        m_hCurBrush = ::SelectObject(hdc, GetStockObject(BLACK_BRUSH));
-        m_hCurFont = ::SelectObject(hdc, GetStockObject(DEFAULT_GUI_FONT));
-        COLORREF clrCur = ::GetTextColor(hdc);
 
-        //将画笔，画刷，字体设置到memdc里
-        ::SelectObject(m_hMemDC, m_hCurPen);
-        ::SelectObject(m_hMemDC, m_hCurBrush);
-        ::SelectObject(m_hMemDC, m_hCurFont);
-        ::SetTextColor(m_hMemDC, clrCur);
-
-        if (m_bCopyBits) { ::BitBlt(m_hMemDC, pRect->left, pRect->top, m_nWidth, m_nHeight, m_hdc, pRect->left, pRect->top, SRCCOPY); }
-
-        //将alpha全部强制修改为0xFF。
-        BYTE *p = m_pBits + 3;
-
-        for (int i = 0; i < m_nHeight; i++)
-        {
-            for (int j = 0; j < m_nWidth; j++, p += 4) { *p = 0xFF; }
-        }
-    }
-
-    ~CHDCHelper()
-    {
-        //将alpha为0xFF的改为0,为0的改为0xFF
-        BYTE *p = m_pBits + 3;
-
-        for (int i = 0; i < m_nHeight; i++) { for (int j = 0; j < m_nWidth; j++, p += 4) { *p = ~(*p); } }
-
-        BLENDFUNCTION bf = { AC_SRC_OVER, 0, m_byAlpha, AC_SRC_ALPHA };
-        static PFunAlphaBlend spfAlphaBlend = GetAlphaBlend();
-        BOOL bRet = spfAlphaBlend(m_hdc, m_pRc->left, m_pRc->top, m_nWidth, m_nHeight,
-                                  m_hMemDC, m_pRc->left, m_pRc->top, m_nWidth, m_nHeight, bf);
-        ::DeleteDC(m_hMemDC);
-        ::DeleteObject(m_hBmp);
-
-        //恢复原DC的画笔，画刷，字体
-        ::SelectObject(m_hdc, m_hCurPen);
-        ::SelectObject(m_hdc, m_hCurBrush);
-        ::SelectObject(m_hdc, m_hCurFont);
-    }
-
-    operator HDC() { return m_hMemDC; }
-
-protected:
-    HDC     m_hdc;
-    HDC     m_hMemDC;
-    HBITMAP m_hBmp;
-    LPBYTE  m_pBits;
-    BYTE    m_byAlpha;
-    LPCRECT m_pRc;
-    int     m_nWidth;
-    int     m_nHeight;
-    BOOL    m_bCopyBits;
-
-    HGDIOBJ m_hCurPen;
-    HGDIOBJ m_hCurBrush;
-    HGDIOBJ m_hCurFont;
-};
+// 2019-07-12 该类开销比较大，因此不再使用。启用 layered 时使用 GdiPlus，反之使用 GDI。
+// class CHDCHelper
+// {
+// public:
+//     CHDCHelper(HDC hdc, const LPCRECT pRect, BYTE byAlpha, BOOL bCopyBits = TRUE)
+//         : m_hdc(hdc)
+//         , m_byAlpha(byAlpha)
+//         , m_pRc(pRect)
+//         , m_bCopyBits(bCopyBits)
+//     {
+//         m_nWidth = pRect->right - pRect->left;
+//         m_nHeight = pRect->bottom - pRect->top;
+//         m_hBmp = CRenderEngine::CreateARGB32Bitmap(m_hdc, m_nWidth, m_nHeight, (COLORREF **)&m_pBits);
+//         m_hMemDC = ::CreateCompatibleDC(hdc);
+//         ::SetBkMode(m_hMemDC, TRANSPARENT);
+//         ::SelectObject(m_hMemDC, m_hBmp);
+//         ::SetViewportOrgEx(m_hMemDC, -pRect->left, -pRect->top, NULL);
+//         //从原DC中获得画笔，画刷，字体，颜色等
+//         m_hCurPen = ::SelectObject(hdc, GetStockObject(BLACK_PEN));
+//         m_hCurBrush = ::SelectObject(hdc, GetStockObject(BLACK_BRUSH));
+//         m_hCurFont = ::SelectObject(hdc, GetStockObject(DEFAULT_GUI_FONT));
+//         COLORREF clrCur = ::GetTextColor(hdc);
+//
+//         //将画笔，画刷，字体设置到memdc里
+//         ::SelectObject(m_hMemDC, m_hCurPen);
+//         ::SelectObject(m_hMemDC, m_hCurBrush);
+//         ::SelectObject(m_hMemDC, m_hCurFont);
+//         ::SetTextColor(m_hMemDC, clrCur);
+//
+//         if (m_bCopyBits) { ::BitBlt(m_hMemDC, pRect->left, pRect->top, m_nWidth, m_nHeight, m_hdc, pRect->left, pRect->top, SRCCOPY); }
+//
+//         //将alpha全部强制修改为0xFF。
+//         BYTE *p = m_pBits + 3;
+//
+//         for (int i = 0; i < m_nHeight; i++)
+//         {
+//             for (int j = 0; j < m_nWidth; j++, p += 4) { *p = 0xFF; }
+//         }
+//     }
+//
+//     ~CHDCHelper()
+//     {
+//         //将alpha为0xFF的改为0,为0的改为0xFF
+//         BYTE *p = m_pBits + 3;
+//
+//         for (int i = 0; i < m_nHeight; i++) { for (int j = 0; j < m_nWidth; j++, p += 4) { *p = ~(*p); } }
+//
+//         BLENDFUNCTION bf = { AC_SRC_OVER, 0, m_byAlpha, AC_SRC_ALPHA };
+//         static PFunAlphaBlend spfAlphaBlend = GetAlphaBlend();
+//         BOOL bRet = spfAlphaBlend(m_hdc, m_pRc->left, m_pRc->top, m_nWidth, m_nHeight,
+//                                   m_hMemDC, m_pRc->left, m_pRc->top, m_nWidth, m_nHeight, bf);
+//         ::DeleteDC(m_hMemDC);
+//         ::DeleteObject(m_hBmp);
+//
+//         //恢复原DC的画笔，画刷，字体
+//         ::SelectObject(m_hdc, m_hCurPen);
+//         ::SelectObject(m_hdc, m_hCurBrush);
+//         ::SelectObject(m_hdc, m_hCurFont);
+//     }
+//
+//     operator HDC() { return m_hMemDC; }
+//
+// protected:
+//     HDC     m_hdc;
+//     HDC     m_hMemDC;
+//     HBITMAP m_hBmp;
+//     LPBYTE  m_pBits;
+//     BYTE    m_byAlpha;
+//     LPCRECT m_pRc;
+//     int     m_nWidth;
+//     int     m_nHeight;
+//     BOOL    m_bCopyBits;
+//
+//     HGDIOBJ m_hCurPen;
+//     HGDIOBJ m_hCurBrush;
+//     HGDIOBJ m_hCurFont;
+// };
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1647,15 +1649,9 @@ bool CRenderEngine::DrawImage(HDC hDC, CPaintManagerUI *pManager, const RECT &rc
         if (nW > drawInfo.pImageInfo->nX)
         {
             // 水平对齐
-            if (drawInfo.byAlign & EPIC_ALIGN_LEFT)
-            {
-                rcDest.right = rcDest.left + drawInfo.pImageInfo->nX;
-            }
+            if (drawInfo.byAlign & EPIC_ALIGN_LEFT)  { rcDest.right = rcDest.left + drawInfo.pImageInfo->nX; }
 
-            if (drawInfo.byAlign & EPIC_ALIGN_RIGHT)
-            {
-                rcDest.left = rcDest.right - drawInfo.pImageInfo->nX;
-            }
+            if (drawInfo.byAlign & EPIC_ALIGN_RIGHT) { rcDest.left = rcDest.right - drawInfo.pImageInfo->nX; }
 
             if (drawInfo.byAlign & EPIC_ALIGN_CENTER)
             {
@@ -1667,15 +1663,9 @@ bool CRenderEngine::DrawImage(HDC hDC, CPaintManagerUI *pManager, const RECT &rc
         if (nH > drawInfo.pImageInfo->nY)
         {
             // 垂直对齐
-            if (drawInfo.byAlign & EPIC_ALIGN_TOP)
-            {
-                rcDest.bottom = rcDest.top + drawInfo.pImageInfo->nY;
-            }
+            if (drawInfo.byAlign & EPIC_ALIGN_TOP)    { rcDest.bottom = rcDest.top + drawInfo.pImageInfo->nY; }
 
-            if (drawInfo.byAlign & EPIC_ALIGN_BOTTOM)
-            {
-                rcDest.top = rcDest.bottom - drawInfo.pImageInfo->nY;
-            }
+            if (drawInfo.byAlign & EPIC_ALIGN_BOTTOM) { rcDest.top = rcDest.bottom - drawInfo.pImageInfo->nY; }
 
             if (drawInfo.byAlign & EPIC_ALIGN_VCENTER)
             {
@@ -1847,33 +1837,46 @@ void CRenderEngine::DrawLine(HDC hDC, const RECT &rc, int nSize, DWORD dwPenColo
     // LOGBRUSH lb = { BS_SOLID, RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor)), 0 };
     // HPEN hPen = ExtCreatePen(nStyle, nSize, &lb, 0, NULL);
     // HPEN hOldPen = (HPEN)::SelectObject(hDC, hPen);
-    // POINT ptTemp = { 0 };
-    // ::MoveToEx(hDC, rc.left, rc.top, &ptTemp);
+    // ::MoveToEx(hDC, rc.left, rc.top, NULL);
     // ::LineTo(hDC, rc.right, rc.bottom);
     // ::SelectObject(hDC, hOldPen);
     // ::DeleteObject(hPen);
-    RECT rtTmp = rc;
 
-    if (rtTmp.left == rtTmp.right)
-    {
-        rtTmp.left -= nSize / 2;
-        rtTmp.right = rtTmp.left + nSize;
-    }
-    else if (rtTmp.top == rtTmp.bottom)
-    {
-        rtTmp.top -= nSize / 2;
-        rtTmp.bottom = rtTmp.top + nSize;
-    }
+    Graphics g(hDC);
 
-    CHDCHelper dcHelper(hDC, &rtTmp, BYTE(dwPenColor >> 24));
-    LOGBRUSH lb = { BS_SOLID, RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor)), 0 };
-    HPEN hPen = ExtCreatePen(nStyle, nSize, &lb, 0, NULL);
-    HPEN hOldPen = (HPEN)::SelectObject(dcHelper, hPen);
-    POINT ptTemp = { 0 };
-    ::MoveToEx(dcHelper, rc.left, rc.top, &ptTemp);
-    ::LineTo(dcHelper, rc.right, rc.bottom);
-    ::SelectObject(dcHelper, hOldPen);
-    ::DeleteObject(hPen);
+    Pen pen(Color(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor)), (REAL)nSize);
+    pen.SetDashStyle(DashStyleSolid);
+    pen.SetAlignment(PenAlignmentInset);
+
+    if (nStyle & PS_DASH)               { pen.SetDashStyle(DashStyleDash); }
+    else if (nStyle & PS_DOT)           { pen.SetDashStyle(DashStyleDot); }
+    else if (nStyle & PS_DASHDOT)       { pen.SetDashStyle(DashStyleDashDot); }
+    else if (nStyle & PS_DASHDOTDOT)    { pen.SetDashStyle(DashStyleDashDotDot); }
+
+    g.DrawLine(&pen, rc.left, rc.top, rc.right, rc.bottom);
+
+    // RECT rtTmp = rc;
+    //
+    // if (rtTmp.left == rtTmp.right)
+    // {
+    //     rtTmp.left -= nSize / 2;
+    //     rtTmp.right = rtTmp.left + nSize;
+    // }
+    // else if (rtTmp.top == rtTmp.bottom)
+    // {
+    //     rtTmp.top -= nSize / 2;
+    //     rtTmp.bottom = rtTmp.top + nSize;
+    // }
+    //
+    // CHDCHelper dcHelper(hDC, &rtTmp, BYTE(dwPenColor >> 24));
+    // LOGBRUSH lb = { BS_SOLID, RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor)), 0 };
+    // HPEN hPen = ExtCreatePen(nStyle, nSize, &lb, 0, NULL);
+    // HPEN hOldPen = (HPEN)::SelectObject(dcHelper, hPen);
+    // POINT ptTemp = { 0 };
+    // ::MoveToEx(dcHelper, rc.left, rc.top, &ptTemp);
+    // ::LineTo(dcHelper, rc.right, rc.bottom);
+    // ::SelectObject(dcHelper, hOldPen);
+    // ::DeleteObject(hPen);
 }
 
 void CRenderEngine::DrawRect(HDC hDC, const RECT &rc, int nSize, DWORD dwPenColor, int nStyle)
@@ -1887,14 +1890,27 @@ void CRenderEngine::DrawRect(HDC hDC, const RECT &rc, int nSize, DWORD dwPenColo
     // ::SelectObject(hDC, hOldPen);
     // ::DeleteObject(hPen);
 
-    CHDCHelper dcHelper(hDC, &rc, BYTE(dwPenColor >> 24));
-    HPEN hPen = ::CreatePen(nStyle | PS_INSIDEFRAME, nSize,
-                            RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor)));
-    HPEN hOldPen = (HPEN)::SelectObject(dcHelper, hPen);
-    ::SelectObject(dcHelper, ::GetStockObject(HOLLOW_BRUSH));
-    ::Rectangle(dcHelper, rc.left, rc.top, rc.right, rc.bottom);
-    ::SelectObject(dcHelper, hOldPen);
-    ::DeleteObject(hPen);
+    Graphics g(hDC);
+
+    Pen pen(Color(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor)), (REAL)nSize);
+    pen.SetDashStyle(DashStyleSolid);
+    pen.SetAlignment(PenAlignmentInset);
+
+    if (nStyle & PS_DASH)               { pen.SetDashStyle(DashStyleDash); }
+    else if (nStyle & PS_DOT)           { pen.SetDashStyle(DashStyleDot); }
+    else if (nStyle & PS_DASHDOT)       { pen.SetDashStyle(DashStyleDashDot); }
+    else if (nStyle & PS_DASHDOTDOT)    { pen.SetDashStyle(DashStyleDashDotDot); }
+
+    g.DrawRectangle(&pen, rc.left, rc.top, rc.right - rc.left - 1, rc.bottom - rc.top - 1);
+
+    // CHDCHelper dcHelper(hDC, &rc, BYTE(dwPenColor >> 24));
+    // HPEN hPen = ::CreatePen(nStyle | PS_INSIDEFRAME, nSize,
+    //                         RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor)));
+    // HPEN hOldPen = (HPEN)::SelectObject(dcHelper, hPen);
+    // ::SelectObject(dcHelper, ::GetStockObject(HOLLOW_BRUSH));
+    // ::Rectangle(dcHelper, rc.left, rc.top, rc.right, rc.bottom);
+    // ::SelectObject(dcHelper, hOldPen);
+    // ::DeleteObject(hPen);
 }
 
 void CRenderEngine::DrawRoundRect(HDC hDC, const RECT &rc, int nSize, int width, int height, DWORD dwPenColor,
@@ -1909,14 +1925,42 @@ void CRenderEngine::DrawRoundRect(HDC hDC, const RECT &rc, int nSize, int width,
     // ::SelectObject(hDC, hOldPen);
     // ::DeleteObject(hPen);
 
-    CHDCHelper dcHelper(hDC, &rc, BYTE(dwPenColor >> 24));
-    HPEN hPen = ::CreatePen(nStyle | PS_INSIDEFRAME, nSize,
-                            RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor)));
-    HPEN hOldPen = (HPEN)::SelectObject(dcHelper, hPen);
-    ::SelectObject(dcHelper, ::GetStockObject(HOLLOW_BRUSH));
-    ::RoundRect(dcHelper, rc.left, rc.top, rc.right, rc.bottom, width, height);
-    ::SelectObject(dcHelper, hOldPen);
-    ::DeleteObject(hPen);
+    Graphics g(hDC);
+
+    Pen pen(Color(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor)), (REAL)nSize);
+    pen.SetDashStyle(DashStyleSolid);
+    pen.SetAlignment(PenAlignmentInset);
+
+    if (nStyle & PS_DASH)               { pen.SetDashStyle(DashStyleDash); }
+    else if (nStyle & PS_DOT)           { pen.SetDashStyle(DashStyleDot); }
+    else if (nStyle & PS_DASHDOT)       { pen.SetDashStyle(DashStyleDashDot); }
+    else if (nStyle & PS_DASHDOTDOT)    { pen.SetDashStyle(DashStyleDashDotDot); }
+
+    int nDiameterX = width * 2, nDiameterY = height * 2;
+    GraphicsPath path;
+    // 左上角圆弧 + 上边
+    path.AddArc(rc.left, rc.top, nDiameterX, nDiameterY, 180, 90);
+    path.AddLine(rc.left + width, rc.top, rc.right - width, rc.top);
+    // 右上角圆弧 + 右边
+    path.AddArc(rc.right - nDiameterX - 1, rc.top, nDiameterX, nDiameterY, 270, 90);
+    path.AddLine(rc.right - 1, rc.top + height, rc.right - 1, rc.bottom - height);
+    // 右下角圆弧 + 下边
+    path.AddArc(rc.right - nDiameterX - 1, rc.bottom - nDiameterY - 1, nDiameterX, nDiameterY, 0, 90);
+    path.AddLine(rc.right - width, rc.bottom - 1, rc.left + width, rc.bottom - 1);
+    // 左下角圆弧 + 左边
+    path.AddArc(rc.left, rc.bottom - nDiameterY - 1, nDiameterX, nDiameterY, 90, 90);
+    path.AddLine(rc.left, rc.bottom - height, rc.left, rc.top + height);
+
+    g.DrawPath(&pen, &path);
+
+    // CHDCHelper dcHelper(hDC, &rc, BYTE(dwPenColor >> 24));
+    // HPEN hPen = ::CreatePen(nStyle | PS_INSIDEFRAME, nSize,
+    //                         RGB(GetBValue(dwPenColor), GetGValue(dwPenColor), GetRValue(dwPenColor)));
+    // HPEN hOldPen = (HPEN)::SelectObject(dcHelper, hPen);
+    // ::SelectObject(dcHelper, ::GetStockObject(HOLLOW_BRUSH));
+    // ::RoundRect(dcHelper, rc.left, rc.top, rc.right, rc.bottom, width, height);
+    // ::SelectObject(dcHelper, hOldPen);
+    // ::DeleteObject(hPen);
 }
 
 void CRenderEngine::DrawText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, LPCTSTR pstrText,
@@ -1926,74 +1970,37 @@ void CRenderEngine::DrawText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, LPCTS
 
     if (pstrText == NULL || pManager == NULL) { return; }
 
-#ifdef USE_GDIPLUS
-
     if (pManager->IsLayered())
     {
-        Gdiplus::Graphics graphics(hDC);
+        Graphics g(hDC);
 
-        Gdiplus::Font font(hDC, pManager->GetFont(iFont));
-        Gdiplus::RectF rectF((Gdiplus::REAL)rc.left, (Gdiplus::REAL)rc.top, (Gdiplus::REAL)(rc.right - rc.left),
-                             (Gdiplus::REAL)(rc.bottom - rc.top));
-        Gdiplus::SolidBrush brush(Gdiplus::Color(255, GetBValue(dwTextColor), GetGValue(dwTextColor),
-                                                 GetRValue(dwTextColor)));
+        Font font(hDC, pManager->GetFont(iFont));
+        RectF rectF((REAL)rc.left, (REAL)rc.top, REAL(rc.right - rc.left), REAL(rc.bottom - rc.top));
+        SolidBrush brush(Color(255, GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
 
-        Gdiplus::StringFormat stringFormat = Gdiplus::StringFormat::GenericTypographic();
+        StringFormat stringFormat = StringFormat::GenericTypographic();
 
-        if ((uStyle & DT_END_ELLIPSIS) != 0)
-        {
-            stringFormat.SetTrimming(Gdiplus::StringTrimmingEllipsisCharacter);
-        }
+        if ((uStyle & DT_END_ELLIPSIS) != 0) { stringFormat.SetTrimming(StringTrimmingEllipsisCharacter); }
 
         int formatFlags = 0;
 
-        if ((uStyle & DT_NOCLIP) != 0)
-        {
-            formatFlags |= Gdiplus::StringFormatFlagsNoClip;
-        }
+        if ((uStyle & DT_NOCLIP) != 0)      { formatFlags |= StringFormatFlagsNoClip; }
 
-        if ((uStyle & DT_SINGLELINE) != 0)
-        {
-            formatFlags |= Gdiplus::StringFormatFlagsNoWrap;
-        }
+        if ((uStyle & DT_SINGLELINE) != 0)  { formatFlags |= StringFormatFlagsNoWrap; }
 
         stringFormat.SetFormatFlags(formatFlags);
 
-        if ((uStyle & DT_LEFT) != 0)
-        {
-            stringFormat.SetAlignment(Gdiplus::StringAlignmentNear);
-        }
-        else if ((uStyle & DT_CENTER) != 0)
-        {
-            stringFormat.SetAlignment(Gdiplus::StringAlignmentCenter);
-        }
-        else if ((uStyle & DT_RIGHT) != 0)
-        {
-            stringFormat.SetAlignment(Gdiplus::StringAlignmentFar);
-        }
-        else
-        {
-            stringFormat.SetAlignment(Gdiplus::StringAlignmentNear);
-        }
+        if ((uStyle & DT_LEFT) != 0)        { stringFormat.SetAlignment(StringAlignmentNear); }
+        else if ((uStyle & DT_CENTER) != 0) { stringFormat.SetAlignment(StringAlignmentCenter); }
+        else if ((uStyle & DT_RIGHT) != 0)  { stringFormat.SetAlignment(StringAlignmentFar); }
+        else                                { stringFormat.SetAlignment(StringAlignmentNear); }
 
         stringFormat.GenericTypographic();
 
-        if ((uStyle & DT_TOP) != 0)
-        {
-            stringFormat.SetLineAlignment(Gdiplus::StringAlignmentNear);
-        }
-        else if ((uStyle & DT_VCENTER) != 0)
-        {
-            stringFormat.SetLineAlignment(Gdiplus::StringAlignmentCenter);
-        }
-        else if ((uStyle & DT_BOTTOM) != 0)
-        {
-            stringFormat.SetLineAlignment(Gdiplus::StringAlignmentFar);
-        }
-        else
-        {
-            stringFormat.SetLineAlignment(Gdiplus::StringAlignmentNear);
-        }
+        if ((uStyle & DT_TOP) != 0)          { stringFormat.SetLineAlignment(StringAlignmentNear); }
+        else if ((uStyle & DT_VCENTER) != 0) { stringFormat.SetLineAlignment(StringAlignmentCenter); }
+        else if ((uStyle & DT_BOTTOM) != 0)  { stringFormat.SetLineAlignment(StringAlignmentFar); }
+        else                                 { stringFormat.SetLineAlignment(StringAlignmentNear); }
 
 #if !defined(UNICODE) || !defined(_UNICODE)
         LPWSTR pwstrText = NULL;
@@ -2007,8 +2014,8 @@ void CRenderEngine::DrawText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, LPCTS
 
         if ((uStyle & DT_CALCRECT) != 0)
         {
-            Gdiplus::RectF bounds;
-            graphics.MeasureString(pwstrText, -1, &font, rectF, &stringFormat, &bounds);
+            RectF bounds;
+            g.MeasureString(pwstrText, -1, &font, rectF, &stringFormat, &bounds);
 
             // MeasureString存在计算误差，这里加一像素
             rc.bottom = rc.top + (long)bounds.Height + 1;
@@ -2016,41 +2023,36 @@ void CRenderEngine::DrawText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, LPCTS
         }
         else
         {
-            graphics.DrawString(pwstrText, -1, &font, rectF, &stringFormat, &brush);
+            g.DrawString(pwstrText, -1, &font, rectF, &stringFormat, &brush);
         }
     }
     else
     {
-#endif // USE_GDIPLUS
-        // ::SetBkMode(hDC, TRANSPARENT);
-        // ::SetTextColor(hDC, RGB(GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
-        // HFONT hOldFont = (HFONT)::SelectObject(hDC, pManager->GetFont(iFont));
-        // ::DrawText(hDC, pstrText, -1, &rc, uStyle | DT_NOPREFIX);
-        // ::SelectObject(hDC, hOldFont);
+        ::SetBkMode(hDC, TRANSPARENT);
+        ::SetTextColor(hDC, RGB(GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
+        HFONT hOldFont = (HFONT)::SelectObject(hDC, pManager->GetFont(iFont));
+        ::DrawText(hDC, pstrText, -1, &rc, uStyle | DT_NOPREFIX);
+        ::SelectObject(hDC, hOldFont);
 
-        if (DT_CALCRECT & uStyle)
-        {
-            // 由于 CHDCHelper 的构造和析构需要消耗大量时间，因此计算文本占用的矩形时直接在原HDC上进行
-            ::SetBkMode(hDC, TRANSPARENT);
-            ::SetTextColor(hDC, RGB(GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
-            HFONT hOldFont = (HFONT)::SelectObject(hDC, pManager->GetFont(iFont));
-            ::DrawText(hDC, pstrText, -1, &rc, uStyle | DT_NOPREFIX);
-            ::SelectObject(hDC, hOldFont);
-        }
-        else
-        {
-            CHDCHelper dcHelper(hDC, &rc, BYTE(dwTextColor >> 24));
-            ::SetBkMode(dcHelper, TRANSPARENT);
-            ::SetTextColor(dcHelper, RGB(GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
-            HFONT hOldFont = (HFONT)::SelectObject(dcHelper, pManager->GetFont(iFont));
-            ::DrawText(dcHelper, pstrText, -1, &rc, uStyle | DT_NOPREFIX);
-            ::SelectObject(dcHelper, hOldFont);
-        }
-
-#ifdef USE_GDIPLUS
+        // if (DT_CALCRECT & uStyle)
+        // {
+        //     // 由于 CHDCHelper 的构造和析构需要消耗大量时间，因此计算文本占用的矩形时直接在原HDC上进行
+        //     ::SetBkMode(hDC, TRANSPARENT);
+        //     ::SetTextColor(hDC, RGB(GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
+        //     HFONT hOldFont = (HFONT)::SelectObject(hDC, pManager->GetFont(iFont));
+        //     ::DrawText(hDC, pstrText, -1, &rc, uStyle | DT_NOPREFIX);
+        //     ::SelectObject(hDC, hOldFont);
+        // }
+        // else
+        // {
+        //     CHDCHelper dcHelper(hDC, &rc, BYTE(dwTextColor >> 24));
+        //     ::SetBkMode(dcHelper, TRANSPARENT);
+        //     ::SetTextColor(dcHelper, RGB(GetBValue(dwTextColor), GetGValue(dwTextColor), GetRValue(dwTextColor)));
+        //     HFONT hOldFont = (HFONT)::SelectObject(dcHelper, pManager->GetFont(iFont));
+        //     ::DrawText(dcHelper, pstrText, -1, &rc, uStyle | DT_NOPREFIX);
+        //     ::SelectObject(dcHelper, hOldFont);
+        // }
     }
-
-#endif // USE_GDIPLUS
 }
 
 void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, LPCTSTR pstrText,
@@ -2910,27 +2912,46 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
             if (bDraw && bLineDraw)
             {
                 iVAlign = DT_BOTTOM;
-                RECT rcTxt = { pt.x + cxOffset, pt.y, pt.x + cxOffset + cxLineWidth, pt.y + cyLineHeight };
-                CHDCHelper dcHelper(hDC, &rcTxt, dwTextColor >> 24);
+                // RECT rcTxt = { pt.x + cxOffset, pt.y, pt.x + cxOffset + cxLineWidth, pt.y + cyLineHeight };
+                // CHDCHelper dcHelper(hDC, &rcTxt, dwTextColor >> 24);
+                Graphics g(hDC);
+                Font f(hDC);
+                COLORREF clrText = ::GetTextColor(hDC);
+                SolidBrush brush(Color(GetRValue(clrText), GetGValue(clrText), GetBValue(clrText)));
+                PointF ptF(REAL(pt.x + cxOffset), 0.0);
 
                 if (aVAlignArray.GetSize() > 0) { iVAlign = (UINT)aVAlignArray.GetAt(aVAlignArray.GetSize() - 1); }
 
                 if (iVAlign == DT_VCENTER)
                 {
-                    ::TextOut(dcHelper, pt.x + cxOffset,
-                              pt.y + (cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading) / 2,
-                              &pstrText[1], 1);
+                    ptF.Y = REAL(pt.y + (cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading) / 2);
+                    // ::TextOut(dcHelper, pt.x + cxOffset,
+                    //           pt.y + (cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading) / 2,
+                    //           &pstrText[1], 1);
                 }
                 else if (iVAlign == DT_TOP)
                 {
-                    ::TextOut(dcHelper, pt.x + cxOffset, pt.y, &pstrText[1], 1);
+                    ptF.Y = REAL(pt.y);
+                    //::TextOut(dcHelper, pt.x + cxOffset, pt.y, &pstrText[1], 1);
                 }
                 else
                 {
-                    ::TextOut(dcHelper, pt.x + cxOffset,
-                              pt.y + cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading,
-                              &pstrText[1], 1);
+                    ptF.Y = REAL(pt.y + cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading);
+                    //::TextOut(dcHelper, pt.x + cxOffset,
+                    //          pt.y + cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading,
+                    //          &pstrText[1], 1);
                 }
+
+#if !defined(UNICODE) || !defined(_UNICODE)
+                LPWSTR pwstrText = NULL;
+                int iLen = 1;
+                pwstrText = new WCHAR[iLen + 1];
+                ::ZeroMemory(pwstrText, (iLen + 1) * sizeof(WCHAR));
+                ::MultiByteToWideChar(CP_ACP, 0, pstrText, iLen, (LPWSTR)pwstrText, iLen);
+                g.DrawString(pwstrText, 1, &f, ptF, &brush);
+#else
+                g.DrawString(&pstrText[1], 1, &f, ptF, &brush);
+#endif
             }
 
             pt.x += szSpace.cx;
@@ -2947,27 +2968,46 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
             if (bDraw && bLineDraw)
             {
                 iVAlign = DT_BOTTOM;
-                RECT rcTxt = { pt.x + cxOffset, pt.y, pt.x + cxOffset + cxLineWidth, pt.y + cyLineHeight };
-                CHDCHelper dcHelper(hDC, &rcTxt, dwTextColor >> 24);
+                // RECT rcTxt = { pt.x + cxOffset, pt.y, pt.x + cxOffset + cxLineWidth, pt.y + cyLineHeight };
+                // CHDCHelper dcHelper(hDC, &rcTxt, dwTextColor >> 24);
+                Graphics g(hDC);
+                Font f(hDC);
+                COLORREF clrText = ::GetTextColor(hDC);
+                SolidBrush brush(Color(GetRValue(clrText), GetGValue(clrText), GetBValue(clrText)));
+                PointF ptF(REAL(pt.x + cxOffset), 0.0);
 
                 if (aVAlignArray.GetSize() > 0) { iVAlign = (UINT)aVAlignArray.GetAt(aVAlignArray.GetSize() - 1); }
 
                 if (iVAlign == DT_VCENTER)
                 {
-                    ::TextOut(dcHelper, pt.x + cxOffset,
-                              pt.y + (cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading) / 2,
-                              &pstrText[1], 1);
+                    ptF.Y = REAL(pt.y + (cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading) / 2);
+                    // ::TextOut(dcHelper, pt.x + cxOffset,
+                    //           pt.y + (cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading) / 2,
+                    //           &pstrText[1], 1);
                 }
                 else if (iVAlign == DT_TOP)
                 {
-                    ::TextOut(dcHelper, pt.x + cxOffset, pt.y, &pstrText[1], 1);
+                    ptF.Y = REAL(pt.y);
+                    // ::TextOut(dcHelper, pt.x + cxOffset, pt.y, &pstrText[1], 1);
                 }
                 else
                 {
-                    ::TextOut(dcHelper, pt.x + cxOffset,
-                              pt.y + cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading,
-                              &pstrText[1], 1);
+                    ptF.Y = REAL(pt.y + cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading);
+                    // ::TextOut(dcHelper, pt.x + cxOffset,
+                    //          pt.y + cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading,
+                    //          &pstrText[1], 1);
                 }
+
+#if !defined(UNICODE) || !defined(_UNICODE)
+                LPWSTR pwstrText = NULL;
+                int iLen = 1;
+                pwstrText = new WCHAR[iLen + 1];
+                ::ZeroMemory(pwstrText, (iLen + 1) * sizeof(WCHAR));
+                ::MultiByteToWideChar(CP_ACP, 0, pstrText, iLen, (LPWSTR)pwstrText, iLen);
+                g.DrawString(pwstrText, 1, &f, ptF, &brush);
+#else
+                g.DrawString(&pstrText[1], 1, &f, ptF, &brush);
+#endif
             }
 
             pt.x += szSpace.cx;
@@ -2985,27 +3025,46 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
             if (bDraw && bLineDraw)
             {
                 iVAlign = DT_BOTTOM;
-                RECT rcTxt = { pt.x + cxOffset, pt.y, pt.x + cxOffset + cxLineWidth, pt.y + cyLineHeight };
-                CHDCHelper dcHelper(hDC, &rcTxt, dwTextColor >> 24);
+                // RECT rcTxt = { pt.x + cxOffset, pt.y, pt.x + cxOffset + cxLineWidth, pt.y + cyLineHeight };
+                // CHDCHelper dcHelper(hDC, &rcTxt, dwTextColor >> 24);
+                Graphics g(hDC);
+                Font f(hDC);
+                COLORREF clrText = ::GetTextColor(hDC);
+                SolidBrush brush(Color(GetRValue(clrText), GetGValue(clrText), GetGValue(clrText)));
+                PointF ptF(REAL(pt.x + cxOffset), 0.0);
 
                 if (aVAlignArray.GetSize() > 0) { iVAlign = (UINT)aVAlignArray.GetAt(aVAlignArray.GetSize() - 1); }
 
                 if (iVAlign == DT_VCENTER)
                 {
-                    ::TextOut(dcHelper, pt.x + cxOffset,
-                              pt.y + (cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading) / 2,
-                              _T(" "), 1);
+                    ptF.Y = REAL(pt.y + (cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading) / 2);
+                    // ::TextOut(dcHelper, pt.x + cxOffset,
+                    //           pt.y + (cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading) / 2,
+                    //           _T(" "), 1);
                 }
                 else if (iVAlign == DT_TOP)
                 {
-                    ::TextOut(dcHelper, pt.x + cxOffset, pt.y, _T(" "), 1);
+                    ptF.Y = REAL(pt.y);
+                    // ::TextOut(dcHelper, pt.x + cxOffset, pt.y, _T(" "), 1);
                 }
                 else
                 {
-                    ::TextOut(dcHelper, pt.x + cxOffset,
-                              pt.y + cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading,
-                              _T(" "), 1);
+                    ptF.Y = REAL(pt.y + cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading);
+                    // ::TextOut(dcHelper, pt.x + cxOffset,
+                    //           pt.y + cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading,
+                    //           _T(" "), 1);
                 }
+
+#if !defined(UNICODE) || !defined(_UNICODE)
+                LPWSTR pwstrText = NULL;
+                int iLen = 1;
+                pwstrText = new WCHAR[iLen + 1];
+                ::ZeroMemory(pwstrText, (iLen + 1) * sizeof(WCHAR));
+                ::MultiByteToWideChar(CP_ACP, 0, pstrText, iLen, (LPWSTR)pwstrText, iLen);
+                g.DrawString(pwstrText, 1, &f, ptF, &brush);
+#else
+                g.DrawString(&pstrText[1], 1, &f, ptF, &brush);
+#endif
             }
 
             pt.x += szSpace.cx;
@@ -3022,7 +3081,6 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
             LPCTSTR p = pstrText;
             LPCTSTR pstrNext;
             SIZE szText = { 0 };
-            POINT ptCur = pt;
 
             if (!bInRaw && *p == _T('<') || *p == _T('{')) { p++, cchChars++, cchSize++; }
 
@@ -3114,52 +3172,68 @@ void CRenderEngine::DrawHtmlText(HDC hDC, CPaintManagerUI *pManager, RECT &rc, L
             if (bDraw && bLineDraw)
             {
                 iVAlign = DT_BOTTOM;
-                RECT rcTxt = { ptCur.x + cxOffset, ptCur.y, rc.right, ptCur.y + cyLineHeight };
-                CHDCHelper dcHelper(hDC, &rcTxt, dwTextColor >> 24);
+                // RECT rcTxt = { pt.x + cxOffset, pt.y, rc.right, pt.y + cyLineHeight };
+                // CHDCHelper dcHelper(hDC, &rcTxt, dwTextColor >> 24);
+                Graphics g(hDC);
+                Font f(hDC);
+                COLORREF clrText = ::GetTextColor(hDC);
+                SolidBrush brush(Color(GetRValue(clrText), GetGValue(clrText), GetBValue(clrText)));
+                PointF ptF(REAL(pt.x + cxOffset), 0.0);
 
                 if (aVAlignArray.GetSize() > 0) { iVAlign = (UINT)aVAlignArray.GetAt(aVAlignArray.GetSize() - 1); }
 
                 if (iVAlign == DT_VCENTER)
                 {
-                    //::TextOut(dcHelper, pt.x + cxOffset,
-                    ::TextOut(dcHelper, rcTxt.left,
-                              pt.y + (cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading) / 2,
-                              pstrText, cchSize);
+                    ptF.Y = REAL(pt.y + (cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading) / 2);
+                    // ::TextOut(dcHelper, rcTxt.left,
+                    //           pt.y + (cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading) / 2,
+                    //           pstrText, cchSize);
                 }
                 else if (iVAlign == DT_TOP)
                 {
-                    //::TextOut(dcHelper, pt.x + cxOffset, pt.y, pstrText, cchSize);
-                    ::TextOut(dcHelper, rcTxt.left, pt.y, pstrText, cchSize);
+                    ptF.Y = REAL(pt.y);
+                    // ::TextOut(dcHelper, rcTxt.left, pt.y, pstrText, cchSize);
                 }
                 else
                 {
-                    //::TextOut(dcHelper, pt.x + cxOffset,
-                    ::TextOut(dcHelper, rcTxt.left,
-                              pt.y + cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading,
-                              pstrText, cchSize);
+                    ptF.Y = REAL(pt.y + cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading);
+                    // ::TextOut(dcHelper, rcTxt.left,
+                    //           pt.y + cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading,
+                    //           pstrText, cchSize);
                 }
+
+#if !defined(UNICODE) || !defined(_UNICODE)
+                LPWSTR pwstrText = NULL;
+                int iLen = cchSize;
+                pwstrText = new WCHAR[iLen + 1];
+                ::ZeroMemory(pwstrText, (iLen + 1) * sizeof(WCHAR));
+                ::MultiByteToWideChar(CP_ACP, 0, pstrText, iLen, (LPWSTR)pwstrText, iLen);
+                g.DrawString(pwstrText, cchSize, &f, ptF, &brush);
+#else
+                g.DrawString(pstrText, cchSize, &f, ptF, &brush);
+#endif
 
                 if (pt.x >= rc.right && (uStyle & DT_END_ELLIPSIS) != 0)
                 {
-                    if (iVAlign == DT_VCENTER)
-                    {
-                        //::TextOut(dcHelper, pt.x + cxOffset + szText.cx,
-                        ::TextOut(dcHelper, rcTxt.left + szText.cx,
-                                  pt.y + (cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading) / 2,
-                                  _T("..."), 3);
-                    }
-                    else if (iVAlign == DT_TOP)
-                    {
-                        //::TextOut(dcHelper, pt.x + cxOffset + szText.cx, pt.y, _T("..."), 3);
-                        ::TextOut(dcHelper, rcTxt.left + szText.cx, pt.y, _T("..."), 3);
-                    }
-                    else
-                    {
-                        //::TextOut(dcHelper, pt.x + cxOffset + szText.cx,
-                        ::TextOut(dcHelper, rcTxt.left + szText.cx,
-                                  pt.y + cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading,
-                                  _T("..."), 3);
-                    }
+                    // ptF.Y 不变。
+                    ptF.X += REAL(szText.cx);
+                    g.DrawString(L"...", 3, &f, ptF, &brush);
+                    // if (iVAlign == DT_VCENTER)
+                    // {
+                    //     ::TextOut(dcHelper, rcTxt.left + szText.cx,
+                    //               pt.y + (cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading) / 2,
+                    //               _T("..."), 3);
+                    // }
+                    // else if (iVAlign == DT_TOP)
+                    // {
+                    //     ::TextOut(dcHelper, rcTxt.left + szText.cx, pt.y, _T("..."), 3);
+                    // }
+                    // else
+                    // {
+                    //     ::TextOut(dcHelper, rcTxt.left + szText.cx,
+                    //               pt.y + cyLineHeight - pTm->tmHeight - pTm->tmExternalLeading,
+                    //               _T("..."), 3);
+                    // }
                 }
             }
 
