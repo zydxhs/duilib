@@ -217,7 +217,7 @@ SIZE CLabelUI::EstimateSize(SIZE szAvailable)
             if (m_cxyFixedLast.cy == 0)
             {
                 m_cxyFixedLast.cy = m_pManager->GetFontInfo(m_iFont)->tm.tmHeight + 8;
-                m_cxyFixedLast.cy += m_rcPadding.top + m_rcPadding.bottom;
+                m_cxyFixedLast.cy += m_rcPadding.top + m_rcPadding.bottom + m_rcBorderSize.top + m_rcBorderSize.bottom;
             }
 
             if (m_cxyFixedLast.cx == 0 || m_bAutoWidth)
@@ -245,7 +245,6 @@ SIZE CLabelUI::EstimateSize(SIZE szAvailable)
             }
 
             m_cxyFixedLast.cx += m_rcBorderSize.left + m_rcBorderSize.right;
-            m_cxyFixedLast.cy += m_rcBorderSize.top + m_rcBorderSize.bottom;
             m_cxyFixed.cx = m_bAutoWidth ? m_cxyFixedLast.cx : m_cxyFixed.cx;
         }
         else
