@@ -2016,6 +2016,11 @@ void CControlUI::OnEffectEnd(TAniParam &data)
             ::PostMessage(m_pManager->GetPaintWindow(), WM_CLOSE, 0, m_byEffectTrigger);
         }
     }
+    // 2019-07-15 zhuyadong 解决添加窗体显示特效，由于编辑获得焦点导致编辑框位置显示异常问题
+    else if (TRIGGER_SHOW == m_byEffectTrigger && NULL == m_pParent)
+    {
+        ::PostMessage(m_pManager->GetPaintWindow(), WM_WNDEFFECT_SHOWEND_NOTIFY, 0, 0);
+    }
 
     m_byEffectTrigger = TRIGGER_NONE;
     Invalidate();

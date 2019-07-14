@@ -27,6 +27,7 @@ enum EMCUSTOM_EVENT
     WM_RBUTTON_CLICK,                       // 右键 单击 消息 duilib内部使用
     WM_RBUTTON_DBLCLK,                      // 右键 双击 消息 duilib内部使用
     WM_WNDDATA_UPDATE,                      // 窗体数据 初始化/保存 WPARAM=EMParamUpdateDirection
+    WM_WNDEFFECT_SHOWEND_NOTIFY,            // 窗体显示特效结束，继续窗体显示流程
 
     WM_DUILIB_INNER_MAX = WM_APP + 200,     // DUILIB 内部消息的最大值
 

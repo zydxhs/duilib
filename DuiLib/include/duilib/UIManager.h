@@ -402,6 +402,7 @@ public:
     void KillFocus(void);
     void SetFocusNeeded(CControlUI *pControl);
     bool SetNextTabControl(bool bForward = true);
+    void SetFocusDefault(void);                                         // 设置窗体默认焦点
 
     bool SetTimer(CControlUI *pControl, UINT nTimerID, UINT uElapse);
     bool KillTimer(CControlUI *pControl, UINT nTimerID);

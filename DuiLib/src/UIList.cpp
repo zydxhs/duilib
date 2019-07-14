@@ -1316,11 +1316,11 @@ void CListUI::SetAllItemSelected(bool bSelect, int nColumn)
 {
     for (int i = 0; i < GetCount(); ++i)
     {
-        if (CListElementUI * pCtrl = dynamic_cast<CListElementUI *>(GetItemAt(i)))
+        if (CListElementUI *pCtrl = dynamic_cast<CListElementUI *>(GetItemAt(i)))
         {
             pCtrl->SetCheckBoxState(bSelect, nColumn);
         }
-        else if (CListContainerElementUI * pCtrl = dynamic_cast<CListContainerElementUI *>(GetItemAt(i)))
+        else if (CListContainerElementUI *pCtrl = dynamic_cast<CListContainerElementUI *>(GetItemAt(i)))
         {
             pCtrl->SetCheckBoxState(bSelect, nColumn);
         }

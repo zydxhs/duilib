@@ -140,6 +140,7 @@ protected:
 
 private:
     LRESULT OnWndDataUpdate(UINT uMsg, WPARAM wParam, LPARAM lParam);
+    LRESULT OnWndEffectShowEndNty(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 protected:
     static LPBYTE m_lpResourceZIPBuffer;

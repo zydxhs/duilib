@@ -724,6 +724,13 @@ LRESULT CWndImplBase::OnWndDataUpdate(UINT uMsg, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
+LRESULT CWndImplBase::OnWndEffectShowEndNty(UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    m_pm.SetFocusDefault();
+    OnPrepare();
+    return 0;
+}
+
 bool CWndImplBase::Relayout(void *pParam)
 {
     if (NULL == m_pm.GetRoot() || NULL == m_pCtrlPlaceHolder) { return false; }
@@ -757,11 +764,13 @@ DUI_INLINE LRESULT CWndImplBase::HandleCustomMessage(UINT uMsg, WPARAM wParam, L
     switch (uMsg)
     {
     //2017-02-25 zhuyadong 完善多语言切换
-    case WM_LANGUAGE_UPDATE:    lRes = OnLanguageUpdate(uMsg, wParam, lParam);  break;
+    case WM_LANGUAGE_UPDATE:            lRes = OnLanguageUpdate(uMsg, wParam, lParam);      break;
 
-    case WM_WNDDATA_UPDATE:     lRes = OnWndDataUpdate(uMsg, wParam, lParam);   break;
+    case WM_WNDDATA_UPDATE:             lRes = OnWndDataUpdate(uMsg, wParam, lParam);       break;
 
-    default:                    bHandled = FALSE;                               break;
+    case WM_WNDEFFECT_SHOWEND_NOTIFY:   lRes = OnWndEffectShowEndNty(uMsg, wParam, lParam); break;
+
+    default:                            bHandled = FALSE;                                   break;
     }
 
     return lRes;
@@ -819,8 +828,13 @@ DUI_INLINE void CWndImplBase::Notify(TNotifyUI &msg)
     if (msg.sType == DUI_MSGTYPE_WINDOWINIT)
     {
         // 2018-08-18 zhuyadong 添加特效
-        m_pm.GetRoot()->StartEffect(TRIGGER_SHOW);
-        OnPrepare();
+        // 2019-07-15 zhuyadong 解决添加窗体显示特效，由于编辑获得焦点导致编辑框位置显示异常问题
+        if (!m_pm.GetRoot()->StartEffect(TRIGGER_SHOW))
+        {
+            m_pm.SetFocusDefault();
+            OnPrepare();
+        }
+
         return;
     }
     else if (msg.sType == DUI_MSGTYPE_SCROLL)
