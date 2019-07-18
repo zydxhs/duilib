@@ -397,7 +397,10 @@ RECT CControlUI::GetRelativePos() const
 
 RECT CControlUI::GetClientPos() const
 {
-    return m_rcItem;
+    return RECT { m_rcItem.left + m_rcBorderSize.left + m_rcPadding.left,
+                  m_rcItem.top + m_rcBorderSize.top + m_rcPadding.top,
+                  m_rcItem.right - m_rcBorderSize.right - m_rcPadding.right,
+                  m_rcItem.bottom - m_rcBorderSize.bottom - m_rcPadding.bottom };
 }
 
 void CControlUI::SetPos(RECT rc, bool bNeedInvalidate)
