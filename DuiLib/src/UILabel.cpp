@@ -236,6 +236,7 @@ SIZE CLabelUI::EstimateSize(SIZE szAvailable)
                 }
 
                 m_cxyFixedLast.cx = rcText.right - rcText.left + m_rcPadding.left + m_rcPadding.right;
+                m_cxyFixedLast.cx += m_rcBorderSize.left + m_rcBorderSize.right;
                 //if (m_bAutoWidth) { m_cxyFixed.cx = m_cxyFixedLast.cx; }
                 //if (m_bAutoHeight)
                 //{
@@ -244,7 +245,6 @@ SIZE CLabelUI::EstimateSize(SIZE szAvailable)
                 //}
             }
 
-            m_cxyFixedLast.cx += m_rcBorderSize.left + m_rcBorderSize.right;
             m_cxyFixed.cx = m_bAutoWidth ? m_cxyFixedLast.cx : m_cxyFixed.cx;
         }
         else
