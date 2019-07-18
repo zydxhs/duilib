@@ -190,6 +190,18 @@ void wkeSetDebugConfig(wkeWebView webView, CDuiString debugString, CDuiString pa
     pfn ? pfn(webView, strDebug.c_str(), strParam.c_str()) : pfn;
 }
 
+DUILIB_API void *wkeGetDebugConfig(wkeWebView webView, CDuiString &debugString)
+{
+#if defined(UNICODE) || defined(_UNICODE)
+    std::string strDebug = WStr2Utf8(debugString);
+#else
+    std::string strDebug = Ansi2Utf8(debugString.GetData());
+#endif
+    typedef void *(*FUN)(wkeWebView, const char *);
+    LOADFUN(wkeGetDebugConfig);
+    return pfn ? pfn(webView, strDebug.c_str()) : NULL;
+}
+
 void wkeSetResourceGc(wkeWebView webView, long intervalSec)
 {
     typedef void(*FUN)(wkeWebView, long);
@@ -277,6 +289,13 @@ void wkeSetLanguage(wkeWebView webView, CDuiString language)
     typedef void(*FUN)(wkeWebView, const utf8 *);
     LOADFUN(wkeSetLanguage);
     pfn ? pfn(webView, strLanguage.c_str()) : pfn;
+}
+
+DUILIB_API void wkeSetContextMenuItemShow(wkeWebView webView, wkeMenuItemId item, bool isShow)
+{
+    typedef void(*FUN)(wkeWebView, wkeMenuItemId, bool);
+    LOADFUN(wkeSetContextMenuItemShow);
+    pfn ? pfn(webView, item, isShow) : pfn;
 }
 
 void wkeSetViewNetInterface(wkeWebView webView, CDuiString netInterface)
@@ -862,6 +881,13 @@ void wkeSetCookieJarFullPath(wkeWebView webView, CDuiString path)
     pfn ? pfn(webView, strPath.c_str()) : pfn;
 }
 
+DUILIB_API void wkeClearCookie(wkeWebView webView)
+{
+    typedef void(*FUN)(wkeWebView);
+    LOADFUN(wkeClearCookie);
+    pfn ? pfn(webView) : pfn;
+}
+
 void wkeSetLocalStorageFullPath(wkeWebView webView, CDuiString path)
 {
 #if defined(UNICODE) || defined(_UNICODE)
@@ -1300,6 +1326,13 @@ void wkeOnLoadUrlEnd(wkeWebView webView, wkeLoadUrlEndCallback callback, void *p
     pfn ? pfn(webView, callback, param) : pfn;
 }
 
+DUILIB_API void wkeOnLoadUrlFail(wkeWebView webView, wkeLoadUrlFailCallback callback, void *callbackParam)
+{
+    typedef void(*FUN)(wkeWebView, wkeLoadUrlFailCallback, void *);
+    LOADFUN(wkeOnLoadUrlFail);
+    pfn ? pfn(webView, callback, callbackParam) : pfn;
+}
+
 void wkeOnDidCreateScriptContext(wkeWebView webView, wkeDidCreateScriptContextCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeDidCreateScriptContextCallback, void *);
@@ -1358,6 +1391,14 @@ void wkeOnPrint(wkeWebView webView, wkeOnPrintCallback callback, void *param)
     pfn ? pfn(webView, callback, param) : pfn;
 }
 
+DUILIB_API void wkeScreenshot(wkeWebView webView, const wkeScreenshotSettings *settings,
+                              wkeOnScreenshot callback, void *param)
+{
+    typedef void(*FUN)(wkeWebView, const wkeScreenshotSettings *, wkeOnScreenshot, void *);
+    LOADFUN(wkeScreenshot);
+    pfn ? pfn(webView, settings, callback, param) : pfn;
+}
+
 void wkeOnOtherLoad(wkeWebView webView, wkeOnOtherLoadCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeOnOtherLoadCallback, void *);
@@ -1405,9 +1446,9 @@ void wkeNetSetHTTPHeaderField(wkeNetJob jobPtr, CDuiString key, CDuiString value
     std::wstring strKey = Ansi2WStr(key.GetData());
     std::wstring strValue = Ansi2WStr(value.GetData());
 #endif
-    typedef void(*FUN)(wkeNetJob, wchar_t *, wchar_t *, bool);
+    typedef void(*FUN)(wkeNetJob, const wchar_t *, const wchar_t *, bool);
     LOADFUN(wkeNetSetHTTPHeaderField);
-    pfn ? pfn(jobPtr, (wchar_t *)strKey.c_str(), (wchar_t *)strValue.c_str(), response) : pfn;
+    pfn ? pfn(jobPtr, strKey.c_str(), strValue.c_str(), response) : pfn;
 }
 
 CDuiString wkeNetGetHTTPHeaderField(wkeNetJob jobPtr, CDuiString key)
@@ -1496,6 +1537,13 @@ CDuiString wkeNetGetUrlByJob(wkeNetJob jobPtr)
 #else
     return Utf82Ansi(pBuf).c_str();
 #endif
+}
+
+DUILIB_API const wkeSlist *wkeNetGetRawHttpHead(wkeNetJob jobPtr)
+{
+    typedef const wkeSlist*(*FUN)(wkeNetJob jobPtr);
+    LOADFUN(wkeNetGetRawHttpHead);
+    return pfn ? pfn(jobPtr) : NULL;
 }
 
 void wkeNetCancelRequest(wkeNetJob jobPtr)

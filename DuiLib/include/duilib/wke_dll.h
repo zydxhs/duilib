@@ -23,7 +23,6 @@ typedef void *wkeNetJob;
 typedef struct _tagWkeMediaPlayer *wkeMediaPlayer;
 typedef struct _tagWkeMediaPlayerClient *wkeMediaPlayerClient;
 typedef struct _tabblinkWebURLRequestPtr *blinkWebURLRequestPtr;
-typedef void *wkeWebFrameHandle;
 
 
 struct wkeRect
@@ -44,7 +43,7 @@ enum wkeMouseFlags
 {
     WKE_LBUTTON = 0x01,
     WKE_RBUTTON = 0x02,
-    WKE_SHIFT = 0x04,
+    WKE_SHIFT   = 0x04,
     WKE_CONTROL = 0x08,
     WKE_MBUTTON = 0x10,
 };
@@ -52,22 +51,22 @@ enum wkeMouseFlags
 enum wkeKeyFlags
 {
     WKE_EXTENDED = 0x0100,
-    WKE_REPEAT = 0x4000,
+    WKE_REPEAT   = 0x4000,
 };
 
 enum wkeMouseMsg
 {
-    WKE_MSG_MOUSEMOVE = 0x0200,
-    WKE_MSG_LBUTTONDOWN = 0x0201,
-    WKE_MSG_LBUTTONUP = 0x0202,
+    WKE_MSG_MOUSEMOVE     = 0x0200,
+    WKE_MSG_LBUTTONDOWN   = 0x0201,
+    WKE_MSG_LBUTTONUP     = 0x0202,
     WKE_MSG_LBUTTONDBLCLK = 0x0203,
-    WKE_MSG_RBUTTONDOWN = 0x0204,
-    WKE_MSG_RBUTTONUP = 0x0205,
+    WKE_MSG_RBUTTONDOWN   = 0x0204,
+    WKE_MSG_RBUTTONUP     = 0x0205,
     WKE_MSG_RBUTTONDBLCLK = 0x0206,
-    WKE_MSG_MBUTTONDOWN = 0x0207,
-    WKE_MSG_MBUTTONUP = 0x0208,
+    WKE_MSG_MBUTTONDOWN   = 0x0207,
+    WKE_MSG_MBUTTONUP     = 0x0208,
     WKE_MSG_MBUTTONDBLCLK = 0x0209,
-    WKE_MSG_MOUSEWHEEL = 0x020A,
+    WKE_MSG_MOUSEWHEEL    = 0x020A,
 };
 
 enum wkeProxyType
@@ -78,6 +77,27 @@ enum wkeProxyType
     WKE_PROXY_SOCKS4A,
     WKE_PROXY_SOCKS5,
     WKE_PROXY_SOCKS5HOSTNAME
+};
+
+enum wkeMenuItemId
+{
+    kWkeMenuSelectedAllId      = 1 << 1,
+    kWkeMenuSelectedTextId     = 1 << 2,
+    kWkeMenuUndoId             = 1 << 3,
+    kWkeMenuCopyImageId        = 1 << 4,
+    kWkeMenuInspectElementAtId = 1 << 5,
+    kWkeMenuCutId              = 1 << 6,
+    kWkeMenuPasteId            = 1 << 7,
+    kWkeMenuPrintId            = 1 << 8,
+    kWkeMenuGoForwardId        = 1 << 9,
+    kWkeMenuGoBackId           = 1 << 10,
+    kWkeMenuReloadId           = 1 << 11,
+};
+
+struct wkeSlist
+{
+    char *data;
+    struct wkeSlist *next;
 };
 
 struct wkeProxy
@@ -91,7 +111,7 @@ struct wkeProxy
 
 enum wkeSettingMask
 {
-    WKE_SETTING_PROXY = 1,
+    WKE_SETTING_PROXY                         = 1,
     WKE_SETTING_PAINTCALLBACK_IN_OTHER_THREAD = 1 << 2,
 };
 
@@ -126,14 +146,14 @@ enum wkeNavigationType
 
 enum wkeWebDragOperation
 {
-    wkeWebDragOperationNone = 0,
-    wkeWebDragOperationCopy = 1,
-    wkeWebDragOperationLink = 2,
+    wkeWebDragOperationNone    = 0,
+    wkeWebDragOperationCopy    = 1,
+    wkeWebDragOperationLink    = 2,
     wkeWebDragOperationGeneric = 4,
     wkeWebDragOperationPrivate = 8,
-    wkeWebDragOperationMove = 16,
-    wkeWebDragOperationDelete = 32,
-    wkeWebDragOperationEvery = 0xffffffff
+    wkeWebDragOperationMove    = 16,
+    wkeWebDragOperationDelete  = 32,
+    wkeWebDragOperationEvery   = 0xffffffff
 };
 typedef wkeWebDragOperation wkeWebDragOperationsMask;
 
@@ -206,21 +226,21 @@ struct wkePostBodyElements
 
 enum wkeResourceType
 {
-    WKE_RESOURCE_TYPE_MAIN_FRAME = 0,       // top level page
-    WKE_RESOURCE_TYPE_SUB_FRAME = 1,        // frame or iframe
-    WKE_RESOURCE_TYPE_STYLESHEET = 2,       // a CSS stylesheet
-    WKE_RESOURCE_TYPE_SCRIPT = 3,           // an external script
-    WKE_RESOURCE_TYPE_IMAGE = 4,            // an image (jpg/gif/png/etc)
-    WKE_RESOURCE_TYPE_FONT_RESOURCE = 5,    // a font
-    WKE_RESOURCE_TYPE_SUB_RESOURCE = 6,     // an "other" subresource.
-    WKE_RESOURCE_TYPE_OBJECT = 7,           // an object (or embed) tag for a plugin, or a resource that a plugin requested.
-    WKE_RESOURCE_TYPE_MEDIA = 8,            // a media resource.
-    WKE_RESOURCE_TYPE_WORKER = 9,           // the main resource of a dedicated worker.
-    WKE_RESOURCE_TYPE_SHARED_WORKER = 10,   // the main resource of a shared worker.
-    WKE_RESOURCE_TYPE_PREFETCH = 11,        // an explicitly requested prefetch
-    WKE_RESOURCE_TYPE_FAVICON = 12,         // a favicon
-    WKE_RESOURCE_TYPE_XHR = 13,             // a XMLHttpRequest
-    WKE_RESOURCE_TYPE_PING = 14,            // a ping request for <a ping>
+    WKE_RESOURCE_TYPE_MAIN_FRAME     = 0,   // top level page
+    WKE_RESOURCE_TYPE_SUB_FRAME      = 1,   // frame or iframe
+    WKE_RESOURCE_TYPE_STYLESHEET     = 2,   // a CSS stylesheet
+    WKE_RESOURCE_TYPE_SCRIPT         = 3,   // an external script
+    WKE_RESOURCE_TYPE_IMAGE          = 4,   // an image (jpg/gif/png/etc)
+    WKE_RESOURCE_TYPE_FONT_RESOURCE  = 5,   // a font
+    WKE_RESOURCE_TYPE_SUB_RESOURCE   = 6,   // an "other" subresource.
+    WKE_RESOURCE_TYPE_OBJECT         = 7,   // an object (or embed) tag for a plugin, or a resource that a plugin requested.
+    WKE_RESOURCE_TYPE_MEDIA          = 8,   // a media resource.
+    WKE_RESOURCE_TYPE_WORKER         = 9,   // the main resource of a dedicated worker.
+    WKE_RESOURCE_TYPE_SHARED_WORKER  = 10,  // the main resource of a shared worker.
+    WKE_RESOURCE_TYPE_PREFETCH       = 11,  // an explicitly requested prefetch
+    WKE_RESOURCE_TYPE_FAVICON        = 12,  // a favicon
+    WKE_RESOURCE_TYPE_XHR            = 13,  // a XMLHttpRequest
+    WKE_RESOURCE_TYPE_PING           = 14,  // a ping request for <a ping>
     WKE_RESOURCE_TYPE_SERVICE_WORKER = 15,  // the main resource of a service worker.
     WKE_RESOURCE_TYPE_LAST_TYPE
 };
@@ -244,6 +264,13 @@ struct wkeTempCallbackInfo
     const char *url;
     wkePostBodyElements *postBody;
     wkeNetJob job;
+};
+
+struct wkeScreenshotSettings
+{
+    int structSize;
+    int width;
+    int height;
 };
 
 
@@ -284,14 +311,17 @@ DUILIB_API void wkeSetViewSettings(wkeWebView webView, const wkeViewSettings *se
 // 参数：
 // debugString：
 // "showDevTools"   开启开发者工具，此时param要填写开发者工具的资源路径，如file:///c:/miniblink-release/front_end/inspector.html。注意param此时必须是utf8编码
-// "wakeMinInterval"    设置帧率，默认值是10，值越大帧率越低
-// "drawMinInterval"    设置帧率，默认值是3，值越大帧率越低
-// "antiAlias"  设置抗锯齿渲染。param必须设置为"1"
-// "minimumFontSize"    最小字体
+// "wakeMinInterval"        设置帧率，默认值是10，值越大帧率越低
+// "drawMinInterval"        设置帧率，默认值是3，值越大帧率越低
+// "antiAlias"              设置抗锯齿渲染。param必须设置为"1"
+// "minimumFontSize"        最小字体
 // "minimumLogicalFontSize" 最小逻辑字体
-// "defaultFontSize"    默认字体
+// "defaultFontSize"        默认字体
 // "defaultFixedFontSize"   默认fixed字体
+// "consoleOutput"          参数值为"1"时，可关闭console在dbgview下的输出
 DUILIB_API void wkeSetDebugConfig(wkeWebView webView, CDuiString debugString, CDuiString param);
+DUILIB_API void *wkeGetDebugConfig(wkeWebView webView, CDuiString debugString);
+
 // 单独设置资源回收间隔
 DUILIB_API void wkeSetResourceGc(wkeWebView webView, long intervalSec);
 
@@ -315,6 +345,8 @@ DUILIB_API void wkeSetDragEnable(wkeWebView webView, bool b);
 // 可关闭拖拽到其他进程
 DUILIB_API void wkeSetDragDropEnable(wkeWebView webView, bool b);
 DUILIB_API void wkeSetLanguage(wkeWebView webView, CDuiString language);
+// 设置某项menu是否显示
+DUILIB_API void wkeSetContextMenuItemShow(wkeWebView webView, wkeMenuItemId item, bool isShow);
 
 DUILIB_API void wkeSetViewNetInterface(wkeWebView webView, CDuiString netInterface);
 
@@ -490,6 +522,7 @@ DUILIB_API bool wkeIsCookieEnabled(wkeWebView webView);
 DUILIB_API void wkeSetCookieJarPath(wkeWebView webView, CDuiString path);
 // 设置cookie的全路径+文件名，如“c:\mb\cookie.dat”
 DUILIB_API void wkeSetCookieJarFullPath(wkeWebView webView, CDuiString path);
+DUILIB_API void wkeClearCookie(wkeWebView webView);
 // 设置local storage的全路径。如“c:\mb\LocalStorage\”
 // 注意：这个接口只能接受目录。
 DUILIB_API void wkeSetLocalStorageFullPath(wkeWebView webView, CDuiString path);
@@ -624,15 +657,16 @@ DUILIB_API void wkeSetDragFiles(wkeWebView webView, const POINT *clintPos, const
 // 参数：
 // device：设备的字符串。可取值有：
 // "navigator.maxTouchPoints"   此时 paramInt 需要被设置，表示 touch 的点数
-// "navigator.platform" 此时 paramStr 需要被设置，表示js里获取的 navigator.platform字符串
+// "navigator.platform"         此时 paramStr 需要被设置，表示js里获取的 navigator.platform字符串
 // "navigator.hardwareConcurrency"  此时 paramInt 需要被设置，表示js里获取的 navigator.hardwareConcurrency 整数值
-// "screen.width"   此时 paramInt 需要被设置，表示js里获取的 screen.width 整数值
-// "screen.height"  此时 paramInt 需要被设置，表示js里获取的 screen.height 整数值
+// "screen.width"       此时 paramInt 需要被设置，表示js里获取的 screen.width 整数值
+// "screen.height"      此时 paramInt 需要被设置，表示js里获取的 screen.height 整数值
 // "screen.availWidth"  此时 paramInt 需要被设置，表示js里获取的 screen.availWidth 整数值
 // "screen.availHeight" 此时 paramInt 需要被设置，表示js里获取的 screen.availHeight 整数值
 // "screen.pixelDepth"  此时 paramInt 需要被设置，表示js里获取的 screen.pixelDepth 整数值
 // "screen.pixelDepth"  目前等价于"screen.pixelDepth"
 // "window.devicePixelRatio"    同上
+// "navigator.connection.type"
 DUILIB_API void wkeSetDeviceParameter(wkeWebView webView, CDuiString device, CDuiString paramStr,
                                       int paramInt, float paramFloat);
 
@@ -684,7 +718,7 @@ typedef bool(WKE_CALL *wkePromptBoxCallback)(wkeWebView webView, void *param, co
 DUILIB_API void wkeOnPromptBox(wkeWebView webView, wkePromptBoxCallback callback, void *callbackParam);
 
 typedef bool(WKE_CALL *wkeNavigationCallback)(wkeWebView webView, void *param,
-                                              wkeNavigationType navigationType, const wkeString url);
+                                              wkeNavigationType navigationType, wkeString url);
 
 // 网页开始浏览将触发回调
 // 参数：typedef bool(*wkeNavigationCallback)(wkeWebView webView, void* param, wkeNavigationType navigationType, const wkeString url);
@@ -770,13 +804,13 @@ DUILIB_API void wkeOnDownload2(wkeWebView webView, wkeDownload2Callback callback
 
 enum wkeConsoleLevel
 {
-    wkeLevelDebug = 4,
-    wkeLevelLog = 1,
-    wkeLevelInfo = 5,
-    wkeLevelWarning = 2,
-    wkeLevelError = 3,
+    wkeLevelDebug        = 4,
+    wkeLevelLog          = 1,
+    wkeLevelInfo         = 5,
+    wkeLevelWarning      = 2,
+    wkeLevelError        = 3,
     wkeLevelRevokedError = 6,
-    wkeLevelLast = wkeLevelInfo
+    wkeLevelLast         = wkeLevelInfo
 };
 
 typedef void(WKE_CALL *wkeConsoleCallback)(wkeWebView webView, void *param, wkeConsoleLevel level,
@@ -855,6 +889,10 @@ typedef void(WKE_CALL *wkeLoadUrlEndCallback)(wkeWebView webView, void *param, c
 // 见wkeOnLoadUrlBegin的描述
 DUILIB_API void wkeOnLoadUrlEnd(wkeWebView webView, wkeLoadUrlEndCallback callback, void *callbackParam);
 
+typedef void(WKE_CALL *wkeLoadUrlFailCallback)(wkeWebView webView, void *param, const utf8 *url,
+                                               wkeNetJob job);
+DUILIB_API void wkeOnLoadUrlFail(wkeWebView webView, wkeLoadUrlFailCallback callback, void *callbackParam);
+
 typedef void(WKE_CALL *wkeDidCreateScriptContextCallback)(wkeWebView webView, void *param,
                                                           wkeWebFrameHandle frameId, void *context, int extensionGroup, int worldId);
 // javascript的v8执行环境被创建时触发此回调
@@ -915,6 +953,11 @@ DUILIB_API void wkeOnStartDragging(wkeWebView webView, wkeStartDraggingCallback 
 typedef void(WKE_CALL *wkeOnPrintCallback)(wkeWebView webView, void *param, wkeWebFrameHandle frameId,
                                            void *printParams);
 DUILIB_API void wkeOnPrint(wkeWebView webView, wkeOnPrintCallback callback, void *param);
+
+typedef void(WKE_CALL *wkeOnScreenshot)(wkeWebView webView, void *param, const char *data, size_t size);
+DUILIB_API void wkeScreenshot(wkeWebView webView,
+                              const wkeScreenshotSettings *settings,
+                              wkeOnScreenshot callback, void *param);
 
 enum wkeOtherLoadType
 {
@@ -978,6 +1021,7 @@ DUILIB_API int wkeNetGetFavicon(wkeWebView webView, wkeOnNetGetFaviconCallback c
 
 DUILIB_API void wkeNetContinueJob(wkeNetJob jobPtr);
 DUILIB_API CDuiString wkeNetGetUrlByJob(wkeNetJob jobPtr);
+DUILIB_API const wkeSlist *wkeNetGetRawHttpHead(wkeNetJob jobPtr);
 // 在wkeOnLoadUrlBegin回调里调用，设置后，此请求将被取消。
 DUILIB_API void wkeNetCancelRequest(wkeNetJob jobPtr);
 
@@ -1129,23 +1173,17 @@ struct wkePdfDatas
 
 struct wkePrintSettings
 {
-    int structSize;
-    int dpi;
-    int width; // in px
-    int height;
-    int marginTop;
-    int marginBottom;
-    int marginLeft;
-    int marginRight;
+    int  structSize;
+    int  dpi;
+    int  width; // in px
+    int  height;
+    int  marginTop;
+    int  marginBottom;
+    int  marginLeft;
+    int  marginRight;
     BOOL isPrintPageHeadAndFooter;
     BOOL isPrintBackgroud;
-};
-
-struct wkeScreenshotSettings
-{
-    int structSize;
-    int width;
-    int height;
+    BOOL isLandscape;
 };
 
 DUILIB_API const wkePdfDatas *wkeUtilPrintToPdf(wkeWebView webView, wkeWebFrameHandle frameId,
