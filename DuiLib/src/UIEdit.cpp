@@ -1147,7 +1147,7 @@ void CEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if (_tcscmp(pstrName, _T("delayvalidate")) == 0)
     {
         m_dwDelayValidateTime = ParseDWord(pstrValue);
-        m_dwDelayValidateTime = m_dwDelayValidateTime >= 300 ? m_dwDelayValidateTime : 300;
+        // m_dwDelayValidateTime = m_dwDelayValidateTime >= 300 ? m_dwDelayValidateTime : 300;
     }
     else if (_tcscmp(pstrName, _T("dragenable")) == 0) { DUITRACE(_T("不支持属性:dragenable")); }
     else if (_tcscmp(pstrName, _T("dragimage")) == 0) { DUITRACE(_T("不支持属性:drageimage")); }
