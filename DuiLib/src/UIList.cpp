@@ -1314,6 +1314,22 @@ void CListUI::GetAllSelectedItem(CDuiValArray &arySelIdx, int nColumn)
 
 void CListUI::SetAllItemSelected(bool bSelect, int nColumn)
 {
+    if (nColumn >= m_pHeader->GetCount())
+    {
+        DUITRACE(_T("nColumn=%d, 超出了列范围！"), nColumn);
+        return;
+    }
+
+    // 设置表头中的复选框状态
+    if (NULL != m_pHeader)
+    {
+        CListHeaderItemUI *pHItem = dynamic_cast<CListHeaderItemUI *>(m_pHeader->GetItemAt(nColumn));
+        ASSERT(NULL != pHItem);
+        CCheckBoxUI *pCtrl = dynamic_cast<CCheckBoxUI *>(m_pManager->FindSubControlByClass(pHItem, DUI_CTR_CHECKBOX));
+        ASSERT(NULL != pCtrl);
+        pCtrl ? pCtrl->SetCheck(bSelect) : NULL;
+    }
+
     for (int i = 0; i < GetCount(); ++i)
     {
         if (CListElementUI *pCtrl = dynamic_cast<CListElementUI *>(GetItemAt(i)))
