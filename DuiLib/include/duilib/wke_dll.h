@@ -319,8 +319,8 @@ DUILIB_API void wkeSetViewSettings(wkeWebView webView, const wkeViewSettings *se
 // "defaultFontSize"        默认字体
 // "defaultFixedFontSize"   默认fixed字体
 // "consoleOutput"          参数值为"1"时，可关闭console在dbgview下的输出
-DUILIB_API void wkeSetDebugConfig(wkeWebView webView, CDuiString debugString, CDuiString param);
-DUILIB_API void *wkeGetDebugConfig(wkeWebView webView, CDuiString debugString);
+DUILIB_API void wkeSetDebugConfig(wkeWebView webView, const CDuiString &debugString, const CDuiString &param);
+DUILIB_API void *wkeGetDebugConfig(wkeWebView webView, const CDuiString &debugString);
 
 // 单独设置资源回收间隔
 DUILIB_API void wkeSetResourceGc(wkeWebView webView, long intervalSec);
@@ -344,11 +344,11 @@ DUILIB_API void wkeSetHeadlessEnabled(wkeWebView webView, bool b);
 DUILIB_API void wkeSetDragEnable(wkeWebView webView, bool b);
 // 可关闭拖拽到其他进程
 DUILIB_API void wkeSetDragDropEnable(wkeWebView webView, bool b);
-DUILIB_API void wkeSetLanguage(wkeWebView webView, CDuiString language);
+DUILIB_API void wkeSetLanguage(wkeWebView webView, const CDuiString &language);
 // 设置某项menu是否显示
 DUILIB_API void wkeSetContextMenuItemShow(wkeWebView webView, wkeMenuItemId item, bool isShow);
 
-DUILIB_API void wkeSetViewNetInterface(wkeWebView webView, CDuiString netInterface);
+DUILIB_API void wkeSetViewNetInterface(wkeWebView webView, const CDuiString &netInterface);
 
 // 设置整个mb的代码。此句是全局生效
 DUILIB_API void wkeSetProxy(const wkeProxy *proxy);
@@ -356,7 +356,7 @@ DUILIB_API void wkeSetProxy(const wkeProxy *proxy);
 DUILIB_API void wkeSetViewProxy(wkeWebView webView, wkeProxy *proxy);
 
 DUILIB_API CDuiString wkeGetName(wkeWebView webView);
-DUILIB_API void wkeSetName(wkeWebView webView, CDuiString name);
+DUILIB_API void wkeSetName(wkeWebView webView, const CDuiString &name);
 
 // 设置wkeWebView对应的窗口句柄。
 // 注意：只有在无窗口模式下才能使用。如果是用wkeCreateWebWindow创建的webview，已经自带窗口句柄了。
@@ -371,25 +371,25 @@ DUILIB_API bool wkeIsTransparent(wkeWebView webView);
 DUILIB_API void wkeSetTransparent(wkeWebView webView, bool transparent);
 
 // 设置webview的UA
-DUILIB_API void wkeSetUserAgent(wkeWebView webView, CDuiString userAgent);
+DUILIB_API void wkeSetUserAgent(wkeWebView webView, const CDuiString &userAgent);
 // 获取webview的UA
 DUILIB_API CDuiString wkeGetUserAgent(wkeWebView webView);
 
 typedef void(WKE_CALL *wkeOnShowDevtoolsCallback)(wkeWebView webView, void *param);
-DUILIB_API void wkeShowDevtools(wkeWebView webView, CDuiString path, wkeOnShowDevtoolsCallback callback,
-                                void *param);
+DUILIB_API void wkeShowDevtools(wkeWebView webView, const CDuiString &path,
+                                wkeOnShowDevtoolsCallback callback, void *param);
 
 // 加载url。url必须是网络路径，如"http://qq.com/"
-DUILIB_API void wkeLoadURL(wkeWebView webView, CDuiString url);
-DUILIB_API void wkePostURL(wkeWebView wkeView, CDuiString url, CDuiString postData);
+DUILIB_API void wkeLoadURL(wkeWebView webView, const CDuiString &url);
+DUILIB_API void wkePostURL(wkeWebView wkeView, const CDuiString &url, const CDuiString &postData);
 // 加载一段html
 // 参数：略
 // 注意：如果html里有相对路径，则是相对exe所在目录的路径
-DUILIB_API void wkeLoadHTML(wkeWebView webView, CDuiString html);
+DUILIB_API void wkeLoadHTML(wkeWebView webView, const CDuiString &html);
 // 加载一段html，但可以指定baseURL，也就是相对于哪个目录的url
-DUILIB_API void wkeLoadHtmlWithBaseUrl(wkeWebView webView, CDuiString html, CDuiString baseUrl);
+DUILIB_API void wkeLoadHtmlWithBaseUrl(wkeWebView webView, const CDuiString &html, const CDuiString &baseUrl);
 
-DUILIB_API void wkeLoadFile(wkeWebView webView, CDuiString filename);
+DUILIB_API void wkeLoadFile(wkeWebView webView, const CDuiString &filename);
 
 // 获取webview主frame的url
 DUILIB_API CDuiString wkeGetURL(wkeWebView webView);
@@ -414,7 +414,7 @@ DUILIB_API int wkeGetWebviewId(wkeWebView webView);
 DUILIB_API bool wkeIsWebviewAlive(int id);
 
 DUILIB_API CDuiString wkeGetDocumentCompleteURL(wkeWebView webView, wkeWebFrameHandle frameId,
-                                                CDuiString partialURL);
+                                                const CDuiString &partialURL);
 
 DUILIB_API wkeMemBuf *wkeCreateMemBuf(wkeWebView webView, void *buf, size_t length);
 DUILIB_API void wkeFreeMemBuf(wkeMemBuf *buf);
@@ -480,7 +480,7 @@ DUILIB_API void wkeEditorRedo(wkeWebView webView);
 DUILIB_API CDuiString wkeGetCookie(wkeWebView webView);
 // 设置页面cookie。
 // 注意：cookie必须符合curl的cookie写法。一个例子是：PERSONALIZE=123;expires=Monday, 13-Jun-2022 03:04:55 GMT; domain=.fidelity.com; path=/; secure
-DUILIB_API void wkeSetCookie(wkeWebView webView, CDuiString url, CDuiString cookie);
+DUILIB_API void wkeSetCookie(wkeWebView webView, const CDuiString &url, const CDuiString &cookie);
 
 typedef bool(WKE_CALL *wkeCookieVisitor)(
     void *params,
@@ -519,14 +519,14 @@ DUILIB_API void wkePerformCookieCommand(wkeWebView webView, wkeCookieCommand com
 DUILIB_API void wkeSetCookieEnabled(wkeWebView webView, bool enable);
 DUILIB_API bool wkeIsCookieEnabled(wkeWebView webView);
 // 设置cookie的本地文件目录。默认是当前目录。cookies存在当前目录的“cookie.dat”里
-DUILIB_API void wkeSetCookieJarPath(wkeWebView webView, CDuiString path);
+DUILIB_API void wkeSetCookieJarPath(wkeWebView webView, const CDuiString &path);
 // 设置cookie的全路径+文件名，如“c:\mb\cookie.dat”
-DUILIB_API void wkeSetCookieJarFullPath(wkeWebView webView, CDuiString path);
+DUILIB_API void wkeSetCookieJarFullPath(wkeWebView webView, const CDuiString &path);
 DUILIB_API void wkeClearCookie(wkeWebView webView);
 // 设置local storage的全路径。如“c:\mb\LocalStorage\”
 // 注意：这个接口只能接受目录。
-DUILIB_API void wkeSetLocalStorageFullPath(wkeWebView webView, CDuiString path);
-DUILIB_API void wkeAddPluginDirectory(wkeWebView webView, CDuiString path);
+DUILIB_API void wkeSetLocalStorageFullPath(wkeWebView webView, const CDuiString &path);
+DUILIB_API void wkeAddPluginDirectory(wkeWebView webView, const CDuiString &path);
 
 // 设置、获取 音量
 DUILIB_API void wkeSetMediaVolume(wkeWebView webView, float volume);
@@ -568,7 +568,7 @@ DUILIB_API wkeRect wkeGetCaretRect(wkeWebView webView);
 
 // 运行一段js。返回js的值jsValue。jsValue是个封装了内部v8各种类型的类，如果需要获取详细信息，有jsXXX相关接口可以调用。见下述。
 // 注意，此函数以及wkeRunJS，执行的js，也就是script，是在一个闭包中
-DUILIB_API jsValue wkeRunJS(wkeWebView webView, CDuiString script);
+DUILIB_API jsValue wkeRunJS(wkeWebView webView, const CDuiString &script);
 
 // 获取页面主frame的jsExecState。jsExecState是什么，见下述。
 DUILIB_API jsExecState wkeGlobalExec(wkeWebView webView);
@@ -587,17 +587,17 @@ DUILIB_API void wkeSetEditable(wkeWebView webView, bool editable);
 // 获取wkeString结构体对应的字符串，ansi/utf16编码
 DUILIB_API CDuiString wkeGetString(const wkeString s);
 // 设置wkeString结构体对应的字符串，ansi/utf16编码
-DUILIB_API void wkeSetString(wkeString string, CDuiString str);
+DUILIB_API void wkeSetString(wkeString string, const CDuiString &str);
 
 // 通过utf16编码的字符串，创建一个wkeString
-DUILIB_API wkeString wkeCreateString(CDuiString str);
+DUILIB_API wkeString wkeCreateString(const CDuiString &str);
 // 析构这个wkeString
 DUILIB_API void wkeDeleteString(wkeString str);
 
 DUILIB_API wkeWebView wkeGetWebViewForCurrentContext();
 // 对webView设置一个key value键值对。可以用来保存用户自己定义的任何指针
-DUILIB_API void wkeSetUserKeyValue(wkeWebView webView, CDuiString key, void *value);
-DUILIB_API void *wkeGetUserKeyValue(wkeWebView webView, CDuiString key);
+DUILIB_API void wkeSetUserKeyValue(wkeWebView webView, const CDuiString &key, void *value);
+DUILIB_API void *wkeGetUserKeyValue(wkeWebView webView, const CDuiString &key);
 
 
 enum WkeCursorInfoType
@@ -667,8 +667,8 @@ DUILIB_API void wkeSetDragFiles(wkeWebView webView, const POINT *clintPos, const
 // "screen.pixelDepth"  目前等价于"screen.pixelDepth"
 // "window.devicePixelRatio"    同上
 // "navigator.connection.type"
-DUILIB_API void wkeSetDeviceParameter(wkeWebView webView, CDuiString device, CDuiString paramStr,
-                                      int paramInt, float paramFloat);
+DUILIB_API void wkeSetDeviceParameter(wkeWebView webView, const CDuiString &device,
+                                      const CDuiString &paramStr, int paramInt, float paramFloat);
 
 DUILIB_API wkeTempCallbackInfo *wkeGetTempCallbackInfo(wkeWebView webView);
 
@@ -976,14 +976,15 @@ DUILIB_API void wkeOnOtherLoad(wkeWebView webView, wkeOnOtherLoadCallback callba
 DUILIB_API bool wkeIsProcessingUserGesture(wkeWebView webView);
 
 // 在wkeOnLoadUrlBegin回调里调用，表示设置http请求的MIME type
-DUILIB_API void wkeNetSetMIMEType(wkeNetJob jobPtr, CDuiString type);
+DUILIB_API void wkeNetSetMIMEType(wkeNetJob jobPtr, const CDuiString &type);
 // 参数：第2个参数可以传nullptr
 DUILIB_API CDuiString wkeNetGetMIMEType(wkeNetJob jobPtr, wkeString mime);
 // 在wkeOnLoadUrlBegin回调里调用，表示设置http请求（或者file:///协议）的 http header field。response一直要被设置成false
-DUILIB_API void wkeNetSetHTTPHeaderField(wkeNetJob jobPtr, CDuiString key, CDuiString value, bool response);
+DUILIB_API void wkeNetSetHTTPHeaderField(wkeNetJob jobPtr, const CDuiString &key, const CDuiString &value,
+                                         bool response);
 
-DUILIB_API CDuiString wkeNetGetHTTPHeaderField(wkeNetJob jobPtr, CDuiString key);
-DUILIB_API CDuiString wkeNetGetHTTPHeaderFieldFromResponse(wkeNetJob jobPtr, CDuiString key);
+DUILIB_API CDuiString wkeNetGetHTTPHeaderField(wkeNetJob jobPtr, const CDuiString &key);
+DUILIB_API CDuiString wkeNetGetHTTPHeaderFieldFromResponse(wkeNetJob jobPtr, const CDuiString &key);
 
 // 在wkeOnLoadUrlEnd里被调用，表示设置hook后缓存的数据
 // 调用此函数后,网络层收到数据会存储在一buf内,接收数据完成后响应OnLoadUrlEnd事件.#此调用严重影响性能,慎用
@@ -1030,17 +1031,18 @@ DUILIB_API void wkeNetCancelRequest(wkeNetJob jobPtr);
 // 返回值：TRUE代表成功，FALSE代表调用失败，不能再调用wkeNetContinueJob了
 DUILIB_API BOOL wkeNetHoldJobToAsynCommit(wkeNetJob jobPtr);
 
-DUILIB_API void wkeNetChangeRequestUrl(wkeNetJob jobPtr, CDuiString url);
+DUILIB_API void wkeNetChangeRequestUrl(wkeNetJob jobPtr, const CDuiString &url);
 
 typedef struct wkeWebUrlRequest *wkeWebUrlRequestPtr;
 typedef struct wkeWebUrlResponse *wkeWebUrlResponsePtr;
 
-DUILIB_API wkeWebUrlRequestPtr wkeNetCreateWebUrlRequest(CDuiString url, CDuiString method, CDuiString mime);
+DUILIB_API wkeWebUrlRequestPtr wkeNetCreateWebUrlRequest(const CDuiString &url, const CDuiString &method,
+                                                         const CDuiString &mime);
 DUILIB_API wkeWebUrlRequestPtr wkeNetCreateWebUrlRequest2(const blinkWebURLRequestPtr request);
 DUILIB_API blinkWebURLRequestPtr wkeNetCopyWebUrlRequest(wkeNetJob jobPtr, bool needExtraData);
 DUILIB_API void wkeNetDeleteBlinkWebURLRequestPtr(blinkWebURLRequestPtr request);
-DUILIB_API void wkeNetAddHTTPHeaderFieldToUrlRequest(wkeWebUrlRequestPtr request, CDuiString name,
-                                                     CDuiString value);
+DUILIB_API void wkeNetAddHTTPHeaderFieldToUrlRequest(wkeWebUrlRequestPtr request, const CDuiString &name,
+                                                     const CDuiString &value);
 
 typedef void(WKE_CALL *wkeOnUrlRequestWillRedirectCallback)(wkeWebView webView, void *param,
                                                             wkeWebUrlRequestPtr oldRequest, wkeWebUrlRequestPtr request,
@@ -1091,9 +1093,9 @@ DUILIB_API wkeWebFrameHandle wkeWebFrameGetMainFrame(wkeWebView webView);
 // 运行js在指定的frame上，通过frameId
 // 参数：isInClosure表示是否在外层包个function() {}形式的闭包
 // 注意：如果需要返回值，在isInClosure为true时，需要写return，为false则不用
-DUILIB_API jsValue wkeRunJsByFrame(wkeWebView webView, wkeWebFrameHandle frameId, CDuiString script,
+DUILIB_API jsValue wkeRunJsByFrame(wkeWebView webView, wkeWebFrameHandle frameId, const CDuiString &script,
                                    bool isInClosure);
-DUILIB_API void wkeInsertCSSByFrame(wkeWebView webView, wkeWebFrameHandle frameId, CDuiString cssText);
+DUILIB_API void wkeInsertCSSByFrame(wkeWebView webView, wkeWebFrameHandle frameId, const CDuiString &cssText);
 
 typedef void *v8ContextPtr;
 DUILIB_API void wkeWebFrameGetMainWorldScriptContext(wkeWebView webView, wkeWebFrameHandle webFrameId,
@@ -1192,7 +1194,7 @@ DUILIB_API const wkeMemBuf *wkePrintToBitmap(wkeWebView webView, wkeWebFrameHand
                                              const wkeScreenshotSettings *settings);
 DUILIB_API void wkeUtilRelasePrintPdfDatas(const wkePdfDatas *datas);
 
-DUILIB_API void wkeSetWindowTitle(wkeWebView webView, CDuiString title);
+DUILIB_API void wkeSetWindowTitle(wkeWebView webView, const CDuiString &title);
 
 typedef void(WKE_CALL *wkeNodeOnCreateProcessCallback)(wkeWebView webView, void *param,
                                                        const WCHAR *applicationPath, const WCHAR *arguments, STARTUPINFOW *startup);
@@ -1201,15 +1203,22 @@ DUILIB_API void wkeNodeOnCreateProcess(wkeWebView webView, wkeNodeOnCreateProces
 
 typedef void(WKE_CALL *wkeOnPluginFindCallback)(wkeWebView webView, void *param, const utf8 *mime,
                                                 void *initializeFunc, void *getEntryPointsFunc, void *shutdownFunc);
-DUILIB_API void wkeOnPluginFind(wkeWebView webView, CDuiString mime, wkeOnPluginFindCallback callback,
+DUILIB_API void wkeOnPluginFind(wkeWebView webView, const CDuiString &mime, wkeOnPluginFindCallback callback,
                                 void *param);
 DUILIB_API void wkeAddNpapiPlugin(wkeWebView webView, void *initializeFunc, void *getEntryPointsFunc,
                                   void *shutdownFunc);
 
+DUILIB_API void wkePluginListBuilderAddPlugin(void *builder, const CDuiString &name, const CDuiString &desc,
+                                              const CDuiString &fileName);
+DUILIB_API void wkePluginListBuilderAddMediaTypeToLastPlugin(void *builder, const CDuiString &name,
+        const CDuiString &desc);
+DUILIB_API void wkePluginListBuilderAddFileExtensionToLastMediaType(void *builder,
+        const CDuiString &fileExtension);
+
 DUILIB_API wkeWebView wkeGetWebViewByNData(void *ndata);
 
 DUILIB_API bool wkeRegisterEmbedderCustomElement(wkeWebView webView, wkeWebFrameHandle frameId,
-                                                 CDuiString name, void *options, void *outResult);
+                                                 const CDuiString &name, void *options, void *outResult);
 
 typedef wkeMediaPlayer(WKE_CALL *wkeMediaPlayerFactory)(wkeWebView webView, wkeMediaPlayerClient client,
                                                         void *npBrowserFuncs, void *npPluginFuncs);
@@ -1219,11 +1228,11 @@ DUILIB_API void wkeSetMediaPlayerFactory(wkeWebView webView, wkeMediaPlayerFacto
 
 DUILIB_API CDuiString wkeGetContentAsMarkup(wkeWebView webView, wkeWebFrameHandle frame, size_t *size);
 
-DUILIB_API CDuiString wkeUtilDecodeURLEscape(CDuiString url);
-DUILIB_API CDuiString wkeUtilEncodeURLEscape(CDuiString url);
-DUILIB_API CDuiString wkeUtilBase64Encode(CDuiString str);
-DUILIB_API CDuiString wkeUtilBase64Decode(CDuiString str);
-DUILIB_API const wkeMemBuf *wkeUtilCreateV8Snapshot(CDuiString str);
+DUILIB_API CDuiString wkeUtilDecodeURLEscape(const CDuiString &url);
+DUILIB_API CDuiString wkeUtilEncodeURLEscape(const CDuiString &url);
+DUILIB_API CDuiString wkeUtilBase64Encode(const CDuiString &str);
+DUILIB_API CDuiString wkeUtilBase64Decode(const CDuiString &str);
+DUILIB_API const wkeMemBuf *wkeUtilCreateV8Snapshot(const CDuiString &str);
 
 DUILIB_API void wkeRunMessageLoop();
 
@@ -1249,23 +1258,24 @@ typedef jsValue(JS_CALL *jsNativeFunction)(jsExecState es);
 // js里：
 //  --------
 //  window.testCall('testStrt');
-DUILIB_API void __fastcall jsBindFunction(CDuiString name, jsNativeFunction fn, unsigned int argCount);
+DUILIB_API void __fastcall jsBindFunction(const CDuiString &name, jsNativeFunction fn, unsigned int argCount);
 // 对js winows绑定一个属性访问器，在js里windows.XXX这种形式调用时，fn会被调用
 // 示例：jsBindGetter("XXX")
-DUILIB_API void jsBindGetter(CDuiString name, jsNativeFunction fn);
+DUILIB_API void jsBindGetter(const CDuiString &name, jsNativeFunction fn);
 // 对js winows绑定一个属性设置器。
-DUILIB_API void jsBindSetter(CDuiString name, jsNativeFunction fn);
+DUILIB_API void jsBindSetter(const CDuiString &name, jsNativeFunction fn);
 
 typedef jsValue(WKE_CALL *jsNativeFunctionEx)(jsExecState es, void *param);
 
 // 和jsBindFunction功能类似，但更方便一点，可以传一个param做自定义数据。
 // 此接口和wkeJsBindFunction必须在webview创建前调用
-DUILIB_API void jsBindFunctionEx(CDuiString name, jsNativeFunctionEx fn, void *param, unsigned int argCount);
+DUILIB_API void jsBindFunctionEx(const CDuiString &name, jsNativeFunctionEx fn, void *param,
+                                 unsigned int argCount);
 // 对js winows绑定一个属性访问器，在js里windows.XXX这种形式调用时，fn会被调用
 // 示例：jsBindGetterEx("XXX")
-DUILIB_API void jsBindGetterEx(CDuiString name, jsNativeFunctionEx fn, void *param);
+DUILIB_API void jsBindGetterEx(const CDuiString &name, jsNativeFunctionEx fn, void *param);
 // 对js winows绑定一个属性设置器。
-DUILIB_API void jsBindSetterEx(CDuiString name, jsNativeFunctionEx fn, void *param);
+DUILIB_API void jsBindSetterEx(const CDuiString &name, jsNativeFunctionEx fn, void *param);
 
 // 获取es里存的参数个数。一般是在绑定的js调用c++回调里使用，判断js传递了多少参数给c++
 DUILIB_API int jsArgCount(jsExecState es);
@@ -1337,7 +1347,7 @@ DUILIB_API jsValue jsTrue();
 DUILIB_API jsValue jsFalse();
 
 // 构建一个utf8编码的字符串的的jsValue。str会在内部拷贝保存，注意是创建
-DUILIB_API jsValue jsString(jsExecState es, CDuiString str);
+DUILIB_API jsValue jsString(jsExecState es, const CDuiString &str);
 // 构建一个临时js object的jsValue，注意是创建
 DUILIB_API jsValue jsEmptyObject(jsExecState es);
 DUILIB_API jsValue jsEmptyArray(jsExecState es);
@@ -1376,9 +1386,9 @@ DUILIB_API jsValue jsFunction(jsExecState es, jsData *data);
 DUILIB_API jsData *jsGetData(jsExecState es, jsValue value);
 
 // 如果object是个js的object，则获取prop指定的属性。如果object不是js object类型，则返回jsUndefined
-DUILIB_API jsValue jsGet(jsExecState es, jsValue obj, CDuiString prop);
+DUILIB_API jsValue jsGet(jsExecState es, jsValue obj, const  CDuiString &prop);
 // 设置object的属性
-DUILIB_API void jsSet(jsExecState es, jsValue obj, CDuiString prop, jsValue v);
+DUILIB_API void jsSet(jsExecState es, jsValue obj, const CDuiString &prop, jsValue v);
 
 // 设置js arrary的第index个成员的值，object必须是js array才有用，否则会返回jsUndefined
 DUILIB_API jsValue jsGetAt(jsExecState es, jsValue obj, int index);
@@ -1396,7 +1406,7 @@ DUILIB_API void jsFreeKeys(jsKeys *obj);
 
 DUILIB_API bool jsIsJsValueValid(jsExecState es, jsValue obj);
 DUILIB_API bool jsIsValidExecState(jsExecState es);
-DUILIB_API void jsDeleteObjectProp(jsExecState es, jsValue obj, CDuiString prop);
+DUILIB_API void jsDeleteObjectProp(jsExecState es, jsValue obj, const CDuiString &prop);
 
 // 获取js arrary的长度，object必须是js array才有用。
 DUILIB_API int jsGetLength(jsExecState es, jsValue obj);
@@ -1409,10 +1419,10 @@ DUILIB_API wkeWebView jsGetWebView(jsExecState es);
 
 // 执行一段js，并返回值。
 // 注意：str的代码会在mb内部自动被包裹在一个function(){}中。所以使用的变量会被隔离 注意：要获取返回值，请写return。这和wke不太一样。wke不需要写retrun
-DUILIB_API jsValue jsEval(jsExecState es, CDuiString str);
+DUILIB_API jsValue jsEval(jsExecState es, const CDuiString &str);
 // 和上述接口的区别是，isInClosure表示是否要包裹一层function(){}。jsEvalW相当于jsEvalExW(es, str, false)
 // 注意：如果需要返回值，在isInClosure为true时，需要写return，为false则不用
-DUILIB_API jsValue jsEvalExW(jsExecState es, CDuiString str, bool isInClosure);
+DUILIB_API jsValue jsEvalExW(jsExecState es, const CDuiString &str, bool isInClosure);
 
 // 调用一个func对应的js函数。如果此js函数是成员函数，则需要填thisValue。 否则可以传jsUndefined。args是个数组，个数由argCount控制。 func可以是从js里取的，也可以是自行构造的。
 DUILIB_API jsValue jsCall(jsExecState es, jsValue func, jsValue thisValue, jsValue *args, int argCount);
@@ -1420,9 +1430,9 @@ DUILIB_API jsValue jsCall(jsExecState es, jsValue func, jsValue thisValue, jsVal
 DUILIB_API jsValue jsCallGlobal(jsExecState es, jsValue func, jsValue *args, int argCount);
 
 // 获取window上的属性
-DUILIB_API jsValue jsGetGlobal(jsExecState es, CDuiString prop);
+DUILIB_API jsValue jsGetGlobal(jsExecState es, const CDuiString &prop);
 // 设置window上的属性
-DUILIB_API void jsSetGlobal(jsExecState es, CDuiString prop, jsValue v);
+DUILIB_API void jsSetGlobal(jsExecState es, const CDuiString &prop, jsValue v);
 
 // 强制垃圾回收
 DUILIB_API void jsGC();

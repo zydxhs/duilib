@@ -176,7 +176,7 @@ void wkeSetViewSettings(wkeWebView webView, const wkeViewSettings *settings)
     pfn ? pfn(webView, settings) : pfn;
 }
 
-void wkeSetDebugConfig(wkeWebView webView, CDuiString debugString, CDuiString param)
+void wkeSetDebugConfig(wkeWebView webView, const CDuiString &debugString, const CDuiString &param)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strDebug = WStr2Utf8(debugString);
@@ -190,7 +190,7 @@ void wkeSetDebugConfig(wkeWebView webView, CDuiString debugString, CDuiString pa
     pfn ? pfn(webView, strDebug.c_str(), strParam.c_str()) : pfn;
 }
 
-DUILIB_API void *wkeGetDebugConfig(wkeWebView webView, CDuiString &debugString)
+DUILIB_API void *wkeGetDebugConfig(wkeWebView webView, const CDuiString &debugString)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strDebug = WStr2Utf8(debugString);
@@ -279,7 +279,7 @@ void wkeSetDragDropEnable(wkeWebView webView, bool b)
     pfn ? pfn(webView, b) : pfn;
 }
 
-void wkeSetLanguage(wkeWebView webView, CDuiString language)
+void wkeSetLanguage(wkeWebView webView, const CDuiString &language)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strLanguage = WStr2Utf8(language.GetData());
@@ -298,7 +298,7 @@ DUILIB_API void wkeSetContextMenuItemShow(wkeWebView webView, wkeMenuItemId item
     pfn ? pfn(webView, item, isShow) : pfn;
 }
 
-void wkeSetViewNetInterface(wkeWebView webView, CDuiString netInterface)
+void wkeSetViewNetInterface(wkeWebView webView, const CDuiString &netInterface)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strNet = WStr2Utf8(netInterface.GetData());
@@ -336,7 +336,7 @@ CDuiString wkeGetName(wkeWebView webView)
 #endif
 }
 
-void wkeSetName(wkeWebView webView, CDuiString name)
+void wkeSetName(wkeWebView webView, const CDuiString &name)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strName = WStr2Utf8(name.GetData());
@@ -376,7 +376,7 @@ void wkeSetTransparent(wkeWebView webView, bool transparent)
     pfn ? pfn(webView, transparent) : pfn;
 }
 
-void wkeSetUserAgent(wkeWebView webView, CDuiString userAgent)
+void wkeSetUserAgent(wkeWebView webView, const CDuiString &userAgent)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::wstring strAgent = userAgent.GetData();
@@ -400,7 +400,8 @@ CDuiString wkeGetUserAgent(wkeWebView webView)
 #endif
 }
 
-void wkeShowDevtools(wkeWebView webView, CDuiString path, wkeOnShowDevtoolsCallback callback, void *param)
+void wkeShowDevtools(wkeWebView webView, const CDuiString &path, wkeOnShowDevtoolsCallback callback,
+                     void *param)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::wstring strPath = path.GetData();
@@ -412,7 +413,7 @@ void wkeShowDevtools(wkeWebView webView, CDuiString path, wkeOnShowDevtoolsCallb
     pfn ? pfn(webView, strPath.c_str(), callback, param) : pfn;
 }
 
-void wkeLoadURL(wkeWebView webView, CDuiString url)
+void wkeLoadURL(wkeWebView webView, const CDuiString &url)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::wstring strUrl = url.GetData();
@@ -424,7 +425,7 @@ void wkeLoadURL(wkeWebView webView, CDuiString url)
     pfn ? pfn(webView, strUrl.c_str()) : pfn;
 }
 
-void wkePostURL(wkeWebView webView, CDuiString url, CDuiString postData)
+void wkePostURL(wkeWebView webView, const CDuiString &url, const CDuiString &postData)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::wstring strUrl = url.GetData();
@@ -438,7 +439,7 @@ void wkePostURL(wkeWebView webView, CDuiString url, CDuiString postData)
     pfn ? pfn(webView, strUrl.c_str(), strData.c_str(), strData.length()) : pfn;
 }
 
-void wkeLoadHTML(wkeWebView webView, CDuiString html)
+void wkeLoadHTML(wkeWebView webView, const CDuiString &html)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::wstring strHtml = html.GetData();
@@ -450,7 +451,7 @@ void wkeLoadHTML(wkeWebView webView, CDuiString html)
     pfn ? pfn(webView, strHtml.c_str()) : pfn;
 }
 
-void wkeLoadHtmlWithBaseUrl(wkeWebView webView, CDuiString html, CDuiString baseUrl)
+void wkeLoadHtmlWithBaseUrl(wkeWebView webView, const CDuiString &html, const CDuiString &baseUrl)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strHtml = WStr2Utf8(html);
@@ -464,7 +465,7 @@ void wkeLoadHtmlWithBaseUrl(wkeWebView webView, CDuiString html, CDuiString base
     pfn ? pfn(webView, strHtml.c_str(), strBaseUrl.c_str()) : pfn;
 }
 
-void wkeLoadFile(wkeWebView webView, CDuiString filename)
+void wkeLoadFile(wkeWebView webView, const CDuiString &filename)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::wstring strFile = filename.GetData();
@@ -577,7 +578,8 @@ bool wkeIsWebviewAlive(int id)
     return pfn ? pfn(id) : false;
 }
 
-CDuiString wkeGetDocumentCompleteURL(wkeWebView webView, wkeWebFrameHandle frameId, CDuiString partialURL)
+CDuiString wkeGetDocumentCompleteURL(wkeWebView webView, wkeWebFrameHandle frameId,
+                                     const CDuiString &partialURL)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strUrl = WStr2Utf8(partialURL.GetData());
@@ -815,7 +817,7 @@ CDuiString wkeGetCookie(wkeWebView webView)
 #endif
 }
 
-void wkeSetCookie(wkeWebView webView, CDuiString url, CDuiString cookie)
+void wkeSetCookie(wkeWebView webView, const CDuiString &url, const CDuiString &cookie)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strUrl = WStr2Utf8(url.GetData());
@@ -857,7 +859,7 @@ bool wkeIsCookieEnabled(wkeWebView webView)
     return pfn ? pfn(webView) : false;
 }
 
-void wkeSetCookieJarPath(wkeWebView webView, CDuiString path)
+void wkeSetCookieJarPath(wkeWebView webView, const CDuiString &path)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::wstring strPath = path;
@@ -869,7 +871,7 @@ void wkeSetCookieJarPath(wkeWebView webView, CDuiString path)
     pfn ? pfn(webView, strPath.c_str()) : pfn;
 }
 
-void wkeSetCookieJarFullPath(wkeWebView webView, CDuiString path)
+void wkeSetCookieJarFullPath(wkeWebView webView, const CDuiString &path)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::wstring strPath = path;
@@ -888,7 +890,7 @@ DUILIB_API void wkeClearCookie(wkeWebView webView)
     pfn ? pfn(webView) : pfn;
 }
 
-void wkeSetLocalStorageFullPath(wkeWebView webView, CDuiString path)
+void wkeSetLocalStorageFullPath(wkeWebView webView, const CDuiString &path)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::wstring strPath = path;
@@ -900,7 +902,7 @@ void wkeSetLocalStorageFullPath(wkeWebView webView, CDuiString path)
     pfn ? pfn(webView, strPath.c_str()) : pfn;
 }
 
-void wkeAddPluginDirectory(wkeWebView webView, CDuiString path)
+void wkeAddPluginDirectory(wkeWebView webView, const CDuiString &path)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::wstring strPath = path;
@@ -997,7 +999,7 @@ wkeRect wkeGetCaretRect(wkeWebView webView)
     return pfn ? pfn(webView) : wkeRect { 0, 0, 0, 0 };
 }
 
-jsValue wkeRunJS(wkeWebView webView, CDuiString script)
+jsValue wkeRunJS(wkeWebView webView, const CDuiString &script)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::wstring strScript = script.GetData();
@@ -1078,7 +1080,7 @@ CDuiString wkeGetString(const wkeString string)
 #endif
 }
 
-void wkeSetString(wkeString string, CDuiString str)
+void wkeSetString(wkeString string, const CDuiString &str)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::wstring strStr = str.GetData();
@@ -1090,7 +1092,7 @@ void wkeSetString(wkeString string, CDuiString str)
     pfn ? pfn(string, strStr.c_str(), strStr.length()) : pfn;
 }
 
-wkeString wkeCreateString(CDuiString str)
+wkeString wkeCreateString(const CDuiString &str)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::wstring strStr = str.GetData();
@@ -1116,7 +1118,7 @@ wkeWebView wkeGetWebViewForCurrentContext()
     return pfn ? pfn() : NULL;
 }
 
-void wkeSetUserKeyValue(wkeWebView webView, CDuiString key, void *value)
+void wkeSetUserKeyValue(wkeWebView webView, const CDuiString &key, void *value)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strKey = WStr2Utf8(key.GetData());
@@ -1128,7 +1130,7 @@ void wkeSetUserKeyValue(wkeWebView webView, CDuiString key, void *value)
     pfn ? pfn(webView, strKey.c_str(), value) : pfn;
 }
 
-void *wkeGetUserKeyValue(wkeWebView webView, CDuiString key)
+void *wkeGetUserKeyValue(wkeWebView webView, const CDuiString &key)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strKey = WStr2Utf8(key.GetData());
@@ -1162,8 +1164,8 @@ void wkeSetDragFiles(wkeWebView webView, const POINT *clintPos, const POINT *scr
     pfn ? pfn(webView, clintPos, screenPos, files, filesCount) : pfn;
 }
 
-void wkeSetDeviceParameter(wkeWebView webView, CDuiString device, CDuiString paramStr, int paramInt,
-                           float paramFloat)
+void wkeSetDeviceParameter(wkeWebView webView, const CDuiString &device, const CDuiString &paramStr,
+                           int paramInt, float paramFloat)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strDevice = WStr2Utf8(device.GetData());
@@ -1413,7 +1415,7 @@ bool wkeIsProcessingUserGesture(wkeWebView webView)
     return pfn ? pfn(webView) : false;
 }
 
-void wkeNetSetMIMEType(wkeNetJob job, CDuiString type)
+void wkeNetSetMIMEType(wkeNetJob job, const CDuiString &type)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strType = WStr2Utf8(type.GetData());
@@ -1437,7 +1439,7 @@ CDuiString wkeNetGetMIMEType(wkeNetJob jobPtr, wkeString mime)
 #endif
 }
 
-void wkeNetSetHTTPHeaderField(wkeNetJob jobPtr, CDuiString key, CDuiString value, bool response)
+void wkeNetSetHTTPHeaderField(wkeNetJob jobPtr, const CDuiString &key, const CDuiString &value, bool response)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::wstring strKey = key.GetData();
@@ -1451,7 +1453,7 @@ void wkeNetSetHTTPHeaderField(wkeNetJob jobPtr, CDuiString key, CDuiString value
     pfn ? pfn(jobPtr, strKey.c_str(), strValue.c_str(), response) : pfn;
 }
 
-CDuiString wkeNetGetHTTPHeaderField(wkeNetJob jobPtr, CDuiString key)
+CDuiString wkeNetGetHTTPHeaderField(wkeNetJob jobPtr, const CDuiString &key)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strKey = WStr2Utf8(key.GetData());
@@ -1560,7 +1562,7 @@ BOOL wkeNetHoldJobToAsynCommit(wkeNetJob jobPtr)
     return pfn ? pfn(jobPtr) : FALSE;
 }
 
-void wkeNetChangeRequestUrl(wkeNetJob jobPtr, CDuiString url)
+void wkeNetChangeRequestUrl(wkeNetJob jobPtr, const CDuiString &url)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strUrl = WStr2Utf8(url.GetData());
@@ -1572,7 +1574,8 @@ void wkeNetChangeRequestUrl(wkeNetJob jobPtr, CDuiString url)
     pfn ? pfn(jobPtr, strUrl.c_str()) : pfn;
 }
 
-wkeWebUrlRequestPtr wkeNetCreateWebUrlRequest(CDuiString url, CDuiString method, CDuiString mime)
+wkeWebUrlRequestPtr wkeNetCreateWebUrlRequest(const CDuiString &url, const CDuiString &method,
+                                              const CDuiString &mime)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strUrl = WStr2Utf8(url.GetData());
@@ -1609,7 +1612,8 @@ void wkeNetDeleteBlinkWebURLRequestPtr(blinkWebURLRequestPtr request)
     pfn ? pfn(request) : pfn;
 }
 
-void wkeNetAddHTTPHeaderFieldToUrlRequest(wkeWebUrlRequestPtr request, CDuiString name, CDuiString value)
+void wkeNetAddHTTPHeaderFieldToUrlRequest(wkeWebUrlRequestPtr request, const CDuiString &name,
+                                          const CDuiString &value)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strName = WStr2Utf8(name.GetData());
@@ -1720,7 +1724,8 @@ wkeWebFrameHandle wkeWebFrameGetMainFrame(wkeWebView webView)
     return pfn ? pfn(webView) : NULL;
 }
 
-jsValue wkeRunJsByFrame(wkeWebView webView, wkeWebFrameHandle frameId, CDuiString script, bool isInClosure)
+jsValue wkeRunJsByFrame(wkeWebView webView, wkeWebFrameHandle frameId, const CDuiString &script,
+                        bool isInClosure)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strScript = WStr2Utf8(script.GetData());
@@ -1732,7 +1737,7 @@ jsValue wkeRunJsByFrame(wkeWebView webView, wkeWebFrameHandle frameId, CDuiStrin
     return pfn ? pfn(webView, frameId, strScript.c_str(), isInClosure) : -1;
 }
 
-void wkeInsertCSSByFrame(wkeWebView webView, wkeWebFrameHandle frameId, CDuiString cssText)
+void wkeInsertCSSByFrame(wkeWebView webView, wkeWebFrameHandle frameId, const CDuiString &cssText)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strCSS = WStr2Utf8(cssText.GetData());
@@ -1906,7 +1911,7 @@ void wkeUtilRelasePrintPdfDatas(const wkePdfDatas *datas)
     pfn ? pfn(datas) : pfn;
 }
 
-void wkeSetWindowTitle(wkeWebView webView, CDuiString title)
+void wkeSetWindowTitle(wkeWebView webView, const CDuiString &title)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::wstring strTitle = title.GetData();
@@ -1925,7 +1930,8 @@ void wkeNodeOnCreateProcess(wkeWebView webView, wkeNodeOnCreateProcessCallback c
     pfn ? pfn(webView, callback, param) : pfn;
 }
 
-void wkeOnPluginFind(wkeWebView webView, CDuiString mime, wkeOnPluginFindCallback callback, void *param)
+void wkeOnPluginFind(wkeWebView webView, const CDuiString &mime, wkeOnPluginFindCallback callback,
+                     void *param)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strMime = WStr2Utf8(mime.GetData());
@@ -1944,6 +1950,50 @@ void wkeAddNpapiPlugin(wkeWebView webView, void *initializeFunc, void *getEntryP
     pfn ? pfn(webView, initializeFunc, getEntryPointsFunc, shutdownFunc) : pfn;
 }
 
+void wkePluginListBuilderAddPlugin(void *builder, const CDuiString &name, const CDuiString &desc,
+                                   const CDuiString &fileName)
+{
+#if defined(UNICODE) || defined(_UNICODE)
+    std::string strName = WStr2Utf8(name.GetData());
+    std::string strDesc = WStr2Utf8(desc.GetData());
+    std::string strFile = WStr2Utf8(fileName.GetData());
+#else
+    std::string strName = Ansi2Utf8(name.GetData());
+    std::string strDesc = Ansi2Utf8(desc.GetData());
+    std::string strFile = Ansi2Utf8(fileName.GetData());
+#endif
+    typedef void(*FUN)(void *, const utf8 *, const utf8 *, const utf8 *);
+    LOADFUN(wkePluginListBuilderAddPlugin);
+    pfn ? pfn(builder, strName.c_str(), strDesc.c_str(), strFile.c_str()) : pfn;
+}
+
+void wkePluginListBuilderAddMediaTypeToLastPlugin(void *builder, const CDuiString &name,
+                                                  const CDuiString &desc)
+{
+#if defined(UNICODE) || defined(_UNICODE)
+    std::string strName = WStr2Utf8(name.GetData());
+    std::string strDesc = WStr2Utf8(desc.GetData());
+#else
+    std::string strName = Ansi2Utf8(name.GetData());
+    std::string strDesc = Ansi2Utf8(desc.GetData());
+#endif
+    typedef void(*FUN)(void *, const utf8 *, const utf8 *);
+    LOADFUN(wkePluginListBuilderAddMediaTypeToLastPlugin);
+    pfn ? pfn(builder, strName.c_str(), strDesc.c_str()) : pfn;
+}
+
+void wkePluginListBuilderAddFileExtensionToLastMediaType(void *builder, const CDuiString &fileExtension)
+{
+#if defined(UNICODE) || defined(_UNICODE)
+    std::string strExt = WStr2Utf8(fileExtension.GetData());
+#else
+    std::string strExt = Ansi2Utf8(fileExtension.GetData());
+#endif
+    typedef void(*FUN)(void *, const utf8 *);
+    LOADFUN(wkePluginListBuilderAddFileExtensionToLastMediaType);
+    pfn ? pfn(builder, strExt.c_str()) : pfn;
+}
+
 wkeWebView wkeGetWebViewByNData(void *ndata)
 {
     typedef wkeWebView(*FUN)(void *);
@@ -1951,7 +2001,7 @@ wkeWebView wkeGetWebViewByNData(void *ndata)
     return pfn ? pfn(ndata) : NULL;
 }
 
-bool wkeRegisterEmbedderCustomElement(wkeWebView webView, wkeWebFrameHandle frameId, CDuiString name,
+bool wkeRegisterEmbedderCustomElement(wkeWebView webView, wkeWebFrameHandle frameId, const CDuiString &name,
                                       void *options, void *outResult)
 {
 #if defined(UNICODE) || defined(_UNICODE)
@@ -1984,7 +2034,7 @@ CDuiString wkeGetContentAsMarkup(wkeWebView webView, wkeWebFrameHandle frame, si
 #endif
 }
 
-CDuiString wkeUtilDecodeURLEscape(CDuiString url)
+CDuiString wkeUtilDecodeURLEscape(const CDuiString &url)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strUrl = WStr2Utf8(url.GetData());
@@ -2001,7 +2051,7 @@ CDuiString wkeUtilDecodeURLEscape(CDuiString url)
 #endif
 }
 
-CDuiString wkeUtilEncodeURLEscape(CDuiString url)
+CDuiString wkeUtilEncodeURLEscape(const CDuiString &url)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strUrl = WStr2Utf8(url.GetData());
@@ -2018,7 +2068,7 @@ CDuiString wkeUtilEncodeURLEscape(CDuiString url)
 #endif
 }
 
-CDuiString wkeUtilBase64Encode(CDuiString str)
+CDuiString wkeUtilBase64Encode(const CDuiString &str)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strStr = WStr2Utf8(str.GetData());
@@ -2035,7 +2085,7 @@ CDuiString wkeUtilBase64Encode(CDuiString str)
 #endif
 }
 
-CDuiString wkeUtilBase64Decode(CDuiString str)
+CDuiString wkeUtilBase64Decode(const CDuiString &str)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strStr = WStr2Utf8(str.GetData());
@@ -2052,7 +2102,7 @@ CDuiString wkeUtilBase64Decode(CDuiString str)
 #endif
 }
 
-const wkeMemBuf *wkeUtilCreateV8Snapshot(CDuiString str)
+const wkeMemBuf *wkeUtilCreateV8Snapshot(const CDuiString &str)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strStr = WStr2Utf8(str.GetData());
@@ -2073,7 +2123,7 @@ void wkeRunMessageLoop()
 
 
 //JavaScript Bind-----------------------------------------------------------------------------------
-void __fastcall jsBindFunction(CDuiString name, jsNativeFunction fn, unsigned int argCount)
+void __fastcall jsBindFunction(const CDuiString &name, jsNativeFunction fn, unsigned int argCount)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strName = WStr2Utf8(name.GetData());
@@ -2085,7 +2135,7 @@ void __fastcall jsBindFunction(CDuiString name, jsNativeFunction fn, unsigned in
     pfn ? pfn(strName.c_str(), fn, argCount) : pfn;
 }
 
-void jsBindGetter(CDuiString name, jsNativeFunction fn)
+void jsBindGetter(const CDuiString &name, jsNativeFunction fn)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strName = WStr2Utf8(name.GetData());
@@ -2097,7 +2147,7 @@ void jsBindGetter(CDuiString name, jsNativeFunction fn)
     pfn ? pfn(strName.c_str(), fn) : pfn;
 }
 
-void jsBindSetter(CDuiString name, jsNativeFunction fn)
+void jsBindSetter(const CDuiString &name, jsNativeFunction fn)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strName = WStr2Utf8(name.GetData());
@@ -2109,7 +2159,7 @@ void jsBindSetter(CDuiString name, jsNativeFunction fn)
     pfn ? pfn(strName.c_str(), fn) : pfn;
 }
 
-void jsBindFunctionEx(CDuiString name, jsNativeFunctionEx fn, void *param, unsigned int argCount)
+void jsBindFunctionEx(const CDuiString &name, jsNativeFunctionEx fn, void *param, unsigned int argCount)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strName = WStr2Utf8(name.GetData());
@@ -2121,7 +2171,7 @@ void jsBindFunctionEx(CDuiString name, jsNativeFunctionEx fn, void *param, unsig
     pfn ? pfn(strName.c_str(), fn, param, argCount) : pfn;
 }
 
-void jsBindGetterEx(CDuiString name, jsNativeFunctionEx fn, void *param)
+void jsBindGetterEx(const CDuiString &name, jsNativeFunctionEx fn, void *param)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strName = WStr2Utf8(name.GetData());
@@ -2133,7 +2183,7 @@ void jsBindGetterEx(CDuiString name, jsNativeFunctionEx fn, void *param)
     pfn ? pfn(strName.c_str(), fn, param) : pfn;
 }
 
-void jsBindSetterEx(CDuiString name, jsNativeFunctionEx fn, void *param)
+void jsBindSetterEx(const CDuiString &name, jsNativeFunctionEx fn, void *param)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strName = WStr2Utf8(name.GetData());
@@ -2365,7 +2415,7 @@ jsValue jsFalse()
     return pfn ? pfn() : -1;
 }
 
-jsValue jsString(jsExecState es, CDuiString str)
+jsValue jsString(jsExecState es, const CDuiString &str)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::wstring strStr = str.GetData();
@@ -2412,7 +2462,7 @@ jsData *jsGetData(jsExecState es, jsValue obj)
     return pfn ? pfn(es, obj) : NULL;
 }
 
-jsValue jsGet(jsExecState es, jsValue obj, CDuiString prop)
+jsValue jsGet(jsExecState es, jsValue obj, const CDuiString &prop)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strProp = WStr2Utf8(prop.GetData());
@@ -2424,7 +2474,7 @@ jsValue jsGet(jsExecState es, jsValue obj, CDuiString prop)
     return pfn ? pfn(es, obj, strProp.c_str()) : -1;
 }
 
-void jsSet(jsExecState es, jsValue obj, CDuiString prop, jsValue v)
+void jsSet(jsExecState es, jsValue obj, const CDuiString &prop, jsValue v)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strProp = WStr2Utf8(prop.GetData());
@@ -2486,7 +2536,7 @@ bool jsIsValidExecState(jsExecState es)
     return pfn ? pfn(es) : false;
 }
 
-void jsDeleteObjectProp(jsExecState es, jsValue obj, CDuiString prop)
+void jsDeleteObjectProp(jsExecState es, jsValue obj, const CDuiString &prop)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strProp = WStr2Utf8(prop.GetData());
@@ -2526,7 +2576,7 @@ wkeWebView jsGetWebView(jsExecState es)
     return pfn ? pfn(es) : NULL;
 }
 
-jsValue jsEval(jsExecState es, CDuiString str)
+jsValue jsEval(jsExecState es, const CDuiString &str)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::wstring strStr = str.GetData();
@@ -2538,7 +2588,7 @@ jsValue jsEval(jsExecState es, CDuiString str)
     return pfn ? pfn(es, strStr.c_str()) : -1;
 }
 
-jsValue jsEvalEx(jsExecState es, CDuiString str, bool isInClosure)
+jsValue jsEvalEx(jsExecState es, const CDuiString &str, bool isInClosure)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::wstring strStr = str.GetData();
@@ -2564,7 +2614,7 @@ jsValue jsCallGlobal(jsExecState es, jsValue func, jsValue *args, int argCount)
     return pfn ? pfn(es, func, args, argCount) : -1;
 }
 
-jsValue jsGetGlobal(jsExecState es, CDuiString prop)
+jsValue jsGetGlobal(jsExecState es, const CDuiString &prop)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strProp = WStr2Utf8(prop.GetData());
@@ -2576,7 +2626,7 @@ jsValue jsGetGlobal(jsExecState es, CDuiString prop)
     return pfn ? pfn(es, strProp.c_str()) : -1;
 }
 
-void jsSetGlobal(jsExecState es, CDuiString prop, jsValue v)
+void jsSetGlobal(jsExecState es, const CDuiString &prop, jsValue v)
 {
 #if defined(UNICODE) || defined(_UNICODE)
     std::string strProp = WStr2Utf8(prop.GetData());
