@@ -79,7 +79,7 @@ private:
 
     // ITranslateAccelerator
     // Duilib消息分发给Flash
-    virtual LRESULT TranslateAccelerator(MSG *pMsg);
+    virtual LRESULT TranslateAccelerator(MSG *pMsg) override;
 
 private:
     friend class CFlashEvents;

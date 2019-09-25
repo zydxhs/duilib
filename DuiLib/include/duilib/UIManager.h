@@ -227,10 +227,10 @@ public:
     ~CPaintManagerUI();
 
 protected:
-    virtual HRESULT OnDragEnter(IDataObject *pDataObj, DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect);
-    virtual HRESULT OnDragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
-    virtual HRESULT OnDragLeave(void);
-    virtual HRESULT OnDragDrop(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
+    virtual HRESULT OnDragEnter(IDataObject *pDataObj, DWORD grfKeyState, POINTL ptl, DWORD *pdwEffect) override;
+    virtual HRESULT OnDragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect) override;
+    virtual HRESULT OnDragLeave(void) override;
+    virtual HRESULT OnDragDrop(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect) override;
 public:
     void Init(HWND hWnd, LPCTSTR pstrName = NULL);
     bool IsUpdateNeeded() const;

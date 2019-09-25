@@ -25,10 +25,10 @@ public:
     virtual ~CWndImplBase() {};
 
     // IMessageFilterUI 接口，进行消息发送到窗口过程前的过滤处理
-    virtual LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool &bHandled);
+    virtual LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool &bHandled) override;
 
     // INotifyUI 接口，duilib 控件通知消息
-    virtual void Notify(TNotifyUI &msg);
+    virtual void Notify(TNotifyUI &msg) override;
 
     void ShowWindow(bool bShow = true, bool bTakeFocus = true);
 
@@ -44,9 +44,9 @@ protected:
 
 protected:
     // 窗口类相关接口
-    virtual LPCTSTR GetWindowClassName(void) const = 0;
+    virtual LPCTSTR GetWindowClassName(void) const override = 0;
     // virtual LPCTSTR GetSuperClassName() const;
-    virtual UINT GetClassStyle() const { return CS_DBLCLKS; }
+    virtual UINT GetClassStyle() const override { return CS_DBLCLKS; }
 
     // 窗口资源相关接口
     virtual CDuiString GetSkinFolder() = 0;
@@ -65,7 +65,7 @@ protected:
     // .窗体创建后，绑定数据。比如控件与变量的绑定、控件属性设置等只需要设置一次的操作。
     virtual void OnInitWindow(void);
     // .窗体销毁后，类对象销毁前，最后被调用的接口。new 的窗体，在该接口中调用 delete 销毁对象。
-    virtual void OnFinalMessage(HWND hWnd);
+    virtual void OnFinalMessage(HWND hWnd) override;
     // 窗体数据显示数据的初始化、保存
     // .窗体 创建|显示 之前 初始化 数据。在 OnInitWindow 和 OnFinalMesssage 之间调用
     virtual void OnDataInit(void) { }
@@ -110,7 +110,7 @@ protected:
     virtual LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
 
     // 窗口处理过程，通常不需要重载。所有发送到窗口的消息，都可以在此截获
-    virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+    virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) override;
 
 protected:
     // 子窗口。派生类通常不需要调用。
