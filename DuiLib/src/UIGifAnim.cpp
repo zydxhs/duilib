@@ -438,9 +438,16 @@ void CGifAnimUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 
 void CGifAnimUI::SetBkImage(LPCTSTR pStrImage)
 {
-    if (m_sBkImage == pStrImage || NULL == pStrImage) { return; }
+    if (m_diBk.sDrawString == pStrImage && m_diBk.pImageInfo != NULL) { return; }
 
-    m_sBkImage = pStrImage;
+    m_diBk.Clear();
+    m_diBk.sDrawString = pStrImage;
+
+    if (m_bFloat && m_cxyFixed.cx == 0 && m_cxyFixed.cy == 0 && m_diBk.pImageInfo)
+    {
+        m_cxyFixed.cx = m_diBk.pImageInfo->nX;
+        m_cxyFixed.cy = m_diBk.pImageInfo->nY;
+    }
 
     StopGif();
     DeleteGif();
@@ -449,7 +456,7 @@ void CGifAnimUI::SetBkImage(LPCTSTR pStrImage)
 
 LPCTSTR CGifAnimUI::GetBkImage()
 {
-    return m_sBkImage.GetData();
+    return m_diBk.sDrawString.GetData();
 }
 
 void CGifAnimUI::SetAutoPlay(bool bIsAuto)
@@ -505,7 +512,7 @@ void CGifAnimUI::InitGifImage()
 {
     if (NULL != m_pcGifInfo) { return; }
 
-    m_pcGifInfo = CRenderEngine::LoadGif(m_sBkImage);
+    m_pcGifInfo = CRenderEngine::LoadGif(m_diBk);
 
     if (NULL == m_pcGifInfo) { return; }
 

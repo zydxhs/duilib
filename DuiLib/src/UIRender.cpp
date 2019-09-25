@@ -778,10 +778,9 @@ TImageInfo *CRenderEngine::LoadImage(STRINGorID bitmap, LPCTSTR type, DWORD mask
     return data;
 }
 
-DuiLib::CGifInfo *CRenderEngine::LoadGif(CDuiString &sDrawString)
+DuiLib::CGifInfo *CRenderEngine::LoadGif(TDrawInfo &drawInfo)
 {
     // 支持 file res restype mask
-    TDrawInfo drawInfo(sDrawString);
     CDuiString sResType;
     DWORD dwMask = 0;
     bool bUseHSL = false;

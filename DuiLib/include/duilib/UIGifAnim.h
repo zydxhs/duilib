@@ -83,7 +83,6 @@ private:
 private:
     CGifInfo       *m_pcGifInfo;                // gif 图片信息
 
-    CDuiString      m_sBkImage;
     bool            m_bIsAutoPlay;              // 是否自动播放gif
     bool            m_bIsAutoSize;              // 是否自动根据图片设置大小
     bool            m_bIsPlaying;

@@ -45,7 +45,7 @@ public:
     static HBITMAP CreateARGB32Bitmap(HDC hDC, int cx, int cy, COLORREF **pBits);
     static void AdjustImage(bool bUseHSL, TImageInfo *imageInfo, short H, short S, short L);
     static TImageInfo *LoadImage(STRINGorID bitmap, LPCTSTR type = NULL, DWORD mask = 0);
-    static CGifInfo *LoadGif(CDuiString &sDrawString);
+    static CGifInfo *LoadGif(TDrawInfo &drawInfo);
     static CGifInfo *LoadGif(STRINGorID bitmap, LPCTSTR type = NULL, DWORD mask = 0);
     static void FreeImage(TImageInfo *bitmap, bool bDelete = true);
     static void DrawImage(HDC hDC, HBITMAP hBitmap, const RECT &rc, const RECT &rcPaint, const RECT &rcBmpPart,
