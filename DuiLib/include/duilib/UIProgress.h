@@ -22,17 +22,23 @@ public:
     void SetValue(int nValue);
     LPCTSTR GetForeImage() const;
     void SetForeImage(LPCTSTR pStrImage);
+    LPCTSTR GetForeDisabledImage() const;
+    void SetForeDisabledImage(LPCTSTR pStrImage);
+
+    void SetEnabled(bool bEnable = true);
 
     void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
     void PaintStatusImage(HDC hDC);
 
 protected:
+    UINT m_uButtonState;
     bool m_bHorizontal;
     int m_nMax;
     int m_nMin;
     int m_nValue;
 
     TDrawInfo m_diFore;
+    TDrawInfo m_diForeDisabled;
 };
 
 } // namespace DuiLib

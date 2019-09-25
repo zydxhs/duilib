@@ -27,6 +27,8 @@ public:
     void SetThumbHotImage(LPCTSTR pStrImage);
     LPCTSTR GetThumbPushedImage() const;
     void SetThumbPushedImage(LPCTSTR pStrImage);
+    LPCTSTR GetThumbDisabledImage() const;
+    void SetThumbDisabledImage(LPCTSTR pStrImage);
 
     void DoEvent(TEventUI &event);
     void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
@@ -34,13 +36,14 @@ public:
 
 protected:
     SIZE m_szThumb;
-    UINT m_uButtonState;
+    // UINT m_uButtonState;
     int m_nStep;
     bool m_bImmMode;
 
     TDrawInfo m_diThumb;
     TDrawInfo m_diThumbHot;
     TDrawInfo m_diThumbPushed;
+    TDrawInfo m_diThumbDisabled;
 };
 }
 

@@ -1,7 +1,7 @@
 ﻿#include "stdafx.h"
 
 namespace DuiLib {
-CProgressUI::CProgressUI() : m_bHorizontal(true), m_nMin(0), m_nMax(100), m_nValue(0)
+CProgressUI::CProgressUI() : m_uButtonState(0), m_bHorizontal(true), m_nMin(0), m_nMax(100), m_nValue(0)
 {
     m_uTextStyle = DT_SINGLELINE | DT_CENTER;
     SetFixedHeight(12);
@@ -84,9 +84,31 @@ void CProgressUI::SetForeImage(LPCTSTR pStrImage)
     Invalidate();
 }
 
+LPCTSTR CProgressUI::GetForeDisabledImage() const
+{
+    return m_diForeDisabled.sDrawString;
+}
+
+void CProgressUI::SetForeDisabledImage(LPCTSTR pStrImage)
+{
+    if (m_diForeDisabled.sDrawString == pStrImage && m_diForeDisabled.pImageInfo != NULL) { return; }
+
+    m_diForeDisabled.Clear();
+    m_diForeDisabled.sDrawString = pStrImage;
+    Invalidate();
+}
+
+void CProgressUI::SetEnabled(bool bEnable /*= true*/)
+{
+    CControlUI::SetEnabled(bEnable);
+
+    if (!IsEnabled()) { m_uButtonState = 0; }
+}
+
 void CProgressUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 {
     if (_tcscmp(pstrName, _T("foreimage")) == 0) { SetForeImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("foredisabledimage")) == 0) { SetForeDisabledImage(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("hor")) == 0) { SetHorizontal(ParseBool(pstrValue)); }
     else if (_tcscmp(pstrName, _T("min")) == 0) { SetMinValue(ParseInt(pstrValue)); }
     else if (_tcscmp(pstrName, _T("max")) == 0) { SetMaxValue(ParseInt(pstrValue)); }
@@ -112,6 +134,9 @@ void CProgressUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 
 void CProgressUI::PaintStatusImage(HDC hDC)
 {
+    if (!IsEnabled()) { m_uButtonState |= UISTATE_DISABLED; }
+    else { m_uButtonState &= ~UISTATE_DISABLED; }
+
     if (m_nMax <= m_nMin) { m_nMax = m_nMin + 1; }
 
     if (m_nValue > m_nMax) { m_nValue = m_nMax; }
@@ -132,8 +157,17 @@ void CProgressUI::PaintStatusImage(HDC hDC)
         rc.bottom = m_rcItem.bottom - m_rcItem.top;
     }
 
-    m_diFore.rcDestOffset = rc;
-
-    if (DrawImage(hDC, m_diFore)) { return; }
+    //m_diFore.rcDestOffset = rc;
+    //if (DrawImage(hDC, m_diFore)) { return; }
+    if ((m_uButtonState & UISTATE_DISABLED) != 0)
+    {
+        m_diForeDisabled.rcDestOffset = rc;
+        DrawImage(hDC, m_diForeDisabled);
+    }
+    else
+    {
+        m_diFore.rcDestOffset = rc;
+        DrawImage(hDC, m_diFore);
+    }
 }
 }

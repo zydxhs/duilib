@@ -1,7 +1,7 @@
 ﻿#include "StdAfx.h"
 
 namespace DuiLib {
-CSliderUI::CSliderUI() : m_uButtonState(0), m_nStep(1), m_bImmMode(false)
+CSliderUI::CSliderUI() : m_nStep(1), m_bImmMode(false)
 {
     m_uTextStyle = DT_SINGLELINE | DT_CENTER;
     m_szThumb.cx = m_szThumb.cy = 10;
@@ -117,6 +117,20 @@ void CSliderUI::SetThumbPushedImage(LPCTSTR pStrImage)
 
     m_diThumbPushed.Clear();
     m_diThumbPushed.sDrawString = pStrImage;
+    Invalidate();
+}
+
+LPCTSTR CSliderUI::GetThumbDisabledImage() const
+{
+    return m_diThumbDisabled.sDrawString;
+}
+
+void CSliderUI::SetThumbDisabledImage(LPCTSTR pStrImage)
+{
+    if (m_diThumbDisabled.sDrawString == pStrImage && m_diThumbDisabled.pImageInfo != NULL) { return; }
+
+    m_diThumbDisabled.Clear();
+    m_diThumbDisabled.sDrawString = pStrImage;
     Invalidate();
 }
 
@@ -317,6 +331,7 @@ void CSliderUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     if (_tcscmp(pstrName, _T("thumbimage")) == 0) { SetThumbImage(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("thumbhotimage")) == 0) { SetThumbHotImage(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("thumbpushedimage")) == 0) { SetThumbPushedImage(ParseString(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("thumbdisabledimage")) == 0) { SetThumbDisabledImage(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("thumbsize")) == 0)
     {
         SIZE sz = ParseSize(pstrValue);
@@ -351,6 +366,12 @@ void CSliderUI::PaintStatusImage(HDC hDC)
         m_diThumbHot.rcDestOffset = rcThumb;
 
         if (DrawImage(hDC, m_diThumbHot)) { return; }
+    }
+    else if ((m_uButtonState & UISTATE_DISABLED) != 0)
+    {
+        m_diThumbDisabled.rcDestOffset = rcThumb;
+
+        if (DrawImage(hDC, m_diThumbDisabled)) { return; }
     }
 
     m_diThumb.rcDestOffset = rcThumb;

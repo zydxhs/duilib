@@ -329,6 +329,7 @@
         </Text>
         <Progress parent="Label" notifies="setfocus killfocus timer menu windowinit(root) dblclick">
             <Attribute name="foreimage" default="" type="STRING" comment="前景图片"/>
+            <Attribute name="foredisabledimage" default="" type="STRING" comment="前景禁用状态图片"/>
             <Attribute name="hor" default="true" type="BOOL" comment="水平或垂直,如(true)"/>
             <Attribute name="min" default="0" type="INT" comment="进度最小值，如(0)"/>
             <Attribute name="max" default="100" type="INT" comment="进度最大值，如(100)"/>
@@ -339,6 +340,7 @@
             <Attribute name="thumbimage" default="" type="STRING" comment="拖动滑块普通状态图片"/>
             <Attribute name="thumbhotimage" default="" type="STRING" comment="拖动滑块鼠标悬浮状态图片"/>
             <Attribute name="thumbpushedimage" default="" type="STRING" comment="拖动滑块鼠标按下状态图片"/>
+            <Attribute name="thumbdisabledimage" default="" type="STRING" comment="拖动滑块禁用状态图片"/>
             <Attribute name="thumbsize" default="10,10" type="SIZE" comment="拖动滑块大小,如(10,10)"/>
             <Attribute name="step" default="1" type="INT" comment="进度步长，如(1)"/>
             <Attribute name="imm" default="false" type="BOOL" comment="在滑动过程中也发出消息"/>
