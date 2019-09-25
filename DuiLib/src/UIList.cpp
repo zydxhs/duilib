@@ -87,6 +87,15 @@ LPVOID CListUI::GetInterface(LPCTSTR pstrName)
     return CVerticalLayoutUI::GetInterface(pstrName);
 }
 
+void CListUI::SetEnabled(bool bEnable /*= true*/)
+{
+    CVerticalLayoutUI::SetEnabled(bEnable);
+
+    if (NULL != m_pHeader) { m_pHeader->SetEnabled(IsEnabled()); }
+
+    if (NULL != m_pList) { m_pList->SetEnabled(IsEnabled()); }
+}
+
 CControlUI *CListUI::GetItemAt(int iIndex) const
 {
     return m_pList->GetItemAt(iIndex);
@@ -185,6 +194,10 @@ int CListUI::GetCount() const
 
 bool CListUI::Add(CControlUI *pControl)
 {
+    if (NULL == pControl) { return false; }
+
+    pControl->SetEnabled(IsEnabled());
+
     // Override the Add() method so we can add items specifically to
     // the intended widgets. Headers are assumed to be
     // answer the correct interface so we can add multiple list headers.
@@ -222,6 +235,10 @@ bool CListUI::Add(CControlUI *pControl)
 
 bool CListUI::AddAt(CControlUI *pControl, int iIndex)
 {
+    if (NULL == pControl) { return false; }
+
+    pControl->SetEnabled(IsEnabled());
+
     // Override the AddAt() method so we can add items specifically to
     // the intended widgets. Headers and are assumed to be
     // answer the correct interface so we can add multiple list headers.
@@ -530,7 +547,8 @@ void CListUI::DoEvent(TEventUI &event)
 
     if (event.Type == UIEVENT_SETFOCUS)
     {
-        m_bFocused = true;
+        if (IsEnabled()) { m_bFocused = true; }
+
         return;
     }
 
@@ -568,22 +586,19 @@ void CListUI::DoEvent(TEventUI &event)
 
     if (event.Type == UIEVENT_SCROLLWHEEL)
     {
-        if (IsEnabled())
+        switch (LOWORD(event.wParam))
         {
-            switch (LOWORD(event.wParam))
-            {
-            case SB_LINEUP:
-                if (m_bScrollSelect) { SelectItem(FindSelectable(m_iCurSel - 1, false), true); }
-                else { LineUp(); }
+        case SB_LINEUP:
+            if (m_bScrollSelect) { SelectItem(FindSelectable(m_iCurSel - 1, false), true); }
+            else { LineUp(); }
 
-                return;
+            return;
 
-            case SB_LINEDOWN:
-                if (m_bScrollSelect) { SelectItem(FindSelectable(m_iCurSel + 1, true), true); }
-                else { LineDown(); }
+        case SB_LINEDOWN:
+            if (m_bScrollSelect) { SelectItem(FindSelectable(m_iCurSel + 1, true), true); }
+            else { LineDown(); }
 
-                return;
-            }
+            return;
         }
     }
 
@@ -2409,12 +2424,12 @@ void CListHeaderItemUI::DoEvent(TEventUI &event)
 
     if (event.Type == UIEVENT_SETFOCUS)
     {
-        Invalidate();
+        if (IsEnabled()) { Invalidate(); }
     }
 
     if (event.Type == UIEVENT_KILLFOCUS)
     {
-        Invalidate();
+        if (IsEnabled()) { Invalidate(); }
     }
 
     if (event.Type == UIEVENT_BUTTONDOWN || event.Type == UIEVENT_LBUTTONDBLDOWN)
@@ -2466,12 +2481,12 @@ void CListHeaderItemUI::DoEvent(TEventUI &event)
     {
         // 2018-05-23 单击事件放在鼠标弹起时发送
         // 2018-07-15 单击事件放在单击消息中发送
-        m_pManager->SendNotify(this, DUI_MSGTYPE_HEADERCLICK);
+        if (IsEnabled()) { m_pManager->SendNotify(this, DUI_MSGTYPE_HEADERCLICK); }
     }
 
     if (event.Type == UIEVENT_MOUSEMOVE)
     {
-        if ((m_uButtonState & UISTATE_CAPTURED) != 0)
+        if ((m_uButtonState & UISTATE_CAPTURED) != 0 && IsEnabled())
         {
             RECT rc = m_rcItem;
 
@@ -2498,26 +2513,26 @@ void CListHeaderItemUI::DoEvent(TEventUI &event)
 
     if (event.Type == UIEVENT_SETCURSOR)
     {
-        RECT rcSeparator = GetThumbRect();
-
-        if (IsEnabled() && m_bDragable && ::PtInRect(&rcSeparator, event.ptMouse))
+        if (m_bDragable && IsEnabled())
         {
-            ::SetCursor(::LoadCursor(NULL, MAKEINTRESOURCE(IDC_SIZEWE)));
-            return;
+            RECT rcSeparator = GetThumbRect();
+
+            if (::PtInRect(&rcSeparator, event.ptMouse))
+            {
+                ::SetCursor(::LoadCursor(NULL, MAKEINTRESOURCE(IDC_SIZEWE)));
+                return;
+            }
         }
     }
 
     if (event.Type == UIEVENT_MOUSEENTER)
     {
-        if (::PtInRect(&m_rcItem, event.ptMouse))
+        if (IsEnabled() && ::PtInRect(&m_rcItem, event.ptMouse))
         {
-            if (IsEnabled())
+            if ((m_uButtonState & UISTATE_HOT) == 0)
             {
-                if ((m_uButtonState & UISTATE_HOT) == 0)
-                {
-                    m_uButtonState |= UISTATE_HOT;
-                    Invalidate();
-                }
+                m_uButtonState |= UISTATE_HOT;
+                Invalidate();
             }
         }
     }
@@ -2636,6 +2651,8 @@ void CListHeaderItemUI::PaintText(HDC hDC)
 {
     if (m_dwTextColor == 0) { m_dwTextColor = m_pManager->GetDefaultFontColor(); }
 
+    DWORD clrText = IsEnabled() ? m_dwTextColor : m_pManager->GetDefaultDisabledColor();
+
     RECT rcText = m_rcItem;
     rcText.left += (m_rcBorderSize.left + m_rcPadding.left);
     rcText.top += (m_rcBorderSize.top + m_rcPadding.top);
@@ -2645,11 +2662,9 @@ void CListHeaderItemUI::PaintText(HDC hDC)
     if (m_sText.IsEmpty()) { return; }
 
     if (m_bShowHtml)
-        CRenderEngine::DrawHtmlText(hDC, m_pManager, rcText, m_sText, m_dwTextColor,
-                                    NULL, NULL, NULL, m_iFont, m_uTextStyle);
+    { CRenderEngine::DrawHtmlText(hDC, m_pManager, rcText, m_sText, clrText, NULL, NULL, NULL, m_iFont, m_uTextStyle); }
     else
-        CRenderEngine::DrawText(hDC, m_pManager, rcText, m_sText, m_dwTextColor,
-                                m_iFont, m_uTextStyle);
+    { CRenderEngine::DrawText(hDC, m_pManager, rcText, m_sText, clrText, m_iFont, m_uTextStyle); }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -2875,7 +2890,8 @@ void CListElementUI::DoEvent(TEventUI &event)
     // 2018-08-28 zhuyadong 解决 List 不支持拖拽源、目的的问题
     if (event.Type == UIEVENT_MOUSEMOVE && (event.wParam & MK_LBUTTON) && m_bDragEnable)
     {
-        OnDoDragDrop(event);
+        if (IsEnabled()) { OnDoDragDrop(event); }
+
         return;
     }
 
@@ -3120,15 +3136,12 @@ void CListLabelElementUI::DoEvent(TEventUI &event)
 
     if (event.Type == UIEVENT_MOUSEENTER)
     {
-        if (::PtInRect(&m_rcItem, event.ptMouse))
+        if (IsEnabled() && ::PtInRect(&m_rcItem, event.ptMouse))
         {
-            if (IsEnabled())
+            if ((m_uButtonState & UISTATE_HOT) == 0)
             {
-                if ((m_uButtonState & UISTATE_HOT) == 0)
-                {
-                    m_uButtonState |= UISTATE_HOT;
-                    Invalidate();
-                }
+                m_uButtonState |= UISTATE_HOT;
+                Invalidate();
             }
         }
     }
@@ -3414,12 +3427,15 @@ void CListTextElementUI::DoEvent(TEventUI &event)
     // When you hover over a link
     if (event.Type == UIEVENT_SETCURSOR)
     {
-        for (int i = 0; i < m_nLinks; i++)
+        if (IsEnabled())
         {
-            if (::PtInRect(&m_rcLinks[i], event.ptMouse))
+            for (int i = 0; i < m_nLinks; i++)
             {
-                ::SetCursor(::LoadCursor(NULL, MAKEINTRESOURCE(IDC_HAND)));
-                return;
+                if (::PtInRect(&m_rcLinks[i], event.ptMouse))
+                {
+                    ::SetCursor(::LoadCursor(NULL, MAKEINTRESOURCE(IDC_HAND)));
+                    return;
+                }
             }
         }
     }
@@ -3457,40 +3473,46 @@ void CListTextElementUI::DoEvent(TEventUI &event)
 
     if (m_nLinks > 0 && event.Type == UIEVENT_MOUSEMOVE)
     {
-        int nHoverLink = -1;
-
-        for (int i = 0; i < m_nLinks; i++)
+        if (IsEnabled())
         {
-            if (::PtInRect(&m_rcLinks[i], event.ptMouse))
+            int nHoverLink = -1;
+
+            for (int i = 0; i < m_nLinks; i++)
             {
-                nHoverLink = i;
-                break;
+                if (::PtInRect(&m_rcLinks[i], event.ptMouse))
+                {
+                    nHoverLink = i;
+                    break;
+                }
             }
-        }
 
-        if (m_nHoverLink != nHoverLink)
-        {
-            Invalidate();
-            m_nHoverLink = nHoverLink;
+            if (m_nHoverLink != nHoverLink)
+            {
+                Invalidate();
+                m_nHoverLink = nHoverLink;
+            }
         }
     }
 
     if (m_nLinks > 0 && event.Type == UIEVENT_MOUSELEAVE)
     {
-        if (m_nHoverLink != -1)
+        if (IsEnabled())
         {
-            if (!::PtInRect(&m_rcLinks[m_nHoverLink], event.ptMouse))
+            if (m_nHoverLink != -1)
             {
-                m_nHoverLink = -1;
-                Invalidate();
+                if (!::PtInRect(&m_rcLinks[m_nHoverLink], event.ptMouse))
+                {
+                    m_nHoverLink = -1;
+                    Invalidate();
 
-                if (m_pManager) { m_pManager->RemoveMouseLeaveNeeded(this); }
-            }
-            else
-            {
-                if (m_pManager) { m_pManager->AddMouseLeaveNeeded(this); }
+                    if (m_pManager) { m_pManager->RemoveMouseLeaveNeeded(this); }
+                }
+                else
+                {
+                    if (m_pManager) { m_pManager->AddMouseLeaveNeeded(this); }
 
-                return;
+                    return;
+                }
             }
         }
     }
@@ -4079,7 +4101,8 @@ void CListContainerElementUI::DoEvent(TEventUI &event)
     // 2018-08-28 zhuyadong 解决 List 不支持拖拽源、目的的问题
     if (event.Type == UIEVENT_MOUSEMOVE && (event.wParam & MK_LBUTTON) && m_bDragEnable)
     {
-        OnDoDragDrop(event);
+        if (IsEnabled()) { OnDoDragDrop(event); }
+
         return;
     }
 

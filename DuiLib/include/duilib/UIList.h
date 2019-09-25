@@ -120,6 +120,7 @@ public:
     virtual LPCTSTR GetClass() const override;
     virtual UINT GetControlFlags() const override;
     virtual LPVOID GetInterface(LPCTSTR pstrName) override;
+    virtual void SetEnabled(bool bEnable = true) override;
 
     bool GetScrollSelect();
     void SetScrollSelect(bool bScrollSelect);

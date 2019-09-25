@@ -1624,7 +1624,8 @@ void CContainerUI::SetEnabled(bool bEnable /*= true*/)
 
     for (int i = 0; i < GetCount(); ++i)
     {
-        static_cast<CControlUI *>(m_items[i])->SetEnabled(bEnable);
+        // static_cast<CControlUI *>(m_items[i])->SetEnabled(bEnable);
+        static_cast<CControlUI *>(GetItemAt(i))->SetEnabled(bEnable);
     }
 
     Invalidate();
