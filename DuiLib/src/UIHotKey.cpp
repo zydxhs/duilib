@@ -496,9 +496,9 @@ DWORD CHotKeyUI::GetNativeBkColor() const
     return GetBkColor();
 }
 
-void CHotKeyUI::SetPos(RECT rc)
+void CHotKeyUI::SetPos(RECT rc, bool bNeedInvalidate)
 {
-    CControlUI::SetPos(rc);
+    CControlUI::SetPos(rc, bNeedInvalidate);
 
     if (m_pWindow != NULL)
     {

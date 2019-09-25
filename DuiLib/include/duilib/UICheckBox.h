@@ -16,8 +16,8 @@ namespace DuiLib {
 class DUILIB_API CCheckBoxUI : public COptionUI
 {
 public:
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
     void SetCheck(bool bCheck, bool bTriggerEvent = true);
     bool GetCheck() const;
@@ -25,9 +25,9 @@ public:
     void SetSelText(LPCTSTR pstrValue);
     CDuiString GetSelText(void);
 
-    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-    virtual void PaintText(HDC hDC);
-    virtual void ReloadText(void);
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
+    virtual void PaintText(HDC hDC) override;
+    virtual void ReloadText(void) override;
 
 protected:
     CDuiString  m_sSelText;     // 选中状态显示的文本。用于状态切换时自动改变显示文本。

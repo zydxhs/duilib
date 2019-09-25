@@ -9,20 +9,20 @@ class DUILIB_API CVerticalLayoutUI : public CContainerUI
 public:
     CVerticalLayoutUI();
 
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
-    UINT GetControlFlags() const;
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
+    virtual UINT GetControlFlags() const override;
 
     void SetSepHeight(int iHeight);
     int GetSepHeight() const;
     void SetSepImmMode(bool bImmediately);
     bool IsSepImmMode() const;
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-    void DoEvent(TEventUI &event);
-    virtual SIZE EstimateSize(SIZE szAvailable);
-
-    void SetPos(RECT rc, bool bNeedInvalidate = true);
-    void DoPostPaint(HDC hDC, const RECT &rcPaint);
+    
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
+    virtual void DoEvent(TEventUI &event) override;
+    virtual SIZE EstimateSize(SIZE szAvailable) override;
+    virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+    virtual void DoPostPaint(HDC hDC, const RECT &rcPaint) override;
 
     RECT GetThumbRect(bool bUseNew = false) const;
 

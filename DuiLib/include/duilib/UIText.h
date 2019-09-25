@@ -8,23 +8,22 @@ class DUILIB_API CTextUI : public CLabelUI
 {
 public:
     CTextUI();
-    ~CTextUI();
+    virtual ~CTextUI();
 
-    LPCTSTR GetClass() const;
-    UINT GetControlFlags() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
+    virtual LPCTSTR GetClass() const override;
+    virtual UINT GetControlFlags() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
-    virtual int *GetLinksNum(void);
+    virtual int *GetLinksNum(void) override;
     CDuiString *GetLinkContent(int iIndex);
 
-    void DoEvent(TEventUI &event);
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-
-    void PaintText(HDC hDC);
+    virtual void DoEvent(TEventUI &event) override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
+    virtual void PaintText(HDC hDC) override;
 
 protected:
-    virtual RECT *GetRectLinks(void);
-    virtual CDuiString *GetStringLinks(void);
+    virtual RECT *GetRectLinks(void) override;
+    virtual CDuiString *GetStringLinks(void) override;
 
 protected:
     enum { MAX_LINK = 8 };

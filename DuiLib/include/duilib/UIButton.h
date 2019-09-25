@@ -9,13 +9,13 @@ class DUILIB_API CButtonUI : public CLabelUI
 public:
     CButtonUI();
 
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
-    UINT GetControlFlags() const;
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
+    virtual UINT GetControlFlags() const override;
 
-    bool Activate();
-    void SetEnabled(bool bEnable = true);
-    void DoEvent(TEventUI &event);
+    virtual bool Activate() override;
+    virtual void SetEnabled(bool bEnable = true) override;
+    virtual void DoEvent(TEventUI &event) override;
 
     LPCTSTR GetNormalImage();
     void SetNormalImage(LPCTSTR pStrImage);
@@ -59,12 +59,12 @@ public:
     void SetPushedTextColor(DWORD dwColor);
     DWORD GetPushedTextColor() const;
 
-    SIZE EstimateSize(SIZE szAvailable);
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+    virtual SIZE EstimateSize(SIZE szAvailable) override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
-    virtual void PaintBkColor(HDC hDC);
-    virtual void PaintStatusImage(HDC hDC);
-    virtual void PaintText(HDC hDC);
+    virtual void PaintBkColor(HDC hDC) override;
+    virtual void PaintStatusImage(HDC hDC) override;
+    virtual void PaintText(HDC hDC) override;
 
 protected:
     void DrawNormalBkImage(HDC hDC, TDrawInfo &diNormal, TDrawInfo *pdiHot = NULL, bool bHot = false);

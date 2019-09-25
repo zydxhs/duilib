@@ -11,11 +11,11 @@ class DUILIB_API CHotKeyUI : public CLabelUI
     friend class CHotKeyWnd;
 public:
     CHotKeyUI();
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
-    UINT GetControlFlags() const;
-    void SetEnabled(bool bEnable = true);
-    void SetText(LPCTSTR pstrText);
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
+    virtual UINT GetControlFlags() const override;
+    virtual void SetEnabled(bool bEnable = true) override;
+    virtual void SetText(LPCTSTR pstrText) override;
     LPCTSTR GetNormalImage();
     void SetNormalImage(LPCTSTR pStrImage);
     LPCTSTR GetHotImage();
@@ -25,15 +25,15 @@ public:
     LPCTSTR GetDisabledImage();
     void SetDisabledImage(LPCTSTR pStrImage);
 
-    void SetPos(RECT rc);
-    bool SetVisible(bool bVisible = true);
-    void SetInternVisible(bool bVisible = true);
-    SIZE EstimateSize(SIZE szAvailable);
-    void DoEvent(TEventUI &event);
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+    virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+    virtual bool SetVisible(bool bVisible = true) override;
+    virtual void SetInternVisible(bool bVisible = true) override;
+    virtual SIZE EstimateSize(SIZE szAvailable) override;
+    virtual void DoEvent(TEventUI &event) override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
-    void PaintStatusImage(HDC hDC);
-    void PaintText(HDC hDC);
+    virtual void PaintStatusImage(HDC hDC) override;
+    virtual void PaintText(HDC hDC) override;
 public:
     void GetHotKey(WORD &wVirtualKeyCode, WORD &wModifiers) const;
     DWORD GetHotKey(void) const;

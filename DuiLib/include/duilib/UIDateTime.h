@@ -12,10 +12,10 @@ class DUILIB_API CDateTimeUI : public CLabelUI
     friend class CDateTimeWnd;
 public:
     CDateTimeUI();
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
-    UINT GetControlFlags() const;
-    HWND GetNativeWindow() const;
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
+    virtual UINT GetControlFlags() const override;
+    virtual HWND GetNativeWindow() const override;
 
     SYSTEMTIME &GetTime();
     void SetTime(SYSTEMTIME *pst);
@@ -25,12 +25,12 @@ public:
 
     void UpdateText();
 
-    void SetPos(RECT rc, bool bNeedInvalidate = true);
-    void Move(SIZE szOffset, bool bNeedInvalidate = true);
+    virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+    virtual void Move(SIZE szOffset, bool bNeedInvalidate = true) override;
 
-    void DoEvent(TEventUI &event);
-    SIZE EstimateSize(SIZE szAvailable);
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+    virtual void DoEvent(TEventUI &event) override;
+    virtual SIZE EstimateSize(SIZE szAvailable) override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
 protected:
     SYSTEMTIME m_sysTime;

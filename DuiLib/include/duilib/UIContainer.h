@@ -34,29 +34,29 @@ public:
     virtual ~CContainerUI();
 
 public:
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
-    CControlUI *GetItemAt(int iIndex) const;
-    int GetItemIndex(CControlUI *pControl) const;
-    bool SetItemIndex(CControlUI *pControl, int iNewIndex);
-    bool SetMultiItemIndex(CControlUI *pStartControl, int iCount, int iNewStartIndex);
-    int GetCount() const;
-    bool Add(CControlUI *pControl);
-    bool AddAt(CControlUI *pControl, int iIndex);
-    bool Remove(CControlUI *pControl, bool bDoNotDestroy = false);
-    bool RemoveAt(int iIndex, bool bDoNotDestroy = false);
-    void RemoveAll();
+    virtual CControlUI *GetItemAt(int iIndex) const override;
+    virtual int GetItemIndex(CControlUI *pControl) const override;
+    virtual bool SetItemIndex(CControlUI *pControl, int iNewIndex) override;
+    virtual bool SetMultiItemIndex(CControlUI *pStartControl, int iCount, int iNewStartIndex) override;
+    virtual int GetCount() const override;
+    virtual bool Add(CControlUI *pControl) override;
+    virtual bool AddAt(CControlUI *pControl, int iIndex) override;
+    virtual bool Remove(CControlUI *pControl, bool bDoNotDestroy = false) override;
+    virtual bool RemoveAt(int iIndex, bool bDoNotDestroy = false) override;
+    virtual void RemoveAll() override;
     bool RemoveCount(int iIndex, int iCount, bool bDoNotDestroy = false);
 
-    virtual void DoEvent(TEventUI &event);
-    virtual bool SetVisible(bool bVisible = true);
-    virtual void SetInternVisible(bool bVisible = true);
-    virtual void SetMouseEnabled(bool bEnable = true);
-    virtual bool IsEnabled() const;
-    virtual void SetEnabled(bool bEnable = true);
+    virtual void DoEvent(TEventUI &event) override;
+    virtual bool SetVisible(bool bVisible = true) override;
+    virtual void SetInternVisible(bool bVisible = true) override;
+    virtual void SetMouseEnabled(bool bEnable = true) override;
+    virtual bool IsEnabled() const override;
+    virtual void SetEnabled(bool bEnable = true) override;
 
-    virtual void SetPadding(RECT rcPadding); // 设置内边距，相当于设置客户区
+    virtual void SetPadding(RECT rcPadding) override; // 设置内边距，相当于设置客户区
     virtual int GetChildMargin() const;
     virtual void SetChildMargin(int iMargin);
     virtual UINT GetChildAlign() const;
@@ -72,18 +72,18 @@ public:
 
     virtual int FindSelectable(int iIndex, bool bForward = true) const;
 
-    virtual void ReloadText(void);
+    virtual void ReloadText(void) override;
 
-    RECT GetClientPos() const;      // 返回客户区域（除去scrollbar,border和inset/padding）
-    void SetPos(RECT rc, bool bNeedInvalidate = true);
-    void Move(SIZE szOffset, bool bNeedInvalidate = true);
-    bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl);
-    virtual SIZE EstimateSize(SIZE szAvailable);
+    RECT GetClientPos() const override;      // 返回客户区域（除去scrollbar,border和inset/padding）
+    void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+    void Move(SIZE szOffset, bool bNeedInvalidate = true) override;
+    bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl) override;
+    virtual SIZE EstimateSize(SIZE szAvailable) override;
 
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
-    void SetManager(CPaintManagerUI *pManager, CControlUI *pParent, bool bInit = true);
-    CControlUI *FindControl(FINDCONTROLPROC Proc, LPVOID pData, UINT uFlags);
+    virtual void SetManager(CPaintManagerUI *pManager, CControlUI *pParent, bool bInit = true) override;
+    virtual CControlUI *FindControl(FINDCONTROLPROC Proc, LPVOID pData, UINT uFlags) override;
 
     bool SetSubControlText(LPCTSTR pstrSubControlName, LPCTSTR pstrText);
     bool SetSubControlFixedHeight(LPCTSTR pstrSubControlName, int cy);

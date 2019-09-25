@@ -15,36 +15,36 @@ class DUILIB_API CComboUI : public CContainerUI, public IListOwnerUI
 public:
     CComboUI();
 
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
-    void DoInit();
-    UINT GetControlFlags() const;
+    virtual void DoInit() override;
+    virtual UINT GetControlFlags() const override;
 
-    CDuiString GetText() const;
-    void SetEnabled(bool bEnable = true);
+    virtual CDuiString GetText() const override;
+    virtual void SetEnabled(bool bEnable = true) override;
 
     CDuiString GetDropBoxAttributeList();
     void SetDropBoxAttributeList(LPCTSTR pstrList);
     SIZE GetDropBoxSize() const;
     void SetDropBoxSize(SIZE szDropBox);
 
-    int GetCurSel() const;
+    virtual int GetCurSel() const override;
     bool GetSelectCloseFlag();
     void SetSelectCloseFlag(bool flag);
-    bool SelectItem(int iIndex, bool bTakeFocus = false, bool bTriggerEvent = true);
-    bool ExpandItem(int iIndex, bool bExpand = true);
-    int GetExpandedItem() const;
+    virtual bool SelectItem(int iIndex, bool bTakeFocus = false, bool bTriggerEvent = true) override;
+    virtual bool ExpandItem(int iIndex, bool bExpand = true) override;
+    virtual int GetExpandedItem() const override;
 
-    bool SetItemIndex(CControlUI *pControl, int iNewIndex);
-    bool SetMultiItemIndex(CControlUI *pStartControl, int iCount, int iNewStartIndex);
-    bool Add(CControlUI *pControl);
-    bool AddAt(CControlUI *pControl, int iIndex);
-    bool Remove(CControlUI *pControl, bool bDoNotDestroy = false);
-    bool RemoveAt(int iIndex, bool bDoNotDestroy = false);
-    void RemoveAll();
+    virtual bool SetItemIndex(CControlUI *pControl, int iNewIndex) override;
+    virtual bool SetMultiItemIndex(CControlUI *pStartControl, int iCount, int iNewStartIndex) override;
+    virtual bool Add(CControlUI *pControl) override;
+    virtual bool AddAt(CControlUI *pControl, int iIndex) override;
+    virtual bool Remove(CControlUI *pControl, bool bDoNotDestroy = false) override;
+    virtual bool RemoveAt(int iIndex, bool bDoNotDestroy = false) override;
+    virtual void RemoveAll() override;
 
-    bool Activate();
+    virtual bool Activate() override;
 
     bool GetShowText() const;
     void SetShowText(bool flag);
@@ -60,7 +60,7 @@ public:
     LPCTSTR GetDisabledImage() const;
     void SetDisabledImage(LPCTSTR pStrImage);
 
-    TListInfoUI *GetListInfo();
+    virtual TListInfoUI *GetListInfo() override;
     UINT GetItemFixedHeight();
     void SetItemFixedHeight(UINT nHeight);
     int GetItemFont(int index);
@@ -106,15 +106,15 @@ public:
     bool IsItemShowHtml();
     void SetItemShowHtml(bool bShowHtml = true);
 
-    SIZE EstimateSize(SIZE szAvailable);
-    void SetPos(RECT rc, bool bNeedInvalidate = true);
-    void Move(SIZE szOffset, bool bNeedInvalidate = true);
-    void DoEvent(TEventUI &event);
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+    virtual SIZE EstimateSize(SIZE szAvailable) override;
+    virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+    virtual void Move(SIZE szOffset, bool bNeedInvalidate = true) override;
+    virtual void DoEvent(TEventUI &event) override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
-    bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl);
-    void PaintText(HDC hDC);
-    void PaintStatusImage(HDC hDC);
+    virtual bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl) override;
+    virtual void PaintText(HDC hDC) override;
+    virtual void PaintStatusImage(HDC hDC) override;
 
     bool SelectItemByTag(UINT_PTR pTag);
     bool SelectItemByUserData(LPCTSTR pstrText);

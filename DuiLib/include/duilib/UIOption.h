@@ -8,15 +8,15 @@ class DUILIB_API COptionUI : public CButtonUI
 {
 public:
     COptionUI();
-    ~COptionUI();
+    virtual ~COptionUI();
 
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
-    void SetManager(CPaintManagerUI *pManager, CControlUI *pParent, bool bInit = true);
+    virtual void SetManager(CPaintManagerUI *pManager, CControlUI *pParent, bool bInit = true) override;
 
-    bool Activate();
-    void SetEnabled(bool bEnable = true);
+    virtual bool Activate() override;
+    virtual void SetEnabled(bool bEnable = true) override;
 
     void SetSelTextColor(DWORD dwTextColor);
     DWORD GetSelTextColor();
@@ -64,16 +64,17 @@ public:
     bool IsSelected() const;
     virtual void Selected(bool bSelected, bool bTriggerEvent = true);
 
-    SIZE EstimateSize(SIZE szAvailable);
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+    virtual SIZE EstimateSize(SIZE szAvailable) override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
-    virtual void PaintBkColor(HDC hDC);
-    virtual void PaintStatusImage(HDC hDC);
-    void PaintText(HDC hDC);
-    virtual void PaintBorder(HDC hDC);
+    virtual void PaintBkColor(HDC hDC) override;
+    virtual void PaintStatusImage(HDC hDC) override;
+    virtual void PaintText(HDC hDC) override;
+    virtual void PaintBorder(HDC hDC) override;
 
 protected:
     void SwitchTabLayoutPage(void);
+
 protected:
     bool            m_bSelected;
     CDuiString      m_sGroupName;

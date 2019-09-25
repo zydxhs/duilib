@@ -491,9 +491,7 @@ UINT CIPAddressUI::GetControlFlags() const
 
 HWND CIPAddressUI::GetNativeWindow() const
 {
-    if (m_pWindow) { return m_pWindow->GetHWND(); }
-
-    return NULL;
+    return (NULL != m_pWindow) ? m_pWindow->GetHWND() : NULL;
 }
 
 void CIPAddressUI::DoEvent(TEventUI &event)
@@ -677,13 +675,6 @@ void CIPAddressUI::SetReadOnly(bool bReadOnly)
 bool CIPAddressUI::IsReadOnly() const
 {
     return m_bReadOnly;
-}
-
-HWND CIPAddressUI::GetNativeEditHWND() const
-{
-    if (m_pWindow == NULL) { return NULL; }
-
-    return m_pWindow->GetHWND();
 }
 
 void CIPAddressUI::SetIp(DWORD dwIp)

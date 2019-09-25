@@ -9,8 +9,8 @@ class DUILIB_API CProgressUI : public CLabelUI
 public:
     CProgressUI();
 
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
     bool IsHorizontal();
     void SetHorizontal(bool bHorizontal = true);
@@ -25,10 +25,9 @@ public:
     LPCTSTR GetForeDisabledImage() const;
     void SetForeDisabledImage(LPCTSTR pStrImage);
 
-    void SetEnabled(bool bEnable = true);
-
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-    void PaintStatusImage(HDC hDC);
+    virtual void SetEnabled(bool bEnable = true) override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
+    virtual void PaintStatusImage(HDC hDC) override;
 
 protected:
     UINT m_uButtonState;

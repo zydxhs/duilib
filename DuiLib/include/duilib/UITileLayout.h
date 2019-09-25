@@ -9,10 +9,10 @@ class DUILIB_API CTileLayoutUI : public CContainerUI
 public:
     CTileLayoutUI();
 
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
-
-    void SetPos(RECT rc, bool bNeedInvalidate = true);
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
+    virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
     int GetFixedColumns() const;
     void SetFixedColumns(int iColums);
@@ -27,7 +27,6 @@ public:
     void SetItemSize(SIZE szSize);
     int GetColumns() const;
     int GetRows() const;
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
 private:
     void ResetInternVisible(void);  // 重置子控件内部显示属性

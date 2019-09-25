@@ -13,11 +13,11 @@ public:
     CPwdCheckUI(void);
     virtual ~CPwdCheckUI(void);
 
-    virtual LPCTSTR GetClass(void) const;
-    virtual LPVOID GetInterface(LPCTSTR pstrName);
-    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-    virtual void PaintBkColor(HDC hDC);
-    virtual void PaintText(HDC hDC);
+    virtual LPCTSTR GetClass(void) const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
+    virtual void PaintBkColor(HDC hDC) override;
+    virtual void PaintText(HDC hDC) override;
 
     void SetClrWeak(DWORD dwClr);
     DWORD GetClrWeak(void);
@@ -30,8 +30,8 @@ public:
 
     void SetShowTxt(bool bShow);
     bool IsShowTxt(void);
-    virtual CDuiString GetText(void) const;
-    virtual void SetText(LPCTSTR pstrText);
+    virtual CDuiString GetText(void) const override;
+    virtual void SetText(LPCTSTR pstrText) override;
 
     BYTE GetPwdStrongth();
 

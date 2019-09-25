@@ -50,7 +50,7 @@ public:
     void SetDirection(bool bHorizonal);
     bool GetDirection(void);
     LPCTSTR GetBkImage();
-    void SetBkImage(LPCTSTR pStrImage);
+    virtual void SetBkImage(LPCTSTR pStrImage);
     bool IsColorHSL() const;
     void SetColorHSL(bool bColorHSL);
     SIZE GetBorderRound() const;
@@ -159,7 +159,7 @@ public:
 
     virtual CControlUI *FindControl(FINDCONTROLPROC Proc, LPVOID pData, UINT uFlags);
 
-    void Invalidate();
+    virtual void Invalidate();
     bool IsUpdateNeeded() const;
     void NeedUpdate();
     void NeedParentUpdate();

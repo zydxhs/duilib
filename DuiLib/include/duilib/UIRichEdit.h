@@ -11,12 +11,14 @@ class DUILIB_API CRichEditUI : public CContainerUI, public IMessageFilterUI
 {
 public:
     CRichEditUI();
-    ~CRichEditUI();
+    virtual ~CRichEditUI();
 
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
-    UINT GetControlFlags() const;
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
+    virtual UINT GetControlFlags() const override;
 
+    virtual CDuiString GetText() const override;
+    virtual void SetText(LPCTSTR pstrText) override;
     bool IsWantTab();
     void SetWantTab(bool bWantTab = true);
     bool IsWantReturn();
@@ -41,8 +43,6 @@ public:
     int GetLimitText();
     void SetLimitText(int iChars);
     long GetTextLength(DWORD dwFlags = GTL_DEFAULT) const;
-    CDuiString GetText() const;
-    void SetText(LPCTSTR pstrText);
     bool IsModify() const;
     void SetModify(bool bModified = true) const;
     void GetSel(CHARRANGE &cr) const;
@@ -97,16 +97,16 @@ public:
     long StreamIn(int nFormat, EDITSTREAM &es);
     long StreamOut(int nFormat, EDITSTREAM &es);
 
-    void SetPadding(RECT rc);
+    virtual void SetPadding(RECT rc) override;
 
+    virtual void ReloadText(void) override;
     //2018-04-15 zhuyadong 添加提示文字及其颜色
     void SetTipText(LPCTSTR pstrTip);
     LPCTSTR GetTipText();
-    virtual void ReloadText(void);
     void SetTipColor(DWORD dwColor);
     DWORD GetTipColor();
 
-    void DoInit();
+    virtual void DoInit() override;
     bool SetDropAcceptFile(bool bAccept);
     // 注意：TxSendMessage和SendMessage是有区别的，TxSendMessage没有multibyte和unicode自动转换的功能，
     // 而richedit2.0内部是以unicode实现的，在multibyte程序中，必须自己处理unicode到multibyte的转换
@@ -115,29 +115,27 @@ public:
     virtual bool OnTxViewChanged();
     virtual void OnTxNotify(DWORD iNotify, void *pv);
 
-    void SetScrollPos(SIZE szPos);
-    void LineUp();
-    void LineDown();
-    void PageUp();
-    void PageDown();
-    void HomeUp();
-    void EndDown();
-    void LineLeft();
-    void LineRight();
-    void PageLeft();
-    void PageRight();
-    void HomeLeft();
-    void EndRight();
+    virtual void SetScrollPos(SIZE szPos) override;
+    virtual void LineUp() override;
+    virtual void LineDown() override;
+    virtual void PageUp() override;
+    virtual void PageDown() override;
+    virtual void HomeUp() override;
+    virtual void EndDown() override;
+    virtual void LineLeft() override;
+    virtual void LineRight() override;
+    virtual void PageLeft() override;
+    virtual void PageRight() override;
+    virtual void HomeLeft() override;
+    virtual void EndRight() override;
 
-    SIZE EstimateSize(SIZE szAvailable);
-    void SetPos(RECT rc, bool bNeedInvalidate = true);
-    void Move(SIZE szOffset, bool bNeedInvalidate = true);
-    void DoEvent(TEventUI &event);
-    bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl);
-
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-
-    LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool &bHandled);
+    virtual SIZE EstimateSize(SIZE szAvailable) override;
+    virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+    virtual void Move(SIZE szOffset, bool bNeedInvalidate = true) override;
+    virtual void DoEvent(TEventUI &event) override;
+    virtual bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl) override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
+    virtual LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool &bHandled) override;
 
 protected:
     CTxtWinHost *m_pTwh;

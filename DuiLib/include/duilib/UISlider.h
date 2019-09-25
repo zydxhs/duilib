@@ -9,11 +9,11 @@ class DUILIB_API CSliderUI : public CProgressUI
 public:
     CSliderUI();
 
-    LPCTSTR GetClass() const;
-    UINT GetControlFlags() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
+    virtual LPCTSTR GetClass() const override;
+    virtual UINT GetControlFlags() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
-    void SetEnabled(bool bEnable = true);
+    virtual void SetEnabled(bool bEnable = true) override;
 
     int GetChangeStep();
     void SetChangeStep(int step);
@@ -30,9 +30,9 @@ public:
     LPCTSTR GetThumbDisabledImage() const;
     void SetThumbDisabledImage(LPCTSTR pStrImage);
 
-    void DoEvent(TEventUI &event);
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-    void PaintStatusImage(HDC hDC);
+    virtual void DoEvent(TEventUI &event) override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
+    virtual void PaintStatusImage(HDC hDC) override;
 
 protected:
     SIZE m_szThumb;

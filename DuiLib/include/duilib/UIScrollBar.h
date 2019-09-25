@@ -9,15 +9,15 @@ class DUILIB_API CScrollBarUI : public CControlUI
 public:
     CScrollBarUI();
 
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
     CContainerUI *GetOwner() const;
     void SetOwner(CContainerUI *pOwner);
 
-    bool SetVisible(bool bVisible = true);
-    void SetEnabled(bool bEnable = true);
-    void SetFocus();
+    bool SetVisible(bool bVisible = true) override;
+    void SetEnabled(bool bEnable = true) override;
+    void SetFocus() override;
 
     bool IsHorizontal();
     void SetHorizontal(bool bHorizontal = true);
@@ -85,11 +85,10 @@ public:
     LPCTSTR GetBkDisabledImage();
     void SetBkDisabledImage(LPCTSTR pStrImage);
 
-    void SetPos(RECT rc, bool bNeedInvalidate = true);
-    void DoEvent(TEventUI &event);
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-
-    bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl);
+    virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+    virtual void DoEvent(TEventUI &event) override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
+    virtual bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl) override;
 
     void PaintBk(HDC hDC);
     void PaintButton1(HDC hDC);

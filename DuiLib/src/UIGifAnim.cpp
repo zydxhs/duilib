@@ -454,11 +454,6 @@ void CGifAnimUI::SetBkImage(LPCTSTR pStrImage)
     Invalidate();
 }
 
-LPCTSTR CGifAnimUI::GetBkImage()
-{
-    return m_diBk.sDrawString.GetData();
-}
-
 void CGifAnimUI::SetAutoPlay(bool bIsAuto)
 {
     m_bIsAutoPlay = bIsAuto;

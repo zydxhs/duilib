@@ -15,26 +15,25 @@ public:
     CIPAddressUI();
     virtual ~CIPAddressUI();
 
-    virtual LPCTSTR GetClass() const;
-    virtual LPVOID GetInterface(LPCTSTR pstrName);
-    virtual UINT GetControlFlags() const;
-    virtual HWND GetNativeWindow() const;
-    virtual void SetPos(RECT rc, bool bNeedInvalidate = true);
-    virtual void Move(SIZE szOffset, bool bNeedInvalidate = true);
-    virtual void SetEnabled(bool bEnable = true);
-    virtual void SetText(LPCTSTR pstrText);
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
+    virtual UINT GetControlFlags() const override;
+    virtual HWND GetNativeWindow() const override;
+    virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+    virtual void Move(SIZE szOffset, bool bNeedInvalidate = true) override;
+    virtual void SetEnabled(bool bEnable = true) override;
+    virtual void SetText(LPCTSTR pstrText) override;
 
-    virtual bool SetVisible(bool bVisible = true);
-    virtual void SetInternVisible(bool bVisible = true);
-    virtual SIZE EstimateSize(SIZE szAvailable);
-    virtual void DoEvent(TEventUI &event);
-    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+    virtual bool SetVisible(bool bVisible = true) override;
+    virtual void SetInternVisible(bool bVisible = true) override;
+    virtual SIZE EstimateSize(SIZE szAvailable) override;
+    virtual void DoEvent(TEventUI &event) override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
-    virtual void PaintText(HDC hDC);
+    virtual void PaintText(HDC hDC) override;
 
     void SetReadOnly(bool bReadOnly);
     bool IsReadOnly() const;
-    HWND GetNativeEditHWND() const;
 
     // 主机序。点分表示法中第1个字段，在最高位
     void SetIp(DWORD dwIp);

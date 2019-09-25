@@ -117,25 +117,25 @@ class DUILIB_API CListUI : public CVerticalLayoutUI, public IListUI
 public:
     CListUI();
 
-    LPCTSTR GetClass() const;
-    UINT GetControlFlags() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
+    virtual LPCTSTR GetClass() const override;
+    virtual UINT GetControlFlags() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
     bool GetScrollSelect();
     void SetScrollSelect(bool bScrollSelect);
-    int GetCurSel() const;
-    bool SelectItem(int iIndex, bool bTakeFocus = false, bool bTriggerEvent = true);
+    virtual int GetCurSel() const override;
+    virtual bool SelectItem(int iIndex, bool bTakeFocus = false, bool bTriggerEvent = true) override;
 
-    CControlUI *GetItemAt(int iIndex) const;
-    int GetItemIndex(CControlUI *pControl) const;
-    bool SetItemIndex(CControlUI *pControl, int iIndex);
-    bool SetMultiItemIndex(CControlUI *pStartControl, int iCount, int iNewStartIndex);
-    int GetCount() const;
-    bool Add(CControlUI *pControl);
-    bool AddAt(CControlUI *pControl, int iIndex);
-    bool Remove(CControlUI *pControl, bool bDoNotDestroy = false);
-    bool RemoveAt(int iIndex, bool bDoNotDestroy = false);
-    void RemoveAll();
+    virtual CControlUI *GetItemAt(int iIndex) const override;
+    virtual int GetItemIndex(CControlUI *pControl) const override;
+    virtual bool SetItemIndex(CControlUI *pControl, int iIndex) override;
+    virtual bool SetMultiItemIndex(CControlUI *pStartControl, int iCount, int iNewStartIndex) override;
+    virtual int GetCount() const override;
+    virtual bool Add(CControlUI *pControl) override;
+    virtual bool AddAt(CControlUI *pControl, int iIndex) override;
+    virtual bool Remove(CControlUI *pControl, bool bDoNotDestroy = false) override;
+    virtual bool RemoveAt(int iIndex, bool bDoNotDestroy = false) override;
+    virtual void RemoveAll() override;
     bool RemoveCount(int iIndex, int iCount, bool bDoNotDestroy = false);
 
     int FindItemByTag(UINT_PTR pTag);
@@ -146,12 +146,12 @@ public:
     void EnsureVisible(int iIndex);
     void Scroll(int dx, int dy);
 
-    int GetChildMargin() const;
-    void SetChildMargin(int iMargin);
+    virtual int GetChildMargin() const override;
+    virtual void SetChildMargin(int iMargin) override;
 
-    CListHeaderUI *GetHeader() const;
-    CContainerUI *GetList() const;
-    TListInfoUI *GetListInfo();
+    virtual CListHeaderUI *GetHeader() const override;
+    virtual CContainerUI *GetList() const override;
+    virtual TListInfoUI *GetListInfo() override;
 
     UINT GetItemFixedHeight();
     void SetItemFixedHeight(UINT nHeight);
@@ -199,52 +199,52 @@ public:
     void SetItemShowHtml(bool bShowHtml = true);
 
     void SetMultiExpanding(bool bMultiExpandable);
-    int GetExpandedItem() const;
-    bool ExpandItem(int iIndex, bool bExpand = true);
+    virtual int GetExpandedItem() const override;
+    virtual bool ExpandItem(int iIndex, bool bExpand = true) override;
 
-    void SetPos(RECT rc, bool bNeedInvalidate = true);
-    void Move(SIZE szOffset, bool bNeedInvalidate = true);
-    void DoEvent(TEventUI &event);
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+    virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+    virtual void Move(SIZE szOffset, bool bNeedInvalidate = true) override;
+    virtual void DoEvent(TEventUI &event) override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
-    IListCallbackUI *GetTextCallback() const;
-    void SetTextCallback(IListCallbackUI *pCallback);
+    virtual IListCallbackUI *GetTextCallback() const override;
+    virtual void SetTextCallback(IListCallbackUI *pCallback) override;
 
-    SIZE GetScrollPos() const;
-    SIZE GetScrollRange() const;
-    void SetScrollPos(SIZE szPos);
-    void LineUp();
-    void LineDown();
-    void PageUp();
-    void PageDown();
-    void HomeUp();
-    void EndDown();
-    void LineLeft();
-    void LineRight();
-    void PageLeft();
-    void PageRight();
-    void HomeLeft();
-    void EndRight();
-    void EnableScrollBar(bool bEnableVertical = true, bool bEnableHorizontal = false);
-    virtual CScrollBarUI *GetVerticalScrollBar() const;
-    virtual CScrollBarUI *GetHorizontalScrollBar() const;
+    virtual SIZE GetScrollPos() const override;
+    virtual SIZE GetScrollRange() const override;
+    virtual void SetScrollPos(SIZE szPos) override;
+    virtual void LineUp() override;
+    virtual void LineDown() override;
+    virtual void PageUp() override;
+    virtual void PageDown() override;
+    virtual void HomeUp() override;
+    virtual void EndDown() override;
+    virtual void LineLeft() override;
+    virtual void LineRight() override;
+    virtual void PageLeft() override;
+    virtual void PageRight() override;
+    virtual void HomeLeft() override;
+    virtual void EndRight() override;
+    virtual void EnableScrollBar(bool bEnableVertical = true, bool bEnableHorizontal = false) override;
+    virtual CScrollBarUI *GetVerticalScrollBar() const override;
+    virtual CScrollBarUI *GetHorizontalScrollBar() const override;
     bool SortItems(PULVCompareFunc pfnCompare, UINT_PTR dwData);
 
     TDrawInfo &GetUnSelImage(void);
     TDrawInfo &GetSelImage(void);
     void GetAllSelectedItem(CDuiValArray &arySelIdx, int nColumn = 0);
     void SetAllItemSelected(bool bSelect, int nColumn = 0);
-    virtual void DoInit();
+    virtual void DoInit() override;
 
     void GetLastModifiedItem(int &nRow, int &nColumn);
-    virtual void ShowEdit(int nRow, int nColumn, RECT &rt, CDuiString &sItemTxt);
-    virtual void HideEdit();
+    virtual void ShowEdit(int nRow, int nColumn, RECT &rt, CDuiString &sItemTxt) override;
+    virtual void HideEdit() override;
     CEditUI *GetEditUI();
 
-    virtual IListCmbCallbackUI *GetCmbItemCallback() const;
-    virtual void SetCmbItemCallback(IListCmbCallbackUI *pCallback);
-    virtual void ShowCombo(int nRow, int nColumn, RECT &rt);
-    virtual void HideCombo();
+    virtual IListCmbCallbackUI *GetCmbItemCallback() const override;
+    virtual void SetCmbItemCallback(IListCmbCallbackUI *pCallback) override;
+    virtual void ShowCombo(int nRow, int nColumn, RECT &rt) override;
+    virtual void HideCombo() override;
     CComboUI *GetComboUI();
 
     int GetMouseColumn(POINT pt);                       // 返回鼠标所在的列
@@ -287,10 +287,10 @@ class DUILIB_API CListHeaderUI : public CHorizontalLayoutUI
 public:
     CListHeaderUI();
 
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
-    SIZE EstimateSize(SIZE szAvailable);
+    virtual SIZE EstimateSize(SIZE szAvailable) override;
 };
 
 
@@ -302,11 +302,11 @@ class DUILIB_API CListHeaderItemUI : public CContainerUI
 public:
     CListHeaderItemUI();
 
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
-    UINT GetControlFlags() const;
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
+    virtual UINT GetControlFlags() const override;
 
-    void SetEnabled(bool bEnable = true);
+    virtual void SetEnabled(bool bEnable = true) override;
 
     bool IsDragable() const;
     void SetDragable(bool bDragable);
@@ -318,7 +318,6 @@ public:
     void SetTextColor(DWORD dwTextColor);
     DWORD GetSepColor() const;
     void SetSepColor(DWORD dwSepColor);
-    void SetPadding(RECT rc);
     void SetFont(int index);
     bool IsShowHtml();
     void SetShowHtml(bool bShowHtml = true);
@@ -333,13 +332,14 @@ public:
     LPCTSTR GetSepImage() const;
     void SetSepImage(LPCTSTR pStrImage);
 
-    void DoEvent(TEventUI &event);
-    SIZE EstimateSize(SIZE szAvailable);
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+    virtual void SetPadding(RECT rc) override;
+    virtual void DoEvent(TEventUI &event) override;
+    virtual SIZE EstimateSize(SIZE szAvailable) override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
     RECT GetThumbRect() const;
 
-    void PaintText(HDC hDC);
-    void PaintStatusImage(HDC hDC);
+    virtual void PaintText(HDC hDC) override;
+    virtual void PaintStatusImage(HDC hDC) override;
 
     void SetEditable(bool bEditable);
     bool IsEditable();
@@ -379,31 +379,31 @@ class DUILIB_API CListElementUI : public CControlUI, public IListItemUI
 public:
     CListElementUI();
 
-    LPCTSTR GetClass() const;
-    UINT GetControlFlags() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
+    virtual LPCTSTR GetClass() const override;
+    virtual UINT GetControlFlags() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
-    void SetEnabled(bool bEnable = true);
+    virtual void SetEnabled(bool bEnable = true) override;
 
-    int GetIndex() const;
-    void SetIndex(int iIndex);
-    int GetDrawIndex() const;
-    void SetDrawIndex(int iIndex);
+    virtual int GetIndex() const override;
+    virtual void SetIndex(int iIndex) override;
+    virtual int GetDrawIndex() const override;
+    virtual void SetDrawIndex(int iIndex) override;
 
-    IListOwnerUI *GetOwner();
-    void SetOwner(CControlUI *pOwner);
-    bool SetVisible(bool bVisible = true);
+    virtual IListOwnerUI *GetOwner() override;
+    virtual void SetOwner(CControlUI *pOwner) override;
+    virtual bool SetVisible(bool bVisible = true) override;
 
-    bool IsSelected() const;
-    bool Select(bool bSelect = true, bool bTriggerEvent = true);
-    bool IsExpanded() const;
-    bool Expand(bool bExpand = true);
+    virtual bool IsSelected() const override;
+    virtual bool Select(bool bSelect = true, bool bTriggerEvent = true) override;
+    virtual bool IsExpanded() const override;
+    virtual bool Expand(bool bExpand = true) override;
 
-    void Invalidate(); // 直接CControl::Invalidate会导致滚动条刷新，重写减少刷新区域
-    bool Activate();
+    virtual void Invalidate() override; // 直接CControl::Invalidate会导致滚动条刷新，重写减少刷新区域
+    virtual bool Activate() override;
 
-    void DoEvent(TEventUI &event);
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+    virtual void DoEvent(TEventUI &event) override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
     void DrawItemBk(HDC hDC, const RECT &rcItem);
 
@@ -433,20 +433,20 @@ class DUILIB_API CListLabelElementUI : public CListElementUI
 public:
     CListLabelElementUI();
 
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
-    void SetOwner(CControlUI *pOwner);
+    virtual void SetOwner(CControlUI *pOwner) override;
 
-    void SetFixedWidth(int cx);
-    void SetFixedHeight(int cy);
-    void SetText(LPCTSTR pstrText);
+    virtual void SetFixedWidth(int cx) override;
+    virtual void SetFixedHeight(int cy) override;
+    virtual void SetText(LPCTSTR pstrText) override;
 
-    void DoEvent(TEventUI &event);
-    SIZE EstimateSize(SIZE szAvailable);
-    bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl);
+    virtual void DoEvent(TEventUI &event) override;
+    virtual SIZE EstimateSize(SIZE szAvailable) override;
+    virtual bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl) override;
 
-    void DrawItemText(HDC hDC, const RECT &rcItem);
+    virtual void DrawItemText(HDC hDC, const RECT &rcItem) override;
 
 protected:
     SIZE    m_cxyFixedLast;
@@ -467,25 +467,25 @@ class DUILIB_API CListTextElementUI : public CListLabelElementUI
 {
 public:
     CListTextElementUI();
-    ~CListTextElementUI();
+    virtual ~CListTextElementUI();
 
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
-    UINT GetControlFlags() const;
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
+    virtual UINT GetControlFlags() const override;
 
     LPCTSTR GetText(int iIndex) const;
     void SetText(int iIndex, LPCTSTR pstrText);
 
-    void SetOwner(CControlUI *pOwner);
+    virtual void SetOwner(CControlUI *pOwner) override;
     CDuiString *GetLinkContent(int iIndex);
 
-    void DoEvent(TEventUI &event);
-    SIZE EstimateSize(SIZE szAvailable);
+    virtual void DoEvent(TEventUI &event) override;
+    virtual SIZE EstimateSize(SIZE szAvailable) override;
 
-    void DrawItemText(HDC hDC, const RECT &rcItem);
+    virtual void DrawItemText(HDC hDC, const RECT &rcItem) override;
 
-    virtual void SetCheckBoxState(bool bSelect, int nColumn = 0);
-    virtual bool GetCheckBoxState(int nColumn = 0);
+    virtual void SetCheckBoxState(bool bSelect, int nColumn = 0) override;
+    virtual bool GetCheckBoxState(int nColumn = 0) override;
 protected:
     enum { MAX_LINK = 8 };
     int m_nLinks;
@@ -507,38 +507,38 @@ class DUILIB_API CListContainerElementUI : public CContainerUI, public IListItem
 public:
     CListContainerElementUI();
 
-    LPCTSTR GetClass() const;
-    UINT GetControlFlags() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
+    virtual LPCTSTR GetClass() const override;
+    virtual UINT GetControlFlags() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
-    int GetIndex() const;
-    void SetIndex(int iIndex);
-    int GetDrawIndex() const;
-    void SetDrawIndex(int iIndex);
+    virtual int GetIndex() const override;
+    virtual void SetIndex(int iIndex) override;
+    virtual int GetDrawIndex() const override;
+    virtual void SetDrawIndex(int iIndex) override;
 
-    IListOwnerUI *GetOwner();
-    void SetOwner(CControlUI *pOwner);
-    bool SetVisible(bool bVisible = true);
-    void SetEnabled(bool bEnable = true);
+    virtual IListOwnerUI *GetOwner() override;
+    virtual void SetOwner(CControlUI *pOwner) override;
+    virtual bool SetVisible(bool bVisible = true) override;
+    virtual void SetEnabled(bool bEnable = true) override;
 
-    bool IsSelected() const;
-    bool Select(bool bSelect = true, bool bTriggerEvent = true);
+    virtual bool IsSelected() const override;
+    virtual bool Select(bool bSelect = true, bool bTriggerEvent = true) override;
+    virtual bool IsExpanded() const override;
+    virtual bool Expand(bool bExpand = true) override;
     bool IsExpandable() const;
     void SetExpandable(bool bExpandable);
-    bool IsExpanded() const;
-    bool Expand(bool bExpand = true);
 
-    void Invalidate(); // 直接CControl::Invalidate会导致滚动条刷新，重写减少刷新区域
-    bool Activate();
+    virtual void Invalidate() override; // 直接CControl::Invalidate会导致滚动条刷新，重写减少刷新区域
+    virtual bool Activate() override;
 
-    void DoEvent(TEventUI &event);
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-    bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl);
+    virtual void DoEvent(TEventUI &event) override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
+    virtual bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl) override;
 
-    void DrawItemText(HDC hDC, const RECT &rcItem);
+    virtual void DrawItemText(HDC hDC, const RECT &rcItem) override;
     void DrawItemBk(HDC hDC, const RECT &rcItem);
 
-    SIZE EstimateSize(SIZE szAvailable);
+    virtual SIZE EstimateSize(SIZE szAvailable) override;
 
     virtual void SetCheckBoxState(bool bSelect, int nColumn = 0);
     virtual bool GetCheckBoxState(int nColumn = 0);
@@ -561,14 +561,14 @@ class DUILIB_API CListHBoxElementUI : public CListContainerElementUI
 public:
     CListHBoxElementUI();
 
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
-    void SetPos(RECT rc, bool bNeedInvalidate = true);
-    bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl);
+    virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+    virtual bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl) override;
 
-    virtual void SetCheckBoxState(bool bSelect, int nColumn = 0);
-    virtual bool GetCheckBoxState(int nColumn = 0);
+    virtual void SetCheckBoxState(bool bSelect, int nColumn = 0) override;
+    virtual bool GetCheckBoxState(int nColumn = 0) override;
 
 };
 

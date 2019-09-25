@@ -9,11 +9,10 @@ class DUILIB_API CHWeightLayoutUI : public CHorizontalLayoutUI
 public:
     CHWeightLayoutUI();
 
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
-    UINT GetControlFlags() const;
-
-    void SetPos(RECT rc, bool bNeedInvalidate = true);
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
+    virtual UINT GetControlFlags() const override;
+    virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
 
 protected:
     void ResetWeightCtrlState(void);    // 带权重且被隐藏的控件，重置其 InternVisible 属性

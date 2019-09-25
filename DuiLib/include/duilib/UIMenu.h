@@ -76,9 +76,10 @@ public:
     CMenuWnd(void);
 
     //继承来的接口
-    virtual void Notify(TNotifyUI &msg) { }
-    virtual CControlUI *CreateControl(LPCTSTR pstrClassName);
-    virtual bool OnSubjectUpdate(WPARAM p1, WPARAM p2 = NULL, LPARAM p3 = NULL, CSubjectBase *pSub = NULL);
+    virtual void Notify(TNotifyUI &msg) override { }
+    virtual CControlUI *CreateControl(LPCTSTR pstrClassName) override;
+    virtual bool OnSubjectUpdate(WPARAM p1, WPARAM p2 = NULL, LPARAM p3 = NULL,
+                                 CSubjectBase *pSub = NULL) override;
 
     // 获取根菜单控件，用于动态添加子菜单
     CMenuUI *GetMenuUI(void);
@@ -89,9 +90,9 @@ public:
 
 protected:
     CPaintManagerUI *GetManager(void);
-    virtual LPCTSTR GetWindowClassName(void) const;
-    virtual void OnFinalMessage(HWND hWnd);
-    virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+    virtual LPCTSTR GetWindowClassName(void) const override;
+    virtual void OnFinalMessage(HWND hWnd) override;
+    virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) override;
     virtual LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
     virtual LRESULT OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
     virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
@@ -123,13 +124,13 @@ public:
     // 用于解决 DuiLib 使用 /MT 编译选项时的断言错误：_pFirstBlock == pHead
     CMenuElementUI *NewMenuItem(void);
     // 添加/删除 菜单项
-    virtual bool Add(CControlUI *pControl);
-    virtual bool AddAt(CControlUI *pControl, int iIndex);
-    virtual bool Remove(CControlUI *pControl, bool bDoNotDestroy = false);
+    virtual bool Add(CControlUI *pControl) override;
+    virtual bool AddAt(CControlUI *pControl, int iIndex) override;
+    virtual bool Remove(CControlUI *pControl, bool bDoNotDestroy = false) override;
 
     // 获取/设置 菜单项位置索引
-    virtual int GetItemIndex(CControlUI *pControl) const;
-    virtual bool SetItemIndex(CControlUI *pControl, int iIndex);
+    virtual int GetItemIndex(CControlUI *pControl) const override;
+    virtual bool SetItemIndex(CControlUI *pControl, int iIndex) override;
 
     // 查找菜单项。
     // 如果返回的菜单项包含子菜单，可以直接添加子菜单项
@@ -137,11 +138,11 @@ public:
     CMenuElementUI *FindMenuItem(LPCTSTR pstrName);
 
     //////////////////////////////////////////////////////////////////////////
-    virtual LPCTSTR GetClass(void) const;
-    virtual LPVOID GetInterface(LPCTSTR pstrName);
-    virtual void DoEvent(TEventUI &event);
+    virtual LPCTSTR GetClass(void) const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
+    virtual void DoEvent(TEventUI &event) override;
     virtual SIZE EstimateSize(SIZE szAvailable) override;
-    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -151,7 +152,7 @@ class DUILIB_API CMenuElementUI : public CListContainerElementUI
     friend CMenuWnd;
 public:
     CMenuElementUI(void);
-    ~CMenuElementUI(void);
+    virtual ~CMenuElementUI(void);
 
     // 返回一个新的菜单项对象，自动添加默认属性。
     // 用于解决 DuiLib 使用 /MT 编译选项时的断言错误：_pFirstBlock == pHead
@@ -178,12 +179,12 @@ public:
     DWORD GetLineColor(void) const;
 
     //////////////////////////////////////////////////////////////////////////
-    virtual LPCTSTR GetClass(void) const;
-    virtual LPVOID GetInterface(LPCTSTR pstrName);
+    virtual LPCTSTR GetClass(void) const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
     virtual bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl) override;
-    virtual SIZE EstimateSize(SIZE szAvailable);
-    virtual void DoEvent(TEventUI &event);
-    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+    virtual SIZE EstimateSize(SIZE szAvailable) override;
+    virtual void DoEvent(TEventUI &event) override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
 private:
     void DrawItemIcon(HDC hDC, const RECT &rcItem);

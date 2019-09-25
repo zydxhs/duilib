@@ -13,17 +13,17 @@ class DUILIB_API CTreeNodeUI : public CListContainerElementUI
 {
 public:
     CTreeNodeUI(CTreeNodeUI *_ParentNode = NULL);
-    ~CTreeNodeUI(void);
+    virtual ~CTreeNodeUI(void);
 
 public:
-    LPCTSTR GetClass() const;
-    LPVOID  GetInterface(LPCTSTR pstrName);
-    void    DoEvent(TEventUI &event);
-    void    Invalidate();
-    bool    Select(bool bSelect = true, bool bTriggerEvent = true);
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID  GetInterface(LPCTSTR pstrName) override;
+    virtual void    DoEvent(TEventUI &event) override;
+    virtual bool    Select(bool bSelect = true, bool bTriggerEvent = true) override;
+    virtual bool    Add(CControlUI *_pTreeNodeUI) override;
+    virtual bool    AddAt(CControlUI *pControl, int iIndex) override;
+    virtual void    Invalidate() override;
 
-    bool    Add(CControlUI *_pTreeNodeUI);
-    bool    AddAt(CControlUI *pControl, int iIndex);
 
     void    SetVisibleTag(bool _IsVisible);
     bool    GetVisibleTag();
@@ -54,7 +54,7 @@ public:
     void    SetSelItemHotTextColor(DWORD _dwSelHotItemTextColor);
     DWORD   GetSelItemHotTextColor() const;
 
-    void    SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+    virtual void    SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
     CDuiPtrArray GetTreeNodes();
 
@@ -96,26 +96,26 @@ class DUILIB_API CTreeViewUI : public CListUI, public INotifyUI
 {
 public:
     CTreeViewUI(void);
-    ~CTreeViewUI(void);
+    virtual ~CTreeViewUI(void);
 
 public:
-    virtual LPCTSTR GetClass() const;
-    virtual LPVOID  GetInterface(LPCTSTR pstrName);
-    virtual bool Add(CControlUI *pControl);
-    virtual bool AddAt(CControlUI *pControl, int iIndex);
-    virtual bool Remove(CControlUI *pControl, bool bDoNotDestroy = false);
-    virtual bool RemoveAt(int iIndex, bool bDoNotDestroy = false);
-    virtual void RemoveAll();
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID  GetInterface(LPCTSTR pstrName) override;
+    virtual bool Add(CControlUI *pControl) override;
+    virtual bool AddAt(CControlUI *pControl, int iIndex) override;
+    virtual bool Remove(CControlUI *pControl, bool bDoNotDestroy = false) override;
+    virtual bool RemoveAt(int iIndex, bool bDoNotDestroy = false) override;
+    virtual void RemoveAll() override;
 
     long AddAt(CTreeNodeUI *pControl, int iIndex);
     bool AddAt(CTreeNodeUI *pControl, CTreeNodeUI *_IndexNode);
 
+    virtual void Notify(TNotifyUI &msg) override;
     virtual bool OnCheckBoxChanged(void *param);
     virtual bool OnFolderChanged(void *param);
     virtual bool OnDBClickItem(void *param);
     virtual bool SetItemCheckBox(bool _Selected, CTreeNodeUI *_TreeNode = NULL);
     virtual void SetItemExpand(bool _Expanded, CTreeNodeUI *_TreeNode = NULL);
-    virtual void Notify(TNotifyUI &msg);
     virtual void SetVisibleFolderBtn(bool _IsVisibled);
     virtual bool GetVisibleFolderBtn();
     virtual void SetVisibleCheckBtn(bool _IsVisibled);
@@ -127,7 +127,7 @@ public:
     virtual void SetSelItemTextColor(DWORD _dwSelItemTextColor);
     virtual void SetSelItemHotTextColor(DWORD _dwSelHotItemTextColor);
 
-    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 private:
     UINT m_uItemMinWidth;
     bool m_bVisibleFolderBtn;

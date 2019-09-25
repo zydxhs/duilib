@@ -15,8 +15,8 @@ namespace DuiLib {
 class DUILIB_API CRadioBoxUI : public COptionUI
 {
 public:
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
 };
 

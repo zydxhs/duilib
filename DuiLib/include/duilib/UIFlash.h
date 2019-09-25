@@ -19,13 +19,13 @@ class DUILIB_API CFlashUI : public CActiveXUI, public ITranslateAccelerator
 {
 public:
     CFlashUI(void);
-    ~CFlashUI(void);
+    virtual ~CFlashUI(void);
 
     ShockwaveFlashObjects::IShockwaveFlash *GetShockwaveFlash(void);
 
-    virtual LPCTSTR GetClass() const;
-    virtual LPVOID GetInterface(LPCTSTR pstrName);
-    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
     // 属性
     CDuiString GetAlign(void);
@@ -49,7 +49,7 @@ public:
     CDuiString GetArgument(void) { return m_sArg; }     // 返回参数
 
 protected:
-    virtual bool DoCreateControl();
+    virtual bool DoCreateControl() override;
 
 private:
     // 影片状态变化通知，可能的值：
@@ -74,7 +74,7 @@ private:
     // "<invoke name='%s'returntype='xml'><arguments><string>%s</string></arguments></invoke>"
     HRESULT FlashCall(CDuiString &request);
 
-    virtual void ReleaseControl();
+    virtual void ReleaseControl() override;
     HRESULT RegisterEventHandler(BOOL inAdvise);
 
     // ITranslateAccelerator

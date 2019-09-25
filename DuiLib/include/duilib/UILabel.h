@@ -8,14 +8,14 @@ class DUILIB_API CLabelUI : public CControlUI
 {
 public:
     CLabelUI();
-    ~CLabelUI();
+    virtual ~CLabelUI();
 
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
-    void SetFixedWidth(int cx);
-    void SetFixedHeight(int cy);
-    void SetText(LPCTSTR pstrText);
+    virtual void SetFixedWidth(int cx) override;
+    virtual void SetFixedHeight(int cy) override;
+    virtual void SetText(LPCTSTR pstrText) override;
 
     void SetTextStyle(UINT uStyle);
     UINT GetTextStyle() const;
@@ -27,16 +27,16 @@ public:
     DWORD GetDisabledTextColor() const;
     void SetFont(int index);
     int GetFont() const;
-    void SetPadding(RECT rc);
     bool IsShowHtml();
     void SetShowHtml(bool bShowHtml = true);
 
-    SIZE EstimateSize(SIZE szAvailable);
-    void DoEvent(TEventUI &event);
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-    virtual void DoInit();
+    virtual void SetPadding(RECT rc) override;
+    virtual SIZE EstimateSize(SIZE szAvailable) override;
+    virtual void DoEvent(TEventUI &event) override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
+    virtual void DoInit() override;
 
-    void PaintText(HDC hDC);
+    virtual void PaintText(HDC hDC) override;
 
     void        SetEnabledEffect(bool _EnabledEffect);
     bool        GetEnabledEffect();

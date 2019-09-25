@@ -28,13 +28,13 @@ public:
     CEditUI();
     virtual ~CEditUI();
 
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
-    UINT GetControlFlags() const;
-    HWND GetNativeWindow() const;
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
+    virtual UINT GetControlFlags() const override;
+    virtual HWND GetNativeWindow() const override;
 
-    void SetEnabled(bool bEnable = true);
-    void SetText(LPCTSTR pstrText);
+    virtual void SetEnabled(bool bEnable = true) override;
+    virtual void SetText(LPCTSTR pstrText) override;
     void SetMaxChar(UINT uMax);
     UINT GetMaxChar();
     void SetReadOnly(bool bReadOnly);
@@ -48,7 +48,6 @@ public:
     void SetNumberOnly(bool bNumberOnly);
     bool IsNumberOnly() const;
     int GetWindowStyls() const;
-    HWND GetNativeEditHWND() const;
 
     LPCTSTR GetNormalImage();
     void SetNormalImage(LPCTSTR pStrImage);
@@ -63,21 +62,21 @@ public:
     void SetSelAll();
     void SetReplaceSel(LPCTSTR lpszReplace);
 
-    void SetPos(RECT rc, bool bNeedInvalidate = true);
-    void Move(SIZE szOffset, bool bNeedInvalidate = true);
-    bool SetVisible(bool bVisible = true);
-    void SetInternVisible(bool bVisible = true);
-    SIZE EstimateSize(SIZE szAvailable);
-    void DoEvent(TEventUI &event);
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+    virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+    virtual void Move(SIZE szOffset, bool bNeedInvalidate = true) override;
+    virtual bool SetVisible(bool bVisible = true) override;
+    virtual void SetInternVisible(bool bVisible = true) override;
+    virtual SIZE EstimateSize(SIZE szAvailable) override;
+    virtual void DoEvent(TEventUI &event) override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
-    void PaintStatusImage(HDC hDC);
-    void PaintText(HDC hDC);
+    virtual void PaintStatusImage(HDC hDC) override;
+    virtual void PaintText(HDC hDC) override;
 
     //2017-02-25 zhuyadong 添加提示文字及其颜色
     void SetTipText(LPCTSTR pstrTip);
     LPCTSTR GetTipText();
-    virtual void ReloadText(void);
+    virtual void ReloadText(void) override;
     void SetTipColor(DWORD dwColor);
     DWORD GetTipColor();
     // 2017-07-21 zhuyadong 添加 minmaxnumber 属性

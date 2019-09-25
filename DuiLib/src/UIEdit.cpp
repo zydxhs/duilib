@@ -650,9 +650,7 @@ UINT CEditUI::GetControlFlags() const
 
 HWND CEditUI::GetNativeWindow() const
 {
-    if (m_pWindow) { return m_pWindow->GetHWND(); }
-
-    return NULL;
+    return (NULL != m_pWindow) ? m_pWindow->GetHWND() : NULL;
 }
 
 void CEditUI::DoEvent(TEventUI &event)
@@ -876,13 +874,6 @@ bool CEditUI::IsNumberOnly() const
 int CEditUI::GetWindowStyls() const
 {
     return m_iWindowStyls;
-}
-
-HWND CEditUI::GetNativeEditHWND() const
-{
-    if (m_pWindow == NULL) { return NULL; }
-
-    return m_pWindow->GetHWND();
 }
 
 void CEditUI::SetPasswordMode(bool bPasswordMode)

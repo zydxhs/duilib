@@ -9,20 +9,19 @@ class DUILIB_API CTabLayoutUI : public CContainerUI
 public:
     CTabLayoutUI();
 
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
 
-    bool Add(CControlUI *pControl);
-    bool AddAt(CControlUI *pControl, int iIndex);
-    bool Remove(CControlUI *pControl, bool bDoNotDestroy = false);
-    void RemoveAll();
+    virtual bool Add(CControlUI *pControl) override;
+    virtual bool AddAt(CControlUI *pControl, int iIndex) override;
+    virtual bool Remove(CControlUI *pControl, bool bDoNotDestroy = false) override;
+    virtual void RemoveAll() override;
+    virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
+
     int GetCurSel() const;
     bool SelectItem(int iIndex, bool bTriggerEvent = true);
     bool SelectItem(CControlUI *pControl,  bool bTriggerEvent = true);
-
-    void SetPos(RECT rc, bool bNeedInvalidate = true);
-
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
 protected:
     int m_iCurSel;

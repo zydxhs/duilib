@@ -20,12 +20,12 @@ public:
     CWkeBrowserUI(void);
     virtual ~CWkeBrowserUI(void);
 
-    virtual LPCTSTR GetClass() const;
-    virtual LPVOID GetInterface(LPCTSTR pstrName);
-    virtual void DoEvent(TEventUI &event);
-    virtual void SetPos(RECT rc, bool bNeedInvalidate = true);
-    virtual bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl);
-    virtual void DoInit();
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
+    virtual void DoEvent(TEventUI &event) override;
+    virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+    virtual bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl) override;
+    virtual void DoInit() override;
 
 
     void LoadUrl(LPCTSTR szUrl);

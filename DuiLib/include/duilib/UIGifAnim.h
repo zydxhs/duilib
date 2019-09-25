@@ -55,17 +55,16 @@ class DUILIB_API CGifAnimUI : public CControlUI
 {
 public:
     CGifAnimUI(void);
-    ~CGifAnimUI(void);
+    virtual ~CGifAnimUI(void) override;
 
-    LPCTSTR GetClass() const;
-    LPVOID  GetInterface(LPCTSTR pstrName);
-    void    DoInit();
-    bool    DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl);
-    void    DoEvent(TEventUI &event);
-    bool SetVisible(bool bVisible = true);
-    void    SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
-    void    SetBkImage(LPCTSTR pStrImage);
-    LPCTSTR GetBkImage();
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID  GetInterface(LPCTSTR pstrName) override;
+    virtual void    DoInit() override;
+    virtual bool    DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl) override;
+    virtual void    DoEvent(TEventUI &event) override;
+    virtual bool    SetVisible(bool bVisible = true) override;
+    virtual void    SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
+    virtual void    SetBkImage(LPCTSTR pStrImage) override;
 
     void    SetAutoPlay(bool bIsAuto = true);
     bool    IsAutoPlay() const;

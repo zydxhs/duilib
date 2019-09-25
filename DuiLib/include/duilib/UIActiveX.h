@@ -32,11 +32,11 @@ public:
     CActiveXUI();
     virtual ~CActiveXUI();
 
-    LPCTSTR GetClass() const;
-    LPVOID GetInterface(LPCTSTR pstrName);
-    void DoInit();
-    UINT GetControlFlags() const;
-    HWND GetNativeWindow() const;
+    virtual LPCTSTR GetClass() const override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
+    virtual void DoInit() override;
+    virtual UINT GetControlFlags() const override;
+    virtual HWND GetNativeWindow() const override;
 
     bool IsDelayCreate() const;
     void SetDelayCreate(bool bDelayCreate = true);
@@ -47,15 +47,15 @@ public:
     CDuiString GetModuleName() const;
     void SetModuleName(LPCTSTR pstrText);
 
-    bool SetVisible(bool bVisible = true);
-    void SetInternVisible(bool bVisible = true);
-    void SetPos(RECT rc, bool bNeedInvalidate = true);
-    void Move(SIZE szOffset, bool bNeedInvalidate = true);
-    bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl);
+    virtual bool SetVisible(bool bVisible = true) override;
+    virtual void SetInternVisible(bool bVisible = true) override;
+    virtual void SetPos(RECT rc, bool bNeedInvalidate = true) override;
+    virtual void Move(SIZE szOffset, bool bNeedInvalidate = true) override;
+    virtual bool DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl) override;
 
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
 
-    LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool &bHandled);
+    virtual LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool &bHandled) override;
 
 protected:
     virtual void ReleaseControl();

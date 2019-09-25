@@ -10,12 +10,13 @@ class DUILIB_API CChildLayoutUI : public CContainerUI
 public:
     CChildLayoutUI();
 
-    void Init();
-    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+    virtual void Init() override;
+    virtual void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue) override;
+    virtual LPVOID GetInterface(LPCTSTR pstrName) override;
+    virtual LPCTSTR GetClass() const override;
+
     void SetChildLayoutXML(CDuiString pXML);
     CDuiString GetChildLayoutXML();
-    virtual LPVOID GetInterface(LPCTSTR pstrName);
-    virtual LPCTSTR GetClass() const;
 
 private:
     CDuiString m_pstrXMLFile;
