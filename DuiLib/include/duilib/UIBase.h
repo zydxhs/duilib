@@ -77,6 +77,8 @@ public:
     UINT ShowModal();
     void Close(UINT nRet = IDOK, bool bSync = false);   // bSync=true 表示同步，否则异步
     void CenterWindow();    // 居中，支持扩展屏幕
+    void MoveWindow(int x, int y);  // 把窗口移动到(x,y)。即移动后，窗口的左上角在(x,y)，大小不变；不重绘窗口
+    void MoveWindow(int x, int y, int w, int h, BOOL bRepaint = FALSE);
     void SetIcon(UINT nRes);
 
     void SetParent(HWND hParent);

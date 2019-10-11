@@ -419,6 +419,20 @@ void CWindowWnd::CenterWindow()
     ::SetWindowPos(m_hWnd, NULL, xLeft, yTop, -1, -1, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
+void CWindowWnd::MoveWindow(int x, int y)
+{
+    ASSERT(::IsWindow(m_hWnd));
+    RECT rt = { 0, 0, 0, 0 };
+    ::GetWindowRect(m_hWnd, &rt);
+    ::MoveWindow(m_hWnd, x, y, rt.right - rt.left, rt.bottom - rt.top, FALSE);
+}
+
+void CWindowWnd::MoveWindow(int x, int y, int w, int h, BOOL bRepaint /*= FALSE*/)
+{
+    ASSERT(::IsWindow(m_hWnd));
+    ::MoveWindow(m_hWnd, x, y, w, h, bRepaint);
+}
+
 void CWindowWnd::SetIcon(UINT nRes)
 {
     // 防止某些 DPI 设置下图标模糊

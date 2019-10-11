@@ -241,7 +241,7 @@ void CMenuWnd::ResizeMenu(void)
     }
 
     SetForegroundWindow(m_hWnd);
-    MoveWindow(m_hWnd, rc.left, rc.top, rc.GetWidth(), rc.GetHeight(), FALSE);
+    MoveWindow(rc.left, rc.top, rc.GetWidth(), rc.GetHeight(), FALSE);
     SetWindowPos(m_hWnd, HWND_TOPMOST, rc.left, rc.top, rc.GetWidth(), rc.GetHeight(), SWP_SHOWWINDOW);
 }
 
@@ -357,7 +357,7 @@ void CMenuWnd::ResizeSubMenu(void)
         rc.right = rc.left + cxFixed;
     }
 
-    MoveWindow(m_hWnd, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, FALSE);
+    MoveWindow(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, FALSE);
 }
 
 LPCTSTR CMenuWnd::GetWindowClassName(void) const

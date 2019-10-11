@@ -306,6 +306,7 @@ void CFrameWnd::OnPreview(void)
         s_pSkin->SetResourceType(m_nType);
         s_pSkin->SetSkinFile(m_pEdtFile->GetText());
         s_pSkin->Create(NULL, _T("Skin"), UI_WNDSTYLE_FRAME | WS_CLIPCHILDREN, WS_EX_WINDOWEDGE);
+        s_pSkin->MoveWindow(50, 50);
     }
 
     if (UILIB_ZIP == m_nType)
