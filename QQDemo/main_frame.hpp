@@ -23,7 +23,6 @@ public:
     virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
     virtual LRESULT OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
     virtual LPCTSTR GetResourceID() const;
-    virtual CWndImplBase *CreateWnd(CDuiString strDlgType) { return NULL; }
 
     DWORD GetBkColor();
     void SetBkColor(DWORD dwBackColor);

@@ -86,7 +86,6 @@ protected:
     virtual CDuiString GetSkinFolder() { return _T(""); }
     virtual CDuiString GetSkinFile() { return m_strFile; }
     virtual CDuiString GetZIPFileName() const { return m_strZip; }
-    virtual CWndImplBase *CreateWnd(CDuiString strDlgType) { return NULL; }
     virtual void OnFinalMessage(HWND hWnd)
     {
         CWndImplBase::OnFinalMessage(hWnd);
@@ -95,7 +94,7 @@ protected:
     }
 
 private:
-    CDuiString m_strZip;
+    CDuiString  m_strZip;
     CDuiString  m_strFile;
     int         m_nResourceType;
 };
@@ -111,7 +110,6 @@ protected:
     virtual CDuiString GetSkinFile() { return _T("102"); }
     virtual UILIB_RESOURCETYPE GetResourceType() const { return UILIB_RESOURCE; }
     virtual LPCTSTR GetResourceID() const { return _T("xml"); }
-    virtual CWndImplBase *CreateWnd(CDuiString strDlgType) { return NULL; }
     virtual void OnFinalMessage(HWND hWnd)
     {
         CWndImplBase::OnFinalMessage(hWnd);

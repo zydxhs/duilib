@@ -56,7 +56,7 @@ protected:
     virtual LPCTSTR GetResourceID() const { return _T(""); }
 
     // 创建子窗体
-    virtual CWndImplBase *CreateWnd(CDuiString strDlgType) = 0;
+    virtual CWndImplBase *CreateWnd(CDuiString strDlgType) { return NULL; };
 
     // IDialogBuilderCallback 接口，创建自定义控件
     virtual CControlUI *CreateControl(LPCTSTR pstrClass) { return NULL; }

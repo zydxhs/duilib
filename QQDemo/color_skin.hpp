@@ -15,7 +15,6 @@ public:
     virtual CDuiString GetSkinFile();
     virtual CDuiString GetSkinFolder();
     virtual LRESULT OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
-    virtual CWndImplBase *CreateWnd(CDuiString strDlgType) { return NULL; }
 
 private:
     RECT parent_window_rect_;

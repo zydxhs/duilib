@@ -25,7 +25,6 @@ public:
     virtual LRESULT OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
     virtual BOOL Receive(SkinChangedParam param);
     virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
-    virtual CWndImplBase *CreateWnd(CDuiString strDlgType) { return NULL; }
 
     void SetTextColor(DWORD dwColor);
     void SendMsg();

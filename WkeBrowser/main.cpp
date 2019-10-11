@@ -18,7 +18,6 @@ protected:
     virtual CDuiString GetSkinFolder() { return _T("skin\\WkeBrowser"); }
     virtual CDuiString GetSkinFile() { return _T("WkeBrowser.xml"); }
     virtual UILIB_RESOURCETYPE GetResourceType() const { return UILIB_FILE; }
-    virtual CWndImplBase *CreateWnd(CDuiString strDlgType) { return NULL; }
     virtual void OnFinalMessage(HWND hWnd)
     {
         CWndImplBase::OnFinalMessage(hWnd);

@@ -376,7 +376,6 @@ protected:
         CWndImplBase::OnFinalMessage(hWnd);
         delete this;
     }
-    virtual CWndImplBase *CreateWnd(CDuiString strDlgType) { return NULL; }
     void OnPrepare()
     {
         CControlUI *pCtrl = m_pm.FindControl(_T("btn_test"));
@@ -402,7 +401,6 @@ protected:
         CWndImplBase::OnFinalMessage(hWnd);
         delete this;
     }
-    virtual CWndImplBase *CreateWnd(CDuiString strDlgType) { return NULL; }
 };
 
 class CFrameWnd : public CWndImplBase, public CDwm, public CDPI
@@ -415,7 +413,6 @@ private:
     virtual CDuiString GetSkinFile() { return _T("mullang.xml"); }
     virtual LPCTSTR GetWindowClassName(void) const { return _T("UIMainFrame"); }
     virtual UINT GetClassStyle() const { return UI_CLASSSTYLE_FRAME | CS_DBLCLKS; }
-    virtual CWndImplBase *CreateWnd(CDuiString strDlgType) { return NULL; }
     virtual void OnFinalMessage(HWND hWnd)
     {
         CWndImplBase::OnFinalMessage(hWnd);
