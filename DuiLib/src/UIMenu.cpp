@@ -566,8 +566,12 @@ LRESULT CMenuWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandl
         ResizeMenu();
     }
 
-    m_pm.GetShadow()->SetShow(bShowShadow);
-    m_pm.GetShadow()->Create(&m_pm);
+    if (bShowShadow)
+    {
+        m_pm.GetShadow()->SetShow(bShowShadow);
+        m_pm.GetShadow()->Create(&m_pm);
+    }
+
     GetManager()->SetFocus(GetMenuUI());
     return 0;
 }

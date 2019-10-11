@@ -1,4 +1,5 @@
 ﻿#include "stdafx.h"
+#include "UIShadow.h"
 
 namespace DuiLib {
 
@@ -6,13 +7,13 @@ namespace DuiLib {
 enum EMWndState
 {
     ESTATE_UNKNOW,      //
-    ESTATE_CREATE,      // 创建窗体
-    ESTATE_SHOW,        // 显示窗体
-    ESTATE_HIDE,        // 隐藏窗体
-    ESTATE_CLOSE,       // 销毁窗体
+    ESTATE_CREATE,      // 创建窗口
+    ESTATE_SHOW,        // 显示窗口
+    ESTATE_HIDE,        // 隐藏窗口
+    ESTATE_CLOSE,       // 销毁窗口
 };
 
-// 功能选项控件关联的子窗体类型字符串或控件指针
+// 功能选项控件关联的子窗口类型字符串或控件指针
 struct TBudddyItem
 {
     CDuiString          m_strDlg;   // 对话框类型字符串，用于工厂模式创建对话框
@@ -103,20 +104,21 @@ LRESULT CWndImplBase::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bo
 
 LRESULT CWndImplBase::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
+    bHandled = FALSE;
+
     // 2018-08-18 zhuyadong 添加特效
     if (lParam == TRIGGER_NONE)
     {
-        if (ESTATE_SHOW == m_nWndState) { OnDataSave(); }
+        if (ESTATE_SHOW == m_nWndState || ESTATE_CREATE == m_nWndState) { OnDataSave(); }
 
-        // 阻止窗体关闭，等待特效播放完毕
-        if (!m_pm.GetRoot()->StartEffect(TRIGGER_HIDE))
+        if (ESTATE_SHOW == m_nWndState && m_pm.GetRoot()->HasEffect(TRIGGER_HIDE))
         {
-            bHandled = m_bModified;
+            // 即将播放窗口关闭特效，隐藏窗口阴影
+            CShadowUI *pShadow = m_pm.GetShadow();
+            pShadow ? pShadow->SetShadowShow(false) : NULL;
+            m_nWndState = ESTATE_CLOSE;
+            bHandled = m_pm.GetRoot()->StartEffect(TRIGGER_HIDE);
         }
-    }
-    else
-    {
-        bHandled = FALSE;
     }
 
     return 0;
@@ -726,8 +728,27 @@ LRESULT CWndImplBase::OnWndDataUpdate(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 LRESULT CWndImplBase::OnWndEffectShowEndNty(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    m_pm.SetFocusDefault();
-    OnPrepare();
+    if (ESTATE_SHOW == m_nWndState && m_pm.GetRoot()->HasEffect(TRIGGER_SHOW))
+    {
+        // 窗口显示特效播放完毕，显示窗口阴影
+        CShadowUI *pShadow = m_pm.GetShadow();
+        pShadow ? pShadow->SetShadowShow(true) : NULL;
+        m_pm.SetFocusDefault();
+    }
+
+    if (ESTATE_HIDE == m_nWndState)
+    {
+        // 隐藏特效：无需处理窗口阴影
+        // 隐藏特效播放完毕，隐藏窗口
+        CWindowWnd::ShowWindow(false, false);
+    }
+
+    if (ESTATE_CLOSE == m_nWndState)
+    {
+        // 这里不能直接 DestroyWindow(),会导致异常崩溃。
+        PostMessage(WM_CLOSE, 0, TRIGGER_HIDE);
+    }
+
     return 0;
 }
 
@@ -805,14 +826,38 @@ bool CWndImplBase::IsCaptionCtrl(CControlUI *pCtrl)
 
 void CWndImplBase::ShowWindow(bool bShow /*= true*/, bool bTakeFocus /*= true*/)
 {
+    // 隐藏窗口：CREATE 和 HIDE 状态无需处理
     if (ESTATE_SHOW == m_nWndState && !bShow)
     {
         m_nWndState = ESTATE_HIDE;
         SendMessage(WM_WNDDATA_UPDATE, EPARAM_SAVE);
+
+        if (m_pm.GetRoot()->HasEffect(TRIGGER_HIDE))
+        {
+            // 即将播放隐藏特效，隐藏窗口阴影
+            CShadowUI *pShadow = m_pm.GetShadow();
+            pShadow ? pShadow->SetShadowShow(false) : NULL;
+
+            // 播放特效成功，阻止窗口隐藏；待到特效播放完毕，再隐藏。执行成功后，阻止隐藏窗口
+            if (m_pm.GetRoot()->StartEffect(TRIGGER_HIDE)) { return; }
+        }
     }
 
+    // 显示窗口：SHOW 状态无需处理
     if ((ESTATE_HIDE == m_nWndState || ESTATE_CREATE == m_nWndState) && bShow)
     {
+        if (m_pm.GetRoot()->HasEffect(TRIGGER_SHOW))
+        {
+            // 即将播放显示特效，必需隐藏窗口阴影；特效播放完毕，再显示窗口阴影
+            if (ESTATE_CREATE == m_nWndState)
+            {
+                CShadowUI *pShadow = m_pm.GetShadow();
+                pShadow ? pShadow->SetShadowShow(false) : NULL;
+            }
+
+            m_pm.GetRoot()->StartEffect(TRIGGER_SHOW);
+        }
+
         m_nWndState = ESTATE_SHOW;
         PostMessage(WM_WNDDATA_UPDATE, EPARAM_INIT);
     }
@@ -824,13 +869,27 @@ DUI_INLINE void CWndImplBase::Notify(TNotifyUI &msg)
 {
     if (msg.sType == DUI_MSGTYPE_WINDOWINIT)
     {
-        // 2018-08-18 zhuyadong 添加特效
-        // 2019-07-15 zhuyadong 解决添加窗体显示特效，由于编辑获得焦点导致编辑框位置显示异常问题
-        if (!m_pm.GetRoot()->StartEffect(TRIGGER_SHOW))
+        // 2019-10-11 优化显示/隐藏窗口特效
+        // 只在创建窗口时执行一次。创建隐藏窗口，也会走到这里
+        OnPrepare();
+
+        // m_pm.SetFocusDefault() 必须在特效播放完毕后执行，否则由于编辑框控件的 Native 窗口，会破坏特效
+        // 1. 没有特效时，直接调用
+        // 2. 播放特效失败时，直接调用
+        // 3. 播放特效成功时，在特效播放完毕后调用
+        if (m_pm.GetRoot()->HasEffect(TRIGGER_SHOW))
         {
-            m_pm.SetFocusDefault();
-            OnPrepare();
+            if (ESTATE_SHOW == m_nWndState)
+            {
+                // 即将播放窗口显示特效，隐藏窗口阴影。播放完毕，显示窗口阴影
+                CShadowUI *pShadow = m_pm.GetShadow();
+                pShadow ? pShadow->SetShadowShow(false) : NULL;
+            }
+
+            if (!m_pm.GetRoot()->StartEffect(TRIGGER_SHOW)) { m_pm.SetFocusDefault(); }
         }
+        else
+        { m_pm.SetFocusDefault(); }
 
         return;
     }

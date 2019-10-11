@@ -54,6 +54,8 @@ public:
     // bShow为真时才会创建阴影
     void SetShow(bool bShow);
     bool IsShow() const;
+    // 改变阴影状态
+    void SetShadowShow(bool bShow);
 
     // 算法阴影的函数
     bool SetSize(int NewSize = 0);

@@ -216,7 +216,7 @@ public:
     void DelEffect(BYTE byTrigger);                 // 删除动画触发器
     bool StartEffect(BYTE byTrigger);               // 开始播放动画
     void StopEffect(void);                          // 停止播放动画
-    BYTE GetEffectTrigger(void);                    // 获取当前特效触发器ID
+    bool HasEffect(BYTE byTrigger);                 // 判断是否设置了触发器相关的动画
 
     virtual void OnEffectBegin(TAniParam &data);    // 每一个特效开始时回调
     virtual void OnEffectEnd(TAniParam &data);      // 每一个特效结束时回调

@@ -1223,6 +1223,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
                     {
                         m_bFirstLayout = false;
                         SendNotify(m_pRoot, DUI_MSGTYPE_WINDOWINIT, 0, 0, false);
+
                         // 2018-08-19 zhuyadong 设置窗体默认焦点
                         // 2019-07-15 zhuyadong 解决添加窗体显示特效，由于编辑获得焦点导致编辑框位置显示异常问题
                         // SetFocusNeeded(FindControl(m_sDefFocusedCtrl));
@@ -2341,7 +2342,7 @@ bool CPaintManagerUI::AttachDialog(CControlUI *pControl)
     //m_bFocusNeeded = true;
 
     // 如果是子窗体，则不创建阴影
-    if (!(::GetWindowLong(m_hWndPaint, GWL_STYLE) & WS_CHILD))
+    if (m_pWndShadow->IsShow() && !(::GetWindowLong(m_hWndPaint, GWL_STYLE) & WS_CHILD))
     {
         m_pWndShadow->Create(this);
     }

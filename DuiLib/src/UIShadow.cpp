@@ -95,7 +95,6 @@ void CShadowUI::Create(CPaintManagerUI *pPaintManager)
 #pragma warning(disable: 4311)  // temporrarily disable the type_cast warning in Win32
     SetWindowLongPtr(hParentWnd, GWLP_WNDPROC, (LONG_PTR)ParentProc);
 #pragma warning(default: 4311)
-
 }
 
 std::map<HWND, CShadowUI *> &CShadowUI::GetShadowMap()
@@ -137,7 +136,9 @@ LRESULT CALLBACK CShadowUI::ParentProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
         break;
 
     case WM_SIZE:
-        if (pThis->m_Status & SS_ENABLED)
+
+        // 2019-10-11 || 后的条件，用于解决创建的隐藏窗口，显示后没有阴影的问题
+        if ((pThis->m_Status & SS_ENABLED) || (0 == pThis->m_WndSize && !(pThis->m_Status & SS_ENABLED)))
         {
             if (SIZE_MAXIMIZED == wParam || SIZE_MINIMIZED == wParam)
             {
@@ -160,6 +161,9 @@ LRESULT CALLBACK CShadowUI::ParentProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
                     pThis->m_Status |= SS_VISABLE;
                 }
             }
+
+            // 2019-10-11 || 后的条件，用于解决创建的隐藏窗口，显示后没有阴影的问题
+            if (0 == pThis->m_WndSize && !(pThis->m_Status & SS_ENABLED)) { ::ShowWindow(pThis->m_hWnd, SW_HIDE); }
 
             pThis->m_WndSize = lParam;
         }
@@ -189,7 +193,9 @@ LRESULT CALLBACK CShadowUI::ParentProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
         break;
 
     case WM_SHOWWINDOW:
-        if (pThis->m_Status & SS_ENABLED)
+
+        // 2019-10-11 || 后的条件，用于解决创建的隐藏窗口，显示后没有阴影的问题
+        if ((pThis->m_Status & SS_ENABLED) || (0 == pThis->m_WndSize && !(pThis->m_Status & SS_ENABLED)))
         {
             if (!wParam) // the window is being hidden
             {
@@ -229,7 +235,6 @@ LRESULT CALLBACK CShadowUI::ParentProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
 
 void CShadowUI::Update(HWND hParent)
 {
-
     RECT WndRect;
     GetWindowRect(hParent, &WndRect);
     int nShadWndWid;
@@ -572,6 +577,14 @@ void CShadowUI::SetShow(bool bShow)
 bool CShadowUI::IsShow() const
 {
     return m_bIsShow;
+}
+
+void CShadowUI::SetShadowShow(bool bShow)
+{
+    if (bShow) { m_Status |= SS_ENABLED;  }
+    else       { m_Status &= ~SS_ENABLED; }
+
+    ShowWindow(m_hWnd, bShow ? SW_NORMAL : SW_HIDE);
 }
 
 bool CShadowUI::SetSize(int NewSize)

@@ -1985,16 +1985,12 @@ bool CControlUI::StartEffect(BYTE byTrigger)
 
 void CControlUI::StopEffect(void)
 {
-    if (NULL != m_pEffect)
-    {
-        m_pEffect->Stop(m_byEffectTrigger);
-        m_byEffectTrigger = TRIGGER_NONE;
-    }
+    if (NULL != m_pEffect) { m_pEffect->Stop(m_byEffectTrigger); }
 }
 
-DUI_INLINE BYTE CControlUI::GetEffectTrigger(void)
+bool CControlUI::HasEffect(BYTE byTrigger)
 {
-    return m_byEffectTrigger;
+    return (NULL != m_pEffect && m_pEffect->HasEffectTrigger(byTrigger));
 }
 
 void CControlUI::OnEffectBegin(TAniParam &data)
@@ -2009,20 +2005,14 @@ void CControlUI::OnEffectBegin(TAniParam &data)
 
 void CControlUI::OnEffectEnd(TAniParam &data)
 {
-    // 触发控件隐藏
-    if (TRIGGER_HIDE == m_byEffectTrigger)
+    if ((TRIGGER_HIDE == m_byEffectTrigger || TRIGGER_SHOW == m_byEffectTrigger) && NULL == m_pParent)
     {
-        if (m_pParent) { SetVisible(false);}
-        else
-        {
-            // 窗体关闭特效，重新发送 WM_CLOSE 消息，带参数特效触发器
-            ::PostMessage(m_pManager->GetPaintWindow(), WM_CLOSE, 0, m_byEffectTrigger);
-        }
-    }
-    // 2019-07-15 zhuyadong 解决添加窗体显示特效，由于编辑获得焦点导致编辑框位置显示异常问题
-    else if (TRIGGER_SHOW == m_byEffectTrigger && NULL == m_pParent)
-    {
+        // 2019-10-11 窗口的显示/隐藏特效播放完毕，发消息给窗口执行后续操作
         ::PostMessage(m_pManager->GetPaintWindow(), WM_WNDEFFECT_SHOWEND_NOTIFY, 0, 0);
+    }
+    else if (TRIGGER_HIDE == m_byEffectTrigger && NULL != m_pParent)
+    {
+        SetVisible(false);
     }
 
     m_byEffectTrigger = TRIGGER_NONE;
