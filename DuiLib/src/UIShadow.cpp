@@ -12,8 +12,8 @@ CShadowUI::CShadowUI(void)
     : m_hWnd((HWND)NULL)
     , m_OriParentProc(NULL)
     , m_Status(0)
-    , m_nDarkness(150)
-    , m_nSharpness(5)
+    , m_nDarkness(200)
+      //, m_nSharpness(5)
     , m_nSize(5)
     , m_nxOffset(0)
     , m_nyOffset(0)
@@ -418,12 +418,14 @@ void CShadowUI::MakeShadow(UINT32 *pShadBits, HWND hParent, RECT *rcParent)
     ptAnchorsTmp[0][1] = 0;
     ptAnchorsTmp[nAnchors + 1][0] = szParent.cx;
     ptAnchorsTmp[nAnchors + 1][1] = 0;
-    int nEroTimes = 0;
+    // int nEroTimes = 0;
+    int nMaxOffset = std::max<int>(abs(m_nxOffset), abs(m_nyOffset));
 
     // morphologic erosion
-    for (int i = 0; i < m_nSharpness - m_nSize; i++)
+    //for (int i = 0; i < m_nSharpness - m_nSize; i++)
+    for (int i = 0; i < nMaxOffset; i++)
     {
-        nEroTimes++;
+        // nEroTimes++;
 
         //ptAnchorsTmp[1][0] = szParent.cx;
         //ptAnchorsTmp[1][1] = 0;
@@ -444,8 +446,10 @@ void CShadowUI::MakeShadow(UINT32 *pShadBits, HWND hParent, RECT *rcParent)
     // morphologic dilation
     ptAnchors += (m_nSize < 0 ? -m_nSize : 0) + 1;  // now coordinates in ptAnchors are same as in shadow window
     // Generate the kernel
-    int nKernelSize = m_nSize > m_nSharpness ? m_nSize : m_nSharpness;
-    int nCenterSize = m_nSize > m_nSharpness ? (m_nSize - m_nSharpness) : 0;
+    // int nKernelSize = m_nSize > m_nSharpness ? m_nSize : m_nSharpness;
+    // int nCenterSize = m_nSize > m_nSharpness ? (m_nSize - m_nSharpness) : 0;
+    int nKernelSize = m_nSize + nMaxOffset;
+    int nCenterSize = 0;
     UINT32 *pKernel = new UINT32[(2 * nKernelSize + 1) * (2 * nKernelSize + 1)];
     UINT32 *pKernelIter = pKernel;
 
@@ -459,7 +463,9 @@ void CShadowUI::MakeShadow(UINT32 *pShadBits, HWND hParent, RECT *rcParent)
             { *pKernelIter = m_nDarkness << 24 | PreMultiply(m_Color, m_nDarkness); }
             else if (dLength <= nKernelSize)
             {
-                UINT32 nFactor = ((UINT32)((1 - (dLength - nCenterSize) / (m_nSharpness + 1)) * m_nDarkness));
+                //UINT32 nFactor = ((UINT32)((1 - (dLength - nCenterSize) / (m_nSharpness + 1)) * m_nDarkness));
+                double x = 1 - dLength / (nKernelSize + 1);
+                UINT32 nFactor = (UINT32)(x * x * m_nDarkness);
                 *pKernelIter = nFactor << 24 | PreMultiply(m_Color, nFactor);
             }
             else
@@ -479,7 +485,6 @@ void CShadowUI::MakeShadow(UINT32 *pShadBits, HWND hParent, RECT *rcParent)
 
         if (ptAnchors[i][0] < ptAnchors[i][1])
         {
-
             // Start of line
             for (j = ptAnchors[i][0];
                  j < min(max(ptAnchors[i - 1][0], ptAnchors[i + 1][0]) + 1, ptAnchors[i][1]);
@@ -587,27 +592,27 @@ void CShadowUI::SetShadowShow(bool bShow)
     ShowWindow(m_hWnd, bShow ? SW_NORMAL : SW_HIDE);
 }
 
-bool CShadowUI::SetSize(int NewSize)
+bool CShadowUI::SetSize(unsigned int NewSize)
 {
     m_nSize = (signed char)NewSize;
     m_nSize = (m_nSize > 20) ? 20 : m_nSize;
-    m_nSize = (m_nSize < -20) ? -20 : m_nSize;
+    m_nSize = (m_nSize <= 1) ? 1 : m_nSize;
 
     if (m_hWnd != NULL && (SS_VISABLE & m_Status)) { Update(GetParent(m_hWnd)); }
 
     return true;
 }
 
-bool CShadowUI::SetSharpness(unsigned int NewSharpness)
-{
-    if (NewSharpness > 20) { return false; }
-
-    m_nSharpness = (unsigned char)NewSharpness;
-
-    if (m_hWnd != NULL && (SS_VISABLE & m_Status)) { Update(GetParent(m_hWnd)); }
-
-    return true;
-}
+// bool CShadowUI::SetSharpness(unsigned int NewSharpness)
+// {
+//     if (NewSharpness > 20) { return false; }
+//
+//     m_nSharpness = (unsigned char)NewSharpness;
+//
+//     if (m_hWnd != NULL && (SS_VISABLE & m_Status)) { Update(GetParent(m_hWnd)); }
+//
+//     return true;
+// }
 
 bool CShadowUI::SetDarkness(unsigned int NewDarkness)
 {
@@ -662,7 +667,7 @@ bool CShadowUI::CopyShadow(CShadowUI *pShadow)
     else
     {
         pShadow->SetSize((int)m_nSize);
-        pShadow->SetSharpness((unsigned int)m_nSharpness);
+        //pShadow->SetSharpness((unsigned int)m_nSharpness);
         pShadow->SetDarkness((unsigned int)m_nDarkness);
         pShadow->SetColor(m_Color);
         pShadow->SetPosition((int)m_nxOffset, (int)m_nyOffset);

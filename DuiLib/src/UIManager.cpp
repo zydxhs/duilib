@@ -4268,7 +4268,7 @@ void CPaintManagerUI::SetWindowAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         COLORREF rgb = RGB(GetBValue(clr), GetGValue(clr), GetRValue(clr));
         m_pWndShadow->SetColor(rgb);
     }
-    else if (_tcsicmp(pstrName, _T("shadowsharpness")) == 0) { m_pWndShadow->SetSharpness(ParseByte(pstrValue)); }
+    //else if (_tcsicmp(pstrName, _T("shadowsharpness")) == 0) { m_pWndShadow->SetSharpness(ParseByte(pstrValue)); }
     else if (_tcsicmp(pstrName, _T("shadowdarkness")) == 0) { m_pWndShadow->SetDarkness(ParseByte(pstrValue)); }
     else if (_tcscmp(pstrName, _T("shadowimage")) == 0) { m_pWndShadow->SetImage(ParseString(pstrValue)); }
     else if (_tcscmp(pstrName, _T("focusedctrl")) == 0) { m_sDefFocusedCtrl = ParseString(pstrValue); }

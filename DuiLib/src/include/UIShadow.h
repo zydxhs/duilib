@@ -58,8 +58,8 @@ public:
     void SetShadowShow(bool bShow);
 
     // 算法阴影的函数
-    bool SetSize(int NewSize = 0);
-    bool SetSharpness(unsigned int NewSharpness = 5);
+    bool SetSize(unsigned int NewSize = 0);
+    // bool SetSharpness(unsigned int NewSharpness = 5);
     bool SetDarkness(unsigned int NewDarkness = 200);
     bool SetPosition(int NewXOffset = 5, int NewYOffset = 5);
     bool SetColor(COLORREF NewColor = 0);
@@ -116,7 +116,7 @@ protected:
 
     // 算法阴影成员变量
     unsigned char m_nDarkness;  // Darkness, transparency of blurred area
-    unsigned char m_nSharpness; // Sharpness, width of blurred border of shadow window
+    // unsigned char m_nSharpness; // Sharpness, width of blurred border of shadow window
     signed char   m_nSize;  // Shadow window size, relative to parent window size
 
     // The X and Y offsets of shadow window,

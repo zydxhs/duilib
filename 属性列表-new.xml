@@ -82,10 +82,10 @@
         <Attribute name="shape" default="" type="STRING" comment="分层窗体背景图，默认无。"/>
         <!-- 扩展属性 -->
         <Attribute name="shadowshow" default="false" type="BOOL" comment="是否启用窗体阴影"/>
-        <Attribute name="shadowsize" default="5" type="BYTE" comment="算法阴影的宽度(-20到20),默认5"/>
+        <Attribute name="shadowsize" default="5" type="BYTE" comment="算法阴影的宽度(1到20),默认5"/>
         <Attribute name="shadowpos" default="0,0" type="SIZE" comment="算法阴影的偏移量"/>
         <Attribute name="shadowcolor" default="0x000000" type="DWORD" comment="算法阴影的颜色，不支持透明度，使用shadowdarkness设置透明度"/>
-        <Attribute name="shadowsharpness" default="5" type="BYTE" comment="算法阴影的锐度(0~20)"/>
+        <!-- <Attribute name="shadowsharpness" default="5" type="BYTE" comment="算法阴影的锐度(0~20)"/> -->
         <Attribute name="shadowdarkness" default="255" type="BYTE" comment="算法阴影的深度(相当于透明度)"/>
         <Attribute name="shadowimage" default="" type="STRING" comment="阴影图片，使用此属性后自动屏蔽算法阴影。支持 file|res|restype|corner/scale9 属性"/>
         <Attribute name="dropenable" default="false" type="BOOL" comment="是否接受拖放（拖放目标）"/>
