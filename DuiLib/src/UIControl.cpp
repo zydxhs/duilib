@@ -30,6 +30,8 @@ CControlUI::CControlUI()
     , m_bNeedShift(false)
     , m_bNeedAlt(false)
     , m_pTag(NULL)
+    , m_dwTextColor(0)
+    , m_dwDisabledTextColor(0)
     , m_dwBackColor(0)
     , m_dwBackColor2(0)
     , m_dwBackColor3(0)
@@ -199,6 +201,28 @@ void CControlUI::SetText(LPCTSTR pstrText)
 void CControlUI::ReloadText(void)
 {
     SetText(m_sTextOrig);
+}
+
+void CControlUI::SetTextColor(DWORD dwTextColor)
+{
+    m_dwTextColor = dwTextColor;
+    IsEnabled() ? Invalidate() : NULL;
+}
+
+DWORD CControlUI::GetTextColor() const
+{
+    return m_dwTextColor;
+}
+
+void CControlUI::SetDisabledTextColor(DWORD dwTextColor)
+{
+    m_dwDisabledTextColor = dwTextColor;
+    IsEnabled() ? NULL : Invalidate();
+}
+
+DWORD CControlUI::GetDisabledTextColor() const
+{
+    return m_dwDisabledTextColor;
 }
 
 DWORD CControlUI::GetBkColor() const
@@ -814,12 +838,36 @@ bool CControlUI::IsVisible() const
 
 bool CControlUI::SetVisible(bool bVisible /*= true*/)
 {
-    if (m_bVisible == bVisible) { return true; }
-
-    // 2018-08-18 zhuyadong 修复控件首次显示特效问题
-    if (m_pEffect && TRIGGER_NONE == m_byEffectTrigger)
+    if (TRIGGER_NONE != m_byEffectTrigger && !IsLastFrame())
     {
-        if (!bVisible && StartEffect(TRIGGER_HIDE)) { return false; }
+        if (TRIGGER_HIDE == m_byEffectTrigger)
+        {
+            // 正在播放特效 隐藏：
+            // 1. 再次触发隐藏特效，重新开始隐藏特效
+            // 2. 再次触发显示特效，立即开始显示特效
+            // 3. 没有显示特效，触发显示，终止隐藏特效并立即显示
+            if (StartEffect(bVisible ? TRIGGER_SHOW : TRIGGER_HIDE)) { return false; }
+        }
+        else if (TRIGGER_SHOW == m_byEffectTrigger)
+        {
+            // 正在播放特效 显示：
+            // 1. 再次触发显示特效，重新开始显示特效
+            // 2. 再次触发隐藏特效，立即开始隐藏特效
+            // 3. 没有隐藏特效，触发隐藏，终止显示特效并立即隐藏
+            if (bVisible) { if (StartEffect(TRIGGER_SHOW)) { return false; } }
+            else          { StopEffect(); }
+        }
+    }
+
+    if (m_bVisible == bVisible)
+    {
+        return true;
+    }
+
+    // 2018-08-18 zhuyadong 修复控件首次隐藏特效问题
+    if (!bVisible && HasEffect(TRIGGER_HIDE) && TRIGGER_NONE == m_byEffectTrigger)
+    {
+        if (StartEffect(TRIGGER_HIDE)) { return false; }
     }
 
     bool v = IsVisible();
@@ -840,7 +888,7 @@ bool CControlUI::SetVisible(bool bVisible /*= true*/)
     if (m_pCover != NULL) { m_pCover->SetInternVisible(IsVisible()); }
 
     // 2018-08-18 zhuyadong 修复控件首次显示特效问题
-    if (m_pEffect && TRIGGER_NONE == m_byEffectTrigger && bVisible)
+    if (bVisible && HasEffect(TRIGGER_SHOW) && TRIGGER_NONE == m_byEffectTrigger)
     {
         if (m_rcItem.left == m_rcItem.right || m_rcItem.top == m_rcItem.bottom && m_pParent)
         {
@@ -1101,7 +1149,8 @@ void CControlUI::Init()
 
 void CControlUI::DoInit()
 {
-
+    m_dwTextColor = m_dwTextColor ? m_dwTextColor : m_pManager->GetDefaultFontColor();
+    m_dwDisabledTextColor = m_dwDisabledTextColor ? m_dwDisabledTextColor : m_pManager->GetDefaultDisabledColor();
 }
 
 void CControlUI::Event(TEventUI &event)
@@ -1503,6 +1552,8 @@ void CControlUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if (_tcscmp(pstrName, _T("dragimage")) == 0) { m_diDrag.sDrawString = ParseString(pstrValue); }
     else if (_tcscmp(pstrName, _T("autowidth")) == 0) { SetAutoWidth(ParseBool(pstrValue)); }
     else if (_tcscmp(pstrName, _T("autoheight")) == 0) { SetAutoHeight(ParseBool(pstrValue)); }
+    else if (_tcscmp(pstrName, _T("textcolor")) == 0) { m_dwTextColor = ParseColor(pstrValue); }
+    else if (_tcscmp(pstrName, _T("disabledtextcolor")) == 0) { m_dwDisabledTextColor = ParseColor(pstrValue); }
     // 2018-08-18 zhuyadong 添加特效
     else if (_tcscmp(pstrName, _T("triggerenter")) == 0)
     {
@@ -1624,7 +1675,7 @@ bool CControlUI::Paint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl)
 bool CControlUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl)
 {
     // 2018-08-18 zhuyadong 添加特效
-    if (NULL != m_pEffect && m_pEffect->IsRunning(m_byEffectTrigger))
+    if (IsEffectRunning())
     {
         // 窗体显示特效：第一次走到这里，并非是特效，而是系统触发的绘制。应该过滤掉
         if (TRIGGER_SHOW == m_byEffectTrigger && 0 == m_pEffect->GetCurFrame(m_byEffectTrigger)) { return true; }
@@ -1986,11 +2037,23 @@ bool CControlUI::StartEffect(BYTE byTrigger)
 void CControlUI::StopEffect(void)
 {
     if (NULL != m_pEffect) { m_pEffect->Stop(m_byEffectTrigger); }
+
+    m_byEffectTrigger = TRIGGER_NONE;
 }
 
 bool CControlUI::HasEffect(BYTE byTrigger)
 {
     return (NULL != m_pEffect && m_pEffect->HasEffectTrigger(byTrigger));
+}
+
+bool CControlUI::IsEffectRunning()
+{
+    return (NULL != m_pEffect) ? m_pEffect->IsRunning(m_byEffectTrigger) : false;
+}
+
+bool CControlUI::IsLastFrame()
+{
+    return (NULL != m_pEffect) ? m_pEffect->IsLastFrame(m_byEffectTrigger) : false;
 }
 
 void CControlUI::OnEffectBegin(TAniParam &data)

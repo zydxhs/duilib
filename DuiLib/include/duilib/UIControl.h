@@ -39,6 +39,10 @@ public:
     virtual CDuiString GetText() const;
     virtual void SetText(LPCTSTR pstrText);
     virtual void ReloadText(void);
+    virtual void SetTextColor(DWORD dwTextColor);
+    DWORD GetTextColor() const;
+    virtual void SetDisabledTextColor(DWORD dwTextColor);
+    DWORD GetDisabledTextColor() const;
 
     // 图形相关
     DWORD GetBkColor() const;
@@ -217,6 +221,8 @@ public:
     bool StartEffect(BYTE byTrigger);               // 开始播放动画
     void StopEffect(void);                          // 停止播放动画
     bool HasEffect(BYTE byTrigger);                 // 判断是否设置了触发器相关的动画
+    bool IsEffectRunning();                         // 判断是否正在播放动画
+    bool IsLastFrame();                             // 判断是否是特效最后一帧
 
     virtual void OnEffectBegin(TAniParam &data);    // 每一个特效开始时回调
     virtual void OnEffectEnd(TAniParam &data);      // 每一个特效结束时回调
@@ -272,6 +278,8 @@ protected:
     CDuiString m_sTextOrig;     // 翻译前的文本
     CDuiString m_sToolTip;
     CDuiString m_sToolTipOrig;  // 翻译前的文本
+    DWORD m_dwTextColor;        // 文本颜色
+    DWORD m_dwDisabledTextColor;// 禁用状态文本颜色
     TCHAR m_chShortcut;
     bool  m_bNeedCtrl;
     bool  m_bNeedShift;

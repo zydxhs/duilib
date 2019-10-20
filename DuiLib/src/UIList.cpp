@@ -2138,7 +2138,7 @@ SIZE CListHeaderUI::EstimateSize(SIZE szAvailable)
 //
 
 CListHeaderItemUI::CListHeaderItemUI() : m_bDragable(true), m_uButtonState(0), m_iSepWidth(4),
-    m_uTextStyle(DT_LEFT | DT_VCENTER | DT_SINGLELINE), m_dwTextColor(0), m_dwSepColor(0),
+    m_uTextStyle(DT_LEFT | DT_VCENTER | DT_SINGLELINE), m_dwSepColor(0),
     m_iFont(-1), m_bShowHtml(false), m_bEditable(false), m_bComboable(false), m_bCheckable(false)
 {
     //设置内边距，防止遮挡拖放的间隔条。在资源文件中设置
@@ -2203,17 +2203,6 @@ DWORD CListHeaderItemUI::GetTextStyle() const
 void CListHeaderItemUI::SetTextStyle(UINT uStyle)
 {
     m_uTextStyle = uStyle;
-    Invalidate();
-}
-
-DWORD CListHeaderItemUI::GetTextColor() const
-{
-    return m_dwTextColor;
-}
-
-void CListHeaderItemUI::SetTextColor(DWORD dwTextColor)
-{
-    m_dwTextColor = dwTextColor;
     Invalidate();
 }
 
@@ -2380,11 +2369,6 @@ void CListHeaderItemUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         else { m_uTextStyle |= DT_SINGLELINE; }
     }
     else if (_tcscmp(pstrName, _T("font")) == 0) { SetFont(ParseInt(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("textcolor")) == 0)
-    {
-        DWORD clr = ParseColor(pstrValue);
-        SetTextColor(clr);
-    }
     else if (_tcscmp(pstrName, _T("textpadding")) == 0 || _tcscmp(pstrName, _T("padding")) == 0)
     {
         RECT rt = ParseRect(pstrValue);

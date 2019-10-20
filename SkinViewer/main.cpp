@@ -158,7 +158,7 @@ void CFrameWnd::Notify(TNotifyUI &msg)
         }
         else if (msg.pSender->GetName() == _T("btnStop"))
         {
-            if (NULL != s_pSkin) { s_pSkin->Close(); s_pSkin = NULL; }
+            if (NULL != s_pSkin) { s_pSkin->Close(); }
         }
     }
     else if (msg.sType == DUI_MSGTYPE_SELECTCHANGED)
@@ -306,6 +306,7 @@ void CFrameWnd::OnPreview(void)
         s_pSkin->SetResourceType(m_nType);
         s_pSkin->SetSkinFile(m_pEdtFile->GetText());
         s_pSkin->Create(NULL, _T("Skin"), UI_WNDSTYLE_FRAME | WS_CLIPCHILDREN, WS_EX_WINDOWEDGE);
+        //s_pSkin->Create(NULL, _T("Skin"), WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN, WS_EX_WINDOWEDGE);
         s_pSkin->MoveWindow(50, 50);
     }
 

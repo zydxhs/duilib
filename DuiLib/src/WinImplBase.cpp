@@ -826,7 +826,13 @@ bool CWndImplBase::IsCaptionCtrl(CControlUI *pCtrl)
 
 void CWndImplBase::ShowWindow(bool bShow /*= true*/, bool bTakeFocus /*= true*/)
 {
-    // 隐藏窗口：CREATE 和 HIDE 状态无需处理
+    // 正在播放窗口隐藏特效，立即重新播放隐藏特效
+    if (ESTATE_HIDE == m_nWndState && !bShow && m_pm.GetRoot()->IsEffectRunning())
+    {
+        if (m_pm.GetRoot()->StartEffect(TRIGGER_HIDE)) { return; }
+    }
+
+    // 窗口从显示到隐藏，如果有特效则播放特效
     if (ESTATE_SHOW == m_nWndState && !bShow)
     {
         m_nWndState = ESTATE_HIDE;
@@ -843,7 +849,14 @@ void CWndImplBase::ShowWindow(bool bShow /*= true*/, bool bTakeFocus /*= true*/)
         }
     }
 
-    // 显示窗口：SHOW 状态无需处理
+    // 正在播放窗口显示特效，立即重新播放显示特效
+    if (ESTATE_SHOW == m_nWndState && bShow && m_pm.GetRoot()->IsEffectRunning())
+    {
+        m_pm.GetRoot()->StartEffect(TRIGGER_SHOW);
+        return;
+    }
+
+    // 窗口从隐藏到显示，如果有特效则播放特效
     if ((ESTATE_HIDE == m_nWndState || ESTATE_CREATE == m_nWndState) && bShow)
     {
         if (m_pm.GetRoot()->HasEffect(TRIGGER_SHOW))

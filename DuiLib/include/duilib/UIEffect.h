@@ -165,7 +165,7 @@ public:
     void Stop(BYTE byTrigger = TRIGGER_ALL);
 
     // 返回是否正在播放指定的特效
-    bool IsRunning(BYTE byTrigger);
+    bool IsRunning(BYTE byTrigger = TRIGGER_NONE);
 
     bool HasEffectTrigger(BYTE byTrigger);
 
@@ -175,6 +175,7 @@ public:
     // 返回指定特效的内存HDC，用于绘制
     HDC GetMemHDC(BYTE byTrigger);
     BYTE GetCurFrame(BYTE byTrigger);
+    bool IsLastFrame(BYTE byTrigger);
 protected:
     TAniParam *GetTriggerById(BYTE byTrigger);
     void RemoveTriggerById(BYTE byTrigger);

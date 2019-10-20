@@ -12,8 +12,6 @@ static Color ARGB2Color(DWORD dwColor)
 CLabelUI::CLabelUI()
     : m_pWideText(0)
     , m_uTextStyle(DT_SINGLELINE | DT_VCENTER)
-    , m_dwTextColor(0)
-    , m_dwDisabledTextColor(0)
     , m_iFont(-1)
     , m_bShowHtml(false)
     , m_bNeedEstimateSize(true)
@@ -133,28 +131,6 @@ void CLabelUI::SetMultiLine(bool bMultiLine)
     else { m_uTextStyle |= DT_SINGLELINE; }
 
     m_bNeedEstimateSize = true;
-}
-
-void CLabelUI::SetTextColor(DWORD dwTextColor)
-{
-    m_dwTextColor = dwTextColor;
-    Invalidate();
-}
-
-DWORD CLabelUI::GetTextColor() const
-{
-    return m_dwTextColor;
-}
-
-void CLabelUI::SetDisabledTextColor(DWORD dwTextColor)
-{
-    m_dwDisabledTextColor = dwTextColor;
-    Invalidate();
-}
-
-DWORD CLabelUI::GetDisabledTextColor() const
-{
-    return m_dwDisabledTextColor;
 }
 
 void CLabelUI::SetFont(int index)
@@ -348,16 +324,6 @@ void CLabelUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         else { m_uTextStyle &= ~DT_END_ELLIPSIS; }
     }
     else if (_tcscmp(pstrName, _T("font")) == 0) { SetFont(ParseInt(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("textcolor")) == 0)
-    {
-        DWORD clr = ParseColor(pstrValue);
-        SetTextColor(clr);
-    }
-    else if (_tcscmp(pstrName, _T("disabledtextcolor")) == 0)
-    {
-        DWORD clr = ParseColor(pstrValue);
-        SetDisabledTextColor(clr);
-    }
     else if (_tcscmp(pstrName, _T("textpadding")) == 0 || _tcscmp(pstrName, _T("padding")) == 0)
     {
         RECT rt = ParseRect(pstrValue);
@@ -540,7 +506,8 @@ void CLabelUI::PaintTextEffect(HDC hDC, RECT rt)
     }
 
     LinearGradientBrush nLineGrBrushA(Point(GetGradientAngle(), 0), Point(0, nGradientLength),
-                                      ARGB2Color(GetTextShadowColorA()), ARGB2Color(GetTextShadowColorB() == -1 ? GetTextShadowColorA() : GetTextShadowColorB()));
+                                      ARGB2Color(GetTextShadowColorA()),
+                                      ARGB2Color(GetTextShadowColorB() == -1 ? GetTextShadowColorA() : GetTextShadowColorB()));
     LinearGradientBrush nLineGrBrushB(Point(GetGradientAngle(), 0), Point(0, nGradientLength),
                                       ARGB2Color(GetTextColor()), ARGB2Color(GetTextColor1() == -1 ? GetTextColor() : GetTextColor1()));
 

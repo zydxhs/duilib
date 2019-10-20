@@ -315,8 +315,6 @@ public:
     void SetSepWidth(int iWidth);
     DWORD GetTextStyle() const;
     void SetTextStyle(UINT uStyle);
-    DWORD GetTextColor() const;
-    void SetTextColor(DWORD dwTextColor);
     DWORD GetSepColor() const;
     void SetSepColor(DWORD dwSepColor);
     void SetFont(int index);
@@ -360,7 +358,6 @@ protected:
     bool      m_bCheckable;     // 当前列是否支持复选框
     UINT      m_uButtonState;
     int       m_iSepWidth;
-    DWORD     m_dwTextColor;
     DWORD     m_dwSepColor;
     int       m_iFont;
     UINT      m_uTextStyle;

@@ -19,11 +19,12 @@ public:
     HRGN hOldRgn;
 
     // 创建一个剪切区域，将绘图限制在rc区域内
-    static void GenerateClip(HDC hDC, RECT rc, CRenderClip &clip);
+    static void GenerateClip(HDC hDC, const RECT &rc, CRenderClip &clip);
 
     // 创建一个圆角剪切区域，将绘图限制在rc区域内
     // width、height 横/纵向圆角弧度
-    static void GenerateRoundClip(HDC hDC, RECT rc, RECT rcItem, int width, int height, CRenderClip &clip);
+    static void GenerateRoundClip(HDC hDC, const RECT &rc, const RECT &rcItem, int width, int height,
+                                  CRenderClip &clip);
 
     // 使用活跃区域作为绘图区
     static void UseOldClipBegin(HDC hDC, CRenderClip &clip);
@@ -70,7 +71,7 @@ public:
 
     static HBITMAP GenerateBitmap(CPaintManagerUI *pManager, RECT rc, CControlUI *pStopControl = NULL,
                                   DWORD dwFilterColor = 0);
-    static HBITMAP GenerateBitmap(CPaintManagerUI *pManager, CControlUI *pControl, RECT rc,
+    static HBITMAP GenerateBitmap(CPaintManagerUI *pManager, CControlUI *pControl, const RECT &rc,
                                   DWORD dwFilterColor = 0);
     static SIZE GetTextSize(HDC hDC, CPaintManagerUI *pManager, LPCTSTR pstrText, int iFont, UINT uStyle);
 };

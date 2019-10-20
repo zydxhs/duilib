@@ -152,7 +152,7 @@ CPaintManagerUI::CPaintManagerUI() :
     if (m_SharedResInfo.m_DefaultFontInfo.sFontName.IsEmpty())
     {
         m_SharedResInfo.m_dwDefaultDisabledColor = 0xFFA7A6AA;
-        m_SharedResInfo.m_dwDefaultFontColor = 0xFF000000;
+        m_SharedResInfo.m_dwDefaultFontColor = 0xFF111111;
         m_SharedResInfo.m_dwDefaultLinkFontColor = 0xFF0000FF;
         m_SharedResInfo.m_dwDefaultLinkHoverFontColor = 0xFFD3215F;
         m_SharedResInfo.m_dwDefaultSelectedBkColor = 0xFFBAE4FF;
@@ -1354,51 +1354,51 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
                     pPostPaintControl->DoPostPaint(m_hDcOffscreen, rcPaint);
                 }
 
-                if (IsLayered())
-                {
-                    LPBYTE pOffScrBits = (LPBYTE)m_pOffscreenBits;
-                    long nClientWidth = rcClient.right - rcClient.left;
-#ifdef USE_GDIPLUS
-                    // 为RichEdit控件修补alpha
-                    CDuiPtrArray *pAryRichEdit = FindSubControlsByClass(m_pRoot, DUI_CTR_RICHEDIT, UIFIND_ALL | UIFIND_VISIBLE);
-
-                    for (int i = 0; i < pAryRichEdit->GetSize(); ++i)
-                    {
-                        CControlUI *pCtrl = (CControlUI *)pAryRichEdit->GetAt(i);
-                        RECT rcRichEdit = pCtrl->GetPos();
-
-                        if (IntersectRect(&rcRichEdit, &rcRichEdit, &rcPaint))
-                        {
-                            for (int y = rcRichEdit.top; y < rcRichEdit.bottom; ++y)
-                            {
-                                for (int x = rcRichEdit.left; x < rcRichEdit.right; ++x)
-                                {
-                                    int i = (y * nClientWidth + x) * 4;
-                                    pOffScrBits[i + 3] = 255;
-                                }
-                            }
-                        }
-                    }
-
-#else
-
-                    // 为整个绘图区域修补alpha
-                    for (int y = rcPaint.top; y < rcPaint.bottom; ++y)
-                    {
-                        for (int x = rcPaint.left; x < rcPaint.right; ++x)
-                        {
-                            int i = (y * nClientWidth + x) * 4;
-
-                            if ((pOffScrBits[i + 3] == 0) &&
-                                (pOffScrBits[i + 0] != 0 || pOffScrBits[i + 1] != 0 || pOffScrBits[i + 2] != 0))
-                            {
-                                pOffScrBits[i + 3] = 255;
-                            }
-                        }
-                    }
-
-#endif // USE_GDIPLUS
-                }
+                // TODO 2019-10-13 会导致在播放动画时，RichEdit区域显示黑色框。alpha修复放在 RichEdit 的 DoPaint 中
+                //                 if (IsLayered() && !m_pRoot->IsEffectRunning())
+                //                 {
+                //                     LPBYTE pOffScrBits = (LPBYTE)m_pOffscreenBits;
+                //                     long nClientWidth = rcClient.right - rcClient.left;
+                // #ifdef USE_GDIPLUS
+                //                     CDuiPtrArray &aryRichEdit = FindSubControlsByClass(m_pRoot, DUI_CTR_RICHEDIT, UIFIND_ALL | UIFIND_VISIBLE);
+                //
+                //                     for (int i = 0; i < aryRichEdit.GetSize(); ++i)
+                //                     {
+                //                         CControlUI *pCtrl = (CControlUI *)aryRichEdit.GetAt(i);
+                //                         RECT rcRichEdit = pCtrl->GetPos();
+                //
+                //                         if (IntersectRect(&rcRichEdit, &rcRichEdit, &rcPaint))
+                //                         {
+                //                             for (int y = rcRichEdit.top; y < rcRichEdit.bottom; ++y)
+                //                             {
+                //                                 for (int x = rcRichEdit.left; x < rcRichEdit.right; ++x)
+                //                                 {
+                //                                     int i = (y * nClientWidth + x) * 4;
+                //                                     pOffScrBits[i + 3] = 255;
+                //                                 }
+                //                             }
+                //                         }
+                //                     }
+                //
+                // #else
+                //
+                //                     // 为整个绘图区域修补alpha
+                //                     for (int y = rcPaint.top; y < rcPaint.bottom; ++y)
+                //                     {
+                //                         for (int x = rcPaint.left; x < rcPaint.right; ++x)
+                //                         {
+                //                             int i = (y * nClientWidth + x) * 4;
+                //
+                //                             if ((pOffScrBits[i + 3] == 0) &&
+                //                                 (pOffScrBits[i + 0] != 0 || pOffScrBits[i + 1] != 0 || pOffScrBits[i + 2] != 0))
+                //                             {
+                //                                 pOffScrBits[i + 3] = 255;
+                //                             }
+                //                         }
+                //                     }
+                //
+                // #endif // USE_GDIPLUS
+                //                 }
 
                 ::RestoreDC(m_hDcOffscreen, iSaveDC);
 
@@ -4522,14 +4522,14 @@ CControlUI *CPaintManagerUI::FindSubControlByClass(CControlUI *pParent, LPCTSTR 
     return pParent->FindControl(__FindControlFromClass, (LPVOID)pstrClass, UIFIND_ALL);
 }
 
-CDuiPtrArray *CPaintManagerUI::FindSubControlsByClass(CControlUI *pParent, LPCTSTR pstrClass, UINT uFlags)
+CDuiPtrArray &CPaintManagerUI::FindSubControlsByClass(CControlUI *pParent, LPCTSTR pstrClass, UINT uFlags)
 {
     if (pParent == NULL) { pParent = GetRoot(); }
 
     ASSERT(pParent);
     m_aFoundControls.Empty();
     pParent->FindControl(__FindControlsFromClass, (LPVOID)pstrClass, uFlags);
-    return &m_aFoundControls;
+    return m_aFoundControls;
 }
 
 DUI_INLINE CDuiPtrArray *CPaintManagerUI::GetFoundControls()

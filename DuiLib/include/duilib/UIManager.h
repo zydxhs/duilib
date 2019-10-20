@@ -452,7 +452,7 @@ public:
     CControlUI *FindSubControlByPoint(CControlUI *pParent, POINT pt) const;
     CControlUI *FindSubControlByName(CControlUI *pParent, LPCTSTR pstrName) const;
     CControlUI *FindSubControlByClass(CControlUI *pParent, LPCTSTR pstrClass, int iIndex = 0);
-    CDuiPtrArray *FindSubControlsByClass(CControlUI *pParent, LPCTSTR pstrClass, UINT uFlags = UIFIND_ALL);
+    CDuiPtrArray &FindSubControlsByClass(CControlUI *pParent, LPCTSTR pstrClass, UINT uFlags = UIFIND_ALL);
 
     static int MessageLoop();
     static bool TranslateMessage(const LPMSG pMsg);
@@ -462,6 +462,7 @@ public:
     bool PreMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT &lRes);
     void UsedVirtualWnd(bool bUsed);
     CShadowUI *GetShadow();
+
 private:
     CDuiPtrArray *GetFoundControls();
     static CControlUI *CALLBACK __FindControlFromNameHash(CControlUI *pThis, LPVOID pData);

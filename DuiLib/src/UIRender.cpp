@@ -297,7 +297,7 @@ CRenderClip::~CRenderClip()
     ::DeleteObject(hRgn);
 }
 
-void CRenderClip::GenerateClip(HDC hDC, RECT rc, CRenderClip &clip)
+void CRenderClip::GenerateClip(HDC hDC, const RECT &rc, CRenderClip &clip)
 {
     RECT rcClip = { 0 };
     ::GetClipBox(hDC, &rcClip);
@@ -309,7 +309,8 @@ void CRenderClip::GenerateClip(HDC hDC, RECT rc, CRenderClip &clip)
     clip.rcItem = rc;
 }
 
-void CRenderClip::GenerateRoundClip(HDC hDC, RECT rc, RECT rcItem, int width, int height, CRenderClip &clip)
+void CRenderClip::GenerateRoundClip(HDC hDC, const RECT &rc, const RECT &rcItem, int width, int height,
+                                    CRenderClip &clip)
 {
     RECT rcClip = { 0 };
     ::GetClipBox(hDC, &rcClip);
@@ -3392,7 +3393,7 @@ HBITMAP CRenderEngine::GenerateBitmap(CPaintManagerUI *pManager, RECT rc, CContr
     return hBitmap;
 }
 
-HBITMAP CRenderEngine::GenerateBitmap(CPaintManagerUI *pManager, CControlUI *pControl, RECT rc,
+HBITMAP CRenderEngine::GenerateBitmap(CPaintManagerUI *pManager, CControlUI *pControl, const RECT &rc,
                                       DWORD dwFilterColor)
 {
     if (pManager == NULL || pControl == NULL) { return NULL; }

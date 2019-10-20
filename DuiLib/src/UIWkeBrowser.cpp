@@ -394,7 +394,7 @@ void CWkeBrowserUI::DoEvent(TEventUI &event)
 bool CWkeBrowserUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl)
 {
     // 2018-08-18 zhuyadong 添加特效
-    if (NULL != m_pEffect && m_pEffect->IsRunning(m_byEffectTrigger))
+    if (IsEffectRunning())
     {
         // 窗体显示特效：第一次走到这里，并非是特效，而是系统触发的绘制。应该过滤掉
         if (TRIGGER_SHOW == m_byEffectTrigger && 0 == m_pEffect->GetCurFrame(m_byEffectTrigger)) { return true; }

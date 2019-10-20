@@ -274,12 +274,33 @@ void CContainerUI::SetMouseChildEnabled(bool bEnable)
 
 bool CContainerUI::SetVisible(bool bVisible /*= true*/)
 {
+    if (TRIGGER_NONE != m_byEffectTrigger && !IsLastFrame())
+    {
+        if (TRIGGER_HIDE == m_byEffectTrigger)
+        {
+            // 正在播放特效 隐藏：
+            // 1. 再次触发隐藏特效，重新开始隐藏特效
+            // 2. 再次触发显示特效，立即开始显示特效
+            // 3. 没有显示特效，触发显示，终止隐藏特效并立即显示
+            if (StartEffect(bVisible ? TRIGGER_SHOW : TRIGGER_HIDE)) { return false; }
+        }
+        else if (TRIGGER_SHOW == m_byEffectTrigger)
+        {
+            // 正在播放特效 显示：
+            // 1. 再次触发显示特效，重新开始显示特效
+            // 2. 再次触发隐藏特效，立即开始隐藏特效
+            // 3. 没有隐藏特效，触发隐藏，终止显示特效并立即隐藏
+            if (bVisible) { if (StartEffect(TRIGGER_SHOW)) { return false; } }
+            else { StopEffect(); }
+        }
+    }
+
     if (m_bVisible == bVisible) { return true; }
 
     // 2018-08-18 zhuyadong 添加特效。隐藏特效
-    if (TRIGGER_NONE == m_byEffectTrigger)
+    if (!bVisible && HasEffect(TRIGGER_HIDE) && TRIGGER_NONE == m_byEffectTrigger)
     {
-        if (!bVisible && StartEffect(TRIGGER_HIDE)) { return false; }
+        if (StartEffect(TRIGGER_HIDE)) { return false; }
     }
 
     bool v = IsVisible();
@@ -305,7 +326,7 @@ bool CContainerUI::SetVisible(bool bVisible /*= true*/)
     }
 
     // 2018-08-18 zhuyadong 添加特效。显示特效
-    if (TRIGGER_NONE == m_byEffectTrigger && bVisible)
+    if (bVisible && HasEffect(TRIGGER_SHOW) && TRIGGER_NONE == m_byEffectTrigger)
     {
         // 2019-05-25 zhuyadong 修复条件判断不正确的问题
         //if (m_rcItem.left == m_rcItem.right || m_rcItem.top == m_rcItem.bottom && m_pParent)
@@ -1025,7 +1046,7 @@ CControlUI *CContainerUI::FindControl(FINDCONTROLPROC Proc, LPVOID pData, UINT u
 bool CContainerUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl)
 {
     // 2018-08-18 zhuyadong 添加特效
-    if (NULL != m_pEffect && m_pEffect->IsRunning(m_byEffectTrigger))
+    if (IsEffectRunning())
     {
         // 窗体显示特效：第一次走到这里，并非是特效，而是系统触发的绘制。应该过滤掉
         if (TRIGGER_SHOW == m_byEffectTrigger && 0 == m_pEffect->GetCurFrame(m_byEffectTrigger)) { return true; }

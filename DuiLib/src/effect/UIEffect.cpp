@@ -5,11 +5,11 @@
 namespace DuiLib {
 
 //////////////////////////////////////////////////////////////////////////
-void RestoreAlphaColor(LPBYTE pBits, int bitsWidth, PRECT rc)
+void RestoreAlphaColor(LPBYTE pBits, int bitsWidth, const RECT &rc)
 {
-    for (int i = rc->top; i < rc->bottom; ++i)
+    for (int i = rc.top; i < rc.bottom; ++i)
     {
-        for (int j = rc->left; j < rc->right; ++j)
+        for (int j = rc.left; j < rc.right; ++j)
         {
             if ((pBits[3] == 0) && (pBits[0] != 0 || pBits[1] != 0 || pBits[2] != 0)) { pBits[3] = 255; }
 
@@ -63,8 +63,12 @@ bool TAniParam::Init(CControlUI *pCtrl)
     pBmpData = (BYTE *)bmDst.bmBits;
 
     //修补一下Alpha通道,一些控件(Richedit)会让Alpha为0
-    RECT rcRestore = rcCtrl;
-    RestoreAlphaColor((LPBYTE)bmDst.bmBits, bmDst.bmWidth, &rcRestore);
+    //RECT rcRestore = rcCtrl;
+    //RestoreAlphaColor((LPBYTE)bmDst.bmBits, bmDst.bmWidth, &rcRestore);
+    rcCtrl.left = rcCtrl.top = 0;
+    rcCtrl.right = bmDst.bmWidth;
+    rcCtrl.bottom = bmDst.bmHeight;
+    RestoreAlphaColor((LPBYTE)bmDst.bmBits, bmDst.bmWidth, rcCtrl);
 
     memcpy(pBmpDataCopy, pBmpData, nBmpBytes);
     pEffect->InitEffectParam(this);
@@ -201,15 +205,15 @@ void CEffectUI::OnElapse(BYTE byTrigger)
 
     if (pData->bLastFrame)
     {
-        m_pControl->OnEffectEnd(*pData);
-
         if (pData->bLoop)
         {
             pData->byCurFrame = 0;
+            pData->bLastFrame = false;
         }
         else
         {
             m_pControl->GetManager()->KillTimer(m_pControl, pData->byTrigger);
+            m_pControl->OnEffectEnd(*pData);
             pData->Release();
         }
     }
@@ -227,8 +231,16 @@ BYTE CEffectUI::GetCurFrame(BYTE byTrigger)
     return pData ? pData->byCurFrame : 0;
 }
 
+bool CEffectUI::IsLastFrame(BYTE byTrigger)
+{
+    TAniParam *pData = GetTriggerById(byTrigger);
+    return pData ? pData->bLastFrame && !pData->bLoop : false;
+}
+
 TAniParam *CEffectUI::GetTriggerById(BYTE byTrigger)
 {
+    if (TRIGGER_NONE == byTrigger || TRIGGER_COUNT <= byTrigger) { return NULL; }
+
     for (int i = 0; i < m_aryAniParam.GetSize(); ++i)
     {
         TAniParam *pAniParam = (TAniParam *)m_aryAniParam[i];

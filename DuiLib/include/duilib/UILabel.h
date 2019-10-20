@@ -21,10 +21,6 @@ public:
     UINT GetTextStyle() const;
     bool IsMultiLine();
     void SetMultiLine(bool bMultiLine = true);
-    void SetTextColor(DWORD dwTextColor);
-    DWORD GetTextColor() const;
-    void SetDisabledTextColor(DWORD dwTextColor);
-    DWORD GetDisabledTextColor() const;
     void SetFont(int index);
     int GetFont() const;
     bool IsShowHtml();
@@ -74,8 +70,6 @@ protected:
 
 protected:
     LPWSTR  m_pWideText;
-    DWORD   m_dwTextColor;
-    DWORD   m_dwDisabledTextColor;
     int     m_iFont;
     UINT    m_uTextStyle;
     bool    m_bShowHtml;

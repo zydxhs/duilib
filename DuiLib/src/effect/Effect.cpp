@@ -206,7 +206,7 @@ void CFlipEffect::ComputeOneFrame(TAniParam *pData)
 
     if (frame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -295,7 +295,7 @@ void CMosaicEffect::ComputeOneFrame(TAniParam *pData)
 
     if ((int)pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -442,7 +442,7 @@ void CSlideEffect::ComputeOneFrame(TAniParam *pData)
 
     if ((int)pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -638,7 +638,7 @@ void CBandSlideEffect::ComputeOneFrame(TAniParam *pData)
 
     if ((int)pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -707,7 +707,7 @@ void CBlindsEffect::ComputeOneFrame(TAniParam *pData)
 
     if ((int)pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -897,7 +897,7 @@ void CSepcialBlindsEffect::ComputeOneFrame(TAniParam *pData)
 
     if ((int)pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -985,7 +985,7 @@ void CScanEffect::ComputeOneFrame(TAniParam *pData)
 
     if ((int)pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -1075,7 +1075,7 @@ void CInertiaSlideEffect::ComputeOneFrame(TAniParam *pData)
 
         if ((int)pData->byCurFrame == m_nFrame)
         {
-            pData->bLastFrame = TRUE;
+            pData->bLastFrame = true;
         }
     }
     else
@@ -1206,7 +1206,7 @@ void CInertiaSlideEffect::ComputeOneFrame(TAniParam *pData)
             // 惯性运动结束条件
             if (inertiaDistance == (int)pUnderDamp->GetNowAmplitude(m_tInertiaTime))
             {
-                pData->bLastFrame = TRUE;
+                pData->bLastFrame = true;
             }
         }
     }
@@ -1263,7 +1263,7 @@ void CFadeEffect::ComputeOneFrame(TAniParam *pData)
 
     if ((int)pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -1312,7 +1312,7 @@ void CZoomEffect::ComputeOneFrame(TAniParam *pData)
 
     if ((int)pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -1378,7 +1378,7 @@ void CShrinkEffect::ComputeOneFrame(TAniParam *pData)
 
     if ((int)pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -1463,7 +1463,7 @@ void CSwingEffect::ComputeOneFrame(TAniParam *pData)
 
     if ((int)pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 
 }
@@ -1562,7 +1562,8 @@ void CFunnelEffect::ComputeOneFrame(TAniParam *pData)
             real k2 = (real)(rc.bottom - rcWarp.bottomLeft.y) / rc.Width();
 
             rcWarp.topRight = CdPoint(rcClient.right - 1, ToNearestInt(k1 * (int)step * (pData->byCurFrame) + rcWarp.topLeft.y));
-            rcWarp.bottomRight = CdPoint(rcClient.right - 1, ToNearestInt(k2 * (int)step * (pData->byCurFrame) + rcWarp.bottomLeft.y));
+            rcWarp.bottomRight = CdPoint(rcClient.right - 1,
+                                         ToNearestInt(k2 * (int)step * (pData->byCurFrame) + rcWarp.bottomLeft.y));
 
             RECT rcSrc = {(int)step *(8 - pData->byCurFrame), rcClient.top, rcClient.right - 1, rcClient.bottom - 1};
             RECT rcBound = {rcSrc.left, rcSrc.top, rcSrc.right + 1, rcSrc.bottom + 1};
@@ -1584,7 +1585,7 @@ void CFunnelEffect::ComputeOneFrame(TAniParam *pData)
 
     if ((int)pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -1651,7 +1652,7 @@ void CNoiseEffect::ComputeOneFrame(TAniParam *pData)
 
     if ((int)pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 
 }
@@ -1769,7 +1770,7 @@ void CCubeEffect::ComputeOneFrame(TAniParam *pData)
 
     if (pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -1968,7 +1969,7 @@ void CGradualEraseEffect::ComputeOneFrame(TAniParam *pData)
 
     if (pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -2050,7 +2051,7 @@ void CPushEffect::ComputeOneFrame(TAniParam *pData)
 
     if ((int)pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -2120,7 +2121,7 @@ void CDissolveEffect::ComputeOneFrame(TAniParam *pData)
 
     if ((int)pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 
 }
@@ -2172,7 +2173,7 @@ void CCurtainEffect::ComputeOneFrame(TAniParam *pData)
 
     if ((int)pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -2281,7 +2282,7 @@ void CTriangularprismEffect::ComputeOneFrame(TAniParam *pData)
 
     if ((int)pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -2392,7 +2393,7 @@ void CCubeInsideEffect::ComputeOneFrame(TAniParam *pData)
 
     if (pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -2738,7 +2739,7 @@ void CSpatialmotionEffect::ComputeOneFrame(TAniParam *pData)
 
     if (pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -2849,7 +2850,7 @@ void CPatchFlipEffect::ComputeOneFrame(TAniParam *pData)
 
     if (pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -2908,7 +2909,7 @@ void CSpatialRotateEffect::ComputeOneFrame(TAniParam *pData)
 
     if (pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -3002,7 +3003,7 @@ void CDoorEffect::ComputeOneFrame(TAniParam *pData)
 
     if (pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -3049,7 +3050,7 @@ void CWaveEffect::ComputeOneFrame(TAniParam *pData)
 
     if (pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -3155,7 +3156,7 @@ void CScatterEffect::ComputeOneFrame(TAniParam *pData)
 
     if (pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 
 }
@@ -3203,7 +3204,7 @@ void CColorFadeEffect::ComputeOneFrame(TAniParam *pData)
 
     if (pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -3341,7 +3342,7 @@ void CDampSlideEffect::ComputeOneFrame(TAniParam *pData)
     // 惯性运动结束条件
     if (!xInt && !yInt || (inertiaDistance < 1.0f))
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -3394,7 +3395,7 @@ void CWhirlPoolEffect::ComputeOneFrame(TAniParam *pData)
 
     if (pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -3430,7 +3431,7 @@ void CClockWipeEffect::ComputeOneFrame(TAniParam *pData)
 
         if (pData->byCurFrame == m_nFrame)
         {
-            pData->bLastFrame = TRUE;
+            pData->bLastFrame = true;
             memset(pData->pBmpData, 0, width * height * 4);
         }
         else
@@ -3501,7 +3502,7 @@ void CClockWipeEffect::ComputeOneFrame(TAniParam *pData)
     {
         if (pData->byCurFrame == m_nFrame)
         {
-            pData->bLastFrame = TRUE;
+            pData->bLastFrame = true;
             memcpy(pData->pBmpData, pData->pBmpDataCopy, width * height * 4);
         }
         else
@@ -3575,7 +3576,7 @@ void CClockWipeEffect::ComputeOneFrame(TAniParam *pData)
 
     if (pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -3640,7 +3641,7 @@ void CPinWheelEffect::ComputeOneFrame(TAniParam *pData)
     {
         if (pData->byCurFrame == m_nFrame)
         {
-            pData->bLastFrame = TRUE;
+            pData->bLastFrame = true;
             memset(pData->pBmpData, 0, width * height * 4);
         }
         else
@@ -3725,7 +3726,7 @@ void CPinWheelEffect::ComputeOneFrame(TAniParam *pData)
     {
         if (pData->byCurFrame == m_nFrame)
         {
-            pData->bLastFrame = TRUE;
+            pData->bLastFrame = true;
             memcpy(pData->pBmpData, pData->pBmpDataCopy, width * height * 4);
         }
         else
@@ -3809,7 +3810,7 @@ void CPinWheelEffect::ComputeOneFrame(TAniParam *pData)
 
     if (pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -3861,7 +3862,7 @@ void CPagePeelEffect::ComputeOneFrame(TAniParam *pData)
     {
         if (pData->byCurFrame == m_nFrame)
         {
-            pData->bLastFrame = TRUE;
+            pData->bLastFrame = true;
             memset(pData->pBmpData, 0, width * height * 4);
         }
         else
@@ -4004,7 +4005,7 @@ void CPagePeelEffect::ComputeOneFrame(TAniParam *pData)
 
         if (pData->byCurFrame == m_nFrame)
         {
-            pData->bLastFrame = TRUE;
+            pData->bLastFrame = true;
 
             //memcpy(pData->pBmpData, pData->pBmpDataCopy, width*height*4);
             for (int row = 0; row < height; row++)
@@ -4204,7 +4205,7 @@ void CBlurEffect::ComputeOneFrame(TAniParam *pData)
     {
         if (pData->byCurFrame == m_nFrame)
         {
-            pData->bLastFrame = TRUE;
+            pData->bLastFrame = true;
             memset(pData->pBmpData, 0, width * height * 4);
         }
         else
@@ -4224,7 +4225,7 @@ void CBlurEffect::ComputeOneFrame(TAniParam *pData)
     {
         if (pData->byCurFrame == m_nFrame)
         {
-            pData->bLastFrame = TRUE;
+            pData->bLastFrame = true;
             memcpy(pData->pBmpData, pData->pBmpDataCopy, width * height * 4);
         }
         else
@@ -4242,7 +4243,7 @@ void CBlurEffect::ComputeOneFrame(TAniParam *pData)
 
     if (pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -4287,7 +4288,7 @@ void CZoomBlurEffect::ComputeOneFrame(TAniParam *pData)
 
     if (pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 
@@ -4400,7 +4401,7 @@ void CFoldEffect::ComputeOneFrame(TAniParam *pData)
 
     if (pData->byCurFrame == m_nFrame)
     {
-        pData->bLastFrame = TRUE;
+        pData->bLastFrame = true;
     }
 }
 

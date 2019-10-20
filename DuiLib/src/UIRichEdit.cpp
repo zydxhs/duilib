@@ -1059,8 +1059,8 @@ void CTxtWinHost::SetParaFormat(PARAFORMAT2 &p)
 
 CRichEditUI::CRichEditUI() : m_pTwh(NULL), m_bVScrollBarFixing(false), m_bWantTab(true), m_bWantReturn(true),
     m_bWantCtrlReturn(true), m_bTransparent(true), m_bRich(true), m_bReadOnly(false), m_bWordWrap(false),
-    m_dwTextColor(0), m_iFont(-1), m_dwTipColor(0xFFBAC0C5),
-    m_iLimitText(cInitTextMax), m_lTwhStyle(ES_MULTILINE), m_bDrawCaret(true), m_bInited(false)
+    m_iFont(-1), m_dwTipColor(0xFFBAC0C5), m_iLimitText(cInitTextMax), m_lTwhStyle(ES_MULTILINE),
+    m_bDrawCaret(true), m_bInited(false)
 {
 }
 
@@ -1070,6 +1070,7 @@ CRichEditUI::~CRichEditUI()
     {
         m_pTwh->Release();
         m_pManager->RemoveMessageFilter(this);
+        m_pManager->KillTimer(this, TIMERID_CARET);
     }
 }
 
@@ -1090,6 +1091,18 @@ UINT CRichEditUI::GetControlFlags() const
     if (!IsEnabled()) { return CControlUI::GetControlFlags(); }
 
     return UIFLAG_SETCURSOR | UIFLAG_TABSTOP;
+}
+
+void CRichEditUI::SetEnabled(bool bEnable /*= true*/)
+{
+    //if (m_bEnabled == bEnable) { return; }
+
+    if (m_pTwh)
+    {
+        m_pTwh->SetColor(bEnable ? m_dwTextColor : m_dwDisabledTextColor);
+    }
+
+    CContainerUI::SetEnabled(bEnable);
 }
 
 bool CRichEditUI::IsWantTab()
@@ -1220,19 +1233,20 @@ void CRichEditUI::SetWinStyle(LONG lStyle)
     m_lTwhStyle = lStyle;
 }
 
-DWORD CRichEditUI::GetTextColor()
-{
-    return m_dwTextColor;
-}
-
 void CRichEditUI::SetTextColor(DWORD dwTextColor)
 {
+    // 无需调用基类函数
     m_dwTextColor = dwTextColor;
 
-    if (m_pTwh)
-    {
-        m_pTwh->SetColor(dwTextColor);
-    }
+    if (m_pTwh) { m_pTwh->SetColor(dwTextColor); }
+}
+
+void CRichEditUI::SetDisabledTextColor(DWORD dwTextColor)
+{
+    // 无需调用基类函数
+    m_dwDisabledTextColor = dwTextColor;
+
+    if (m_pTwh) { m_pTwh->SetColor(dwTextColor); }
 }
 
 int CRichEditUI::GetLimitText()
@@ -1807,6 +1821,7 @@ void CRichEditUI::DoInit()
         if (m_pManager->IsLayered()) { m_pManager->SetTimer(this, TIMERID_CARET, ::GetCaretBlinkTime()); }
     }
 
+    SetEnabled(m_bEnabled);
     m_bInited = true;
 }
 
@@ -2097,7 +2112,7 @@ void CRichEditUI::DoEvent(TEventUI &event)
             m_pTwh->GetTextServices()->TxSendMessage(WM_TIMER, event.wParam, event.lParam, 0);
         }
 
-        return;
+        //return; // 会导致特效无法播放
     }
 
     if (event.Type == UIEVENT_SCROLLWHEEL)
@@ -2283,7 +2298,7 @@ void CRichEditUI::Move(SIZE szOffset, bool bNeedInvalidate)
 bool CRichEditUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl)
 {
     // 2018-08-18 zhuyadong 添加特效
-    if (NULL != m_pEffect && m_pEffect->IsRunning(m_byEffectTrigger))
+    if (IsEffectRunning())
     {
         // 窗体显示特效：第一次走到这里，并非是特效，而是系统触发的绘制。应该过滤掉
         if (TRIGGER_SHOW == m_byEffectTrigger && 0 == m_pEffect->GetCurFrame(m_byEffectTrigger)) { return true; }
@@ -2342,6 +2357,30 @@ bool CRichEditUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl
             if (lHeight <= rc.bottom - rc.top)
             {
                 NeedUpdate();
+            }
+        }
+
+        // alplha 通道修复，修复文字 alapha 丢失
+        RECT rt = m_rcItem;
+        HBITMAP hBmp = (HBITMAP)GetCurrentObject(hDC, OBJ_BITMAP);
+        BITMAP bmDst;
+        GetObject(hBmp, sizeof(bmDst), &bmDst);
+
+        if (NULL != bmDst.bmBits && IntersectRect(&rt, &rt, &rcPaint))
+        {
+            int nWidth = rcPaint.right - rcPaint.left;
+            LPBYTE pBits = (LPBYTE)bmDst.bmBits;
+            pBits += rt.top * nWidth * 4;
+
+            for (int y = rt.top; y < rt.bottom; ++y, pBits += nWidth * 4)
+            {
+                for (int x = 0; x < rt.right; ++x)
+                {
+                    int nOffset = x * 4;
+
+                    if (pBits[nOffset + 3] == 0 && (pBits[0] != 0 || pBits[1] != 0 || pBits[2] != 0)) { pBits[nOffset + 3] = 255; }
+
+                }
             }
         }
     }
@@ -2542,10 +2581,9 @@ void CRichEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
         }
     }
     else if (_tcscmp(pstrName, _T("font")) == 0) { SetFont(ParseInt(pstrValue)); }
-    else if (_tcscmp(pstrName, _T("textcolor")) == 0)
+    else if (_tcscmp(pstrName, _T("enabled")) == 0)
     {
-        DWORD clr = ParseColor(pstrValue);
-        SetTextColor(clr);
+        m_bEnabled = ParseBool(pstrValue);
     }
     else if (_tcscmp(pstrName, _T("textpadding")) == 0 || _tcscmp(pstrName, _T("padding")) == 0)
     {

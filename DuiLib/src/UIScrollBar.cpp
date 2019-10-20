@@ -57,16 +57,10 @@ void CScrollBarUI::SetOwner(CContainerUI *pOwner)
 
 bool CScrollBarUI::SetVisible(bool bVisible /*= true*/)
 {
-    if (m_bVisible == bVisible) { return false; }
+    // 2018-08-18 zhuyadong 添加特效
+    if (!CControlUI::SetVisible(bVisible)) { return false; }
 
-    // 2018-08-18 zhuyadong 添加特效。显示/隐藏特效
-    if (TRIGGER_NONE == m_byEffectTrigger)
-    {
-        if (!bVisible && StartEffect(TRIGGER_HIDE)) { return false; }
-        else if (bVisible) { StartEffect(TRIGGER_SHOW); }
-    }
-
-    //bool v = IsVisible();
+    //if (m_bVisible == bVisible) { return false; }
     m_bVisible = bVisible;
 
     if (m_bFocused) { m_bFocused = false; }
@@ -1121,7 +1115,7 @@ void CScrollBarUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
 bool CScrollBarUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl)
 {
     // 2018-08-18 zhuyadong 添加特效
-    if (NULL != m_pEffect && m_pEffect->IsRunning(m_byEffectTrigger))
+    if (IsEffectRunning())
     {
         // 窗体显示特效：第一次走到这里，并非是特效，而是系统触发的绘制。应该过滤掉
         if (TRIGGER_SHOW == m_byEffectTrigger && 0 == m_pEffect->GetCurFrame(m_byEffectTrigger)) { return true; }

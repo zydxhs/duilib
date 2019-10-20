@@ -63,7 +63,7 @@
         <Attribute name="mininfo" default="0,0" type="SIZE" comment="窗口最小大小,如(320,240)"/>
         <Attribute name="maxinfo" default="0,0" type="SIZE" comment="窗口最大大小,如(1600,1200)"/>
         <Attribute name="disabledfontcolor" default="#FFA7A6AA" type="DWORD" comment="默认的disabled字体颜色,如(#FFA7A6AA)"/>
-        <Attribute name="defaultfontcolor" default="#FF000000" type="DWORD" comment="默认的字体颜色,如(#FF000000)"/>
+        <Attribute name="defaultfontcolor" default="#FF111111" type="DWORD" comment="默认的字体颜色,如(#FF000000)"/>
         <Attribute name="linkfontcolor" default="#FF0000FF" type="DWORD" comment="默认的link字体颜色,如(#FF0000FF)"/>
         <Attribute name="linkhoverfontcolor" default="#FFD3215F" type="DWORD" comment="默认的linkhoverfont字体颜色,如(#FFD3215F)"/>
         <Attribute name="selectedcolor" default="#FFBAE4FF" type="DWORD" comment="默认的selected字体颜色,如(#FFBAE4FF)"/>
@@ -142,6 +142,9 @@
             <Attribute name="triggerclick" default="" type="BYTE,WORD,BOOL,BOOL" comment="鼠标单击特效。"/>
             <Attribute name="triggershow" default="" type="BYTE,WORD,BOOL,BOOL" comment="控件显示特效。"/>
             <Attribute name="triggerhide" default="" type="BYTE,WORD,BOOL,BOOL" comment="控件隐藏特效。"/>
+            <!-- 正常/禁用状态 文本颜色 -->
+            <Attribute name="textcolor" default="#00000000" type="DWORD" comment="字体颜色，0表示使用默认字体颜色，如(#FFFF0000)"/>
+            <Attribute name="disabledtextcolor" default="#00000000" type="DWORD" comment="禁用状态字体颜色，0表示使用默认disabled字体颜色,如(#FFFF0000)"/>
         </Control>
         <Container parent="Control" notifies="setfocus killfocus timer menu windowinit(root) dblclick">
             <Attribute name="mousechild" default="true" type="BOOL" comment="本控件的子控件是否可以响应用户操作,如(true)"/>
@@ -241,8 +244,6 @@
             <Attribute name="valign" default="center" type="STRING" comment="文字纵向对齐方式,取值top、center、bottom"/>
             <Attribute name="endellipsis" default="false" type="BOOL" comment="句末显示不全是否使用...代替,如(true)"/>
             <Attribute name="font" default="-1" type="INT" comment="字体id,如(0)"/>
-            <Attribute name="textcolor" default="#00000000" type="DWORD" comment="字体颜色，0表示使用默认字体颜色,如(#FFFF0000)"/>
-            <Attribute name="disabledtextcolor" default="#00000000" type="DWORD" comment="disabled字体颜色，0表示使用默认disabled字体颜色,如(#FFFF0000)"/>
             <Attribute name="multiline" default="true" type="BOOL" comment="是否使用多行,如(true)"/>
             <Attribute name="showhtml" default="false" type="BOOL" comment="是否使用类html富文本绘制,如(false)"/>
             <Attribute name="autowidth" default="false" type="BOOL" comment="是否自动计算宽度"/>
@@ -445,7 +446,6 @@
             <Attribute name="endellipsis" default="false" type="BOOL" comment="句末显示不全是否使用...代替,如(true)"/>
             <Attribute name="multiline" default="true" type="BOOL" comment="是否使用多行,如(true)"/>
             <Attribute name="font" default="-1" type="INT" comment="字体id,如(0)"/>
-            <Attribute name="textcolor" default="#00000000" type="DWORD" comment="字体颜色，0表示使用默认字体颜色,如(#FFFF0000)"/>
             <Attribute name="showhtml" default="false" type="BOOL" comment="是否使用类html富文本绘制,如(false)"/>
             <Attribute name="normalimage" default="" type="STRING" comment="普通状态图片"/>
             <Attribute name="hotimage" default="" type="STRING" comment="鼠标悬浮的状态图片"/>
@@ -493,7 +493,6 @@
             <Attribute name="password" default="false" type="BOOL" comment="是否显示密码符,如(true)"/>
             <Attribute name="align" default="left" type="STRING" comment="文字对齐方式,取值left、right、cente，如(center)"/>
             <Attribute name="font" default="-1" type="INT" comment="字体id,如(0)"/>
-            <Attribute name="textcolor" default="#00000000" type="DWORD" comment="字体颜色，0表示使用默认字体颜色，如(#FFFF0000)"/>
             <!-- 扩展属性 -->
             <Attribute name="tiptext" default="" type="STRING" comment="默认提示信息,内容不空时消失"/>
             <Attribute name="tipcolor" default="#FFBAC0C5" type="DWORD" comment="默认提示信息的颜色,如(#FFBAC0C5)"/>

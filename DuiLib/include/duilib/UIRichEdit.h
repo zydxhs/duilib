@@ -17,6 +17,7 @@ public:
     virtual LPVOID GetInterface(LPCTSTR pstrName) override;
     virtual UINT GetControlFlags() const override;
 
+    virtual void SetEnabled(bool bEnable = true) override;
     virtual CDuiString GetText() const override;
     virtual void SetText(LPCTSTR pstrText) override;
     bool IsWantTab();
@@ -38,8 +39,8 @@ public:
     void SetFont(LPCTSTR pStrFontName, int nSize, bool bBold, bool bUnderline, bool bItalic);
     LONG GetWinStyle();
     void SetWinStyle(LONG lStyle);
-    DWORD GetTextColor();
-    void SetTextColor(DWORD dwTextColor);
+    virtual void SetTextColor(DWORD dwTextColor) override;
+    virtual void SetDisabledTextColor(DWORD dwTextColor) override;
     int GetLimitText();
     void SetLimitText(int iChars);
     long GetTextLength(DWORD dwFlags = GTL_DEFAULT) const;
@@ -147,7 +148,6 @@ protected:
     bool m_bRich;
     bool m_bReadOnly;
     bool m_bWordWrap;
-    DWORD m_dwTextColor;
     int m_iFont;
     int m_iLimitText;
     LONG m_lTwhStyle;
