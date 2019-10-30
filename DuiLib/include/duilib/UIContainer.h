@@ -115,10 +115,10 @@ public:
     virtual CScrollBarUI *GetVerticalScrollBar() const;
     virtual CScrollBarUI *GetHorizontalScrollBar() const;
 
-    int FindItemByTag(UINT_PTR pTag);
-    int FindItemByUserData(LPCTSTR pstrText);
-    CControlUI *GetItemByTag(UINT_PTR pTag);
-    CControlUI *GetItemByUserData(LPCTSTR pstrText);
+    int FindItemByTag(UINT_PTR pTag);                   // 返回 item 索引，找不到返回 -1
+    int FindItemByUserData(LPCTSTR pstrText);           // 返回 item 索引，找不到返回 -1
+    CControlUI *GetItemByTag(UINT_PTR pTag);            // 返回 item 指针，找不到返回 NULL
+    CControlUI *GetItemByUserData(LPCTSTR pstrText);    // 返回 item 指针，找不到返回 NULL
 
 protected:
     virtual void SetFloatPos(int iIndex);

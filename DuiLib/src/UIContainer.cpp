@@ -1584,7 +1584,7 @@ void CContainerUI::ReloadText(void)
 
 int CContainerUI::FindItemByTag(UINT_PTR pTag)
 {
-    int i = 0;
+    int i = -1;
 
     for (i = m_items.GetSize() - 1; i >= 0; --i)
     {
@@ -1596,7 +1596,7 @@ int CContainerUI::FindItemByTag(UINT_PTR pTag)
 
 int CContainerUI::FindItemByUserData(LPCTSTR pstrText)
 {
-    int i = 0;
+    int i = -1;
 
     for (i = m_items.GetSize() - 1; i >= 0; --i)
     {
@@ -1608,28 +1608,26 @@ int CContainerUI::FindItemByUserData(LPCTSTR pstrText)
 
 DuiLib::CControlUI *CContainerUI::GetItemByTag(UINT_PTR pTag)
 {
-    CControlUI *pItem = NULL;
-
     for (int i = m_items.GetSize() - 1; i >= 0; --i)
     {
         CControlUI *pCtrl = static_cast<CControlUI *>(m_items[i]);
-        pItem = (pCtrl->GetTag() == pTag) ? pCtrl : NULL;
+
+        if (pCtrl->GetTag() == pTag) { return pCtrl; }
     }
 
-    return pItem;
+    return NULL;
 }
 
 DuiLib::CControlUI *CContainerUI::GetItemByUserData(LPCTSTR pstrText)
 {
-    CControlUI *pItem = NULL;
-
     for (int i = m_items.GetSize() - 1; i >= 0; --i)
     {
         CControlUI *pCtrl = static_cast<CControlUI *>(m_items[i]);
-        pItem = (pCtrl->GetUserData() == pstrText) ? pCtrl : NULL;
+
+        if (pCtrl->GetUserData() == pstrText) { return pCtrl; }
     }
 
-    return pItem;
+    return NULL;
 }
 
 bool CContainerUI::IsEnabled() const
