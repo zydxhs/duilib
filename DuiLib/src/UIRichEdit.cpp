@@ -2371,15 +2371,16 @@ bool CRichEditUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl
             int nWidth = rcPaint.right - rcPaint.left;
             LPBYTE pBits = (LPBYTE)bmDst.bmBits;
             pBits += rt.top * nWidth * 4;
+            BYTE byAlpha = 255;
+
+            if (rt.left == rcPaint.left && rt.top == rcPaint.top && rt.right == rcPaint.right && rt.bottom == rcPaint.bottom)
+            { byAlpha = (m_dwBackColor >> 24); }
 
             for (int y = rt.top; y < rt.bottom; ++y, pBits += nWidth * 4)
             {
-                for (int x = 0; x < rt.right; ++x)
+                for (int x = 0, nOffset = 0; x < rt.right; ++x, nOffset += 4)
                 {
-                    int nOffset = x * 4;
-
-                    if (pBits[nOffset + 3] == 0 && (pBits[0] != 0 || pBits[1] != 0 || pBits[2] != 0)) { pBits[nOffset + 3] = 255; }
-
+                    if (pBits[nOffset + 3] == 0 && (pBits[0] != 0 || pBits[1] != 0 || pBits[2] != 0)) { pBits[nOffset + 3] = byAlpha; }
                 }
             }
         }

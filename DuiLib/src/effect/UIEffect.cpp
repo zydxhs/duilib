@@ -5,13 +5,13 @@
 namespace DuiLib {
 
 //////////////////////////////////////////////////////////////////////////
-void RestoreAlphaColor(LPBYTE pBits, int bitsWidth, const RECT &rc)
+void RestoreAlphaColor(LPBYTE pBits, int bitsWidth, const RECT &rc, BYTE byAlpha)
 {
     for (int i = rc.top; i < rc.bottom; ++i)
     {
         for (int j = rc.left; j < rc.right; ++j)
         {
-            if ((pBits[3] == 0) && (pBits[0] != 0 || pBits[1] != 0 || pBits[2] != 0)) { pBits[3] = 255; }
+            if ((pBits[3] == 0) && (pBits[0] != 0 || pBits[1] != 0 || pBits[2] != 0)) { pBits[3] = byAlpha; }
 
             pBits += 4;
         }
@@ -63,12 +63,19 @@ bool TAniParam::Init(CControlUI *pCtrl)
     pBmpData = (BYTE *)bmDst.bmBits;
 
     //修补一下Alpha通道,一些控件(Richedit)会让Alpha为0
+    BYTE byAlpha = 255;
+
+    if (0 == _tcscmp(DUI_CTR_RICHEDIT, pCtrl->GetClass()))
+    {
+        byAlpha = (pCtrl->GetBkColor() >> 24);
+    }
+
     //RECT rcRestore = rcCtrl;
     //RestoreAlphaColor((LPBYTE)bmDst.bmBits, bmDst.bmWidth, &rcRestore);
     rcCtrl.left = rcCtrl.top = 0;
     rcCtrl.right = bmDst.bmWidth;
     rcCtrl.bottom = bmDst.bmHeight;
-    RestoreAlphaColor((LPBYTE)bmDst.bmBits, bmDst.bmWidth, rcCtrl);
+    RestoreAlphaColor((LPBYTE)bmDst.bmBits, bmDst.bmWidth, rcCtrl, byAlpha);
 
     memcpy(pBmpDataCopy, pBmpData, nBmpBytes);
     pEffect->InitEffectParam(this);
