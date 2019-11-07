@@ -478,7 +478,9 @@ LRESULT CEditWnd::OnEditChanged(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPara
     }
 
     // 正则过滤
-    if (m_pOwner->IsRegExpFilter())
+    // 2019-11-06 zhuyadong 解决编辑框正则匹配导致程序异常的问题
+    // 原因描述：输入一个字符，正则匹配失败，恢复编辑框为空字符，而空字符正则匹配仍然失败，如此无穷循环最终程序栈溢出而崩溃。
+    if (m_pOwner->IsRegExpFilter() && m_pOwner->m_sText != sTxt)
     {
         if (m_pOwner->IsRegExpMatch(sTxt))
         {

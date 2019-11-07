@@ -723,7 +723,7 @@ template <class CHART> int CBackrefElxT <CHART>::Match(CContext *pContext) const
 
     if (m_brightleft)
     {
-        // 2019-04-22 zhuydong 仅用于编辑框正则过滤，比较到字符串结尾。
+        // 2019-04-22 zhuyadong 仅用于编辑框正则过滤，比较到字符串结尾。
         // if (npos < slen) { return 0; }
 
         if (m_bignorecase) { bsucc = !refstr.nCompareNoCase(pcsz + (npos - slen), tlen); }
@@ -746,7 +746,7 @@ template <class CHART> int CBackrefElxT <CHART>::Match(CContext *pContext) const
     }
     else
     {
-        // 2019-04-22 zhuydong 仅用于编辑框正则过滤，比较到字符串结尾。
+        // 2019-04-22 zhuyadong 仅用于编辑框正则过滤，比较到字符串结尾。
         // if (npos + slen > tlen) { return 0; }
 
         if (m_bignorecase) { bsucc = !refstr.nCompareNoCase(pcsz + npos, tlen); }
@@ -1449,7 +1449,7 @@ template <class CHART> int CStringElxT <CHART>::Match(CContext *pContext) const
 
     if (m_brightleft)
     {
-        // 2019-04-22 zhuydong 仅用于编辑框正则过滤，比较到字符串结尾。
+        // 2019-04-22 zhuyadong 仅用于编辑框正则过滤，比较到字符串结尾。
         // if (npos < slen) { return 0; }
 
         if (m_bignorecase) { bsucc = !m_szPattern.nCompareNoCase(pcsz + (npos - slen), tlen); }
@@ -1464,7 +1464,7 @@ template <class CHART> int CStringElxT <CHART>::Match(CContext *pContext) const
     }
     else
     {
-        // 2019-04-22 zhuydong 仅用于编辑框正则过滤，比较到字符串结尾。
+        // 2019-04-22 zhuyadong 仅用于编辑框正则过滤，比较到字符串结尾。
         // if (npos + slen > tlen) { return 0; }
 
         if (m_bignorecase) { bsucc = !m_szPattern.nCompareNoCase(pcsz + npos, tlen); }
@@ -3510,13 +3510,13 @@ template <class CHART> MatchResult CRegexpT <CHART>::MatchExact(const CHART *tst
 }
 
 template <class CHART> MatchResult CRegexpT <CHART>::Match(const CHART *tstring, int start,
-        CContext *pContext) const
+                                                           CContext *pContext) const
 {
     return Match(tstring, CBufferRefT<CHART>(tstring).GetSize(), start, pContext);
 }
 
 template <class CHART> MatchResult CRegexpT <CHART>::Match(const CHART *tstring, int length, int start,
-        CContext *pContext) const
+                                                           CContext *pContext) const
 {
     if (m_builder.m_pTopElx == 0) { return 0; }
 
