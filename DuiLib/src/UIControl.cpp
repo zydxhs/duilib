@@ -171,14 +171,14 @@ void CControlUI::SetCover(CControlUI *pControl)
     if (m_pCover != NULL) { m_pCover->Delete(); }
 
     m_pCover = pControl;
-
-    if (m_pCover != NULL)
-    {
-        m_pManager->InitControls(m_pCover, this);
-
-        if (IsVisible()) { NeedUpdate(); }
-        else { pControl->SetInternVisible(false); }
-    }
+    // zhuyadong 2019-11-22 SetCover 被调用时，m_pManager 指针实际上为空，在访问到 m_pManager 的成员变量时可能引发异常
+    // if (m_pCover != NULL)
+    // {
+    //     m_pManager->InitControls(m_pCover, this);
+    //
+    //     if (IsVisible()) { NeedUpdate(); }
+    //     else { pControl->SetInternVisible(false); }
+    // }
 }
 
 CDuiString CControlUI::GetText() const
