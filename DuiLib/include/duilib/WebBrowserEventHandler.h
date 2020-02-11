@@ -8,11 +8,11 @@ class CWebBrowserEventHandler
 {
 public:
     CWebBrowserEventHandler() {}
-    ~CWebBrowserEventHandler() {}
+    virtual ~CWebBrowserEventHandler() {}
 
     virtual void BeforeNavigate2(IDispatch *pDisp, VARIANT *&url, VARIANT *&Flags, VARIANT *&TargetFrameName,
                                  VARIANT *&PostData, VARIANT *&Headers, VARIANT_BOOL *&Cancel) {}
-    virtual void NavigateError(IDispatch *pDisp, VARIANT*&url, VARIANT *&TargetFrameName, VARIANT *&StatusCode,
+    virtual void NavigateError(IDispatch *pDisp, VARIANT *&url, VARIANT *&TargetFrameName, VARIANT *&StatusCode,
                                VARIANT_BOOL *&Cancel) {}
     virtual void NavigateComplete2(IDispatch *pDisp, VARIANT *&url) {}
     virtual void DocumentComplete(IDispatch *pDisp, VARIANT *&url) {}

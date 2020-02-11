@@ -101,8 +101,7 @@ BOOL Save(Image *pImage, LPCWSTR lpszFileName, LPCWSTR format)
     ImageCodecInfo *pCodecInfo = NULL;
     UINT nNum = 0, nSize = 0;
     GetImageEncodersSize(&nNum, &nSize);
-
-    if (nSize < 0) { return FALSE; }
+    // if (nSize < 0) { return FALSE; }
 
     pCodecInfo = new ImageCodecInfo[nSize];
 
@@ -3454,8 +3453,8 @@ void CClockWipeEffect::ComputeOneFrame(TAniParam *pData)
             {
                 path.AddLine((int)rcClient.left, (int)rcClient.top, (int)ptRotate.X, (int)rcClient.top);
                 path.AddLine((int)ptRotate.X, (int)rcClient.top, (int)ptCenter.X, (int)ptCenter.Y);
-                path.AddLine((int)ptCenter.X, (int)ptCenter.Y, (int)ptIntersect.x, (int)ptIntersect.y);
-                path.AddLine((int)ptIntersect.x, (int)ptIntersect.y, (int)rcClient.right, (int)rcClient.top);
+                path.AddLine((int)ptCenter.X, (int)ptCenter.Y, (int)ptIntersect.x, (int)ptIntersect.y); //lint !e67
+                path.AddLine((int)ptIntersect.x, (int)ptIntersect.y, (int)rcClient.right, (int)rcClient.top); //lint !e67
                 path.AddLine((int)rcClient.right, (int)rcClient.top, (int)rcClient.right, (int)rcClient.bottom);
                 path.AddLine((int)rcClient.right, (int)rcClient.bottom, (int)rcClient.left, (int)rcClient.bottom);
                 path.AddLine((int)rcClient.left, (int)rcClient.bottom, (int)rcClient.left, (int)rcClient.top);
@@ -3465,8 +3464,8 @@ void CClockWipeEffect::ComputeOneFrame(TAniParam *pData)
             {
                 path.AddLine((int)rcClient.left, (int)rcClient.top, (int)ptRotate.X, (int)rcClient.top);
                 path.AddLine((int)ptRotate.X, (int)rcClient.top, (int)ptCenter.X, (int)ptCenter.Y);
-                path.AddLine((int)ptCenter.X, (int)ptCenter.Y, (int)ptIntersect.x, (int)ptIntersect.y);
-                path.AddLine((int)ptIntersect.x, (int)ptIntersect.y, (int)rcClient.right, (int)rcClient.bottom);
+                path.AddLine((int)ptCenter.X, (int)ptCenter.Y, (int)ptIntersect.x, (int)ptIntersect.y); //lint !e67
+                path.AddLine((int)ptIntersect.x, (int)ptIntersect.y, (int)rcClient.right, (int)rcClient.bottom); //lint !e67
                 path.AddLine((int)rcClient.right, (int)rcClient.bottom, (int)rcClient.left, (int)rcClient.bottom);
                 path.AddLine((int)rcClient.left, (int)rcClient.bottom, (int)rcClient.left, (int)rcClient.top);
 
@@ -3475,16 +3474,16 @@ void CClockWipeEffect::ComputeOneFrame(TAniParam *pData)
             {
                 path.AddLine((int)rcClient.left, (int)rcClient.top, (int)ptRotate.X, (int)rcClient.top);
                 path.AddLine((int)ptRotate.X, (int)rcClient.top, (int)ptCenter.X, (int)ptCenter.Y);
-                path.AddLine((int)ptCenter.X, (int)ptCenter.Y, (int)ptIntersect.x, (int)ptIntersect.y);
-                path.AddLine((int)ptIntersect.x, (int)ptIntersect.y, (int)rcClient.left, (int)rcClient.bottom);
+                path.AddLine((int)ptCenter.X, (int)ptCenter.Y, (int)ptIntersect.x, (int)ptIntersect.y); //lint !e67
+                path.AddLine((int)ptIntersect.x, (int)ptIntersect.y, (int)rcClient.left, (int)rcClient.bottom); //lint !e67
                 path.AddLine((int)rcClient.left, (int)rcClient.bottom, (int)rcClient.left, (int)rcClient.top);
             }
             else if (GetSegIntersect(lineRotate, lineLeft, ptIntersect))
             {
                 path.AddLine((int)rcClient.left, (int)rcClient.top, (int)ptRotate.X, (int)rcClient.top);
                 path.AddLine((int)ptRotate.X, (int)rcClient.top, (int)ptCenter.X, (int)ptCenter.Y);
-                path.AddLine((int)ptCenter.X, (int)ptCenter.Y, (int)ptIntersect.x, (int)ptIntersect.y);
-                path.AddLine((int)ptIntersect.x, (int)ptIntersect.y, (int)rcClient.left, (int)rcClient.top);
+                path.AddLine((int)ptCenter.X, (int)ptCenter.Y, (int)ptIntersect.x, (int)ptIntersect.y); //lint !e67
+                path.AddLine((int)ptIntersect.x, (int)ptIntersect.y, (int)rcClient.left, (int)rcClient.top); //lint !e67
             }
 
             Bitmap *pBitmap = new Bitmap(width, height, width * 4, PixelFormat32bppARGB, m_pBits);
@@ -3525,8 +3524,8 @@ void CClockWipeEffect::ComputeOneFrame(TAniParam *pData)
             {
                 path.AddLine((int)rcClient.left, (int)rcClient.top, (int)ptRotate.X, (int)rcClient.top);
                 path.AddLine((int)ptRotate.X, (int)rcClient.top, (int)ptCenter.X, (int)ptCenter.Y);
-                path.AddLine((int)ptCenter.X, (int)ptCenter.Y, (int)ptIntersect.x, (int)ptIntersect.y);
-                path.AddLine((int)ptIntersect.x, (int)ptIntersect.y, (int)rcClient.right, (int)rcClient.top);
+                path.AddLine((int)ptCenter.X, (int)ptCenter.Y, (int)ptIntersect.x, (int)ptIntersect.y); //lint !e67
+                path.AddLine((int)ptIntersect.x, (int)ptIntersect.y, (int)rcClient.right, (int)rcClient.top); //lint !e67
                 path.AddLine((int)rcClient.right, (int)rcClient.top, (int)rcClient.right, (int)rcClient.bottom);
                 path.AddLine((int)rcClient.right, (int)rcClient.bottom, (int)rcClient.left, (int)rcClient.bottom);
                 path.AddLine((int)rcClient.left, (int)rcClient.bottom, (int)rcClient.left, (int)rcClient.top);
@@ -3536,8 +3535,8 @@ void CClockWipeEffect::ComputeOneFrame(TAniParam *pData)
             {
                 path.AddLine((int)rcClient.left, (int)rcClient.top, (int)ptRotate.X, (int)rcClient.top);
                 path.AddLine((int)ptRotate.X, (int)rcClient.top, (int)ptCenter.X, (int)ptCenter.Y);
-                path.AddLine((int)ptCenter.X, (int)ptCenter.Y, (int)ptIntersect.x, (int)ptIntersect.y);
-                path.AddLine((int)ptIntersect.x, (int)ptIntersect.y, (int)rcClient.right, (int)rcClient.bottom);
+                path.AddLine((int)ptCenter.X, (int)ptCenter.Y, (int)ptIntersect.x, (int)ptIntersect.y); //lint !e67
+                path.AddLine((int)ptIntersect.x, (int)ptIntersect.y, (int)rcClient.right, (int)rcClient.bottom); //lint !e67
                 path.AddLine((int)rcClient.right, (int)rcClient.bottom, (int)rcClient.left, (int)rcClient.bottom);
                 path.AddLine((int)rcClient.left, (int)rcClient.bottom, (int)rcClient.left, (int)rcClient.top);
 
@@ -3546,16 +3545,16 @@ void CClockWipeEffect::ComputeOneFrame(TAniParam *pData)
             {
                 path.AddLine((int)rcClient.left, (int)rcClient.top, (int)ptRotate.X, (int)rcClient.top);
                 path.AddLine((int)ptRotate.X, (int)rcClient.top, (int)ptCenter.X, (int)ptCenter.Y);
-                path.AddLine((int)ptCenter.X, (int)ptCenter.Y, (int)ptIntersect.x, (int)ptIntersect.y);
-                path.AddLine((int)ptIntersect.x, (int)ptIntersect.y, (int)rcClient.left, (int)rcClient.bottom);
+                path.AddLine((int)ptCenter.X, (int)ptCenter.Y, (int)ptIntersect.x, (int)ptIntersect.y); //lint !e67
+                path.AddLine((int)ptIntersect.x, (int)ptIntersect.y, (int)rcClient.left, (int)rcClient.bottom); //lint !e67
                 path.AddLine((int)rcClient.left, (int)rcClient.bottom, (int)rcClient.left, (int)rcClient.top);
             }
             else if (GetSegIntersect(lineRotate, lineLeft, ptIntersect))
             {
                 path.AddLine((int)rcClient.left, (int)rcClient.top, (int)ptRotate.X, (int)rcClient.top);
                 path.AddLine((int)ptRotate.X, (int)rcClient.top, (int)ptCenter.X, (int)ptCenter.Y);
-                path.AddLine((int)ptCenter.X, (int)ptCenter.Y, (int)ptIntersect.x, (int)ptIntersect.y);
-                path.AddLine((int)ptIntersect.x, (int)ptIntersect.y, (int)rcClient.left, (int)rcClient.top);
+                path.AddLine((int)ptCenter.X, (int)ptCenter.Y, (int)ptIntersect.x, (int)ptIntersect.y); //lint !e67
+                path.AddLine((int)ptIntersect.x, (int)ptIntersect.y, (int)rcClient.left, (int)rcClient.top); //lint !e67
             }
 
             Rect rcTemp(0, 0, width, height);
@@ -3675,39 +3674,39 @@ void CPinWheelEffect::ComputeOneFrame(TAniParam *pData)
 
             path.AddLine(ptSections[0].x, ptSections[0].y, ptCenter.X, ptCenter.Y);
             path.AddLine((int)ptCenter.X, (int)ptCenter.Y, ptTop.X, ptTop.Y);
-            path.AddLine(ptTop.X, ptTop.Y, (int)ptSections[0].x, (int)ptSections[0].y);
+            path.AddLine(ptTop.X, ptTop.Y, (int)ptSections[0].x, (int)ptSections[0].y); //lint !e67
 
             path.AddLine(ptSections[1].x, ptSections[1].y, ptCenter.X, ptCenter.Y);
             path.AddLine((int)ptCenter.X, (int)ptCenter.Y, ptRightTop.X, ptRightTop.Y);
-            path.AddLine(ptRightTop.X, ptRightTop.Y, (int)ptSections[1].x, (int)ptSections[1].y);
+            path.AddLine(ptRightTop.X, ptRightTop.Y, (int)ptSections[1].x, (int)ptSections[1].y); //lint !e67
 
             path.StartFigure();
 
             path.AddLine(ptSections[2].x, ptSections[2].y, ptCenter.X, ptCenter.Y);
             path.AddLine((int)ptCenter.X, (int)ptCenter.Y, ptRight.X, ptRight.Y);
-            path.AddLine(ptRight.X, ptRight.Y, (int)ptSections[2].x, (int)ptSections[2].y);
+            path.AddLine(ptRight.X, ptRight.Y, (int)ptSections[2].x, (int)ptSections[2].y); //lint !e67
 
             path.AddLine(ptSections[3].x, ptSections[3].y, ptCenter.X, ptCenter.Y);
             path.AddLine((int)ptCenter.X, (int)ptCenter.Y, ptRightBottom.X, ptRightBottom.Y);
-            path.AddLine(ptRightBottom.X, ptRightBottom.Y, (int)ptSections[3].x, (int)ptSections[3].y);
+            path.AddLine(ptRightBottom.X, ptRightBottom.Y, (int)ptSections[3].x, (int)ptSections[3].y); //lint !e67
 
             path.StartFigure();
             path.AddLine(ptSections[7].x, ptSections[7].y, ptCenter.X, ptCenter.Y);
             path.AddLine((int)ptCenter.X, (int)ptCenter.Y, ptBottom.X, ptBottom.Y);
-            path.AddLine(ptBottom.X, ptBottom.Y, (int)ptSections[7].x, (int)ptSections[7].y);
+            path.AddLine(ptBottom.X, ptBottom.Y, (int)ptSections[7].x, (int)ptSections[7].y); //lint !e67
 
             path.AddLine(ptSections[6].x, ptSections[6].y, ptCenter.X, ptCenter.Y);
             path.AddLine((int)ptCenter.X, (int)ptCenter.Y, ptLeftBottom.X, ptLeftBottom.Y);
-            path.AddLine(ptLeftBottom.X, ptLeftBottom.Y, (int)ptSections[6].x, (int)ptSections[6].y);
+            path.AddLine(ptLeftBottom.X, ptLeftBottom.Y, (int)ptSections[6].x, (int)ptSections[6].y); //lint !e67
 
             path.StartFigure();
             path.AddLine(ptSections[5].x, ptSections[5].y, ptCenter.X, ptCenter.Y);
             path.AddLine((int)ptCenter.X, (int)ptCenter.Y, ptLeft.X, ptLeft.Y);
-            path.AddLine(ptLeft.X, ptLeft.Y, (int)ptSections[5].x, (int)ptSections[5].y);
+            path.AddLine(ptLeft.X, ptLeft.Y, (int)ptSections[5].x, (int)ptSections[5].y); //lint !e67
 
             path.AddLine(ptSections[4].x, ptSections[4].y, ptCenter.X, ptCenter.Y);
             path.AddLine((int)ptCenter.X, (int)ptCenter.Y, ptLeftTop.X, ptLeftTop.Y);
-            path.AddLine(ptLeftTop.X, ptLeftTop.Y, (int)ptSections[4].x, (int)ptSections[4].y);
+            path.AddLine(ptLeftTop.X, ptLeftTop.Y, (int)ptSections[4].x, (int)ptSections[4].y); //lint !e67
 
             //path.CloseAllFigures();
 
@@ -3760,39 +3759,39 @@ void CPinWheelEffect::ComputeOneFrame(TAniParam *pData)
 
             path.AddLine(ptSections[0].x, ptSections[0].y, ptCenter.X, ptCenter.Y);
             path.AddLine((int)ptCenter.X, (int)ptCenter.Y, ptTop.X, ptTop.Y);
-            path.AddLine(ptTop.X, ptTop.Y, (int)ptSections[0].x, (int)ptSections[0].y);
+            path.AddLine(ptTop.X, ptTop.Y, (int)ptSections[0].x, (int)ptSections[0].y); //lint !e67
 
             path.AddLine(ptSections[1].x, ptSections[1].y, ptCenter.X, ptCenter.Y);
             path.AddLine((int)ptCenter.X, (int)ptCenter.Y, ptRightTop.X, ptRightTop.Y);
-            path.AddLine(ptRightTop.X, ptRightTop.Y, (int)ptSections[1].x, (int)ptSections[1].y);
+            path.AddLine(ptRightTop.X, ptRightTop.Y, (int)ptSections[1].x, (int)ptSections[1].y); //lint !e67
 
             path.StartFigure();
 
             path.AddLine(ptSections[2].x, ptSections[2].y, ptCenter.X, ptCenter.Y);
             path.AddLine((int)ptCenter.X, (int)ptCenter.Y, ptRight.X, ptRight.Y);
-            path.AddLine(ptRight.X, ptRight.Y, (int)ptSections[2].x, (int)ptSections[2].y);
+            path.AddLine(ptRight.X, ptRight.Y, (int)ptSections[2].x, (int)ptSections[2].y); //lint !e67
 
             path.AddLine(ptSections[3].x, ptSections[3].y, ptCenter.X, ptCenter.Y);
             path.AddLine((int)ptCenter.X, (int)ptCenter.Y, ptRightBottom.X, ptRightBottom.Y);
-            path.AddLine(ptRightBottom.X, ptRightBottom.Y, (int)ptSections[3].x, (int)ptSections[3].y);
+            path.AddLine(ptRightBottom.X, ptRightBottom.Y, (int)ptSections[3].x, (int)ptSections[3].y); //lint !e67
 
             path.StartFigure();
             path.AddLine(ptSections[7].x, ptSections[7].y, ptCenter.X, ptCenter.Y);
             path.AddLine((int)ptCenter.X, (int)ptCenter.Y, ptBottom.X, ptBottom.Y);
-            path.AddLine(ptBottom.X, ptBottom.Y, (int)ptSections[7].x, (int)ptSections[7].y);
+            path.AddLine(ptBottom.X, ptBottom.Y, (int)ptSections[7].x, (int)ptSections[7].y); //lint !e67
 
             path.AddLine(ptSections[6].x, ptSections[6].y, ptCenter.X, ptCenter.Y);
             path.AddLine((int)ptCenter.X, (int)ptCenter.Y, ptLeftBottom.X, ptLeftBottom.Y);
-            path.AddLine(ptLeftBottom.X, ptLeftBottom.Y, (int)ptSections[6].x, (int)ptSections[6].y);
+            path.AddLine(ptLeftBottom.X, ptLeftBottom.Y, (int)ptSections[6].x, (int)ptSections[6].y); //lint !e67
 
             path.StartFigure();
             path.AddLine(ptSections[5].x, ptSections[5].y, ptCenter.X, ptCenter.Y);
             path.AddLine((int)ptCenter.X, (int)ptCenter.Y, ptLeft.X, ptLeft.Y);
-            path.AddLine(ptLeft.X, ptLeft.Y, (int)ptSections[5].x, (int)ptSections[5].y);
+            path.AddLine(ptLeft.X, ptLeft.Y, (int)ptSections[5].x, (int)ptSections[5].y); //lint !e67
 
             path.AddLine(ptSections[4].x, ptSections[4].y, ptCenter.X, ptCenter.Y);
             path.AddLine((int)ptCenter.X, (int)ptCenter.Y, ptLeftTop.X, ptLeftTop.Y);
-            path.AddLine(ptLeftTop.X, ptLeftTop.Y, (int)ptSections[4].x, (int)ptSections[4].y);
+            path.AddLine(ptLeftTop.X, ptLeftTop.Y, (int)ptSections[4].x, (int)ptSections[4].y); //lint !e67
 
             //path.CloseAllFigures();
 

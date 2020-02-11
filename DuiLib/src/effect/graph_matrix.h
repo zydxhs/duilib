@@ -131,6 +131,7 @@ public:
 
     inline void MapVector(Vector &vec)
     {
+        //lint --e{7}
         _asm
         {
             mov ecx, vec;

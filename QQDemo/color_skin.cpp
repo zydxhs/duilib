@@ -27,8 +27,8 @@ ColorSkinWindow::ColorSkinWindow(MainFrame* main_frame, RECT rcParentWindow)
 	ShowWindow(true);
 }
 
-LPCTSTR ColorSkinWindow::GetWindowClassName() const 
-{ 
+LPCTSTR ColorSkinWindow::GetWindowClassName() const
+{
 	return _T("ColorSkinWindow");
 }
 
@@ -126,7 +126,7 @@ void ColorSkinWindow::Notify(TNotifyUI& msg)
 void ColorSkinWindow::InitWindow()
 {
     SIZE size = m_pm.GetInitSize();
-	MoveWindow(m_hWnd, parent_window_rect_.right - size.cx, parent_window_rect_.top, size.cx, size.cy, FALSE);
+	MoveWindow(parent_window_rect_.right - size.cx, parent_window_rect_.top, size.cx, size.cy, FALSE);
 }
 
 CDuiString ColorSkinWindow::GetSkinFile()

@@ -73,7 +73,7 @@ void CButtonUI::DoEvent(TEventUI &event)
 
                 // 2018-07-15 如果启用了响应频率控制，并且处理于可用状态
                 // 有可能用户响应事件后，设置按钮为禁用，此时就不能启动该特性，避免超时后置按钮为可用状态
-                if (0 != m_byDisableSeconds && IsEnabled())
+                if (0 != m_byDisableSeconds && IsEnabled() && NULL != m_pManager)
                 {
                     m_byEllapseSeconds = 0;
                     m_pManager->SetTimer(this, TIMERID_DISABLE, ELLAPSE_DISABLE);
@@ -130,7 +130,7 @@ void CButtonUI::DoEvent(TEventUI &event)
 
     if ((event.Type == UIEVENT_DBLCLICK || event.Type == UIEVENT_CLICK) && IsEnabled())
     {
-        if (::PtInRect(&m_rcItem, event.ptMouse))
+        if (NULL != m_pManager && ::PtInRect(&m_rcItem, event.ptMouse))
         {
             // // 2018-08-18 zhuyadong 添加特效。单击特效
             if (event.Type == UIEVENT_CLICK)         { StartEffect(TRIGGER_CLICK); Activate(); }
@@ -152,7 +152,7 @@ void CButtonUI::DoEvent(TEventUI &event)
 
     if (event.Type == UIEVENT_CONTEXTMENU)
     {
-        if (IsContextMenuUsed() && IsEnabled())
+        if (NULL != m_pManager && IsContextMenuUsed() && IsEnabled())
         {
             ReleaseCapture();
             m_pManager->SendNotify(this, DUI_MSGTYPE_MENU, event.wParam, event.lParam, true);
@@ -177,13 +177,13 @@ void CButtonUI::DoEvent(TEventUI &event)
             }
         }
 
-        if (GetFadeAlphaDelta() > 0)
+        if (NULL != m_pManager && GetFadeAlphaDelta() > 0)
         {
             m_pManager->SetTimer(this, TIMERID_FADE, ELLAPSE_FADE);
         }
     }
 
-    if (event.Type == UIEVENT_MOUSELEAVE)
+    if (event.Type == UIEVENT_MOUSELEAVE && NULL != m_pManager)
     {
         if (!::PtInRect(&m_rcItem, event.ptMouse))
         {
@@ -217,7 +217,7 @@ void CButtonUI::DoEvent(TEventUI &event)
         return;
     }
 
-    if (event.Type == UIEVENT_TIMER)
+    if (event.Type == UIEVENT_TIMER && NULL != m_pManager)
     {
         if (event.wParam == TIMERID_FADE)
         {

@@ -16,7 +16,7 @@ class CActiveXCtrl;
 class CActiveXWnd : public CWindowWnd
 {
 public:
-    CActiveXWnd() : m_iLayeredTick(0), m_bDrawCaret(false) {}
+    CActiveXWnd() : m_pOwner(NULL), m_iLayeredTick(0), m_bDrawCaret(false) {}
     HWND Init(CActiveXCtrl *pOwner, HWND hWndParent);
 
     LPCTSTR GetWindowClassName() const;
@@ -1462,13 +1462,23 @@ bool CActiveXUI::DoCreateControl()
     // Activate and done...
     m_pUnk->SetHostNames(OLESTR("UIActiveX"), NULL);
 
-    if (m_pManager != NULL && m_bDelayCreate) { m_pManager->SendNotify((CControlUI *)this, DUI_MSGTYPE_SHOWACTIVEX, 0, 0, false); }
-
-    if ((dwMiscStatus & OLEMISC_INVISIBLEATRUNTIME) == 0)
+    // if (m_pManager != NULL && m_bDelayCreate) { m_pManager->SendNotify((CControlUI *)this, DUI_MSGTYPE_SHOWACTIVEX, 0, 0, false); }
+    // if ((dwMiscStatus & OLEMISC_INVISIBLEATRUNTIME) == 0)
+    // {
+    //     Hr = m_pUnk->DoVerb(OLEIVERB_INPLACEACTIVATE, NULL, pOleClientSite, 0, m_pManager->GetPaintWindow(),
+    //                         &m_rcItem);
+    //     //::RedrawWindow(m_pManager->GetPaintWindow(), &m_rcItem, NULL, RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE | RDW_INTERNALPAINT | RDW_FRAME);
+    // }
+    if (NULL != m_pManager)
     {
-        Hr = m_pUnk->DoVerb(OLEIVERB_INPLACEACTIVATE, NULL, pOleClientSite, 0, m_pManager->GetPaintWindow(),
-                            &m_rcItem);
-        //::RedrawWindow(m_pManager->GetPaintWindow(), &m_rcItem, NULL, RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE | RDW_INTERNALPAINT | RDW_FRAME);
+        m_bDelayCreate ? m_pManager->SendNotify((CControlUI *)this, DUI_MSGTYPE_SHOWACTIVEX, 0, 0, false) : NULL; //lint !e62
+
+        if ((dwMiscStatus & OLEMISC_INVISIBLEATRUNTIME) == 0)
+        {
+            Hr = m_pUnk->DoVerb(OLEIVERB_INPLACEACTIVATE, NULL, pOleClientSite, 0, m_pManager->GetPaintWindow(),
+                                &m_rcItem);
+            //::RedrawWindow(m_pManager->GetPaintWindow(), &m_rcItem, NULL, RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE | RDW_INTERNALPAINT | RDW_FRAME);
+        }
     }
 
     IObjectWithSite *pSite = NULL;

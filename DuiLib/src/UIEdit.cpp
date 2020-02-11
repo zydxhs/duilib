@@ -249,7 +249,7 @@ LRESULT CEditWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         // 2019-04-24 zhuyadong 仅数字模式，按回车键时立即执行越界检查，并发送文本变化通知
         if (m_pOwner->IsNumberOnly())
         {
-            CheckValidNumber() ? SendTxtChangeNty() : NULL;
+            CheckValidNumber() ? SendTxtChangeNty() : NULL; //lint !e62
         }
 
         m_pOwner->GetManager()->SendNotify(m_pOwner, DUI_MSGTYPE_RETURN);
@@ -343,7 +343,7 @@ LRESULT CEditWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         if (TIMERID_NUM_CHECK == wParam)
         {
             KillTimer(m_hWnd, wParam);
-            CheckValidNumber() ? SendTxtChangeNty() : NULL;
+            CheckValidNumber() ? SendTxtChangeNty() : NULL; //lint !e62
             return 0;
         }
 
@@ -438,7 +438,7 @@ LRESULT CEditWnd::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHa
     // 2019-04-24 zhuyadong 仅数字模式，失去焦点时立即执行越界检查，并发送文本变化通知
     if (m_pOwner->IsNumberOnly())
     {
-        CheckValidNumber() ? SendTxtChangeNty() : NULL;
+        CheckValidNumber() ? SendTxtChangeNty() : NULL; //lint !e62
     }
 
     SendMessage(WM_CLOSE);
@@ -673,7 +673,8 @@ void CEditUI::DoEvent(TEventUI &event)
 
     if (event.Type == UIEVENT_WINDOWSIZE)
     {
-        if (m_pWindow != NULL) { m_pManager->SetFocusNeeded(this); }
+        //if (m_pWindow != NULL) { m_pManager->SetFocusNeeded(this); }
+        if (NULL != m_pManager) { m_pManager->SetFocusNeeded(this); }
     }
 
     if (event.Type == UIEVENT_SCROLLWHEEL)
@@ -1156,7 +1157,7 @@ void CEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if (_tcscmp(pstrName, _T("textcolor1")) == 0) { DUITRACE(_T("不支持属性:textcolor1")); }
     else if (_tcscmp(pstrName, _T("textshadowcolora")) == 0) { DUITRACE(_T("不支持属性:textshadowcolora")); }
     else if (_tcscmp(pstrName, _T("textshadowcolorb")) == 0) { DUITRACE(_T("不支持属性:textshadowcolorb")); }
-    else if (_tcscmp(pstrName, _T("textshadowcolorb")) == 0) { DUITRACE(_T("不支持属性:whitelist，详见 charfilter")); }
+    else if (_tcscmp(pstrName, _T("whitelist")) == 0) { DUITRACE(_T("不支持属性:whitelist，详见 charfilter")); }
     else { CLabelUI::SetAttribute(pstrName, pstrValue); }
 }
 

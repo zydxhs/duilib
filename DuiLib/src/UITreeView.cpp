@@ -260,10 +260,15 @@ bool CTreeNodeUI::AddAt(CControlUI *pControl, int iIndex)
 
     pControl = CalLocation((CTreeNodeUI *)pControl);
 
-    if (pTreeView && pIndexNode)
-    { return pTreeView->AddAt((CTreeNodeUI *)pControl, pIndexNode); }
-    else
-    { return pTreeView->Add((CTreeNodeUI *)pControl); }
+    //if (pTreeView && pIndexNode)
+    //{ return pTreeView->AddAt((CTreeNodeUI *)pControl, pIndexNode); }
+    //else
+    //{ return pTreeView->Add((CTreeNodeUI *)pControl); }
+    if (pTreeView)
+    {
+        if (pIndexNode) { return pTreeView->AddAt((CTreeNodeUI *)pControl, pIndexNode); }
+        else { return pTreeView->Add((CTreeNodeUI *)pControl); }
+    }
 
     return true;
 }
@@ -362,8 +367,8 @@ bool CTreeNodeUI::AddChildNode(CTreeNodeUI *_pTreeNodeUI)
         CTreeNodeUI *pNode = static_cast<CTreeNodeUI *>(mTreeNodes.GetAt(mTreeNodes.GetSize() - 1));
 
         if (!pNode || !pNode->GetLastNode())
-        { nRet = pTreeView->AddAt(_pTreeNodeUI, GetTreeIndex() + 1) >= 0; }
-        else { nRet = pTreeView->AddAt(_pTreeNodeUI, pNode->GetLastNode()->GetTreeIndex() + 1) >= 0; }
+        { nRet = pTreeView->AddAt(_pTreeNodeUI, GetTreeIndex() + 1) >= 0l; }
+        else { nRet = pTreeView->AddAt(_pTreeNodeUI, pNode->GetLastNode()->GetTreeIndex() + 1l) >= 0; }
     }
 
     if (nRet) { mTreeNodes.Add(_pTreeNodeUI); }
@@ -576,11 +581,13 @@ int CTreeNodeUI::GetTreeIndex()
 //************************************
 int CTreeNodeUI::GetNodeIndex()
 {
-    if (!GetParentNode() && !pTreeView) { return -1; }
+    CTreeNodeUI *pNode = GetParentNode();
 
-    if (!GetParentNode() && pTreeView) { return GetTreeIndex(); }
+    if (!pNode && !pTreeView) { return -1; }
 
-    return GetParentNode()->GetTreeNodes().Find(this);
+    if (!pNode && pTreeView) { return GetTreeIndex(); }
+
+    return pNode ? pNode->GetTreeNodes().Find(this) : 0;
 }
 
 //************************************
@@ -800,7 +807,7 @@ bool CTreeViewUI::AddAt(CControlUI *pControl, int iIndex)
 
     if (pTreeNode == NULL) { return false; }
 
-    return AddAt(pTreeNode, iIndex) >= 0;
+    return AddAt(pTreeNode, iIndex) >= 0l;
 }
 
 bool CTreeViewUI::Remove(CControlUI *pControl, bool bDoNotDestroy)
@@ -904,7 +911,7 @@ bool CTreeViewUI::AddAt(CTreeNodeUI *pControl, CTreeNodeUI *_IndexNode)
 
     if (nItemIndex == -1) { return false; }
 
-    return AddAt(pControl, nItemIndex) >= 0;
+    return AddAt(pControl, nItemIndex) >= 0l;
 }
 
 //************************************

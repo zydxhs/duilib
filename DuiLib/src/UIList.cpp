@@ -449,8 +449,8 @@ void CListUI::SetPos(RECT rc, bool bNeedInvalidate)
     RECT rt = pItem ? pItem->GetSubItemPos(m_nColumn, false) : RECT{ 0, 0, 0, 0 };
     rt.left -= m_rcItem.left;   rt.right -= m_rcItem.left;
     rt.top -= m_rcItem.top;     rt.bottom -= m_rcItem.top;
-    (m_pEdit && m_pEdit->IsVisible()) ? m_pEdit->SetPos(rt) : NULL;
-    (m_pCombo && m_pCombo->IsVisible()) ? m_pCombo->SetPos(rt) : NULL;
+    (m_pEdit && m_pEdit->IsVisible()) ? m_pEdit->SetPos(rt) : NULL; //lint !e62
+    (m_pCombo && m_pCombo->IsVisible()) ? m_pCombo->SetPos(rt) : NULL; //lint !e62
 
     if (m_pHeader == NULL) { return; }
 
@@ -1336,13 +1336,12 @@ void CListUI::SetAllItemSelected(bool bSelect, int nColumn)
     }
 
     // 设置表头中的复选框状态
-    if (NULL != m_pHeader)
     {
         CListHeaderItemUI *pHItem = dynamic_cast<CListHeaderItemUI *>(m_pHeader->GetItemAt(nColumn));
         ASSERT(NULL != pHItem);
         CCheckBoxUI *pCtrl = dynamic_cast<CCheckBoxUI *>(m_pManager->FindSubControlByClass(pHItem, DUI_CTR_CHECKBOX));
         ASSERT(NULL != pCtrl);
-        pCtrl ? pCtrl->SetCheck(bSelect) : NULL;
+        pCtrl ? pCtrl->SetCheck(bSelect) : NULL; //lint !e62
     }
 
     for (int i = 0; i < GetCount(); ++i)
@@ -1383,7 +1382,7 @@ void CListUI::DoInit()
         if (NULL == pHItem || !pHItem->IsCheckable()) { continue; }
 
         CControlUI *pCtrl = m_pManager->FindSubControlByClass(pHItem, DUI_CTR_CHECKBOX);
-        pCtrl ? (pCtrl->OnNotify += MakeDelegate(this, &CListUI::OnHeaderCheckBoxNotify)) : NULL;
+        pCtrl ? (pCtrl->OnNotify += MakeDelegate(this, &CListUI::OnHeaderCheckBoxNotify)) : NULL; //lint !e62
     }
 }
 
@@ -1445,18 +1444,18 @@ CEditUI *CListUI::GetEditUI()
         m_pEdit->OnNotify += MakeDelegate(this, &CListUI::OnEditNotify);
         // 列表框内容滚动时，隐藏编辑框
         CScrollBarUI *pScrollBar = m_pList->GetVerticalScrollBar();
-        pScrollBar ? pScrollBar->OnNotify += MakeDelegate(this, &CListUI::OnScrollNotify) : NULL;
+        pScrollBar ? pScrollBar->OnNotify += MakeDelegate(this, &CListUI::OnScrollNotify) : NULL; //lint !e62
         pScrollBar = m_pList->GetHorizontalScrollBar();
-        pScrollBar ? pScrollBar->OnNotify += MakeDelegate(this, &CListUI::OnScrollNotify) : NULL;
+        pScrollBar ? pScrollBar->OnNotify += MakeDelegate(this, &CListUI::OnScrollNotify) : NULL; //lint !e62
 
         m_pEdit->SetName(_T("_edt_list"));
         m_pEdit->SetBkColor(0xFFFFFFFF);
         m_pEdit->SetPadding(CDuiRect(2, 2, 2, 2));
 
         LPCTSTR pDefAttr = GetManager()->GetDefaultAttributeList(_T("Edit"), true);
-        pDefAttr ? m_pEdit->SetAttributeList(pDefAttr) : pDefAttr;
+        pDefAttr ? m_pEdit->SetAttributeList(pDefAttr) : pDefAttr; //lint !e62
         pDefAttr = GetManager()->GetDefaultAttributeList(_T("Edit"), false);
-        pDefAttr ? m_pEdit->SetAttributeList(pDefAttr) : pDefAttr;
+        pDefAttr ? m_pEdit->SetAttributeList(pDefAttr) : pDefAttr; //lint !e62
         m_pEdit->SetFloat(true);
         m_pEdit->SetAttribute(_T("autohscroll"), _T("true"));
     }
@@ -1521,18 +1520,18 @@ CComboUI *CListUI::GetComboUI()
         m_pCombo->OnNotify += MakeDelegate(this, &CListUI::OnComboNotify);
         // 列表框内容滚动时，隐藏下拉框
         CScrollBarUI *pScrollBar = m_pList->GetVerticalScrollBar();
-        pScrollBar ? pScrollBar->OnNotify += MakeDelegate(this, &CListUI::OnScrollNotify) : NULL;
+        pScrollBar ? pScrollBar->OnNotify += MakeDelegate(this, &CListUI::OnScrollNotify) : NULL; //lint !e62
         pScrollBar = m_pList->GetHorizontalScrollBar();
-        pScrollBar ? pScrollBar->OnNotify += MakeDelegate(this, &CListUI::OnScrollNotify) : NULL;
+        pScrollBar ? pScrollBar->OnNotify += MakeDelegate(this, &CListUI::OnScrollNotify) : NULL; //lint !e62
 
         m_pCombo->SetName(_T("_cmb_list"));
         m_pCombo->SetBkColor(0xFFFFFFFF);
         m_pCombo->SetPadding(CDuiRect(2, 2, 2, 2));
 
         LPCTSTR pDefAttr = GetManager()->GetDefaultAttributeList(_T("Combo"), true);
-        pDefAttr ? m_pCombo->SetAttributeList(pDefAttr) : pDefAttr;
+        pDefAttr ? m_pCombo->SetAttributeList(pDefAttr) : pDefAttr; //lint !e62
         pDefAttr = GetManager()->GetDefaultAttributeList(_T("Combo"), false);
-        pDefAttr ? m_pCombo->SetAttributeList(pDefAttr) : pDefAttr;
+        pDefAttr ? m_pCombo->SetAttributeList(pDefAttr) : pDefAttr; //lint !e62
         m_pCombo->SetFloat(true);
     }
 
@@ -1627,7 +1626,7 @@ bool CListUI::OnScrollNotify(void *pParam)
 //
 //
 
-CListBodyUI::CListBodyUI(CListUI *pOwner) : m_pOwner(pOwner)
+CListBodyUI::CListBodyUI(CListUI *pOwner) : m_pOwner(pOwner), m_pCompareFunc(NULL), m_compareData(0)
 {
     ASSERT(m_pOwner);
 }
@@ -2465,7 +2464,7 @@ void CListHeaderItemUI::DoEvent(TEventUI &event)
     {
         // 2018-05-23 单击事件放在鼠标弹起时发送
         // 2018-07-15 单击事件放在单击消息中发送
-        if (IsEnabled()) { m_pManager->SendNotify(this, DUI_MSGTYPE_HEADERCLICK); }
+        if (IsEnabled() && NULL != m_pManager) { m_pManager->SendNotify(this, DUI_MSGTYPE_HEADERCLICK); }
     }
 
     if (event.Type == UIEVENT_MOUSEMOVE)
@@ -3105,7 +3104,7 @@ void CListLabelElementUI::DoEvent(TEventUI &event)
     // 2018-05-23 单击事件放在鼠标弹起时发送
     if (event.Type == UIEVENT_BUTTONUP || event.Type == UIEVENT_RBUTTONUP)
     {
-        if (IsEnabled())
+        if (IsEnabled() && NULL != m_pManager)
         {
             ReleaseCapture();
 
@@ -3447,7 +3446,7 @@ void CListTextElementUI::DoEvent(TEventUI &event)
 
         for (int i = 0; i < m_nLinks; i++)
         {
-            if (::PtInRect(&m_rcLinks[i], event.ptMouse))
+            if (::PtInRect(&m_rcLinks[i], event.ptMouse) && NULL != m_pManager)
             {
                 m_pManager->SendNotify(this, DUI_MSGTYPE_LINK, i);
                 return;
@@ -4072,7 +4071,7 @@ void CListContainerElementUI::DoEvent(TEventUI &event)
     // 2018-05-23 单击事件放在鼠标弹起时发送
     if (event.Type == UIEVENT_BUTTONUP || event.Type == UIEVENT_RBUTTONUP)
     {
-        if (IsEnabled())
+        if (IsEnabled() && NULL != m_pManager)
         {
             ReleaseCapture();
 
@@ -4250,7 +4249,7 @@ void CListContainerElementUI::SetCheckBoxState(bool bSelect, int nColumn)
         {
             // nColumn列是布局，
             CCheckBoxUI *pCtrl = dynamic_cast<CCheckBoxUI *>(m_pManager->FindSubControlByClass(pRoot, DUI_CTR_CHECKBOX));
-            pCtrl ? pCtrl->Selected(bSelect, false) : NULL;
+            pCtrl ? pCtrl->Selected(bSelect, false) : NULL; //lint !e62
         }
     }
 }
@@ -4434,7 +4433,7 @@ void CListHBoxElementUI::SetCheckBoxState(bool bSelect, int nColumn /*= 0*/)
     else if (CContainerUI *pRoot = dynamic_cast<CContainerUI *>((CControlUI *)m_items[nColumn]))
     {
         CCheckBoxUI *pCtrl = dynamic_cast<CCheckBoxUI *>(m_pManager->FindSubControlByClass(pRoot, DUI_CTR_CHECKBOX));
-        pCtrl ? pCtrl->Selected(bSelect, false) : false;
+        pCtrl ? pCtrl->Selected(bSelect, false) : NULL; //lint !e62
     }
 }
 

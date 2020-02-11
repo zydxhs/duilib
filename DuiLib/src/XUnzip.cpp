@@ -3826,7 +3826,7 @@ int unzGetGlobalComment (unzFile file, char *szComment, uLong uSizeBuf)
 { //int err=UNZ_OK;
   unz_s* s;
   uLong uReadThis ;
-  if (file==NULL) return UNZ_PARAMERROR;
+  if (file==NULL || szComment == NULL) return UNZ_PARAMERROR;
   s=(unz_s*)file;
   uReadThis = uSizeBuf;
   if (uReadThis>s->gi.size_comment) uReadThis = s->gi.size_comment;

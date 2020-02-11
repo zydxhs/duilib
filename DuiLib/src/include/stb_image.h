@@ -6368,7 +6368,7 @@ static stbi_uc *stbi__gif_load_next(stbi__context *s, stbi__gif *g, int *comp, i
          dispose = 2; // if I don't have an image to revert back to, default to the old background
       }
 
-      if (dispose == 3) { // use previous graphic
+      if (dispose == 3 && two_back != 0) { // use previous graphic
          for (pi = 0; pi < pcount; ++pi) {
             if (g->history[pi]) {
                memcpy( &g->out[pi * 4], &two_back[pi * 4], 4 );

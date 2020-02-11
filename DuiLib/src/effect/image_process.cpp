@@ -332,6 +332,7 @@ void CWarp::Evaluate(real x, real y, real &xnew, real &ynew, real param1)
 
 void CMemery::SetPixels(BYTE *Data, int width, int height, DWORD iValue)
 {
+    //lint --e{533}
     __asm
     {
         mov     eax, iValue
@@ -1394,6 +1395,8 @@ BOOL CScale::ImageScale(BYTE *DataDes, int desWidth, int desHeight, BYTE *DataSr
 BOOL CScale::Scale(BYTE *DataDes, int desWidth, int desHeight, BYTE *DataSrc, int srcStride,
                    int srcLeft, int srcTop, int srcWidth, int srcHeight)
 {
+    //lint --e{533}
+    // TODO 看不懂汇编，不知道这段代码是否有返回值。
     int ratioH = (srcHeight << 16) / desHeight + 1;
     int ratioW = (srcWidth << 16) / desWidth + 1;
 

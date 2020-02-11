@@ -7,7 +7,7 @@ namespace sub {
 class CSubjectImpl
 {
 public:
-    CSubjectImpl(CSubjectBase *pSub) : m_pSub(pSub)
+    CSubjectImpl(CSubjectBase *pSub) : m_pSub(pSub), m_bForward(true)
     {
         ::InitializeCriticalSection(&m_cs);
     }

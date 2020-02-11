@@ -175,7 +175,9 @@ void CSliderUI::DoEvent(TEventUI &event)
             if (m_nValue != nValue && nValue >= m_nMin && nValue <= m_nMax)
             {
                 m_nValue = nValue;
-                m_pManager->SendNotify(this, DUI_MSGTYPE_VALUECHANGING);
+
+                if (NULL != m_pManager) { m_pManager->SendNotify(this, DUI_MSGTYPE_VALUECHANGING); }
+
                 Invalidate();
             }
         }
@@ -202,7 +204,8 @@ void CSliderUI::DoEvent(TEventUI &event)
                 else { m_nValue = m_nMin + (m_nMax - m_nMin) * (m_rcItem.bottom - event.ptMouse.y - m_szThumb.cy / 2) / (m_rcItem.bottom - m_rcItem.top - m_szThumb.cy); }
             }
 
-            m_pManager->SendNotify(this, DUI_MSGTYPE_VALUECHANGED);
+            if (NULL != m_pManager) { m_pManager->SendNotify(this, DUI_MSGTYPE_VALUECHANGED); }
+
             m_uButtonState &= ~UISTATE_CAPTURED;
             Invalidate();
         }
@@ -215,7 +218,7 @@ void CSliderUI::DoEvent(TEventUI &event)
         return;
     }
 
-    if (event.Type == UIEVENT_SCROLLWHEEL && IsEnabled())
+    if (event.Type == UIEVENT_SCROLLWHEEL && IsEnabled() && NULL != m_pManager)
     {
         switch (LOWORD(event.wParam))
         {
@@ -254,7 +257,7 @@ void CSliderUI::DoEvent(TEventUI &event)
                 else { m_nValue = m_nMin + (m_nMax - m_nMin) * (m_rcItem.bottom - event.ptMouse.y - m_szThumb.cy / 2) / (m_rcItem.bottom - m_rcItem.top - m_szThumb.cy); }
             }
 
-            if (m_bImmMode) { m_pManager->SendNotify(this, DUI_MSGTYPE_VALUECHANGING); }
+            if (m_bImmMode && NULL != m_pManager) { m_pManager->SendNotify(this, DUI_MSGTYPE_VALUECHANGING); }
 
             Invalidate();
         }
@@ -313,7 +316,7 @@ void CSliderUI::DoEvent(TEventUI &event)
 
     if (event.Type == UIEVENT_TIMER)
     {
-        if (event.wParam == TIMERID_DELAY_NTY)
+        if (event.wParam == TIMERID_DELAY_NTY && NULL != m_pManager)
         {
             // 2018-08-17 zhuyadong 滚轮事件，延时发送 CHANGED 消息
             m_pManager->KillTimer(this, TIMERID_DELAY_NTY);

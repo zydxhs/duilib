@@ -80,7 +80,7 @@ public:
     {
         real tmp = m_vector.GetLength();
 
-        if (tmp == 0.0f)
+        if (fabs(tmp) < 0.0001f)
         {
             return PointDist(point0, m_point);
         }
@@ -472,15 +472,9 @@ inline bool IsSameSide(const CdLine &line, const CdPoint &pt1, const CdPoint &pt
 {
     int iPos1 = GetRelativePos(line, pt1);
     int iPos2 = GetRelativePos(line, pt2);
-
-    if (iPos1 == -1 && iPos2 == -1 ||
-        iPos1 == 0 || iPos2 == 0 ||
-        iPos1 == 1 && iPos2 == 1)
-    {
-        return true;
-    }
-
-    return false;
+    return iPos1 == iPos2 ? true : false;
+    // if ((iPos1 == -1 && iPos2 == -1) || (iPos1 == 0 || iPos2 == 0) || (iPos1 == 1 && iPos2 == 1)) { return true; }
+    // return false;
 }
 
 // 判断两条线段是否相交

@@ -251,7 +251,7 @@ public:
     CDuiStringPtrMap(int nSize = 83);
     ~CDuiStringPtrMap();
 
-    void Resize(int nSize = 83);
+    void Resize(int nSize = 83); // 会销毁已存储的数据
     LPVOID Find(LPCTSTR key, bool optimize = true) const;
     bool Insert(LPCTSTR key, LPVOID pData);
     LPVOID Set(LPCTSTR key, LPVOID pData);

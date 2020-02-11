@@ -248,8 +248,7 @@ void CShadowUI::Update(HWND hParent)
             DWORD dwMask = 0;
             bool bHSL = false;
             CRenderEngine::ParseDrawInfo(m_diImgShadow, sResType, dwMask, bHSL);
-            const TImageInfo *data = data = m_pManager->GetImageEx((LPCTSTR)m_diImgShadow.sImageName,
-                                                                   (LPCTSTR)sResType, 0, false);
+            const TImageInfo *data = m_pManager->GetImageEx((LPCTSTR)m_diImgShadow.sImageName, (LPCTSTR)sResType, 0, false);
 
             if (!data) { return; }
 

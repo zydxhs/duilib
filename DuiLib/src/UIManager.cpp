@@ -2609,11 +2609,14 @@ void CPaintManagerUI::SetFocusNeeded(CControlUI *pControl)
     FINDTABINFO info = { 0 };
     info.pFocus = pControl;
     info.bForward = false;
-    m_pFocus = m_pRoot->FindControl(__FindControlFromTab, &info,
-                                    UIFIND_VISIBLE | UIFIND_ENABLED | UIFIND_ME_FIRST);
-    m_bFocusNeeded = true;
 
-    if (m_pRoot != NULL) { m_pRoot->NeedUpdate(); }
+    if (NULL != m_pRoot)
+    {
+        m_pFocus = m_pRoot->FindControl(__FindControlFromTab, &info,
+                                        UIFIND_VISIBLE | UIFIND_ENABLED | UIFIND_ME_FIRST);
+        m_bFocusNeeded = true;
+        m_pRoot->NeedUpdate();
+    }
 }
 
 bool CPaintManagerUI::SetTimer(CControlUI *pControl, UINT nTimerID, UINT uElapse)
@@ -3004,7 +3007,7 @@ void CPaintManagerUI::SendNotify(TNotifyUI &Msg, bool bAsync /*= false*/, bool b
     Msg.ptMouse = m_ptLastMousePos;
     Msg.dwTimestamp = ::GetTickCount();
 
-    if (m_bUsedVirtualWnd)
+    if (m_bUsedVirtualWnd && NULL != Msg.pSender)
     {
         Msg.sVirtualWnd = Msg.pSender->GetVirtualWnd();
     }
@@ -3279,7 +3282,7 @@ HFONT CPaintManagerUI::AddFont(int id, LPCTSTR pStrFontName, int nSize, bool bBo
 
     TFontInfo *pFontInfo = new TFontInfo;
 
-    if (!pFontInfo) { return false; }
+    if (!pFontInfo) { ::DeleteObject(hFont); return false; }
 
     ::ZeroMemory(pFontInfo, sizeof(TFontInfo));
     pFontInfo->hFont = hFont;
@@ -3760,7 +3763,7 @@ const TImageInfo *CPaintManagerUI::AddImage(LPCTSTR bitmap, HBITMAP hBitmap, int
     }
     else
     {
-        if (!m_SharedResInfo.m_ImageHash.Insert(bitmap, data))
+        if (!m_ResInfo.m_ImageHash.Insert(bitmap, data))
         {
             CRenderEngine::FreeImage(data);
             data = NULL;
@@ -4820,7 +4823,7 @@ bool CPaintManagerUI::LoadLanguage(int nLangType, const STRINGorID &xml, LPCTSTR
     {
         pstrClass = node.GetName();
 
-        if (_tcscmp(pstrClass, _T("String")) != 0 || !node.HasAttributes()) { continue; }
+        if (NULL == pstrClass || _tcscmp(pstrClass, _T("String")) != 0 || !node.HasAttributes()) { continue; }
 
         nAttributes = node.GetAttributeCount();
         LPCTSTR id = NULL;

@@ -629,7 +629,7 @@ inline CdSize operator * (const CdSize &size, real alpha)
 
 inline CdSize operator / (const CdSize &size, real alpha)
 {
-    assert(alpha != 0.0f);
+    assert(fabs(alpha) > 0.0001f);
     return CdSize(size.cx / alpha, size.cy / alpha);
 }
 

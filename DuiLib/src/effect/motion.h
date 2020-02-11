@@ -13,7 +13,7 @@ public:
 
     }
 
-    ~CMotion()
+    virtual ~CMotion()
     {
 
     }

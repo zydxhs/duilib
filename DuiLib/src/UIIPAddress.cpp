@@ -48,8 +48,15 @@ protected:
 };
 
 
-CIPAddressWnd::CIPAddressWnd() : m_pOwner(NULL), m_eField(EM_FIELD1), m_hBkBrush(NULL), m_bInit(false),
-    m_bDrawCaret(false)
+CIPAddressWnd::CIPAddressWnd()
+    : m_pOwner(NULL)
+    , m_eField(EM_FIELD1)
+    , m_hBkBrush(NULL)
+    , m_bInit(false)
+    , m_bDrawCaret(false)
+#ifndef UNICODE
+    , m_byDChar(0)
+#endif // UNICODE
 {
 }
 
@@ -441,7 +448,7 @@ void CIPAddressWnd::GetValidText(LPCTSTR pstrTxt, CDuiString &strValidTxt)
 {
     strValidTxt = _T("");
 
-    for (const TCHAR *pch = pstrTxt; NULL != *pch && 0 != *pch; pch += 1)
+    for (const TCHAR *pch = pstrTxt; NULL != *pch; pch += 1)
     {
         if (IsValidChar(*pch))
         {
@@ -512,13 +519,13 @@ void CIPAddressUI::DoEvent(TEventUI &event)
 
     if (event.Type == UIEVENT_WINDOWSIZE)
     {
-        if (m_pWindow != NULL) { m_pManager->SetFocusNeeded(this); }
+        if (m_pManager != NULL) { m_pManager->SetFocusNeeded(this); }
     }
 
-    if (event.Type == UIEVENT_SCROLLWHEEL)
-    {
-        if (m_pWindow != NULL) { return; }
-    }
+    // if (event.Type == UIEVENT_SCROLLWHEEL)
+    // {
+    //     if (m_pWindow != NULL) { return; }
+    // }
 
     if (event.Type == UIEVENT_SETFOCUS && IsEnabled())
     {

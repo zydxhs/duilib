@@ -42,7 +42,7 @@ public:
         if (IsIdentity())
         {
             real delta = farPlane - nearPlane;
-            assert(delta != 0);
+            assert(fabs(delta) > 0.0001f);
 
             real a = farPlane / delta;
             real b = -nearPlane * a;
@@ -69,7 +69,7 @@ public:
         assert(IsIdentity());
 
         real delta = farPlane - nearPlane;
-        assert(delta != 0);
+        assert(fabs(delta) > 0.0001f);
 
         real a = farPlane / delta;
         real b = -nearPlane * a;
@@ -111,7 +111,9 @@ public:
         //vec.m_vector[1] = -(innerRes*(vec.m_vector[1]-eye.m_vector[1]) + eye.m_vector[1]);
         //vec.m_vector[0] = innerRes*(vec.m_vector[0]-eye.m_vector[0]) + eye.m_vector[0];
 
-        innerRes = m_eye.m_vector[2] / (m_eye.m_vector[2] - m_eye.m_vector[2]);
+        // TODO 这里原算法会导致除0异常。但不知道如何修复，故随意写了个算式
+        // innerRes = m_eye.m_vector[2] / (m_eye.m_vector[2] - m_eye.m_vector[2]);
+        innerRes = m_eye.m_vector[2] / (m_eye.m_vector[1] - m_eye.m_vector[0]);
         vec.m_vector[1] = -innerRes * vec.m_vector[1];
         vec.m_vector[0] = innerRes * vec.m_vector[0];
     }

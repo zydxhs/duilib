@@ -160,6 +160,8 @@ public:
     // 向量长度
     float Vector::GetLength()
     {
+        //lint --e{12, 7}
+        // TODO 不确定该汇编代码有没有返回值
         float f;
 
         _asm

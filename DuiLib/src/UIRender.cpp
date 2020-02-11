@@ -28,12 +28,12 @@ static void RGBtoHSL(DWORD ARGB, float *H, float *S, float *L)
     M = max(max(nR, nG), nB);
     *L = (m + M) / 2;
 
-    if (M == m) { *H = *S = 0; }
+    if (fabs(M - m) < 0.0001f) { *H = *S = 0; }
     else
     {
         const float
-        f = (nR == m) ? (nG - nB) : ((nG == m) ? (nB - nR) : (nR - nG)),
-        i = (nR == m) ? 3.0f : ((nG == m) ? 5.0f : 1.0f);
+        f = (fabs(nR - m) < 0.0001f) ? (nG - nB) : ((fabs(nG - m) < 0.0001f) ? (nB - nR) : (nR - nG)),
+        i = (fabs(nR - m) < 0.0001f) ? 3.0f : ((fabs(nG - m) < 0.0001f) ? 5.0f : 1.0f);
         *H = (i - f / (M - m));
 
         if (*H >= 6) { *H -= 6; }
@@ -796,7 +796,7 @@ DuiLib::CGifInfo *CRenderEngine::LoadGif(TDrawInfo &drawInfo)
 
 CGifInfo *CRenderEngine::LoadGif(STRINGorID bitmap, LPCTSTR type, DWORD mask)
 {
-    if (_tcscmp(type, RES_TYPE_COLOR) == 0) { return NULL; }
+    if (NULL != type && _tcscmp(type, RES_TYPE_COLOR) == 0) { return NULL; }
 
     LPBYTE pData = NULL;
     DWORD dwSize = 0;

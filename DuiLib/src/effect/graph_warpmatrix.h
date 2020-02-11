@@ -429,13 +429,8 @@ public:
 
     void ClearMatrix()
     {
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                m_warpMatrix[i][j] = 0;
-            }
-        }
+        memset(m_warpMatrix, 0, 9 * sizeof(real));
+        memset(m_warpBackMatrix, 0, 9 * sizeof(real));
     }
 
     void WarpPoint(CdPoint &point)const
@@ -726,7 +721,7 @@ public:
                 }
             }
 
-            if (0 == max)
+            if (fabs(max) < 0.0001f)
             {
                 return FALSE;
             }

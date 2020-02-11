@@ -78,7 +78,7 @@ void CTextUI::DoEvent(TEventUI &event)
 
         for (int i = 0; i < m_nLinks; i++)
         {
-            if (::PtInRect(&m_rcLinks[i], event.ptMouse))
+            if (::PtInRect(&m_rcLinks[i], event.ptMouse) && NULL != m_pManager)
             {
                 m_pManager->SendNotify(this, DUI_MSGTYPE_LINK, i);
                 return;

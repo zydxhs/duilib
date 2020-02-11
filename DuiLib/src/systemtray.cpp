@@ -147,6 +147,10 @@ CSystemTrayImpl::CSystemTrayImpl()
     , m_uCreationFlags(0)
     , m_ptrItemTag(0)
     , m_xml(_T(""))
+    , m_hWnd(NULL)
+    , m_nCurrentIcon(NULL)
+    , m_StartTime(0)
+    , m_nAnimationPeriod(0)
 {
     m_pThis = this;
     memset(&m_tnd, 0, sizeof(m_tnd));
@@ -277,7 +281,7 @@ BOOL CSystemTrayImpl::SetTooltipText(UINT nID)
 
 DuiLib::CDuiString CSystemTrayImpl::GetTooltipText(void) const
 {
-    return m_bEnabled ? CDuiString(m_tnd.szTip) : _T("");
+    return m_bEnabled ? CDuiString(m_tnd.szTip) : CDuiString(_T(""));
 }
 
 BOOL CSystemTrayImpl::SetIcon(HICON hIcon)
@@ -992,7 +996,7 @@ BOOL CSystemTray::SetTooltipText(UINT uID)
 
 DuiLib::CDuiString CSystemTray::GetTooltipText(void) const
 {
-    return (NULL != m_pImpl) ? m_pImpl->GetTooltipText() : _T("");
+    return (NULL != m_pImpl) ? m_pImpl->GetTooltipText() : CDuiString(_T(""));
 }
 
 BOOL CSystemTray::SetIcon(HICON hIcon)
@@ -1027,7 +1031,7 @@ HICON CSystemTray::GetIcon() const
 
 void CSystemTray::SetFocus()
 {
-    (NULL != m_pImpl) ? m_pImpl->SetFocus() : NULL;
+    (NULL != m_pImpl) ? m_pImpl->SetFocus() : NULL; //lint !e62
 }
 
 BOOL CSystemTray::HideIcon()
@@ -1088,7 +1092,7 @@ BOOL CSystemTray::StopAnimation()
 
 void CSystemTray::GetMenuDefaultItem(CDuiString &sItem)
 {
-    (NULL != m_pImpl) ? m_pImpl->GetMenuDefaultItem(sItem) : NULL;
+    (NULL != m_pImpl) ? m_pImpl->GetMenuDefaultItem(sItem) : NULL; //lint !e62
 }
 
 BOOL CSystemTray::SetMenuDefaultItem(const CDuiString &sItem)

@@ -863,6 +863,7 @@ typedef CdRectT<double, false> CdRectDouble;
     typedef CdRectFloat CdRect;
 #endif
 
+//lint -ee{e1029}
 inline bool operator == (const CdRect &rect1, const CdRect &rect2)
 {
     return (rect1.left  == rect2.left)

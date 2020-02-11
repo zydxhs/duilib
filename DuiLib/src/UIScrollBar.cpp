@@ -759,7 +759,7 @@ void CScrollBarUI::DoEvent(TEventUI &event)
 
     if (event.Type == UIEVENT_BUTTONDOWN || event.Type == UIEVENT_LBUTTONDBLDOWN)
     {
-        if (!IsEnabled()) { return; }
+        if (!IsEnabled() || NULL == m_pManager) { return; }
 
         SetCapture();
         m_nLastScrollOffset = 0;
@@ -840,7 +840,8 @@ void CScrollBarUI::DoEvent(TEventUI &event)
         ReleaseCapture();
         m_nScrollRepeatDelay = 0;
         m_nLastScrollOffset = 0;
-        m_pManager->KillTimer(this, TIMERID_REPEAT);
+
+        if (NULL != m_pManager) { m_pManager->KillTimer(this, TIMERID_REPEAT); }
 
         if ((m_uThumbState & UISTATE_CAPTURED) != 0)
         {
@@ -982,7 +983,7 @@ void CScrollBarUI::DoEvent(TEventUI &event)
         }
         else
         {
-            if (m_nScrollRepeatDelay <= 5) { return; }
+            if (m_nScrollRepeatDelay <= 5 || NULL == m_pManager) { return; }
 
             POINT pt = { 0 };
             ::GetCursorPos(&pt);
@@ -1175,8 +1176,9 @@ void CScrollBarUI::PaintButton1(HDC hDC)
 
     if (m_dwButton1Color != 0)
     {
-        if (m_dwButton1Color >= 0xFF000000) { CRenderEngine::DrawColor(hDC, m_rcButton1, GetAdjustColor(m_dwButton1Color)); }
-        else { CRenderEngine::DrawColor(hDC, m_rcButton1, GetAdjustColor(m_dwButton1Color)); }
+        // if (m_dwButton1Color >= 0xFF000000) { CRenderEngine::DrawColor(hDC, m_rcButton1, GetAdjustColor(m_dwButton1Color)); }
+        // else { CRenderEngine::DrawColor(hDC, m_rcButton1, GetAdjustColor(m_dwButton1Color)); }
+        CRenderEngine::DrawColor(hDC, m_rcButton1, GetAdjustColor(m_dwButton1Color));
     }
 
     if ((m_uButton1State & UISTATE_DISABLED) != 0)
@@ -1218,8 +1220,9 @@ void CScrollBarUI::PaintButton2(HDC hDC)
 
     if (m_dwButton2Color != 0)
     {
-        if (m_dwButton2Color >= 0xFF000000) { CRenderEngine::DrawColor(hDC, m_rcButton2, GetAdjustColor(m_dwButton2Color)); }
-        else { CRenderEngine::DrawColor(hDC, m_rcButton2, GetAdjustColor(m_dwButton2Color)); }
+        // if (m_dwButton2Color >= 0xFF000000) { CRenderEngine::DrawColor(hDC, m_rcButton2, GetAdjustColor(m_dwButton2Color)); }
+        // else { CRenderEngine::DrawColor(hDC, m_rcButton2, GetAdjustColor(m_dwButton2Color)); }
+        CRenderEngine::DrawColor(hDC, m_rcButton2, GetAdjustColor(m_dwButton2Color));
     }
 
     if ((m_uButton2State & UISTATE_DISABLED) != 0)
@@ -1261,8 +1264,9 @@ void CScrollBarUI::PaintThumb(HDC hDC)
 
     if (m_dwThumbColor != 0)
     {
-        if (m_dwThumbColor >= 0xFF000000) { CRenderEngine::DrawColor(hDC, m_rcThumb, GetAdjustColor(m_dwThumbColor)); }
-        else { CRenderEngine::DrawColor(hDC, m_rcThumb, GetAdjustColor(m_dwThumbColor)); }
+        //if (m_dwThumbColor >= 0xFF000000) { CRenderEngine::DrawColor(hDC, m_rcThumb, GetAdjustColor(m_dwThumbColor)); }
+        //else { CRenderEngine::DrawColor(hDC, m_rcThumb, GetAdjustColor(m_dwThumbColor)); }
+        CRenderEngine::DrawColor(hDC, m_rcThumb, GetAdjustColor(m_dwThumbColor));
     }
 
     if ((m_uThumbState & UISTATE_DISABLED) != 0)

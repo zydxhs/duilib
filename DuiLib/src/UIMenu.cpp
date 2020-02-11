@@ -957,7 +957,7 @@ SIZE CMenuElementUI::EstimateSize(SIZE szAvailable)
         if (cXY.cx < sz.cx) { cXY.cx = sz.cx; }
     }
 
-    if (cXY.cy == 0 || cXY.cy == 0)
+    if (cXY.cx == 0 || cXY.cy == 0)
     {
         TListInfoUI *pInfo = m_pOwner->GetListInfo();
 

@@ -272,7 +272,7 @@ bool CDuiPtrArray::Add(LPVOID pData)
         }
     }
 
-    m_ppVoid[m_nCount - 1] = pData;
+    m_ppVoid[m_nCount - 1] = pData; //lint !e661
     return true;
 }
 
@@ -302,8 +302,8 @@ bool CDuiPtrArray::InsertAt(int iIndex, LPVOID pData)
         }
     }
 
-    memmove(&m_ppVoid[iIndex + 1], &m_ppVoid[iIndex], (m_nCount - iIndex - 1) * sizeof(LPVOID));
-    m_ppVoid[iIndex] = pData;
+    memmove(&m_ppVoid[iIndex + 1], &m_ppVoid[iIndex], (m_nCount - iIndex - 1) * sizeof(LPVOID)); //lint !e662
+    m_ppVoid[iIndex] = pData; //lint !e661 !e662
     return true;
 }
 
@@ -311,7 +311,7 @@ bool CDuiPtrArray::SetAt(int iIndex, LPVOID pData)
 {
     if (iIndex < 0 || iIndex >= m_nCount) { return false; }
 
-    m_ppVoid[iIndex] = pData;
+    m_ppVoid[iIndex] = pData; //lint !e661
     return true;
 }
 
@@ -346,13 +346,13 @@ LPVOID CDuiPtrArray::GetAt(int iIndex) const
 {
     if (iIndex < 0 || iIndex >= m_nCount) { return NULL; }
 
-    return m_ppVoid[iIndex];
+    return m_ppVoid[iIndex]; //lint !e661
 }
 
 LPVOID CDuiPtrArray::operator[](int iIndex) const
 {
     ASSERT(iIndex >= 0 && iIndex < m_nCount);
-    return m_ppVoid[iIndex];
+    return m_ppVoid[iIndex]; //lint !e661
 }
 
 
@@ -1006,7 +1006,7 @@ void CDuiStringPtrMap::Resize(int nSize)
 
         while (len--)
         {
-            TITEM *pItem = m_aT[len];
+            TITEM *pItem = m_aT[len]; //lint !e661 !e662
 
             while (pItem)
             {
@@ -1163,7 +1163,7 @@ LPCTSTR CDuiStringPtrMap::GetAt(int iIndex) const
 
     while (len--)
     {
-        for (TITEM *pItem = m_aT[len]; pItem; pItem = pItem->pNext)
+        for (TITEM *pItem = m_aT[len]; pItem; pItem = pItem->pNext) //lint !e661 !e662
         {
             if (pos++ == iIndex)
             {

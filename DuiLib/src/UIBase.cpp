@@ -17,7 +17,7 @@ void DUILIB_API DUI__Trace(LPCTSTR pstrFormat, ...)
         va_list args;
         va_start(args, pstrFormat);
         ::wvnsprintf(szBuffer, LENGTHOF(szBuffer) - 2, pstrFormat, args);
-        _tcscat(szBuffer, _T("\n"));
+        _tcsncat(szBuffer, _T("\n"), 1);
         va_end(args);
         ::OutputDebugString(szBuffer);
     }
@@ -83,7 +83,7 @@ LPCTSTR DUI__TraceMsg(UINT uMsg)
     MSGDEF(WM_GETTEXT);
     MSGDEF(WM_GETTEXTLENGTH);
     static TCHAR szMsg[10];
-    ::wsprintf(szMsg, _T("0x%04X"), uMsg);
+    ::wnsprintf(szMsg, sizeof(szMsg)/sizeof(TCHAR), _T("0x%04X"), uMsg);
     return szMsg;
 }
 
@@ -174,28 +174,31 @@ bool CNotifyPump::LoopDispatch(TNotifyUI &msg)
     return false;
 
 LDispatch:
-    union DuiMessageMapFunctions mmf;
-    mmf.pfn = lpEntry->pfn;
-
     bool bRet = false;
-    int nSig;
-    nSig = lpEntry->nSig;
 
-    switch (nSig)
+    if (NULL != lpEntry)
     {
-    default:
-        ASSERT(FALSE);
-        break;
+        union DuiMessageMapFunctions mmf;
+        mmf.pfn = lpEntry->pfn;
+        int nSig;
+        nSig = lpEntry->nSig;
 
-    case DuiSig_lwl:
-        (this->*mmf.pfn_Notify_lwl)(msg.wParam, msg.lParam);
-        bRet = true;
-        break;
+        switch (nSig)
+        {
+        default:
+            ASSERT(FALSE);
+            break;
 
-    case DuiSig_vn:
-        (this->*mmf.pfn_Notify_vn)(msg);
-        bRet = true;
-        break;
+        case DuiSig_lwl:
+            (this->*mmf.pfn_Notify_lwl)(msg.wParam, msg.lParam);
+            bRet = true;
+            break;
+
+        case DuiSig_vn:
+            (this->*mmf.pfn_Notify_vn)(msg);
+            bRet = true;
+            break;
+        }
     }
 
     return bRet;

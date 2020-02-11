@@ -43,10 +43,10 @@
     <ClCompile Include="UIMicroBlog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="color_skin.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="XUnzip.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="color_skin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

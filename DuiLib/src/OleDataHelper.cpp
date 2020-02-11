@@ -318,18 +318,30 @@ HGDIOBJ COleDataHelper::GetCustomGDI(WORD wCF)
 int COleDataHelper::GetInt(void)
 {
     DWORD dwLen = sizeof(int);
-    int *pData = (int *)GetCustomData(ECF_INT32, dwLen);
-    int nRet = *pData;
-    free(pData);
+    void *pData = GetCustomData(ECF_INT32, dwLen);
+    int nRet = 0;
+
+    if (NULL != pData)
+    {
+        int nRet = *(int *)pData;
+        free(pData);
+    }
+
     return nRet;
 }
 
 long long COleDataHelper::GetInt64(void)
 {
     DWORD dwLen = sizeof(int);
-    long long *pData = (long long *)GetCustomData(ECF_INT64, dwLen);
-    long long nRet = *pData;
-    free(pData);
+    void *pData = GetCustomData(ECF_INT64, dwLen);
+    long long nRet = 0;
+
+    if (NULL != pData)
+    {
+        nRet = *(long long *)pData;
+        free(pData);
+    }
+
     return nRet;
 }
 
@@ -497,7 +509,7 @@ bool COleDataHelper::HasCustomData(WORD wCF)
         {
             // 1. 只要有自定义数据，就返回 true
             // 2. 有自定义数据，并且与 wCF 指定的类型一致，才返回 true
-            if (0 == wCF || (0 != wCF && wCFTmp == wCF)) { bRet = true; break; }
+            if (0 == wCF || wCFTmp == wCF) { bRet = true; break; }
         }
     }
 

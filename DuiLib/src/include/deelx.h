@@ -3531,7 +3531,7 @@ template <class CHART> MatchResult CRegexpT <CHART>::Match(const CHART *tstring,
 
 template <class CHART> MatchResult CRegexpT <CHART>::Match(CContext *pContext) const
 {
-    if (m_builder.m_pTopElx == 0) { return 0; }
+    if (m_builder.m_pTopElx == 0 || pContext == NULL) { return 0; }
 
     int endpos, delta;
 

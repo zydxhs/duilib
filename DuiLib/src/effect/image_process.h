@@ -164,7 +164,7 @@ public:
 
 private:
     BOOL InitParam(real sharpenCoefficient);
-    real SinXDivX(real x, real sharpenCoefficient);
+    real SinXDivX(real x, real sharpenCoefficient); //lint !e729
     void ThreeOrder(const BYTE *DataSrc, const int srcStride, const real fx, const real fy, BYTE *resultColor);
     void ThreeOrderBorder(const BYTE *DataSrc, const int srcStride, int srcLeft, int srcTop, const int srcWidth,
                           const int srcHeight, const real fx, const real fy, BYTE *resultColor);

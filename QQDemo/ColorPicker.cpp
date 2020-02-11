@@ -7,7 +7,7 @@
 #include "ColorPicker.hpp"
 #include "chat_dialog.hpp"
 
-static DWORD Colors[5][8] = 
+static DWORD Colors[5][8] =
 {
 	{
 		0xFF000000,0xFFA52A00,0xFF004040,0xFF005500,0xFF00005E,0xFF00008B,0xFF4B0082,0xFF282828
@@ -34,8 +34,8 @@ CColorPicker::CColorPicker(ChatDialog* chat_dialog, POINT ptMouse)
 	ShowWindow(true);
 }
 
-LPCTSTR CColorPicker::GetWindowClassName() const 
-{ 
+LPCTSTR CColorPicker::GetWindowClassName() const
+{
 	return _T("ColorWindow");
 }
 
@@ -86,7 +86,7 @@ void CColorPicker::InitWindow()
 	}
 
     SIZE size = m_pm.GetInitSize();
-	MoveWindow(GetHWND(), based_point_.x - static_cast<LONG>(size.cx / 2), based_point_.y - size.cy, size.cx, size.cy, FALSE);
+	MoveWindow(based_point_.x - static_cast<LONG>(size.cx / 2), based_point_.y - size.cy, size.cx, size.cy, FALSE);
 }
 
 CDuiString CColorPicker::GetSkinFile()

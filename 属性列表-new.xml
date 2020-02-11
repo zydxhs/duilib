@@ -177,12 +177,12 @@
             <!-- 不支持 autoheight 属性 -->
         </HWeightLayout>
         <TileLayout parent="Container" notifies="setfocus killfocus timer menu windowinit(root) dblclick">
-            <Attribute name="columns" default="1" type="INT" comment="列数,如(4)"/>
-            <Attribute name="itemsize" default="0,0" type="SIZE" comment="子项固定大小，如(128,128)"/>
+            <Attribute name="columns" default="1" type="INT" comment="列数,如(4)。0表示自动计算列数，itemsize不能为(0,0)"/>
+            <Attribute name="itemsize" default="80,80" type="SIZE" comment="子项固定大小，如(128,128)。"/>
             <Attribute name="childvmargin" default="0" type="INT" comment="子控件之间垂直方向的额外距离，如（4）"/>
             <!-- 扩展属性 -->
-            <Attribute name="rows" default="1" type="INT" comment="行数,如(4)"/>
-            <Attribute name="childrounded" default="false" type="BOOL" comment="子控件铺满整个控件，忽略itemsize属性"/>
+            <Attribute name="rows" default="0" type="INT" comment="行数,如(4)，需要与 childrounded 属性一起使用。"/>
+            <Attribute name="childrounded" default="false" type="BOOL" comment="子控件铺满整个控件，忽略itemsize属性。必须设置 rows/columns 属性"/>
             <!-- 不支持 autowidth/autoheight 属性 -->
         </TileLayout>
         <TabLayout parent="Container" notifies="setfocus killfocus timer menu tabselect windowinit(root) dblclick">

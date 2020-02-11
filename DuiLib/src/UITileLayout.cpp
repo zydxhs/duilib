@@ -1,8 +1,8 @@
 ﻿#include "stdafx.h"
 
 namespace DuiLib {
-CTileLayoutUI::CTileLayoutUI() : m_nColumns(1), m_nRows(0)
-    , m_nColumnsFixed(0), m_iChildVMargin(0)
+CTileLayoutUI::CTileLayoutUI() : m_nColumns(0), m_nRows(0)
+    , m_nColumnsFixed(1), m_iChildVMargin(0)
     , m_nRowsFixed(0), m_bChildRounded(false)
 {
     m_szItem.cx = m_szItem.cy = 80;
@@ -106,7 +106,7 @@ void CTileLayoutUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if (_tcscmp(pstrName, _T("columns")) == 0)
     {
         m_nColumnsFixed = ParseInt(pstrValue);
-        m_nColumnsFixed = m_nColumnsFixed > 0 ? m_nColumnsFixed : 1;
+        m_nColumnsFixed = m_nColumnsFixed > 1 ? m_nColumnsFixed : 0;
     }
     else if (_tcscmp(pstrName, _T("childvmargin")) == 0)
     {
@@ -116,7 +116,7 @@ void CTileLayoutUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else if (_tcscmp(pstrName, _T("rows")) == 0)
     {
         m_nRowsFixed = ParseInt(pstrValue);
-        m_nRowsFixed = m_nRowsFixed > 0 ? m_nRowsFixed : 1;
+        m_nRowsFixed = m_nRowsFixed > 1 ? m_nRowsFixed : 0;
     }
     else if (_tcscmp(pstrName, _T("childrounded")) == 0)
     {
@@ -188,82 +188,55 @@ void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
         else if (m_bChildRounded && nMaxVisibleCtrl <= nEstimateNum) { pControl->SetInternVisible(false); }
     }
 
-    int cxNeeded = 0;
-    int cyNeeded = 0;
-    int iChildPadding = m_iChildMargin;
+    int cxNeeded = 0;   // 水平方向需要的最小宽度
+    int cyNeeded = 0;   // 垂直方向需要的最小高度
     int nXRemainder = 0; // 水平方向 等分后剩余像素数
     int nYRemainder = 0; // 水平方向 等分后剩余像素数
     int nCoord = 0;      // 子控件的索引位置（从左到右，从上到下，从0开即递增），用于计算子控件的行列号
+    int nWidth = rc.right - rc.left;    // 布局的水平宽度
+    int nHeight = rc.bottom - rc.top;   // 布局的垂直高度
 
-    if (m_nColumnsFixed == 0)
+    if (m_bChildRounded)
     {
-        if (rc.right - rc.left >= m_szItem.cx)
-        {
-            m_nColumns = (rc.right - rc.left) / m_szItem.cx;
-            cxNeeded = rc.right - rc.left;
-
-            if (m_nColumns > 1)
-            {
-                if (iChildPadding <= 0)
-                {
-                    iChildPadding = (cxNeeded - m_nColumns * m_szItem.cx) / (m_nColumns - 1);
-                }
-
-                if (iChildPadding < 0) { iChildPadding = 0; }
-            }
-            else
-            {
-                iChildPadding = 0;
-            }
-        }
-        else
-        {
-            m_nColumns = 1;
-            cxNeeded = m_szItem.cx;
-        }
-
-        m_nRows = (nEstimateNum - 1) / m_nColumns + 1;
-        cyNeeded = m_nRows * m_szItem.cy + (m_nRows - 1) * m_iChildVMargin;
+        // 子控件铺满 自动计算子控件大小，忽略属性中设置的大小
+        m_nColumns = m_nColumnsFixed;
+        m_nRows = m_nRowsFixed;
+        m_szItem.cx = (nWidth - m_iChildMargin * (m_nColumnsFixed - 1)) / m_nColumnsFixed;
+        nXRemainder = (nWidth - m_iChildMargin * (m_nColumnsFixed - 1)) % m_nColumnsFixed;
+        m_szItem.cy = (nHeight - m_iChildVMargin * (m_nRowsFixed - 1)) / m_nRowsFixed;
+        nYRemainder = (nHeight - m_iChildVMargin * (m_nRowsFixed - 1)) % m_nRowsFixed;
+        cxNeeded = nWidth;
+        cyNeeded = nHeight;
     }
     else
     {
-        if (!m_bChildRounded)
+        // 非子控件铺满 子控件使用属性中设置的大小
+        if (0 == m_nColumnsFixed)
         {
-            m_nColumns = m_nColumnsFixed;
-
-            if (m_nColumns > 1)
-            {
-                if (iChildPadding <= 0)
-                {
-                    if (m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible() &&
-                        rc.right - rc.left >= m_nColumns * m_szItem.cx)
-                    {
-                        iChildPadding = (rc.right - rc.left - m_nColumns * m_szItem.cx) / (m_nColumns - 1);
-                    }
-                    else
-                    {
-                        iChildPadding = (szAvailable.cx - m_nColumns * m_szItem.cx) / (m_nColumns - 1);
-                    }
-                }
-
-                if (iChildPadding < 0) { iChildPadding = 0; }
-            }
-            else { iChildPadding = 0; }
-
-            if (nEstimateNum >= m_nColumns) { cxNeeded = m_nColumns * m_szItem.cx + (m_nColumns - 1) * iChildPadding; }
-            else { cxNeeded = nEstimateNum * m_szItem.cx + (nEstimateNum - 1) * iChildPadding; }
-
-            m_nRows = (nEstimateNum - 1) / m_nColumns + 1;
-            cyNeeded = m_nRows * m_szItem.cy + (m_nRows - 1) * m_iChildVMargin;
+            // 计算 列数
+            m_nColumns = (nWidth + m_iChildMargin) / (m_szItem.cx + m_iChildMargin);
+            m_nColumns = (1 < m_nColumns) ? m_nColumns : 1; // 至少一列
+            cxNeeded = (m_szItem.cx + m_iChildMargin) * (m_nColumns - 1) + m_szItem.cx;
+            nXRemainder = (nWidth > cxNeeded) ? (nWidth - cxNeeded) : 0;
+            // 计算 行数
+            m_nRows = nEstimateNum / m_nColumns;
+            m_nRows = ((nEstimateNum % m_nColumns) != 0) ? (m_nRows + 1) : m_nRows;
+            cyNeeded = (m_szItem.cy + m_iChildVMargin) * (m_nRows - 1) + m_szItem.cy;
+            nYRemainder = (nHeight > cyNeeded) ? (nHeight - cyNeeded) : 0;
         }
         else
         {
-            // 子控件铺满
+            // 固定列数。计算列间距
             m_nColumns = m_nColumnsFixed;
-            m_szItem.cx = (rc.right - rc.left - iChildPadding * (m_nColumnsFixed - 1)) / m_nColumnsFixed;
-            nXRemainder = (rc.right - rc.left - iChildPadding * (m_nColumnsFixed - 1)) % m_nColumnsFixed;
-            m_szItem.cy = (rc.bottom - rc.top - m_iChildVMargin * (m_nRowsFixed - 1)) / m_nRowsFixed;
-            nYRemainder = (rc.bottom - rc.top - m_iChildVMargin * (m_nRowsFixed - 1)) % m_nRowsFixed;
+            // m_iChildMargin = (nWidth - m_nColumns * m_szItem.cx) / m_nColumns;
+            // m_iChildMargin = (0 < m_iChildMargin) ? m_iChildMargin : 0;
+            cxNeeded = (m_szItem.cx + m_iChildMargin) * (m_nColumns - 1) + m_szItem.cx;
+            nXRemainder = (nWidth > cxNeeded) ? (nWidth - cxNeeded) : 0;
+            // 计算行数 行间距
+            m_nRows = nEstimateNum / m_nColumns;
+            m_nRows = ((nEstimateNum % m_nColumns) != 0) ? (m_nRows + 1) : m_nRows;
+            cyNeeded = (m_szItem.cy + m_iChildVMargin) * (m_nRows - 1) + m_szItem.cy;
+            nYRemainder = (nHeight > cyNeeded) ? (nHeight - cyNeeded) : 0;
         }
     }
 
@@ -273,11 +246,7 @@ void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
 
         if (!pControl->IsVisible()) { continue; }
 
-        if (pControl->IsFloat())
-        {
-            SetFloatPos(it1);
-            continue;
-        }
+        if (pControl->IsFloat()) { SetFloatPos(it1); continue; }
 
         RECT rcMargin = pControl->GetMargin();
         SIZE sz = m_szItem;
@@ -296,7 +265,7 @@ void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
         UINT iChildVAlign = GetChildVAlign();
         int iColumnIndex = it1 % m_nColumns;
         int iRowIndex = it1 / m_nColumns;
-        int iPosX = rc.left + iColumnIndex * (m_szItem.cx + iChildPadding);
+        int iPosX = rc.left + iColumnIndex * (m_szItem.cx + m_iChildMargin);
 
         if (m_pHorizontalScrollBar && m_pHorizontalScrollBar->IsVisible())
         {
@@ -321,87 +290,11 @@ void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
             iPosX += (iColumnIndex < nXRemainder) ? iColumnIndex : nXRemainder;
             iPosY += (iRowIndex < nYRemainder) ? iRowIndex : nYRemainder;
 
-            if (iChildAlign == DT_CENTER)
-            {
-                if (iChildVAlign == DT_VCENTER)
-                {
-                    rcCtrl.left = iPosX + (szTmp.cx - sz.cx) / 2 + rcMargin.left;
-                    rcCtrl.top = iPosY + (szTmp.cy - sz.cy) / 2 + rcMargin.top;
-                    rcCtrl.right = iPosX + szTmp.cx - rcMargin.right;
-                    rcCtrl.bottom = iPosY + szTmp.cy - rcMargin.bottom;
-                    pControl->SetPos(rcCtrl, false);
-                }
-                else if (iChildVAlign == DT_BOTTOM)
-                {
-                    rcCtrl.left = iPosX + (szTmp.cx - sz.cx) / 2 + rcMargin.left;
-                    rcCtrl.top = iPosY + rcMargin.top;
-                    rcCtrl.right = iPosX + szTmp.cx - rcMargin.right;
-                    rcCtrl.bottom = iPosY + szTmp.cy - rcMargin.bottom;
-                    pControl->SetPos(rcCtrl, false);
-                }
-                else
-                {
-                    rcCtrl.left = iPosX + (szTmp.cx - sz.cx) / 2 + rcMargin.left;
-                    rcCtrl.top = iPosY + rcMargin.top;
-                    rcCtrl.right = iPosX + szTmp.cx - rcMargin.right;
-                    rcCtrl.bottom = iPosY + szTmp.cy - rcMargin.bottom;
-                    pControl->SetPos(rcCtrl, false);
-                }
-            }
-            else if (iChildAlign == DT_RIGHT)
-            {
-                if (iChildVAlign == DT_VCENTER)
-                {
-                    rcCtrl.left = iPosX + szTmp.cx - sz.cx + rcMargin.left;
-                    rcCtrl.top = iPosY + (szTmp.cy - sz.cy) / 2 + rcMargin.top;
-                    rcCtrl.right = iPosX + szTmp.cx - rcMargin.right;
-                    rcCtrl.bottom = iPosY + (szTmp.cy - sz.cy) / 2 + sz.cy - rcMargin.bottom;
-                    pControl->SetPos(rcCtrl, false);
-                }
-                else if (iChildVAlign == DT_BOTTOM)
-                {
-                    rcCtrl.left = iPosX + szTmp.cx - sz.cx + rcMargin.left;
-                    rcCtrl.top = iPosY + szTmp.cy - sz.cy + rcMargin.top;
-                    rcCtrl.right = iPosX + szTmp.cx - rcMargin.right;
-                    rcCtrl.bottom = iPosY + szTmp.cy - rcMargin.bottom;
-                    pControl->SetPos(rcCtrl, false);
-                }
-                else
-                {
-                    rcCtrl.left = iPosX + szTmp.cx - sz.cx + rcMargin.left;
-                    rcCtrl.top = iPosY + rcMargin.top;
-                    rcCtrl.right = iPosX + szTmp.cx - rcMargin.right;
-                    rcCtrl.bottom = iPosY + szTmp.cy - rcMargin.bottom;
-                    pControl->SetPos(rcCtrl, false);
-                }
-            }
-            else
-            {
-                if (iChildVAlign == DT_VCENTER)
-                {
-                    rcCtrl.left = iPosX + rcMargin.left;
-                    rcCtrl.top = iPosY + (szTmp.cy - sz.cy) / 2 + rcMargin.top;
-                    rcCtrl.right = iPosX + szTmp.cx - rcMargin.right;
-                    rcCtrl.bottom = iPosY + szTmp.cy - rcMargin.bottom;
-                    pControl->SetPos(rcCtrl, false);
-                }
-                else if (iChildVAlign == DT_BOTTOM)
-                {
-                    rcCtrl.left = iPosX + rcMargin.left;
-                    rcCtrl.top = iPosY + rcMargin.top;
-                    rcCtrl.right = iPosX + szTmp.cx - rcMargin.right;
-                    rcCtrl.bottom = iPosY + szTmp.cy - rcMargin.bottom;
-                    pControl->SetPos(rcCtrl, false);
-                }
-                else
-                {
-                    rcCtrl.left = iPosX + rcMargin.left;
-                    rcCtrl.top = iPosY + rcMargin.top;
-                    rcCtrl.right = iPosX + szTmp.cx - rcMargin.right;
-                    rcCtrl.bottom = iPosY + szTmp.cy - rcMargin.bottom;
-                    pControl->SetPos(rcCtrl, false);
-                }
-            }
+            rcCtrl.left = iPosX + rcMargin.left;
+            rcCtrl.right = iPosX + szTmp.cx - rcMargin.right;
+            rcCtrl.top = iPosY + rcMargin.top;
+            rcCtrl.bottom = iPosY + szTmp.cy - rcMargin.bottom;
+            pControl->SetPos(rcCtrl, false);
         }
         else
         {

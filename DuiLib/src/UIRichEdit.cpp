@@ -256,11 +256,19 @@ HRESULT CreateHost(CRichEditUI *re, const CREATESTRUCT *pcs, CTxtWinHost **pptec
     return TRUE;
 }
 
-CTxtWinHost::CTxtWinHost() : m_re(NULL)
+CTxtWinHost::CTxtWinHost() : m_re(NULL), pserv(NULL), dwStyle(0), iCaretWidth(0), iCaretHeight(0), iCaretLastWidth(0),
+    iCaretLastHeight(0), lSelBarWidth(0), dwEventMask(0), icf(0), ipf(0)
 {
     ::ZeroMemory(&cRefs, sizeof(CTxtWinHost) - offsetof(CTxtWinHost, cRefs));
     cchTextMost = cInitTextMax;
     laccelpos = -1;
+    rcClient.left = rcClient.top = rcClient.right = rcClient.bottom = 0;
+    sizelExtent.cx = sizelExtent.cy = 0;
+    memset(&cf, 0, sizeof(cf));
+    memset(&pf, 0, sizeof(pf));
+    chPasswordChar = L'*';
+    fEnableAutoWordSel = fWordWrap = fAllowBeep = fRich = fSaveSelection = 0;
+    fInplaceActive = fTimer = fCaptured = fShowCaret = fNeedFreshCaret = 0;
 }
 
 CTxtWinHost::~CTxtWinHost()
@@ -598,7 +606,7 @@ void CTxtWinHost::TxSetCapture(BOOL fCapture)
     if (fCapture) { m_re->SetCapture(); }
     else           { m_re->ReleaseCapture(); }
 
-    fCaptured = fCapture;
+    this->fCaptured = fCapture ? 1 : 0;
 }
 
 void CTxtWinHost::TxSetFocus()
@@ -765,7 +773,7 @@ HRESULT CTxtWinHost::TxGetSelectionBarWidth(LONG *plSelBarWidth)
 
 void CTxtWinHost::SetWordWrap(BOOL fWordWrap)
 {
-    fWordWrap = fWordWrap;
+    this->fWordWrap = fWordWrap ? 1 : 0;
     pserv->OnTxPropertyBitsChange(TXTBIT_WORDWRAP, fWordWrap ? TXTBIT_WORDWRAP : 0);
 }
 
@@ -871,7 +879,7 @@ BOOL CTxtWinHost::GetAllowBeep()
 
 void CTxtWinHost::SetAllowBeep(BOOL fAllowBeep)
 {
-    fAllowBeep = fAllowBeep;
+    this->fAllowBeep = fAllowBeep ? 1 : 0;
 
     pserv->OnTxPropertyBitsChange(TXTBIT_ALLOWBEEP, fAllowBeep ? TXTBIT_ALLOWBEEP : 0);
 }
@@ -896,7 +904,7 @@ BOOL CTxtWinHost::GetRichTextFlag()
 
 void CTxtWinHost::SetRichTextFlag(BOOL fNew)
 {
-    fRich = fNew;
+    fRich = fNew ? 1 : 0;
 
     pserv->OnTxPropertyBitsChange(TXTBIT_RICHTEXT, fNew ? TXTBIT_RICHTEXT : 0);
 }
@@ -929,7 +937,7 @@ BOOL CTxtWinHost::SetSaveSelection(BOOL f_SaveSelection)
 {
     BOOL fResult = f_SaveSelection;
 
-    fSaveSelection = f_SaveSelection;
+    fSaveSelection = f_SaveSelection ? 1 : 0;
 
     // notify text services of property change
     pserv->OnTxPropertyBitsChange(TXTBIT_SAVESELECTION, fSaveSelection ? TXTBIT_SAVESELECTION : 0);
@@ -984,7 +992,7 @@ void CTxtWinHost::GetControlRect(LPRECT prc)
 
 void CTxtWinHost::SetTransparent(BOOL f_Transparent)
 {
-    fTransparent = f_Transparent;
+    fTransparent = f_Transparent ? 1 : 0;
 
     // notify text services of property change
     pserv->OnTxPropertyBitsChange(TXTBIT_BACKSTYLECHANGE, 0);
@@ -2199,7 +2207,7 @@ void CRichEditUI::SetPos(RECT rc, bool bNeedInvalidate)
         // rcText.bottom -= m_rcPadding.bottom;
         m_pTwh->SetClientRect(&rcScrollTextView);
 
-        if (bVScrollBarVisiable && (!m_pVerticalScrollBar->IsVisible() || m_bVScrollBarFixing))
+        if (bVScrollBarVisiable && NULL != m_pVerticalScrollBar && (!m_pVerticalScrollBar->IsVisible() || m_bVScrollBarFixing))
         {
             LONG lWidth = rcText.right - rcText.left + m_pVerticalScrollBar->GetFixedWidth();
             LONG lHeight = 0;
@@ -2341,7 +2349,11 @@ bool CRichEditUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl
 
         if (m_bVScrollBarFixing)
         {
-            LONG lWidth = rc.right - rc.left + m_pVerticalScrollBar->GetFixedWidth();
+            LONG lWidth = 0;
+
+            if (NULL == m_pVerticalScrollBar) { lWidth = rc.right - rc.left; }
+            else { lWidth = rc.right - rc.left + m_pVerticalScrollBar->GetFixedWidth(); }
+
             LONG lHeight = 0;
             SIZEL szExtent = { -1, -1 };
             m_pTwh->GetTextServices()->TxGetNaturalSize(
@@ -2386,7 +2398,7 @@ bool CRichEditUI::DoPaint(HDC hDC, const RECT &rcPaint, CControlUI *pStopControl
         }
     }
 
-    if (GetTextLength() == 0 && !m_sTipText.IsEmpty())
+    if (NULL != m_pTwh && GetTextLength() == 0 && !m_sTipText.IsEmpty())
     {
         RECT rc;
         m_pTwh->GetControlRect(&rc);

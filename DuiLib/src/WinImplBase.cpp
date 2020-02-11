@@ -115,7 +115,7 @@ LRESULT CWndImplBase::OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHa
         {
             // 即将播放窗口关闭特效，隐藏窗口阴影
             CShadowUI *pShadow = m_pm.GetShadow();
-            pShadow ? pShadow->SetShadowShow(false) : NULL;
+            pShadow ? pShadow->SetShadowShow(false) : NULL; //lint !e62
             m_nWndState = ESTATE_CLOSE;
             bHandled = m_pm.GetRoot()->StartEffect(TRIGGER_HIDE);
         }
@@ -732,7 +732,7 @@ LRESULT CWndImplBase::OnWndEffectShowEndNty(UINT uMsg, WPARAM wParam, LPARAM lPa
     {
         // 窗口显示特效播放完毕，显示窗口阴影
         CShadowUI *pShadow = m_pm.GetShadow();
-        pShadow ? pShadow->SetShadowShow(true) : NULL;
+        pShadow ? pShadow->SetShadowShow(true) : NULL; //lint !e62
         m_pm.SetFocusDefault();
     }
 
@@ -842,7 +842,7 @@ void CWndImplBase::ShowWindow(bool bShow /*= true*/, bool bTakeFocus /*= true*/)
         {
             // 即将播放隐藏特效，隐藏窗口阴影
             CShadowUI *pShadow = m_pm.GetShadow();
-            pShadow ? pShadow->SetShadowShow(false) : NULL;
+            pShadow ? pShadow->SetShadowShow(false) : NULL; //lint !e62
 
             // 播放特效成功，阻止窗口隐藏；待到特效播放完毕，再隐藏。执行成功后，阻止隐藏窗口
             if (m_pm.GetRoot()->StartEffect(TRIGGER_HIDE)) { return; }
@@ -865,7 +865,7 @@ void CWndImplBase::ShowWindow(bool bShow /*= true*/, bool bTakeFocus /*= true*/)
             if (ESTATE_CREATE == m_nWndState)
             {
                 CShadowUI *pShadow = m_pm.GetShadow();
-                pShadow ? pShadow->SetShadowShow(false) : NULL;
+                pShadow ? pShadow->SetShadowShow(false) : NULL; //lint !e62
             }
 
             m_pm.GetRoot()->StartEffect(TRIGGER_SHOW);
@@ -896,7 +896,7 @@ DUI_INLINE void CWndImplBase::Notify(TNotifyUI &msg)
             {
                 // 即将播放窗口显示特效，隐藏窗口阴影。播放完毕，显示窗口阴影
                 CShadowUI *pShadow = m_pm.GetShadow();
-                pShadow ? pShadow->SetShadowShow(false) : NULL;
+                pShadow ? pShadow->SetShadowShow(false) : NULL; //lint !e62
             }
 
             if (!m_pm.GetRoot()->StartEffect(TRIGGER_SHOW)) { m_pm.SetFocusDefault(); }

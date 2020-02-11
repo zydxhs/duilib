@@ -119,7 +119,7 @@ LRESULT CHotKeyWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         m_pOwner->GetManager()->SendNotify(m_pOwner, DUI_MSGTYPE_RETURN);
     }
-    else if ((uMsg == WM_NCACTIVATE) || (uMsg == WM_NCACTIVATE) || (uMsg == WM_NCCALCSIZE))
+    else if ((uMsg == WM_NCACTIVATE) || (uMsg == WM_NCCALCSIZE))
     {
         return 0;
     }

@@ -43,12 +43,11 @@ struct HSL
     }
 
 
-    const HSL operator =(HSL &item)
+    const HSL &operator =(HSL &item)
     {
-        if (*this == item)
-        {
-            return *this;
-        }
+        if (this == &item) { return *this; }
+
+        if (*this == item) { return *this; }
 
         this->hue = item.hue;
         this->saturation = item.saturation;

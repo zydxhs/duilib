@@ -206,7 +206,7 @@ void CControlUI::ReloadText(void)
 void CControlUI::SetTextColor(DWORD dwTextColor)
 {
     m_dwTextColor = dwTextColor;
-    IsEnabled() ? Invalidate() : NULL;
+    IsEnabled() ? Invalidate() : NULL; //lint !e62
 }
 
 DWORD CControlUI::GetTextColor() const
@@ -217,7 +217,7 @@ DWORD CControlUI::GetTextColor() const
 void CControlUI::SetDisabledTextColor(DWORD dwTextColor)
 {
     m_dwDisabledTextColor = dwTextColor;
-    IsEnabled() ? NULL : Invalidate();
+    IsEnabled() ? NULL : Invalidate(); //lint !e62
 }
 
 DWORD CControlUI::GetDisabledTextColor() const
@@ -421,6 +421,7 @@ RECT CControlUI::GetRelativePos() const
 
 RECT CControlUI::GetClientPos() const
 {
+    //lint --e{533}
     return RECT { m_rcItem.left + m_rcBorderSize.left + m_rcPadding.left,
                   m_rcItem.top + m_rcBorderSize.top + m_rcPadding.top,
                   m_rcItem.right - m_rcBorderSize.right - m_rcPadding.right,
@@ -540,7 +541,7 @@ void CControlUI::Move(SIZE szOffset, bool bNeedInvalidate)
     m_rcItem.right += szOffset.cx;
     m_rcItem.bottom += szOffset.cy;
 
-    if (bNeedInvalidate && m_pManager == NULL && IsVisible())
+    if (bNeedInvalidate && NULL != m_pManager && IsVisible())
     {
         invalidateRc.Join(m_rcItem);
         CControlUI *pParent = this;
@@ -890,7 +891,7 @@ bool CControlUI::SetVisible(bool bVisible /*= true*/)
     // 2018-08-18 zhuyadong 修复控件首次显示特效问题
     if (bVisible && HasEffect(TRIGGER_SHOW) && TRIGGER_NONE == m_byEffectTrigger)
     {
-        if (m_rcItem.left == m_rcItem.right || m_rcItem.top == m_rcItem.bottom && m_pParent)
+        if ((m_rcItem.left == m_rcItem.right || m_rcItem.top == m_rcItem.bottom) && m_pParent)
         {
             RECT rc = m_pParent->GetPos();
             m_pParent->SetPos(rc, true);
@@ -1743,7 +1744,7 @@ void CControlUI::PaintBkColor(HDC hDC)
                 else
                 {
                     // 垂直渐变
-                    LONG tmp = rc.bottom = rc.bottom;
+                    LONG tmp = rc.bottom;
                     rc.bottom = (rc.bottom + rc.top) / 2;
                     CRenderEngine::DrawGradient(hDC, rc,
                                                 GetAdjustColor(m_dwBackColor), GetAdjustColor(m_dwBackColor2),
