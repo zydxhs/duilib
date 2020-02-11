@@ -92,6 +92,39 @@ enum wkeMenuItemId
     kWkeMenuGoForwardId        = 1 << 9,
     kWkeMenuGoBackId           = 1 << 10,
     kWkeMenuReloadId           = 1 << 11,
+    kWkeMenuSaveImageId        = 1 << 12,
+};
+
+struct wkeGeolocationPosition
+{
+    double timestamp;
+    double latitude;
+    double longitude;
+    double accuracy;
+    bool providesAltitude;
+    double altitude;
+    bool providesAltitudeAccuracy;
+    double altitudeAccuracy;
+    bool providesHeading;
+    double heading;
+    bool providesSpeed;
+    double speed;
+
+    wkeGeolocationPosition(const wkeGeolocationPosition& other)
+    {
+        timestamp = other.timestamp;
+        latitude = other.latitude;
+        longitude = other.longitude;
+        accuracy = other.accuracy;
+        providesAltitude = other.providesAltitude;
+        altitude = other.altitude;
+        providesAltitudeAccuracy = other.providesAltitudeAccuracy;
+        altitudeAccuracy = other.altitudeAccuracy;
+        providesHeading = other.providesHeading;
+        heading = other.heading;
+        providesSpeed = other.providesSpeed;
+        speed = other.speed;
+    }
 };
 
 struct wkeSlist
@@ -296,6 +329,9 @@ DUILIB_API void wkeConfigure(const wkeSettings *settings);
 DUILIB_API bool wkeIsInitialize();
 DUILIB_API void wkeUpdate();
 
+DUILIB_API void wkeShutdown();
+DUILIB_API void wkeShutdownForDebug(); // 测试使用，不了解千万别用！
+
 // 获取版本号
 DUILIB_API unsigned int wkeGetVersion();
 DUILIB_API CDuiString wkeGetVersionStr();
@@ -412,6 +448,7 @@ DUILIB_API void wkeGoToIndex(wkeWebView webView, int index);
 
 DUILIB_API int wkeGetWebviewId(wkeWebView webView);
 DUILIB_API bool wkeIsWebviewAlive(int id);
+DUILIB_API bool wkeIsWebviewValid(wkeWebView webView);
 
 DUILIB_API CDuiString wkeGetDocumentCompleteURL(wkeWebView webView, wkeWebFrameHandle frameId,
                                                 const CDuiString &partialURL);
@@ -591,6 +628,7 @@ DUILIB_API void wkeSetString(wkeString string, const CDuiString &str);
 
 // 通过utf16编码的字符串，创建一个wkeString
 DUILIB_API wkeString wkeCreateString(const CDuiString &str);
+DUILIB_API size_t wkeGetStringLen(wkeString str);
 // 析构这个wkeString
 DUILIB_API void wkeDeleteString(wkeString str);
 
@@ -939,6 +977,8 @@ typedef void(WKE_CALL *wkeWillMediaLoadCallback)(wkeWebView webView, void *param
 DUILIB_API void wkeOnWillMediaLoad(wkeWebView webView, wkeWillMediaLoadCallback callback,
                                    void *callbackParam);
 
+typedef wkeString(WKE_CALL*wkeImageBufferToDataURL)(wkeWebView webView, void* param, const char* data, size_t size);
+
 typedef void(WKE_CALL *wkeStartDraggingCallback)(
     wkeWebView webView,
     void *param,
@@ -1023,6 +1063,7 @@ DUILIB_API int wkeNetGetFavicon(wkeWebView webView, wkeOnNetGetFaviconCallback c
 DUILIB_API void wkeNetContinueJob(wkeNetJob jobPtr);
 DUILIB_API CDuiString wkeNetGetUrlByJob(wkeNetJob jobPtr);
 DUILIB_API const wkeSlist *wkeNetGetRawHttpHead(wkeNetJob jobPtr);
+DUILIB_API const wkeSlist *wkeNetGetRawResponseHead(wkeNetJob jobPtr);
 // 在wkeOnLoadUrlBegin回调里调用，设置后，此请求将被取消。
 DUILIB_API void wkeNetCancelRequest(wkeNetJob jobPtr);
 

@@ -72,14 +72,14 @@ void wkeInitializeEx(const wkeSettings *settings)
 {
     typedef void(*FUN)(const wkeSettings *);
     LOADFUN(wkeInitializeEx);
-    pfn ? pfn(settings) : pfn;
+    pfn ? pfn(settings) : pfn; //lint !e62
 }
 
 void wkeFinalize()
 {
     typedef void(*FUN)();
     LOADFUN(wkeFinalize);
-    return pfn ? pfn() : pfn;
+    pfn ? pfn() : pfn; //lint !e62
 }
 
 bool LoadMiniBlink(LPCTSTR szWkeDll, const wkeSettings *settings)
@@ -118,7 +118,7 @@ void wkeConfigure(const wkeSettings *settings)
 {
     typedef void(*FUN)(const wkeSettings *);
     LOADFUN(wkeConfigure);
-    return pfn ? pfn(settings) : false;
+    pfn ? pfn(settings) : false; //lint !e62
 }
 
 bool wkeIsInitialize()
@@ -132,7 +132,21 @@ void wkeUpdate()
 {
     typedef void(*FUN)();
     LOADFUN(wkeUpdate);
-    return pfn ? pfn() : false;
+    pfn ? pfn() : false; //lint !e62
+}
+
+void wkeShutdown()
+{
+    typedef void(*FUN)();
+    LOADFUN(wkeShutdown);
+    pfn ? pfn() : false; //lint !e62
+}
+
+void wkeShutdownForDebug()
+{
+    typedef void(*FUN)();
+    LOADFUN(wkeShutdownForDebug);
+    pfn ? pfn() : false; //lint !e62
 }
 
 unsigned int wkeGetVersion(void)
@@ -166,14 +180,14 @@ void wkeDestroyWebView(wkeWebView webView)
 {
     typedef void(*FUN)(wkeWebView);
     LOADFUN(wkeDestroyWebView);
-    pfn ? pfn(webView) : pfn;
+    pfn ? pfn(webView) : pfn; //lint !e62
 }
 
 void wkeSetViewSettings(wkeWebView webView, const wkeViewSettings *settings)
 {
     typedef void(*FUN)(wkeWebView, const wkeViewSettings *);
     LOADFUN(wkeSetViewSettings);
-    pfn ? pfn(webView, settings) : pfn;
+    pfn ? pfn(webView, settings) : pfn; //lint !e62
 }
 
 void wkeSetDebugConfig(wkeWebView webView, const CDuiString &debugString, const CDuiString &param)
@@ -187,7 +201,7 @@ void wkeSetDebugConfig(wkeWebView webView, const CDuiString &debugString, const 
 #endif
     typedef void(*FUN)(wkeWebView, const utf8 *, const utf8 *);
     LOADFUN(wkeSetDebugConfig);
-    pfn ? pfn(webView, strDebug.c_str(), strParam.c_str()) : pfn;
+    pfn ? pfn(webView, strDebug.c_str(), strParam.c_str()) : pfn; //lint !e62
 }
 
 DUILIB_API void *wkeGetDebugConfig(wkeWebView webView, const CDuiString &debugString)
@@ -206,77 +220,77 @@ void wkeSetResourceGc(wkeWebView webView, long intervalSec)
 {
     typedef void(*FUN)(wkeWebView, long);
     LOADFUN(wkeSetResourceGc);
-    pfn ? pfn(webView, intervalSec) : pfn;
+    pfn ? pfn(webView, intervalSec) : pfn; //lint !e62
 }
 
 void wkeSetMemoryCacheEnable(wkeWebView webView, bool b)
 {
     typedef void(*FUN)(wkeWebView, bool);
     LOADFUN(wkeSetMemoryCacheEnable);
-    pfn ? pfn(webView, b) : pfn;
+    pfn ? pfn(webView, b) : pfn; //lint !e62
 }
 
 void wkeSetMouseEnabled(wkeWebView webView, bool b)
 {
     typedef void(*FUN)(wkeWebView, bool);
     LOADFUN(wkeSetMouseEnabled);
-    pfn ? pfn(webView, b) : pfn;
+    pfn ? pfn(webView, b) : pfn; //lint !e62
 }
 
 void wkeSetTouchEnabled(wkeWebView webView, bool b)
 {
     typedef void(*FUN)(wkeWebView, bool);
     LOADFUN(wkeSetTouchEnabled);
-    pfn ? pfn(webView, b) : pfn;
+    pfn ? pfn(webView, b) : pfn; //lint !e62
 }
 
 void wkeSetContextMenuEnabled(wkeWebView webView, bool b)
 {
     typedef void(*FUN)(wkeWebView, bool);
     LOADFUN(wkeSetContextMenuEnabled);
-    pfn ? pfn(webView, b) : pfn;
+    pfn ? pfn(webView, b) : pfn; //lint !e62
 }
 
 void wkeSetNavigationToNewWindowEnable(wkeWebView webView, bool b)
 {
     typedef void(*FUN)(wkeWebView, bool);
     LOADFUN(wkeSetNavigationToNewWindowEnable);
-    pfn ? pfn(webView, b) : pfn;
+    pfn ? pfn(webView, b) : pfn; //lint !e62
 }
 
 void wkeSetCspCheckEnable(wkeWebView webView, bool b)
 {
     typedef void(*FUN)(wkeWebView, bool);
     LOADFUN(wkeSetCspCheckEnable);
-    pfn ? pfn(webView, b) : pfn;
+    pfn ? pfn(webView, b) : pfn; //lint !e62
 }
 
 void wkeSetNpapiPluginsEnabled(wkeWebView webView, bool b)
 {
     typedef void(*FUN)(wkeWebView, bool);
     LOADFUN(wkeSetNpapiPluginsEnabled);
-    pfn ? pfn(webView, b) : pfn;
+    pfn ? pfn(webView, b) : pfn; //lint !e62
 }
 
 void wkeSetHeadlessEnabled(wkeWebView webView, bool b)
 {
     typedef void(*FUN)(wkeWebView, bool);
     LOADFUN(wkeSetHeadlessEnabled);
-    pfn ? pfn(webView, b) : pfn;
+    pfn ? pfn(webView, b) : pfn; //lint !e62
 }
 
 void wkeSetDragEnable(wkeWebView webView, bool b)
 {
     typedef void(*FUN)(wkeWebView, bool);
     LOADFUN(wkeSetDragEnable);
-    pfn ? pfn(webView, b) : pfn;
+    pfn ? pfn(webView, b) : pfn; //lint !e62
 }
 
 void wkeSetDragDropEnable(wkeWebView webView, bool b)
 {
     typedef void(*FUN)(wkeWebView, bool);
     LOADFUN(wkeSetDragDropEnable);
-    pfn ? pfn(webView, b) : pfn;
+    pfn ? pfn(webView, b) : pfn; //lint !e62
 }
 
 void wkeSetLanguage(wkeWebView webView, const CDuiString &language)
@@ -288,14 +302,14 @@ void wkeSetLanguage(wkeWebView webView, const CDuiString &language)
 #endif
     typedef void(*FUN)(wkeWebView, const utf8 *);
     LOADFUN(wkeSetLanguage);
-    pfn ? pfn(webView, strLanguage.c_str()) : pfn;
+    pfn ? pfn(webView, strLanguage.c_str()) : pfn; //lint !e62
 }
 
 DUILIB_API void wkeSetContextMenuItemShow(wkeWebView webView, wkeMenuItemId item, bool isShow)
 {
     typedef void(*FUN)(wkeWebView, wkeMenuItemId, bool);
     LOADFUN(wkeSetContextMenuItemShow);
-    pfn ? pfn(webView, item, isShow) : pfn;
+    pfn ? pfn(webView, item, isShow) : pfn; //lint !e62
 }
 
 void wkeSetViewNetInterface(wkeWebView webView, const CDuiString &netInterface)
@@ -307,21 +321,21 @@ void wkeSetViewNetInterface(wkeWebView webView, const CDuiString &netInterface)
 #endif
     typedef void(*FUN)(wkeWebView, const utf8 *);
     LOADFUN(wkeSetViewNetInterface);
-    pfn ? pfn(webView, strNet.c_str()) : pfn;
+    pfn ? pfn(webView, strNet.c_str()) : pfn; //lint !e62
 }
 
 void wkeSetProxy(const wkeProxy *proxy)
 {
     typedef void(*FUN)(const wkeProxy *);
     LOADFUN(wkeSetProxy);
-    pfn ? pfn(proxy) : pfn;
+    pfn ? pfn(proxy) : pfn; //lint !e62
 }
 
 void wkeSetViewProxy(wkeWebView webView, wkeProxy *proxy)
 {
     typedef void(*FUN)(wkeWebView, wkeProxy *);
     LOADFUN(wkeSetViewProxy);
-    pfn ? pfn(webView, proxy) : pfn;
+    pfn ? pfn(webView, proxy) : pfn; //lint !e62
 }
 
 CDuiString wkeGetName(wkeWebView webView)
@@ -345,21 +359,21 @@ void wkeSetName(wkeWebView webView, const CDuiString &name)
 #endif
     typedef void(*FUN)(wkeWebView, const utf8 *);
     LOADFUN(wkeSetName);
-    pfn ? pfn(webView, strName.c_str()) : pfn;
+    pfn ? pfn(webView, strName.c_str()) : pfn; //lint !e62
 }
 
 void wkeSetHandle(wkeWebView webView, HWND wnd)
 {
     typedef void(*FUN)(wkeWebView, HWND);
     LOADFUN(wkeSetHandle);
-    pfn ? pfn(webView, wnd) : pfn;
+    pfn ? pfn(webView, wnd) : pfn; //lint !e62
 }
 
 void wkeSetHandleOffset(wkeWebView webView, int x, int y)
 {
     typedef void(*FUN)(wkeWebView, int, int);
     LOADFUN(wkeSetHandleOffset);
-    pfn ? pfn(webView, x, y) : pfn;
+    pfn ? pfn(webView, x, y) : pfn; //lint !e62
 }
 
 bool wkeIsTransparent(wkeWebView webView)
@@ -373,7 +387,7 @@ void wkeSetTransparent(wkeWebView webView, bool transparent)
 {
     typedef void(*FUN)(wkeWebView, bool);
     LOADFUN(wkeSetTransparent);
-    pfn ? pfn(webView, transparent) : pfn;
+    pfn ? pfn(webView, transparent) : pfn; //lint !e62
 }
 
 void wkeSetUserAgent(wkeWebView webView, const CDuiString &userAgent)
@@ -385,7 +399,7 @@ void wkeSetUserAgent(wkeWebView webView, const CDuiString &userAgent)
 #endif
     typedef void(*FUN)(wkeWebView, const wchar_t *);
     LOADFUN(wkeSetUserAgentW);
-    pfn ? pfn(webView, strAgent.c_str()) : pfn;
+    pfn ? pfn(webView, strAgent.c_str()) : pfn; //lint !e62
 }
 
 CDuiString wkeGetUserAgent(wkeWebView webView)
@@ -410,7 +424,7 @@ void wkeShowDevtools(wkeWebView webView, const CDuiString &path, wkeOnShowDevtoo
 #endif
     typedef void(*FUN)(wkeWebView, const wchar_t *, wkeOnShowDevtoolsCallback, void *);
     LOADFUN(wkeShowDevtools);
-    pfn ? pfn(webView, strPath.c_str(), callback, param) : pfn;
+    pfn ? pfn(webView, strPath.c_str(), callback, param) : pfn; //lint !e62
 }
 
 void wkeLoadURL(wkeWebView webView, const CDuiString &url)
@@ -422,7 +436,7 @@ void wkeLoadURL(wkeWebView webView, const CDuiString &url)
 #endif
     typedef void(*FUN)(wkeWebView, const wchar_t *);
     LOADFUN(wkeLoadURLW);
-    pfn ? pfn(webView, strUrl.c_str()) : pfn;
+    pfn ? pfn(webView, strUrl.c_str()) : pfn; //lint !e62
 }
 
 void wkePostURL(wkeWebView webView, const CDuiString &url, const CDuiString &postData)
@@ -436,7 +450,7 @@ void wkePostURL(wkeWebView webView, const CDuiString &url, const CDuiString &pos
 #endif
     typedef void(*FUN)(wkeWebView, const wchar_t *, const wchar_t *, int);
     LOADFUN(wkePostURLW);
-    pfn ? pfn(webView, strUrl.c_str(), strData.c_str(), strData.length()) : pfn;
+    pfn ? pfn(webView, strUrl.c_str(), strData.c_str(), strData.length()) : pfn; //lint !e62
 }
 
 void wkeLoadHTML(wkeWebView webView, const CDuiString &html)
@@ -448,7 +462,7 @@ void wkeLoadHTML(wkeWebView webView, const CDuiString &html)
 #endif
     typedef void(*FUN)(wkeWebView, const wchar_t *);
     LOADFUN(wkeLoadHTMLW);
-    pfn ? pfn(webView, strHtml.c_str()) : pfn;
+    pfn ? pfn(webView, strHtml.c_str()) : pfn; //lint !e62
 }
 
 void wkeLoadHtmlWithBaseUrl(wkeWebView webView, const CDuiString &html, const CDuiString &baseUrl)
@@ -462,7 +476,7 @@ void wkeLoadHtmlWithBaseUrl(wkeWebView webView, const CDuiString &html, const CD
 #endif
     typedef void(*FUN)(wkeWebView, const utf8 *, const utf8 *);
     LOADFUN(wkeLoadHtmlWithBaseUrl);
-    pfn ? pfn(webView, strHtml.c_str(), strBaseUrl.c_str()) : pfn;
+    pfn ? pfn(webView, strHtml.c_str(), strBaseUrl.c_str()) : pfn; //lint !e62
 }
 
 void wkeLoadFile(wkeWebView webView, const CDuiString &filename)
@@ -474,7 +488,7 @@ void wkeLoadFile(wkeWebView webView, const CDuiString &filename)
 #endif
     typedef void(*FUN)(wkeWebView, const wchar_t *);
     LOADFUN(wkeLoadFileW);
-    pfn ? pfn(webView, strFile.c_str()) : pfn;
+    pfn ? pfn(webView, strFile.c_str()) : pfn; //lint !e62
 }
 
 CDuiString wkeGetURL(wkeWebView webView)
@@ -540,28 +554,28 @@ void wkeStopLoading(wkeWebView webView)
 {
     typedef void(*FUN)(wkeWebView);
     LOADFUN(wkeStopLoading);
-    pfn ? pfn(webView) : pfn;
+    pfn ? pfn(webView) : pfn; //lint !e62
 }
 
 void wkeReload(wkeWebView webView)
 {
     typedef void(*FUN)(wkeWebView);
     LOADFUN(wkeReload);
-    pfn ? pfn(webView) : pfn;
+    pfn ? pfn(webView) : pfn; //lint !e62
 }
 
 void wkeGoToOffset(wkeWebView webView, int offset)
 {
     typedef void(*FUN)(wkeWebView, int);
     LOADFUN(wkeGoToOffset);
-    pfn ? pfn(webView, offset) : pfn;
+    pfn ? pfn(webView, offset) : pfn; //lint !e62
 }
 
 void wkeGoToIndex(wkeWebView webView, int index)
 {
     typedef void(*FUN)(wkeWebView, int);
     LOADFUN(wkeGoToIndex);
-    pfn ? pfn(webView, index) : pfn;
+    pfn ? pfn(webView, index) : pfn; //lint !e62
 }
 
 int wkeGetWebviewId(wkeWebView webView)
@@ -576,6 +590,13 @@ bool wkeIsWebviewAlive(int id)
     typedef bool(*FUN)(int);
     LOADFUN(wkeIsWebviewAlive);
     return pfn ? pfn(id) : false;
+}
+
+DUILIB_API bool wkeIsWebviewValid(wkeWebView webView)
+{
+    typedef bool(*FUN)(wkeWebView);
+    LOADFUN(wkeIsWebviewValid);
+    return pfn ? pfn(webView) : false;
 }
 
 CDuiString wkeGetDocumentCompleteURL(wkeWebView webView, wkeWebFrameHandle frameId,
@@ -607,7 +628,7 @@ void wkeFreeMemBuf(wkeMemBuf *buf)
 {
     typedef void(*FUN)(wkeMemBuf *);
     LOADFUN(wkeFreeMemBuf);
-    pfn ? pfn(buf) : pfn;
+    pfn ? pfn(buf) : pfn; //lint !e62
 }
 
 CDuiString wkeGetTitle(wkeWebView webView)
@@ -626,7 +647,7 @@ void wkeResize(wkeWebView webView, int w, int h)
 {
     typedef void(*FUN)(wkeWebView, int, int);
     LOADFUN(wkeResize);
-    pfn ? pfn(webView, w, h) : pfn;
+    pfn ? pfn(webView, w, h) : pfn; //lint !e62
 }
 
 int wkeGetWidth(wkeWebView webView)
@@ -661,7 +682,7 @@ void wkeSetDirty(wkeWebView webView, bool dirty)
 {
     typedef void(*FUN)(wkeWebView, bool);
     LOADFUN(wkeSetDirty);
-    pfn ? pfn(webView, dirty) : pfn;
+    pfn ? pfn(webView, dirty) : pfn; //lint !e62
 }
 
 bool wkeIsDirty(wkeWebView webView)
@@ -675,14 +696,14 @@ void wkeAddDirtyArea(wkeWebView webView, int x, int y, int w, int h)
 {
     typedef void(*FUN)(wkeWebView, int, int, int, int);
     LOADFUN(wkeAddDirtyArea);
-    pfn ? pfn(webView, x, y, w, h) : pfn;
+    pfn ? pfn(webView, x, y, w, h) : pfn; //lint !e62
 }
 
 void wkeLayoutIfNeeded(wkeWebView webView)
 {
     typedef void(*FUN)(wkeWebView);
     LOADFUN(wkeLayoutIfNeeded);
-    pfn ? pfn(webView) : pfn;
+    pfn ? pfn(webView) : pfn; //lint !e62
 }
 
 void wkePaint2(wkeWebView webView, void *bits, int bufW, int bufH, int xDst, int yDst,
@@ -690,21 +711,21 @@ void wkePaint2(wkeWebView webView, void *bits, int bufW, int bufH, int xDst, int
 {
     typedef void(*FUN)(wkeWebView, void *, int, int, int, int, int, int, int, int, bool);
     LOADFUN(wkePaint2);
-    pfn ? pfn(webView, bits, bufW, bufH, xDst, yDst, w, h, xSrc, ySrc, bCopyAlpha) : pfn;
+    pfn ? pfn(webView, bits, bufW, bufH, xDst, yDst, w, h, xSrc, ySrc, bCopyAlpha) : pfn; //lint !e62
 }
 
 void wkePaint(wkeWebView webView, void *bits, int pitch)
 {
     typedef void(*FUN)(wkeWebView, void *, int);
     LOADFUN(wkePaint);
-    pfn ? pfn(webView, bits, pitch) : pfn;
+    pfn ? pfn(webView, bits, pitch) : pfn; //lint !e62
 }
 
 void wkeRepaintIfNeeded(wkeWebView webView)
 {
     typedef void(*FUN)(wkeWebView);
     LOADFUN(wkeRepaintIfNeeded);
-    pfn ? pfn(webView) : pfn;
+    pfn ? pfn(webView) : pfn; //lint !e62
 }
 
 HDC wkeGetViewDC(wkeWebView webView)
@@ -753,56 +774,56 @@ void wkeEditorSelectAll(wkeWebView webView)
 {
     typedef void(*FUN)(wkeWebView);
     LOADFUN(wkeEditorSelectAll);
-    pfn ? pfn(webView) : pfn;
+    pfn ? pfn(webView) : pfn; //lint !e62
 }
 
 void wkeEditorUnSelect(wkeWebView webView)
 {
     typedef void(*FUN)(wkeWebView);
     LOADFUN(wkeEditorUnSelect);
-    pfn ? pfn(webView) : pfn;
+    pfn ? pfn(webView) : pfn; //lint !e62
 }
 
 void wkeEditorCopy(wkeWebView webView)
 {
     typedef void(*FUN)(wkeWebView);
     LOADFUN(wkeEditorCopy);
-    pfn ? pfn(webView) : pfn;
+    pfn ? pfn(webView) : pfn; //lint !e62
 }
 
 void wkeEditorCut(wkeWebView webView)
 {
     typedef void(*FUN)(wkeWebView);
     LOADFUN(wkeEditorCut);
-    pfn ? pfn(webView) : pfn;
+    pfn ? pfn(webView) : pfn; //lint !e62
 }
 
 void wkeEditorPaste(wkeWebView webView)
 {
     typedef void(*FUN)(wkeWebView);
     LOADFUN(wkeEditorPaste);
-    pfn ? pfn(webView) : pfn;
+    pfn ? pfn(webView) : pfn; //lint !e62
 }
 
 void wkeEditorDelete(wkeWebView webView)
 {
     typedef void(*FUN)(wkeWebView);
     LOADFUN(wkeEditorDelete);
-    pfn ? pfn(webView) : pfn;
+    pfn ? pfn(webView) : pfn; //lint !e62
 }
 
 void wkeEditorUndo(wkeWebView webView)
 {
     typedef void(*FUN)(wkeWebView);
     LOADFUN(wkeEditorUndo);
-    pfn ? pfn(webView) : pfn;
+    pfn ? pfn(webView) : pfn; //lint !e62
 }
 
 void wkeEditorRedo(wkeWebView webView)
 {
     typedef void(*FUN)(wkeWebView);
     LOADFUN(wkeEditorRedo);
-    pfn ? pfn(webView) : pfn;
+    pfn ? pfn(webView) : pfn; //lint !e62
 }
 
 CDuiString wkeGetCookie(wkeWebView webView)
@@ -828,28 +849,28 @@ void wkeSetCookie(wkeWebView webView, const CDuiString &url, const CDuiString &c
 #endif
     typedef void(*FUN)(wkeWebView, const utf8 *, const utf8 *);
     LOADFUN(wkeSetCookie);
-    pfn ? pfn(webView, strUrl.c_str(), strCookie.c_str()) : pfn;
+    pfn ? pfn(webView, strUrl.c_str(), strCookie.c_str()) : pfn; //lint !e62
 }
 
 void wkeVisitAllCookie(void *params, wkeCookieVisitor visitor)
 {
     typedef void(*FUN)(void *, wkeCookieVisitor);
     LOADFUN(wkeVisitAllCookie);
-    pfn ? pfn(params, visitor) : pfn;
+    pfn ? pfn(params, visitor) : pfn; //lint !e62
 }
 
 void wkePerformCookieCommand(wkeWebView webView, wkeCookieCommand command)
 {
     typedef void(*FUN)(wkeWebView, wkeCookieCommand);
     LOADFUN(wkePerformCookieCommand);
-    pfn ? pfn(webView, command) : pfn;
+    pfn ? pfn(webView, command) : pfn; //lint !e62
 }
 
 void wkeSetCookieEnabled(wkeWebView webView, bool enable)
 {
     typedef void(*FUN)(wkeWebView, bool);
     LOADFUN(wkeSetCookieEnabled);
-    pfn ? pfn(webView, enable) : pfn;
+    pfn ? pfn(webView, enable) : pfn; //lint !e62
 }
 
 bool wkeIsCookieEnabled(wkeWebView webView)
@@ -868,7 +889,7 @@ void wkeSetCookieJarPath(wkeWebView webView, const CDuiString &path)
 #endif
     typedef void(*FUN)(wkeWebView, const wchar_t *);
     LOADFUN(wkeSetCookieJarPath);
-    pfn ? pfn(webView, strPath.c_str()) : pfn;
+    pfn ? pfn(webView, strPath.c_str()) : pfn; //lint !e62
 }
 
 void wkeSetCookieJarFullPath(wkeWebView webView, const CDuiString &path)
@@ -880,14 +901,14 @@ void wkeSetCookieJarFullPath(wkeWebView webView, const CDuiString &path)
 #endif
     typedef void(*FUN)(wkeWebView, const wchar_t *);
     LOADFUN(wkeSetCookieJarFullPath);
-    pfn ? pfn(webView, strPath.c_str()) : pfn;
+    pfn ? pfn(webView, strPath.c_str()) : pfn; //lint !e62
 }
 
 DUILIB_API void wkeClearCookie(wkeWebView webView)
 {
     typedef void(*FUN)(wkeWebView);
     LOADFUN(wkeClearCookie);
-    pfn ? pfn(webView) : pfn;
+    pfn ? pfn(webView) : pfn; //lint !e62
 }
 
 void wkeSetLocalStorageFullPath(wkeWebView webView, const CDuiString &path)
@@ -899,7 +920,7 @@ void wkeSetLocalStorageFullPath(wkeWebView webView, const CDuiString &path)
 #endif
     typedef void(*FUN)(wkeWebView, const wchar_t *);
     LOADFUN(wkeSetLocalStorageFullPath);
-    pfn ? pfn(webView, strPath.c_str()) : pfn;
+    pfn ? pfn(webView, strPath.c_str()) : pfn; //lint !e62
 }
 
 void wkeAddPluginDirectory(wkeWebView webView, const CDuiString &path)
@@ -911,14 +932,14 @@ void wkeAddPluginDirectory(wkeWebView webView, const CDuiString &path)
 #endif
     typedef void(*FUN)(wkeWebView, const wchar_t *);
     LOADFUN(wkeAddPluginDirectory);
-    pfn ? pfn(webView, strPath.c_str()) : pfn;
+    pfn ? pfn(webView, strPath.c_str()) : pfn; //lint !e62
 }
 
 void wkeSetMediaVolume(wkeWebView webView, float volume)
 {
     typedef void(*FUN)(wkeWebView, float);
     LOADFUN(wkeSetMediaVolume);
-    pfn ? pfn(webView, volume) : pfn;
+    pfn ? pfn(webView, volume) : pfn; //lint !e62
 }
 
 float wkeGetMediaVolume(wkeWebView webView)
@@ -982,21 +1003,21 @@ void wkeSetFocus(wkeWebView webView)
 {
     typedef void(*FUN)(wkeWebView);
     LOADFUN(wkeSetFocus);
-    pfn ? pfn(webView) : pfn;
+    pfn ? pfn(webView) : pfn; //lint !e62
 }
 
 void wkeKillFocus(wkeWebView webView)
 {
     typedef void(*FUN)(wkeWebView);
     LOADFUN(wkeKillFocus);
-    pfn ? pfn(webView) : pfn;
+    pfn ? pfn(webView) : pfn; //lint !e62
 }
 
 wkeRect wkeGetCaretRect(wkeWebView webView)
 {
     typedef wkeRect(*FUN)(wkeWebView);
     LOADFUN(wkeGetCaret);
-    return pfn ? pfn(webView) : wkeRect { 0, 0, 0, 0 };
+    return pfn ? pfn(webView) : wkeRect { 0, 0, 0, 0 };//lint !e533
 }
 
 jsValue wkeRunJS(wkeWebView webView, const CDuiString &script)
@@ -1029,14 +1050,14 @@ void wkeSleep(wkeWebView webView)
 {
     typedef void(*FUN)(wkeWebView);
     LOADFUN(wkeSleep);
-    pfn ? pfn(webView) : pfn;
+    pfn ? pfn(webView) : pfn; //lint !e62
 }
 
 void wkeWake(wkeWebView webView)
 {
     typedef void(*FUN)(wkeWebView);
     LOADFUN(wkeWake);
-    pfn ? pfn(webView) : pfn;
+    pfn ? pfn(webView) : pfn; //lint !e62
 }
 
 bool wkeIsAwake(wkeWebView webView)
@@ -1050,7 +1071,7 @@ void wkeSetZoomFactor(wkeWebView webView, float factor)
 {
     typedef void(*FUN)(wkeWebView, float);
     LOADFUN(wkeSetZoomFactor);
-    pfn ? pfn(webView, factor) : pfn;
+    pfn ? pfn(webView, factor) : pfn; //lint !e62
 }
 
 float wkeGetZoomFactor(wkeWebView webView)
@@ -1064,7 +1085,7 @@ void wkeSetEditable(wkeWebView webView, bool editable)
 {
     typedef void(*FUN)(wkeWebView, bool);
     LOADFUN(wkeSetEditable);
-    pfn ? pfn(webView, editable) : pfn;
+    pfn ? pfn(webView, editable) : pfn; //lint !e62
 }
 
 CDuiString wkeGetString(const wkeString string)
@@ -1089,7 +1110,7 @@ void wkeSetString(wkeString string, const CDuiString &str)
 #endif
     typedef void(*FUN)(wkeString, const wchar_t *, size_t);
     LOADFUN(wkeSetStringW);
-    pfn ? pfn(string, strStr.c_str(), strStr.length()) : pfn;
+    pfn ? pfn(string, strStr.c_str(), strStr.length()) : pfn; //lint !e62
 }
 
 wkeString wkeCreateString(const CDuiString &str)
@@ -1104,11 +1125,18 @@ wkeString wkeCreateString(const CDuiString &str)
     return pfn ? pfn(strStr.c_str(), strStr.length()) : NULL;
 }
 
+size_t wkeGetStringLen(wkeString str)
+{
+    typedef size_t(*FUN)(wkeString);
+    LOADFUN(wkeGetStringLen);
+    return pfn ? pfn(str) : 0;
+}
+
 void wkeDeleteString(wkeString str)
 {
     typedef void(*FUN)(wkeString);
     LOADFUN(wkeDeleteString);
-    pfn ? pfn(str) : pfn;
+    pfn ? pfn(str) : pfn; //lint !e62
 }
 
 wkeWebView wkeGetWebViewForCurrentContext()
@@ -1127,7 +1155,7 @@ void wkeSetUserKeyValue(wkeWebView webView, const CDuiString &key, void *value)
 #endif
     typedef void(*FUN)(wkeWebView, const utf8 *, void *);
     LOADFUN(wkeSetUserKeyValue);
-    pfn ? pfn(webView, strKey.c_str(), value) : pfn;
+    pfn ? pfn(webView, strKey.c_str(), value) : pfn; //lint !e62
 }
 
 void *wkeGetUserKeyValue(wkeWebView webView, const CDuiString &key)
@@ -1153,7 +1181,7 @@ void wkeSetCursorInfoType(wkeWebView webView, int type)
 {
     typedef void(*FUN)(wkeWebView, int);
     LOADFUN(wkeSetCursorInfoType);
-    pfn ? pfn(webView, type) : pfn;
+    pfn ? pfn(webView, type) : pfn; //lint !e62
 }
 
 void wkeSetDragFiles(wkeWebView webView, const POINT *clintPos, const POINT *screenPos, wkeString files[],
@@ -1161,7 +1189,7 @@ void wkeSetDragFiles(wkeWebView webView, const POINT *clintPos, const POINT *scr
 {
     typedef void(*FUN)(wkeWebView, const POINT *, const POINT *, wkeString[], int);
     LOADFUN(wkeSetDragFiles);
-    pfn ? pfn(webView, clintPos, screenPos, files, filesCount) : pfn;
+    pfn ? pfn(webView, clintPos, screenPos, files, filesCount) : pfn; //lint !e62
 }
 
 void wkeSetDeviceParameter(wkeWebView webView, const CDuiString &device, const CDuiString &paramStr,
@@ -1176,7 +1204,7 @@ void wkeSetDeviceParameter(wkeWebView webView, const CDuiString &device, const C
 #endif
     typedef void(*FUN)(wkeWebView, const utf8 *, const utf8 *, int, float);
     LOADFUN(wkeSetDeviceParameter);
-    pfn ? pfn(webView, strDevice.c_str(), strParam.c_str(), paramInt, paramFloat) : pfn;
+    pfn ? pfn(webView, strDevice.c_str(), strParam.c_str(), paramInt, paramFloat) : pfn; //lint !e62
 }
 
 wkeTempCallbackInfo *wkeGetTempCallbackInfo(wkeWebView webView)
@@ -1192,154 +1220,154 @@ void wkeOnTitleChanged(wkeWebView webView, wkeTitleChangedCallback callback, voi
 {
     typedef void(*FUN)(wkeWebView, wkeTitleChangedCallback, void *);
     LOADFUN(wkeOnTitleChanged);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnMouseOverUrlChanged(wkeWebView webView, wkeTitleChangedCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeTitleChangedCallback, void *);
     LOADFUN(wkeOnMouseOverUrlChanged);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnURLChanged(wkeWebView webView, wkeURLChangedCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeURLChangedCallback, void *);
     LOADFUN(wkeOnURLChanged);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnURLChanged2(wkeWebView webView, wkeURLChangedCallback2 callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeURLChangedCallback2, void *);
     LOADFUN(wkeOnURLChanged2);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnPaintUpdated(wkeWebView webView, wkePaintUpdatedCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkePaintUpdatedCallback, void *);
     LOADFUN(wkeOnPaintUpdated);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnPaintBitUpdated(wkeWebView webView, wkePaintBitUpdatedCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkePaintBitUpdatedCallback, void *);
     LOADFUN(wkeOnPaintBitUpdated);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnAlertBox(wkeWebView webView, wkeAlertBoxCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeAlertBoxCallback, void *);
     LOADFUN(wkeOnAlertBox);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnConfirmBox(wkeWebView webView, wkeConfirmBoxCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeConfirmBoxCallback, void *);
     LOADFUN(wkeOnConfirmBox);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnPromptBox(wkeWebView webView, wkePromptBoxCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkePromptBoxCallback, void *);
     LOADFUN(wkeOnPromptBox);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnNavigation(wkeWebView webView, wkeNavigationCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeNavigationCallback, void *);
     LOADFUN(wkeOnNavigation);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnCreateView(wkeWebView webView, wkeCreateViewCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeCreateViewCallback, void *);
     LOADFUN(wkeOnCreateView);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnDocumentReady(wkeWebView webView, wkeDocumentReadyCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeDocumentReadyCallback, void *);
     LOADFUN(wkeOnDocumentReady);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnDocumentReady2(wkeWebView webView, wkeDocumentReady2Callback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeDocumentReady2Callback, void *);
     LOADFUN(wkeOnDocumentReady2);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnLoadingFinish(wkeWebView webView, wkeLoadingFinishCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeLoadingFinishCallback, void *);
     LOADFUN(wkeOnLoadingFinish);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnDownload(wkeWebView webView, wkeDownloadCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeDownloadCallback, void *);
     LOADFUN(wkeOnDownload);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnDownload2(wkeWebView webView, wkeDownload2Callback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeDownload2Callback, void *);
     LOADFUN(wkeOnDownload2);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnConsole(wkeWebView webView, wkeConsoleCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeConsoleCallback, void *);
     LOADFUN(wkeOnConsole);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeSetUIThreadCallback(wkeWebView webView, wkeCallUiThread callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeCallUiThread, void *);
     LOADFUN(wkeSetUIThreadCallback);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnLoadUrlBegin(wkeWebView webView, wkeLoadUrlBeginCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeLoadUrlBeginCallback, void *);
     LOADFUN(wkeOnLoadUrlBegin);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnLoadUrlEnd(wkeWebView webView, wkeLoadUrlEndCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeLoadUrlEndCallback, void *);
     LOADFUN(wkeOnLoadUrlEnd);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 DUILIB_API void wkeOnLoadUrlFail(wkeWebView webView, wkeLoadUrlFailCallback callback, void *callbackParam)
 {
     typedef void(*FUN)(wkeWebView, wkeLoadUrlFailCallback, void *);
     LOADFUN(wkeOnLoadUrlFail);
-    pfn ? pfn(webView, callback, callbackParam) : pfn;
+    pfn ? pfn(webView, callback, callbackParam) : pfn; //lint !e62
 }
 
 void wkeOnDidCreateScriptContext(wkeWebView webView, wkeDidCreateScriptContextCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeDidCreateScriptContextCallback, void *);
     LOADFUN(wkeOnDidCreateScriptContext);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnWillReleaseScriptContext(wkeWebView webView, wkeWillReleaseScriptContextCallback callback,
@@ -1347,21 +1375,21 @@ void wkeOnWillReleaseScriptContext(wkeWebView webView, wkeWillReleaseScriptConte
 {
     typedef void(*FUN)(wkeWebView, wkeWillReleaseScriptContextCallback, void *);
     LOADFUN(wkeOnWillReleaseScriptContext);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnWindowClosing(wkeWebView webView, wkeWindowClosingCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeWindowClosingCallback, void *);
     LOADFUN(wkeOnWindowClosing);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnWindowDestroy(wkeWebView webView, wkeWindowDestroyCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeWindowDestroyCallback, void *);
     LOADFUN(wkeOnWindowDestroy);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnDraggableRegionsChanged(wkeWebView webView, wkeDraggableRegionsChangedCallback callback,
@@ -1369,28 +1397,28 @@ void wkeOnDraggableRegionsChanged(wkeWebView webView, wkeDraggableRegionsChanged
 {
     typedef void(*FUN)(wkeWebView, wkeDraggableRegionsChangedCallback, void *);
     LOADFUN(wkeOnDraggableRegionsChanged);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnWillMediaLoad(wkeWebView webView, wkeWillMediaLoadCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeWillMediaLoadCallback, void *);
     LOADFUN(wkeOnWillMediaLoad);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnStartDragging(wkeWebView webView, wkeStartDraggingCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeStartDraggingCallback, void *);
     LOADFUN(wkeOnStartDragging);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnPrint(wkeWebView webView, wkeOnPrintCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeOnPrintCallback, void *);
     LOADFUN(wkeOnPrint);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 DUILIB_API void wkeScreenshot(wkeWebView webView, const wkeScreenshotSettings *settings,
@@ -1398,14 +1426,14 @@ DUILIB_API void wkeScreenshot(wkeWebView webView, const wkeScreenshotSettings *s
 {
     typedef void(*FUN)(wkeWebView, const wkeScreenshotSettings *, wkeOnScreenshot, void *);
     LOADFUN(wkeScreenshot);
-    pfn ? pfn(webView, settings, callback, param) : pfn;
+    pfn ? pfn(webView, settings, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnOtherLoad(wkeWebView webView, wkeOnOtherLoadCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeOnOtherLoadCallback, void *);
     LOADFUN(wkeOnOtherLoad);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 bool wkeIsProcessingUserGesture(wkeWebView webView)
@@ -1424,7 +1452,7 @@ void wkeNetSetMIMEType(wkeNetJob job, const CDuiString &type)
 #endif
     typedef void(*FUN)(wkeNetJob, const utf8 *);
     LOADFUN(wkeNetSetMIMEType);
-    pfn ? pfn(job, (utf8 *)strType.c_str()) : pfn;
+    pfn ? pfn(job, (utf8 *)strType.c_str()) : pfn; //lint !e62
 }
 
 CDuiString wkeNetGetMIMEType(wkeNetJob jobPtr, wkeString mime)
@@ -1450,7 +1478,7 @@ void wkeNetSetHTTPHeaderField(wkeNetJob jobPtr, const CDuiString &key, const CDu
 #endif
     typedef void(*FUN)(wkeNetJob, const wchar_t *, const wchar_t *, bool);
     LOADFUN(wkeNetSetHTTPHeaderField);
-    pfn ? pfn(jobPtr, strKey.c_str(), strValue.c_str(), response) : pfn;
+    pfn ? pfn(jobPtr, strKey.c_str(), strValue.c_str(), response) : pfn; //lint !e62
 }
 
 CDuiString wkeNetGetHTTPHeaderField(wkeNetJob jobPtr, const CDuiString &key)
@@ -1491,21 +1519,21 @@ void wkeNetSetData(wkeNetJob jobPtr, void *buf, int len)
 {
     typedef void(*FUN)(wkeNetJob, void *, int);
     LOADFUN(wkeNetSetData);
-    pfn ? pfn(jobPtr, buf, len) : pfn;
+    pfn ? pfn(jobPtr, buf, len) : pfn; //lint !e62
 }
 
 void wkeNetHookRequest(wkeNetJob jobPtr)
 {
     typedef void(*FUN)(wkeNetJob);
     LOADFUN(wkeNetHookRequest);
-    pfn ? pfn(jobPtr) : pfn;
+    pfn ? pfn(jobPtr) : pfn; //lint !e62
 }
 
 void wkeNetOnResponse(wkeWebView webView, wkeNetResponseCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeNetResponseCallback, void *);
     LOADFUN(wkeNetOnResponse);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 wkeRequestType wkeNetGetRequestMethod(wkeNetJob jobPtr)
@@ -1526,7 +1554,7 @@ void wkeNetContinueJob(wkeNetJob jobPtr)
 {
     typedef void(*FUN)(wkeNetJob);
     LOADFUN(wkeNetContinueJob);
-    pfn ? pfn(jobPtr) : pfn;
+    pfn ? pfn(jobPtr) : pfn; //lint !e62
 }
 
 CDuiString wkeNetGetUrlByJob(wkeNetJob jobPtr)
@@ -1541,10 +1569,17 @@ CDuiString wkeNetGetUrlByJob(wkeNetJob jobPtr)
 #endif
 }
 
-DUILIB_API const wkeSlist *wkeNetGetRawHttpHead(wkeNetJob jobPtr)
+const wkeSlist *wkeNetGetRawHttpHead(wkeNetJob jobPtr)
 {
     typedef const wkeSlist*(*FUN)(wkeNetJob jobPtr);
     LOADFUN(wkeNetGetRawHttpHead);
+    return pfn ? pfn(jobPtr) : NULL;
+}
+
+const wkeSlist *wkeNetGetRawResponseHead(wkeNetJob jobPtr)
+{
+    typedef const wkeSlist*(*FUN)(wkeNetJob jobPtr);
+    LOADFUN(wkeNetGetRawResponseHead);
     return pfn ? pfn(jobPtr) : NULL;
 }
 
@@ -1552,7 +1587,7 @@ void wkeNetCancelRequest(wkeNetJob jobPtr)
 {
     typedef void(*FUN)(wkeNetJob);
     LOADFUN(wkeNetCancelRequest);
-    pfn ? pfn(jobPtr) : pfn;
+    pfn ? pfn(jobPtr) : pfn; //lint !e62
 }
 
 BOOL wkeNetHoldJobToAsynCommit(wkeNetJob jobPtr)
@@ -1571,7 +1606,7 @@ void wkeNetChangeRequestUrl(wkeNetJob jobPtr, const CDuiString &url)
 #endif
     typedef void(*FUN)(wkeNetJob, const utf8 *);
     LOADFUN(wkeNetChangeRequestUrl);
-    pfn ? pfn(jobPtr, strUrl.c_str()) : pfn;
+    pfn ? pfn(jobPtr, strUrl.c_str()) : pfn; //lint !e62
 }
 
 wkeWebUrlRequestPtr wkeNetCreateWebUrlRequest(const CDuiString &url, const CDuiString &method,
@@ -1609,7 +1644,7 @@ void wkeNetDeleteBlinkWebURLRequestPtr(blinkWebURLRequestPtr request)
 {
     typedef void(*FUN)(blinkWebURLRequestPtr);
     LOADFUN(wkeNetDeleteBlinkWebURLRequestPtr);
-    pfn ? pfn(request) : pfn;
+    pfn ? pfn(request) : pfn; //lint !e62
 }
 
 void wkeNetAddHTTPHeaderFieldToUrlRequest(wkeWebUrlRequestPtr request, const CDuiString &name,
@@ -1624,7 +1659,7 @@ void wkeNetAddHTTPHeaderFieldToUrlRequest(wkeWebUrlRequestPtr request, const CDu
 #endif
     typedef void(*FUN)(wkeWebUrlRequestPtr, const utf8 *, const utf8 *);
     LOADFUN(wkeNetAddHTTPHeaderFieldToUrlRequest);
-    pfn ? pfn(request, strName.c_str(), strValue.c_str()) : pfn;
+    pfn ? pfn(request, strName.c_str(), strValue.c_str()) : pfn; //lint !e62
 }
 
 int wkeNetStartUrlRequest(wkeWebView webView, wkeWebUrlRequestPtr request, void *param,
@@ -1665,7 +1700,7 @@ void wkeNetCancelWebUrlRequest(int requestId)
 {
     typedef void(*FUN)(int);
     LOADFUN(wkeNetCancelWebUrlRequest);
-    pfn ? pfn(requestId) : pfn;
+    pfn ? pfn(requestId) : pfn; //lint !e62
 }
 
 wkePostBodyElements *wkeNetGetPostBody(wkeNetJob jobPtr)
@@ -1686,7 +1721,7 @@ void wkeNetFreePostBodyElements(wkePostBodyElements *element)
 {
     typedef void(*FUN)(wkePostBodyElements *);
     LOADFUN(wkeNetFreePostBodyElements);
-    pfn ? pfn(element) : pfn;
+    pfn ? pfn(element) : pfn; //lint !e62
 }
 
 wkePostBodyElement *wkeNetCreatePostBodyElement(wkeWebView webView)
@@ -1700,7 +1735,7 @@ void wkeNetFreePostBodyElement(wkePostBodyElement *element)
 {
     typedef void(*FUN)(wkePostBodyElement *);
     LOADFUN(wkeNetFreePostBodyElement);
-    pfn ? pfn(element) : pfn;
+    pfn ? pfn(element) : pfn; //lint !e62
 }
 
 bool wkeIsMainFrame(wkeWebView webView, wkeWebFrameHandle frameId)
@@ -1746,7 +1781,7 @@ void wkeInsertCSSByFrame(wkeWebView webView, wkeWebFrameHandle frameId, const CD
 #endif
     typedef void(*FUN)(wkeWebView, wkeWebFrameHandle, const utf8 *);
     LOADFUN(wkeInsertCSSByFrame);
-    pfn ? pfn(webView, frameId, strCSS.c_str()) : pfn;
+    pfn ? pfn(webView, frameId, strCSS.c_str()) : pfn; //lint !e62
 }
 
 void wkeWebFrameGetMainWorldScriptContext(wkeWebView webView, wkeWebFrameHandle frameId,
@@ -1754,7 +1789,7 @@ void wkeWebFrameGetMainWorldScriptContext(wkeWebView webView, wkeWebFrameHandle 
 {
     typedef void(*FUN)(wkeWebView, wkeWebFrameHandle, v8ContextPtr);
     LOADFUN(wkeWebFrameGetMainWorldScriptContext);
-    pfn ? pfn(webView, frameId, contextOut) : pfn;
+    pfn ? pfn(webView, frameId, contextOut) : pfn; //lint !e62
 }
 
 v8Isolate wkeGetBlinkMainThreadIsolate()
@@ -1783,7 +1818,7 @@ void wkeDestroyWebWindow(wkeWebView webView)
 {
     typedef void(*FUN)(wkeWebView);
     LOADFUN(wkeDestroyWebWindow);
-    pfn ? pfn(webView) : pfn;
+    pfn ? pfn(webView) : pfn; //lint !e62
 }
 
 HWND wkeGetWindowHandle(wkeWebView webView)
@@ -1797,35 +1832,35 @@ void wkeShowWindow(wkeWebView webView, bool show)
 {
     typedef void(*FUN)(wkeWebView, bool);
     LOADFUN(wkeShowWindow);
-    pfn ? pfn(webView, show) : pfn;
+    pfn ? pfn(webView, show) : pfn; //lint !e62
 }
 
 void wkeEnableWindow(wkeWebView webView, bool enable)
 {
     typedef void(*FUN)(wkeWebView, bool);
     LOADFUN(wkeEnableWindow);
-    pfn ? pfn(webView, enable) : pfn;
+    pfn ? pfn(webView, enable) : pfn; //lint !e62
 }
 
 void wkeMoveWindow(wkeWebView webView, int x, int y, int width, int height)
 {
     typedef void(*FUN)(wkeWebView, int, int, int, int);
     LOADFUN(wkeMoveWindow);
-    pfn ? pfn(webView, x, y, width, height) : pfn;
+    pfn ? pfn(webView, x, y, width, height) : pfn; //lint !e62
 }
 
 void wkeMoveToCenter(wkeWebView webView)
 {
     typedef void(*FUN)(wkeWebView);
     LOADFUN(wkeMoveToCenter);
-    pfn ? pfn(webView) : pfn;
+    pfn ? pfn(webView) : pfn; //lint !e62
 }
 
 void wkeResizeWindow(wkeWebView webView, int width, int height)
 {
     typedef void(*FUN)(wkeWebView, int, int);
     LOADFUN(wkeResizeWindow);
-    pfn ? pfn(webView, width, height) : pfn;
+    pfn ? pfn(webView, width, height) : pfn; //lint !e62
 }
 
 wkeWebDragOperation wkeDragTargetDragEnter(wkeWebView webView, const wkeWebDragData *webDragData,
@@ -1851,14 +1886,14 @@ void wkeDragTargetDragLeave(wkeWebView webView)
 {
     typedef void(*FUN)(wkeWebView);
     LOADFUN(wkeDragTargetDragLeave);
-    pfn ? pfn(webView) : pfn;
+    pfn ? pfn(webView) : pfn; //lint !e62
 }
 
 void wkeDragTargetDrop(wkeWebView webView, const POINT *clientPoint, const POINT *screenPoint, int modifiers)
 {
     typedef void(*FUN)(wkeWebView, const POINT *, const POINT *, int);
     LOADFUN(wkeDragTargetDrop);
-    return pfn ? pfn(webView, clientPoint, screenPoint, modifiers) : pfn;
+    pfn ? pfn(webView, clientPoint, screenPoint, modifiers) : pfn; //lint !e62
 }
 
 void wkeDragTargetEnd(wkeWebView webView, const POINT *clientPoint, const POINT *screenPoint,
@@ -1866,14 +1901,14 @@ void wkeDragTargetEnd(wkeWebView webView, const POINT *clientPoint, const POINT 
 {
     typedef void(*FUN)(wkeWebView, const POINT *, const POINT *, wkeWebDragOperation);
     LOADFUN(wkeDragTargetEnd);
-    return pfn ? pfn(webView, clientPoint, screenPoint, operation) : pfn;
+    pfn ? pfn(webView, clientPoint, screenPoint, operation) : pfn; //lint !e62
 }
 
 void wkeUtilSetUiCallback(wkeUiThreadPostTaskCallback callback)
 {
     typedef void(*FUN)(wkeUiThreadPostTaskCallback);
     LOADFUN(wkeUtilSetUiCallback);
-    pfn ? pfn(callback) : pfn;
+    pfn ? pfn(callback) : pfn; //lint !e62
 }
 
 CDuiString wkeUtilSerializeToMHTML(wkeWebView webView)
@@ -1908,7 +1943,7 @@ void wkeUtilRelasePrintPdfDatas(const wkePdfDatas *datas)
 {
     typedef void(*FUN)(const wkePdfDatas *);
     LOADFUN(wkeUtilRelasePrintPdfDatas);
-    pfn ? pfn(datas) : pfn;
+    pfn ? pfn(datas) : pfn; //lint !e62
 }
 
 void wkeSetWindowTitle(wkeWebView webView, const CDuiString &title)
@@ -1920,14 +1955,14 @@ void wkeSetWindowTitle(wkeWebView webView, const CDuiString &title)
 #endif
     typedef void(*FUN)(wkeWebView, const wchar_t *);
     LOADFUN(wkeSetWindowTitleW);
-    pfn ? pfn(webView, strTitle.c_str()) : pfn;
+    pfn ? pfn(webView, strTitle.c_str()) : pfn; //lint !e62
 }
 
 void wkeNodeOnCreateProcess(wkeWebView webView, wkeNodeOnCreateProcessCallback callback, void *param)
 {
     typedef void(*FUN)(wkeWebView, wkeNodeOnCreateProcessCallback, void *);
     LOADFUN(wkeNodeOnCreateProcess);
-    pfn ? pfn(webView, callback, param) : pfn;
+    pfn ? pfn(webView, callback, param) : pfn; //lint !e62
 }
 
 void wkeOnPluginFind(wkeWebView webView, const CDuiString &mime, wkeOnPluginFindCallback callback,
@@ -1940,14 +1975,14 @@ void wkeOnPluginFind(wkeWebView webView, const CDuiString &mime, wkeOnPluginFind
 #endif
     typedef void(*FUN)(wkeWebView, const utf8 *, wkeOnPluginFindCallback, void *);
     LOADFUN(wkeOnPluginFind);
-    pfn ? pfn(webView, strMime.c_str(), callback, param) : pfn;
+    pfn ? pfn(webView, strMime.c_str(), callback, param) : pfn; //lint !e62
 }
 
 void wkeAddNpapiPlugin(wkeWebView webView, void *initializeFunc, void *getEntryPointsFunc, void *shutdownFunc)
 {
     typedef void(*FUN)(wkeWebView, void *, void *, void *);
     LOADFUN(wkeAddNpapiPlugin);
-    pfn ? pfn(webView, initializeFunc, getEntryPointsFunc, shutdownFunc) : pfn;
+    pfn ? pfn(webView, initializeFunc, getEntryPointsFunc, shutdownFunc) : pfn; //lint !e62
 }
 
 void wkePluginListBuilderAddPlugin(void *builder, const CDuiString &name, const CDuiString &desc,
@@ -1964,7 +1999,7 @@ void wkePluginListBuilderAddPlugin(void *builder, const CDuiString &name, const 
 #endif
     typedef void(*FUN)(void *, const utf8 *, const utf8 *, const utf8 *);
     LOADFUN(wkePluginListBuilderAddPlugin);
-    pfn ? pfn(builder, strName.c_str(), strDesc.c_str(), strFile.c_str()) : pfn;
+    pfn ? pfn(builder, strName.c_str(), strDesc.c_str(), strFile.c_str()) : pfn; //lint !e62
 }
 
 void wkePluginListBuilderAddMediaTypeToLastPlugin(void *builder, const CDuiString &name,
@@ -1979,7 +2014,7 @@ void wkePluginListBuilderAddMediaTypeToLastPlugin(void *builder, const CDuiStrin
 #endif
     typedef void(*FUN)(void *, const utf8 *, const utf8 *);
     LOADFUN(wkePluginListBuilderAddMediaTypeToLastPlugin);
-    pfn ? pfn(builder, strName.c_str(), strDesc.c_str()) : pfn;
+    pfn ? pfn(builder, strName.c_str(), strDesc.c_str()) : pfn; //lint !e62
 }
 
 void wkePluginListBuilderAddFileExtensionToLastMediaType(void *builder, const CDuiString &fileExtension)
@@ -1991,7 +2026,7 @@ void wkePluginListBuilderAddFileExtensionToLastMediaType(void *builder, const CD
 #endif
     typedef void(*FUN)(void *, const utf8 *);
     LOADFUN(wkePluginListBuilderAddFileExtensionToLastMediaType);
-    pfn ? pfn(builder, strExt.c_str()) : pfn;
+    pfn ? pfn(builder, strExt.c_str()) : pfn; //lint !e62
 }
 
 wkeWebView wkeGetWebViewByNData(void *ndata)
@@ -2019,7 +2054,7 @@ void wkeSetMediaPlayerFactory(wkeWebView webView, wkeMediaPlayerFactory factory,
 {
     typedef void(*FUN)(wkeWebView, wkeMediaPlayerFactory, wkeOnIsMediaPlayerSupportsMIMEType);
     LOADFUN(wkeSetMediaPlayerFactory);
-    pfn ? pfn(webView, factory, callback) : pfn;
+    pfn ? pfn(webView, factory, callback) : pfn; //lint !e62
 }
 
 CDuiString wkeGetContentAsMarkup(wkeWebView webView, wkeWebFrameHandle frame, size_t *size)
@@ -2118,7 +2153,7 @@ void wkeRunMessageLoop()
 {
     typedef void(*FUN)();
     LOADFUN(wkeRunMessageLoop);
-    pfn ? pfn() : pfn;
+    pfn ? pfn() : pfn; //lint !e62
 }
 
 
@@ -2132,7 +2167,7 @@ void __fastcall jsBindFunction(const CDuiString &name, jsNativeFunction fn, unsi
 #endif
     typedef void(*FUN)(const utf8 *, jsNativeFunction, unsigned int);
     LOADFUN(jsBindFunction);
-    pfn ? pfn(strName.c_str(), fn, argCount) : pfn;
+    pfn ? pfn(strName.c_str(), fn, argCount) : pfn; //lint !e62
 }
 
 void jsBindGetter(const CDuiString &name, jsNativeFunction fn)
@@ -2144,7 +2179,7 @@ void jsBindGetter(const CDuiString &name, jsNativeFunction fn)
 #endif
     typedef void(*FUN)(const utf8 *, jsNativeFunction);
     LOADFUN(jsBindGetter);
-    pfn ? pfn(strName.c_str(), fn) : pfn;
+    pfn ? pfn(strName.c_str(), fn) : pfn; //lint !e62
 }
 
 void jsBindSetter(const CDuiString &name, jsNativeFunction fn)
@@ -2156,7 +2191,7 @@ void jsBindSetter(const CDuiString &name, jsNativeFunction fn)
 #endif
     typedef void(*FUN)(const utf8 *, jsNativeFunction);
     LOADFUN(jsBindSetter);
-    pfn ? pfn(strName.c_str(), fn) : pfn;
+    pfn ? pfn(strName.c_str(), fn) : pfn; //lint !e62
 }
 
 void jsBindFunctionEx(const CDuiString &name, jsNativeFunctionEx fn, void *param, unsigned int argCount)
@@ -2168,7 +2203,7 @@ void jsBindFunctionEx(const CDuiString &name, jsNativeFunctionEx fn, void *param
 #endif
     typedef void(*FUN)(const utf8 *, jsNativeFunctionEx, void *, unsigned int);
     LOADFUN(wkeJsBindFunction);
-    pfn ? pfn(strName.c_str(), fn, param, argCount) : pfn;
+    pfn ? pfn(strName.c_str(), fn, param, argCount) : pfn; //lint !e62
 }
 
 void jsBindGetterEx(const CDuiString &name, jsNativeFunctionEx fn, void *param)
@@ -2180,7 +2215,7 @@ void jsBindGetterEx(const CDuiString &name, jsNativeFunctionEx fn, void *param)
 #endif
     typedef void(*FUN)(const utf8 *, jsNativeFunctionEx, void *);
     LOADFUN(jsBindGetterEx);
-    pfn ? pfn(strName.c_str(), fn, param) : pfn;
+    pfn ? pfn(strName.c_str(), fn, param) : pfn; //lint !e62
 }
 
 void jsBindSetterEx(const CDuiString &name, jsNativeFunctionEx fn, void *param)
@@ -2192,7 +2227,7 @@ void jsBindSetterEx(const CDuiString &name, jsNativeFunctionEx fn, void *param)
 #endif
     typedef void(*FUN)(const utf8 *, jsNativeFunctionEx, void *);
     LOADFUN(jsBindSetterEx);
-    pfn ? pfn(strName.c_str(), fn, param) : pfn;
+    pfn ? pfn(strName.c_str(), fn, param) : pfn; //lint !e62
 }
 
 int jsArgCount(jsExecState es)
@@ -2483,7 +2518,7 @@ void jsSet(jsExecState es, jsValue obj, const CDuiString &prop, jsValue v)
 #endif
     typedef void(*FUN)(jsExecState, jsValue, const utf8 *, jsValue);
     LOADFUN(jsSet);
-    pfn ? pfn(es, obj, strProp.c_str(), v) : pfn;
+    pfn ? pfn(es, obj, strProp.c_str(), v) : pfn; //lint !e62
 }
 
 jsValue jsGetAt(jsExecState es, jsValue obj, int index)
@@ -2497,7 +2532,7 @@ void jsSetAt(jsExecState es, jsValue obj, int index, jsValue v)
 {
     typedef void(*FUN)(jsExecState, jsValue, int, jsValue);
     LOADFUN(jsSetAt);
-    pfn ? pfn(es, obj, index, v) : pfn;
+    pfn ? pfn(es, obj, index, v) : pfn; //lint !e62
 }
 
 jsKeys *jsGetKeys(jsExecState es, jsValue obj)
@@ -2545,7 +2580,7 @@ void jsDeleteObjectProp(jsExecState es, jsValue obj, const CDuiString &prop)
 #endif
     typedef void(*FUN)(jsExecState, jsValue, const utf8 *);
     LOADFUN(jsDeleteObjectProp);
-    pfn ? pfn(es, obj, strProp.c_str()) : pfn;
+    pfn ? pfn(es, obj, strProp.c_str()) : pfn; //lint !e62
 }
 
 int jsGetLength(jsExecState es, jsValue obj)
@@ -2559,7 +2594,7 @@ void jsSetLength(jsExecState es, jsValue obj, int length)
 {
     typedef void(*FUN)(jsExecState, jsValue, int);
     LOADFUN(jsSetLength);
-    pfn ? pfn(es, obj, length) : pfn;
+    pfn ? pfn(es, obj, length) : pfn; //lint !e62
 }
 
 jsValue jsGlobalObject(jsExecState es)
@@ -2635,14 +2670,14 @@ void jsSetGlobal(jsExecState es, const CDuiString &prop, jsValue v)
 #endif
     typedef void(*FUN)(jsExecState, const utf8 *, jsValue);
     LOADFUN(jsSetGlobal);
-    pfn ? pfn(es, strProp.c_str(), v) : pfn;
+    pfn ? pfn(es, strProp.c_str(), v) : pfn; //lint !e62
 }
 
 void jsGC()
 {
     typedef void(*FUN)();
     LOADFUN(jsGC);
-    pfn ? pfn() : pfn;
+    pfn ? pfn() : pfn; //lint !e62
 }
 
 bool jsAddRef(jsExecState es, jsValue val)
