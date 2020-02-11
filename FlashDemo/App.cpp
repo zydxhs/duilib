@@ -20,6 +20,7 @@ public:
 
     void OnInitWindow()
     {
+        CWndImplBase::OnInitWindow();
     }
 
     void Notify(TNotifyUI &msg)

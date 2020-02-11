@@ -1026,10 +1026,11 @@ void CRenderEngine::DrawImage(HDC hDC, HBITMAP hBitmap, const RECT &rc, const RE
                               const RECT &rcBmpPart, const RECT &rcScale9, bool bAlpha,
                               BYTE uFade, bool bHole, bool bTiledX, bool bTiledY)
 {
-    ASSERT(::GetObjectType(hDC) == OBJ_DC || ::GetObjectType(hDC) == OBJ_MEMDC);
-    static PFunAlphaBlend spfAlphaBlend = GetAlphaBlend();
-
+    // 2020-2-11 zhuyadong 加上 ASSERT，会导致Debug版本提示断言错误，不利于调试
+    //ASSERT(::GetObjectType(hDC) == OBJ_DC || ::GetObjectType(hDC) == OBJ_MEMDC);
     if (hDC == NULL || hBitmap == NULL) { return; }
+
+    static PFunAlphaBlend spfAlphaBlend = GetAlphaBlend();
 
     HDC hCloneDC = ::CreateCompatibleDC(hDC);
     HBITMAP hOldBitmap = (HBITMAP) ::SelectObject(hCloneDC, hBitmap);
