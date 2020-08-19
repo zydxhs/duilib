@@ -860,16 +860,13 @@ void CComboUI::DoEvent(TEventUI &event)
         }
     }
 
-    if (event.Type == UIEVENT_SCROLLWHEEL)
+    if (event.Type == UIEVENT_SCROLLWHEEL && IsEnabled() && IsFocused())
     {
-        if (IsEnabled())
-        {
-            bool bDownward = LOWORD(event.wParam) == SB_LINEDOWN;
-            SetSelectCloseFlag(false);
-            SelectItem(FindSelectable(m_iCurSel + (bDownward ? 1 : -1), bDownward));
-            SetSelectCloseFlag(true);
-            return;
-        }
+        bool bDownward = LOWORD(event.wParam) == SB_LINEDOWN;
+        SetSelectCloseFlag(false);
+        SelectItem(FindSelectable(m_iCurSel + (bDownward ? 1 : -1), bDownward));
+        SetSelectCloseFlag(true);
+        return;
     }
 
     if (event.Type == UIEVENT_CONTEXTMENU && IsEnabled())

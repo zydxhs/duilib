@@ -218,7 +218,7 @@ void CSliderUI::DoEvent(TEventUI &event)
         return;
     }
 
-    if (event.Type == UIEVENT_SCROLLWHEEL && IsEnabled() && NULL != m_pManager)
+    if (event.Type == UIEVENT_SCROLLWHEEL && IsEnabled() && NULL != m_pManager && IsFocused())
     {
         switch (LOWORD(event.wParam))
         {

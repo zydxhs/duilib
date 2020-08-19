@@ -201,10 +201,16 @@ void CTileLayoutUI::SetPos(RECT rc, bool bNeedInvalidate)
         // 子控件铺满 自动计算子控件大小，忽略属性中设置的大小
         m_nColumns = m_nColumnsFixed;
         m_nRows = m_nRowsFixed;
-        m_szItem.cx = (nWidth - m_iChildMargin * (m_nColumnsFixed - 1)) / m_nColumnsFixed;
-        nXRemainder = (nWidth - m_iChildMargin * (m_nColumnsFixed - 1)) % m_nColumnsFixed;
-        m_szItem.cy = (nHeight - m_iChildVMargin * (m_nRowsFixed - 1)) / m_nRowsFixed;
-        nYRemainder = (nHeight - m_iChildVMargin * (m_nRowsFixed - 1)) % m_nRowsFixed;
+
+        // 2020-08-19 解决 m_nRowsFixed/m_nColumnsFixed为0时导致的崩溃问题
+        if (m_nColumnsFixed != 0 && m_nRowsFixed != 0)
+        {
+            m_szItem.cx = (nWidth - m_iChildMargin * (m_nColumnsFixed - 1)) / m_nColumnsFixed;
+            nXRemainder = (nWidth - m_iChildMargin * (m_nColumnsFixed - 1)) % m_nColumnsFixed;
+            m_szItem.cy = (nHeight - m_iChildVMargin * (m_nRowsFixed - 1)) / m_nRowsFixed;
+            nYRemainder = (nHeight - m_iChildVMargin * (m_nRowsFixed - 1)) % m_nRowsFixed;
+        }
+
         cxNeeded = nWidth;
         cyNeeded = nHeight;
     }

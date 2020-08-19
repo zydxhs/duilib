@@ -323,7 +323,7 @@ int COleDataHelper::GetInt(void)
 
     if (NULL != pData)
     {
-        int nRet = *(int *)pData;
+        nRet = *(int *)pData;   // 2020-08-19 解决总是返回 0 的问题
         free(pData);
     }
 

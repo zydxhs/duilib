@@ -211,6 +211,11 @@ LRESULT CIPAddressWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
                 pOwner->MoveToBeforeField(eField);
             }
         }
+        // 2020-08-19 解决 DELETE 键无法删除编辑框内数字的问题
+        else if (VK_DELETE == wParam)
+        {
+            lRes = CWindowWnd::HandleMessage(uMsg, wParam, lParam);
+        }
     }
     else if (uMsg == OCM__BASE + WM_CTLCOLOREDIT  || uMsg == OCM__BASE + WM_CTLCOLORSTATIC)
     {
