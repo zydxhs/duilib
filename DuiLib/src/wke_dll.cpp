@@ -36,7 +36,7 @@ std::string WStr2Ansi(const wchar_t *src)
     memset(szBuf, 0, ilen + 1);
     WideCharToMultiByte(CP_ACP, 0, src, -1, szBuf, ilen, NULL, NULL);
     std::string str(szBuf);
-    delete[ ]szBuf;
+    delete []szBuf;
     return str;
 }
 
@@ -47,7 +47,7 @@ std::wstring Ansi2WStr(const char *src)
     memset(wszBuf, 0, 2 * (ilen + 1));
     MultiByteToWideChar(CP_ACP, 0, src, -1, wszBuf, ilen);
     std::wstring str(wszBuf);
-    delete[ ]wszBuf;
+    delete []wszBuf;
     return str;
 }
 
@@ -61,8 +61,8 @@ std::string Ansi2Utf8(const char *src)
     return WStr2Utf8(Ansi2WStr(src).c_str());
 }
 
-#define LOADFUN(FunName)                                    \
-    FUN pfn = (FUN)::GetProcAddress(s_hDll, #FunName );     \
+#define LOADFUN(FunName)                               \
+    FUN pfn = (FUN)::GetProcAddress(s_hDll, #FunName); \
     ASSERT(pfn);
 
 }
@@ -158,7 +158,7 @@ unsigned int wkeGetVersion(void)
 
 CDuiString wkeGetVersionStr()
 {
-    typedef const utf8 *(*FUN)(void);
+    typedef const utf8*(*FUN)(void);
     LOADFUN(wkeGetVersionString);
     const utf8 *pBuf = pfn ? pfn() : NULL;
 
@@ -211,9 +211,16 @@ DUILIB_API void *wkeGetDebugConfig(wkeWebView webView, const CDuiString &debugSt
 #else
     std::string strDebug = Ansi2Utf8(debugString.GetData());
 #endif
-    typedef void *(*FUN)(wkeWebView, const char *);
+    typedef void*(*FUN)(wkeWebView, const char *);
     LOADFUN(wkeGetDebugConfig);
     return pfn ? pfn(webView, strDebug.c_str()) : NULL;
+}
+
+void wkeGC(wkeWebView webView, long intervalSec)
+{
+    typedef void(*FUN)(wkeWebView, long);
+    LOADFUN(wkeGC);
+    pfn ? pfn(webView, intervalSec) : pfn; //lint !e62
 }
 
 void wkeSetResourceGc(wkeWebView webView, long intervalSec)
@@ -241,6 +248,13 @@ void wkeSetTouchEnabled(wkeWebView webView, bool b)
 {
     typedef void(*FUN)(wkeWebView, bool);
     LOADFUN(wkeSetTouchEnabled);
+    pfn ? pfn(webView, b) : pfn; //lint !e62
+}
+
+void wkeSetSystemTouchEnabled(wkeWebView webView, bool b)
+{
+    typedef void(*FUN)(wkeWebView, bool);
+    LOADFUN(wkeSetSystemTouchEnabled);
     pfn ? pfn(webView, b) : pfn; //lint !e62
 }
 
@@ -340,7 +354,7 @@ void wkeSetViewProxy(wkeWebView webView, wkeProxy *proxy)
 
 CDuiString wkeGetName(wkeWebView webView)
 {
-    typedef const utf8 *(*FUN)(wkeWebView);
+    typedef const utf8*(*FUN)(wkeWebView);
     LOADFUN(wkeGetName);
     const utf8 *pBuf = pfn ? pfn(webView) : NULL;
 #if defined(UNICODE) || defined(_UNICODE)
@@ -493,7 +507,7 @@ void wkeLoadFile(wkeWebView webView, const CDuiString &filename)
 
 CDuiString wkeGetURL(wkeWebView webView)
 {
-    typedef const utf8 *(*FUN)(wkeWebView);
+    typedef const utf8*(*FUN)(wkeWebView);
     LOADFUN(wkeGetURL);
     const utf8 *pBuf = pfn ? pfn(webView) : NULL;
 #if defined(UNICODE) || defined(_UNICODE)
@@ -742,6 +756,13 @@ HWND wkeGetHostHWND(wkeWebView webView)
     return pfn ? pfn(webView) : NULL;
 }
 
+void wkeUnlockViewDC(wkeWebView webView)
+{
+    typedef void(*FUN)(wkeWebView);
+    LOADFUN(wkeUnlockViewDC);
+    pfn ? pfn(webView) : pfn;
+}
+
 bool wkeCanGoBack(wkeWebView webView)
 {
     typedef bool(*FUN)(wkeWebView);
@@ -768,6 +789,20 @@ bool wkeGoForward(wkeWebView webView)
     typedef bool(*FUN)(wkeWebView);
     LOADFUN(wkeGoForward);
     return pfn ? pfn(webView) : false;
+}
+
+bool wkeNavigateAtIndex(wkeWebView webView, int index)
+{
+    typedef BOOL(*FUN)(wkeWebView, int);
+    LOADFUN(wkeNavigateAtIndex);
+    return pfn ? pfn(webView, index) : false; //lint !e62
+}
+
+int wkeGetNavigateIndex(wkeWebView webView)
+{
+    typedef int(*FUN)(wkeWebView);
+    LOADFUN(wkeGetNavigateIndex);
+    return pfn ? pfn(webView) : 0; //lint !e62
 }
 
 void wkeEditorSelectAll(wkeWebView webView)
@@ -1020,6 +1055,13 @@ wkeRect wkeGetCaretRect(wkeWebView webView)
     return pfn ? pfn(webView) : wkeRect { 0, 0, 0, 0 };//lint !e533
 }
 
+wkeRect *wkeGetCaretRect2(wkeWebView webView)
+{
+    typedef wkeRect*(*FUN)(wkeWebView);
+    LOADFUN(wkeGetCaretRect2);
+    return pfn ? pfn(webView) : NULL; //lint !e533
+}
+
 jsValue wkeRunJS(wkeWebView webView, const CDuiString &script)
 {
 #if defined(UNICODE) || defined(_UNICODE)
@@ -1079,6 +1121,13 @@ float wkeGetZoomFactor(wkeWebView webView)
     typedef float(*FUN)(wkeWebView);
     LOADFUN(wkeGetZoomFactor);
     return pfn ? pfn(webView) : 0.0f;
+}
+
+void wkeEnableHighDPISupport()
+{
+    typedef void(*FUN)();
+    LOADFUN(wkeEnableHighDPISupport);
+    pfn ? pfn() : pfn;
 }
 
 void wkeSetEditable(wkeWebView webView, bool editable)
@@ -1165,7 +1214,7 @@ void *wkeGetUserKeyValue(wkeWebView webView, const CDuiString &key)
 #else
     std::string strKey = Ansi2Utf8(key.GetData());
 #endif
-    typedef void *(*FUN)(wkeWebView, const utf8 *);
+    typedef void*(*FUN)(wkeWebView, const utf8 *);
     LOADFUN(wkeGetUserKeyValue);
     return pfn ? pfn(webView, strKey.c_str()) : NULL;
 }
@@ -1870,8 +1919,7 @@ wkeWebDragOperation wkeDragTargetDragEnter(wkeWebView webView, const wkeWebDragD
     typedef wkeWebDragOperation(*FUN)(wkeWebView, const wkeWebDragData *, const POINT *, const POINT *,
                                       wkeWebDragOperationsMask, int);
     LOADFUN(wkeDragTargetDragEnter);
-    return pfn ?
-           pfn(webView, webDragData, clientPoint, screenPoint, operationsAllowed, modifiers) : wkeWebDragOperationNone;
+    return pfn ? pfn(webView, webDragData, clientPoint, screenPoint, operationsAllowed, modifiers) : wkeWebDragOperationNone;
 }
 
 wkeWebDragOperation wkeDragTargetDragOver(wkeWebView webView, const POINT *clientPoint,
@@ -2349,6 +2397,18 @@ double jsToDouble(jsExecState es, jsValue v)
     return pfn ? pfn(es, v) : 0.0;
 }
 
+CDuiString jsToDoubleStr(jsExecState es, jsValue v)
+{
+    typedef const char*(*FUN)(jsExecState, jsValue);
+    LOADFUN(jsToDoubleString);
+    const char *pBuf = pfn ? pfn(es, v) : NULL;
+#if defined(UNICODE) || defined(_UNICODE)
+    return Ansi2WStr(pBuf).c_str();
+#else
+    return pBuf;
+#endif
+}
+
 bool jsToBoolean(jsExecState es, jsValue v)
 {
     typedef bool(*FUN)(jsExecState, jsValue);
@@ -2389,7 +2449,7 @@ CDuiString jsToTempString(jsExecState es, jsValue v)
 
 void *jsToV8Value(jsExecState es, jsValue v)
 {
-    typedef void *(*FUN)(jsExecState, jsValue);
+    typedef void*(*FUN)(jsExecState, jsValue);
     LOADFUN(jsToV8Value);
     return pfn ? pfn(es, v) : NULL;
 }
@@ -2408,18 +2468,30 @@ jsValue jsFloat(jsExecState es, float v)
     return pfn ? pfn(es, v) : -1;
 }
 
-jsValue jsDouble(jsExecState es, double v)
+jsValue jsDouble(double v)
 {
-    typedef jsValue(*FUN)(jsExecState, double);
+    typedef jsValue(*FUN)(double);
     LOADFUN(jsDouble);
-    return pfn ? pfn(es, v) : -1;
+    return pfn ? pfn(v) : -1;
 }
 
-jsValue jsBoolean(jsExecState es, bool v)
+jsValue jsDoubleStr(const CDuiString &v)
 {
-    typedef jsValue(*FUN)(jsExecState, int);
+#if defined(UNICODE) || defined(_UNICODE)
+    std::string strStr = WStr2Ansi(v.GetData());
+#else
+    std::string strStr = v.GetData();
+#endif
+    typedef jsValue(*FUN)(const char *);
+    LOADFUN(jsDoubleString);
+    return pfn ? pfn(strStr.c_str()) : -1;
+}
+
+jsValue jsBoolean(bool v)
+{
+    typedef jsValue(*FUN)(int);
     LOADFUN(jsBoolean);
-    return pfn ? pfn(es, v) : -1;
+    return pfn ? pfn(v) : -1;
 }
 
 jsValue jsUndefined()
@@ -2550,7 +2622,7 @@ void jsFreeKeys(jsKeys *obj)
         for (size_t i = 0; i < obj->length; ++i)
         {
             char *key = *(utf8 **)(obj->keys + i);
-            delete[ ] key;
+            delete []key;
         }
 
         delete obj->keys;

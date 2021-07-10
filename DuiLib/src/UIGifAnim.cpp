@@ -258,7 +258,7 @@ Gdiplus::Image *CGifAnimUI::LoadGifFromFile(LPCTSTR pstrGifPath)
 
             dwSize = ::GetFileSize(hFile, NULL);
 
-            if (dwSize == 0) { break; }
+            if (dwSize == 0) { ::CloseHandle(hFile); break; }
 
             DWORD dwRead = 0;
             pData = new BYTE[ dwSize ];
@@ -319,7 +319,7 @@ Gdiplus::Image *CGifAnimUI::LoadGifFromFile(LPCTSTR pstrGifPath)
 
         dwSize = ::GetFileSize(hFile, NULL);
 
-        if (dwSize == 0) { break; }
+        if (dwSize == 0) { ::CloseHandle(hFile); break; }
 
         DWORD dwRead = 0;
         pData = new BYTE[ dwSize ];
